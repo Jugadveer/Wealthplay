@@ -1,0 +1,2142 @@
+{
+  "generated_at": "2025-11-21T16:06:42.449472Z",
+  "total_modules": 24,
+  "modules": [
+    {
+      "module_id": "investing-basics_m1",
+      "topic_id": "investing-basics",
+      "title": "What is Investing?",
+      "summary": "Learn why investing beats saving in the long run",
+      "duration_min": 3,
+      "xp_reward": 50,
+      "theory_text": "Learn why investing beats saving in the long run This lesson introduces the core idea and provides simple examples so beginners can act confidently. Key points and practical examples are provided for clarity.",
+      "fixed_qna": [
+        {
+          "q": "What is the main idea of this module?",
+          "a": "A concise explanation summarizing the module's focus."
+        },
+        {
+          "q": "How do I apply this in real life?",
+          "a": "Actionable steps and small experiments to practice the concept."
+        },
+        {
+          "q": "What common mistakes should I avoid?",
+          "a": "Short list of pitfalls and how to prevent them."
+        }
+      ],
+      "mcqs": [
+        {
+          "id": "mcq-1",
+          "question": "Which statement best describes the concept covered in 'What is Investing?'?",
+          "choices": [
+            "A) Distractor",
+            "B) Correct summary",
+            "C) Partially correct",
+            "D) Incorrect"
+          ],
+          "correct_choice": "B",
+          "explanation": "B correctly summarizes the core concept of the module."
+        },
+        {
+          "id": "mcq-2",
+          "question": "Short scenario: Which action is the most appropriate next step?",
+          "choices": [
+            "A) Do nothing",
+            "B) Follow best practice",
+            "C) Risky move",
+            "D) Irrelevant action"
+          ],
+          "correct_choice": "B",
+          "explanation": "Following the best practice aligns with the guidance in the module."
+        },
+        {
+          "id": "mcq-3",
+          "question": "What term is most closely associated with this topic?",
+          "choices": [
+            "A) Unrelated term",
+            "B) Related key term",
+            "C) Another term",
+            "D) Not related"
+          ],
+          "correct_choice": "B",
+          "explanation": "The related key term represents the main vocabulary from the lesson."
+        }
+      ],
+      "mentor_prompts": [
+        {
+          "user_q": "Explain this in simple terms.",
+          "mentor_a": "I'll summarize the key points in 2–3 short sentences and give a practical example."
+        },
+        {
+          "user_q": "Give a small exercise I can try.",
+          "mentor_a": "Here's a small step-by-step action you can try today to practice the concept."
+        },
+        {
+          "user_q": "What mistakes to avoid?",
+          "mentor_a": "Common pitfalls and how to avoid them; not financial advice—educational only."
+        }
+      ],
+      "plaque_card": {
+        "type": "flash-card",
+        "design_hint": "rounded card, subtle shadow, orange accent for CTAs",
+        "reward_on_complete": {
+          "xp": 25,
+          "badge": null,
+          "streak_inc": 1
+        }
+      },
+      "metadata": {
+        "created_by": "generator",
+        "created_at": "2025-11-21T16:06:42.449472Z",
+        "difficulty": "beginner"
+      }
+    },
+    {
+      "module_id": "investing-basics_m2",
+      "topic_id": "investing-basics",
+      "title": "Risk vs Reward",
+      "summary": "Understanding the relationship between risk and returns",
+      "duration_min": 4,
+      "xp_reward": 50,
+      "theory_text": "Understanding the relationship between risk and returns This lesson introduces the core idea and provides simple examples so beginners can act confidently. Key points and practical examples are provided for clarity.",
+      "fixed_qna": [
+        {
+          "q": "What is the main idea of this module?",
+          "a": "A concise explanation summarizing the module's focus."
+        },
+        {
+          "q": "How do I apply this in real life?",
+          "a": "Actionable steps and small experiments to practice the concept."
+        },
+        {
+          "q": "What common mistakes should I avoid?",
+          "a": "Short list of pitfalls and how to prevent them."
+        }
+      ],
+      "mcqs": [
+        {
+          "id": "mcq-1",
+          "question": "Which statement best describes the concept covered in 'Risk vs Reward'?",
+          "choices": [
+            "A) Distractor",
+            "B) Correct summary",
+            "C) Partially correct",
+            "D) Incorrect"
+          ],
+          "correct_choice": "B",
+          "explanation": "B correctly summarizes the core concept of the module."
+        },
+        {
+          "id": "mcq-2",
+          "question": "Short scenario: Which action is the most appropriate next step?",
+          "choices": [
+            "A) Do nothing",
+            "B) Follow best practice",
+            "C) Risky move",
+            "D) Irrelevant action"
+          ],
+          "correct_choice": "B",
+          "explanation": "Following the best practice aligns with the guidance in the module."
+        },
+        {
+          "id": "mcq-3",
+          "question": "What term is most closely associated with this topic?",
+          "choices": [
+            "A) Unrelated term",
+            "B) Related key term",
+            "C) Another term",
+            "D) Not related"
+          ],
+          "correct_choice": "B",
+          "explanation": "The related key term represents the main vocabulary from the lesson."
+        }
+      ],
+      "mentor_prompts": [
+        {
+          "user_q": "Explain this in simple terms.",
+          "mentor_a": "I'll summarize the key points in 2–3 short sentences and give a practical example."
+        },
+        {
+          "user_q": "Give a small exercise I can try.",
+          "mentor_a": "Here's a small step-by-step action you can try today to practice the concept."
+        },
+        {
+          "user_q": "What mistakes to avoid?",
+          "mentor_a": "Common pitfalls and how to avoid them; not financial advice—educational only."
+        }
+      ],
+      "plaque_card": {
+        "type": "scenario-card",
+        "design_hint": "rounded card, subtle shadow, orange accent for CTAs",
+        "reward_on_complete": {
+          "xp": 25,
+          "badge": null,
+          "streak_inc": 1
+        }
+      },
+      "metadata": {
+        "created_by": "generator",
+        "created_at": "2025-11-21T16:06:42.449472Z",
+        "difficulty": "beginner"
+      }
+    },
+    {
+      "module_id": "investing-basics_m3",
+      "topic_id": "investing-basics",
+      "title": "Power of Compounding",
+      "summary": "How your money grows exponentially over time",
+      "duration_min": 5,
+      "xp_reward": 75,
+      "theory_text": "How your money grows exponentially over time This lesson introduces the core idea and provides simple examples so beginners can act confidently. Key points and practical examples are provided for clarity.",
+      "fixed_qna": [
+        {
+          "q": "What is the main idea of this module?",
+          "a": "A concise explanation summarizing the module's focus."
+        },
+        {
+          "q": "How do I apply this in real life?",
+          "a": "Actionable steps and small experiments to practice the concept."
+        },
+        {
+          "q": "What common mistakes should I avoid?",
+          "a": "Short list of pitfalls and how to prevent them."
+        }
+      ],
+      "mcqs": [
+        {
+          "id": "mcq-1",
+          "question": "Which statement best describes the concept covered in 'Power of Compounding'?",
+          "choices": [
+            "A) Distractor",
+            "B) Correct summary",
+            "C) Partially correct",
+            "D) Incorrect"
+          ],
+          "correct_choice": "B",
+          "explanation": "B correctly summarizes the core concept of the module."
+        },
+        {
+          "id": "mcq-2",
+          "question": "Short scenario: Which action is the most appropriate next step?",
+          "choices": [
+            "A) Do nothing",
+            "B) Follow best practice",
+            "C) Risky move",
+            "D) Irrelevant action"
+          ],
+          "correct_choice": "B",
+          "explanation": "Following the best practice aligns with the guidance in the module."
+        },
+        {
+          "id": "mcq-3",
+          "question": "What term is most closely associated with this topic?",
+          "choices": [
+            "A) Unrelated term",
+            "B) Related key term",
+            "C) Another term",
+            "D) Not related"
+          ],
+          "correct_choice": "B",
+          "explanation": "The related key term represents the main vocabulary from the lesson."
+        }
+      ],
+      "mentor_prompts": [
+        {
+          "user_q": "Explain this in simple terms.",
+          "mentor_a": "I'll summarize the key points in 2–3 short sentences and give a practical example."
+        },
+        {
+          "user_q": "Give a small exercise I can try.",
+          "mentor_a": "Here's a small step-by-step action you can try today to practice the concept."
+        },
+        {
+          "user_q": "What mistakes to avoid?",
+          "mentor_a": "Common pitfalls and how to avoid them; not financial advice—educational only."
+        }
+      ],
+      "plaque_card": {
+        "type": "challenge-card",
+        "design_hint": "rounded card, subtle shadow, orange accent for CTAs",
+        "reward_on_complete": {
+          "xp": 37,
+          "badge": null,
+          "streak_inc": 1
+        }
+      },
+      "metadata": {
+        "created_by": "generator",
+        "created_at": "2025-11-21T16:06:42.449472Z",
+        "difficulty": "beginner"
+      }
+    },
+    {
+      "module_id": "stock-market-101_m4",
+      "topic_id": "stock-market-101",
+      "title": "What are Stocks?",
+      "summary": "Learn about owning a piece of a company",
+      "duration_min": 4,
+      "xp_reward": 50,
+      "theory_text": "Learn about owning a piece of a company This lesson introduces the core idea and provides simple examples so beginners can act confidently. Key points and practical examples are provided for clarity.",
+      "fixed_qna": [
+        {
+          "q": "What is the main idea of this module?",
+          "a": "A concise explanation summarizing the module's focus."
+        },
+        {
+          "q": "How do I apply this in real life?",
+          "a": "Actionable steps and small experiments to practice the concept."
+        },
+        {
+          "q": "What common mistakes should I avoid?",
+          "a": "Short list of pitfalls and how to prevent them."
+        }
+      ],
+      "mcqs": [
+        {
+          "id": "mcq-1",
+          "question": "Which statement best describes the concept covered in 'What are Stocks?'?",
+          "choices": [
+            "A) Distractor",
+            "B) Correct summary",
+            "C) Partially correct",
+            "D) Incorrect"
+          ],
+          "correct_choice": "B",
+          "explanation": "B correctly summarizes the core concept of the module."
+        },
+        {
+          "id": "mcq-2",
+          "question": "Short scenario: Which action is the most appropriate next step?",
+          "choices": [
+            "A) Do nothing",
+            "B) Follow best practice",
+            "C) Risky move",
+            "D) Irrelevant action"
+          ],
+          "correct_choice": "B",
+          "explanation": "Following the best practice aligns with the guidance in the module."
+        },
+        {
+          "id": "mcq-3",
+          "question": "What term is most closely associated with this topic?",
+          "choices": [
+            "A) Unrelated term",
+            "B) Related key term",
+            "C) Another term",
+            "D) Not related"
+          ],
+          "correct_choice": "B",
+          "explanation": "The related key term represents the main vocabulary from the lesson."
+        }
+      ],
+      "mentor_prompts": [
+        {
+          "user_q": "Explain this in simple terms.",
+          "mentor_a": "I'll summarize the key points in 2–3 short sentences and give a practical example."
+        },
+        {
+          "user_q": "Give a small exercise I can try.",
+          "mentor_a": "Here's a small step-by-step action you can try today to practice the concept."
+        },
+        {
+          "user_q": "What mistakes to avoid?",
+          "mentor_a": "Common pitfalls and how to avoid them; not financial advice—educational only."
+        }
+      ],
+      "plaque_card": {
+        "type": "quiz-card",
+        "design_hint": "rounded card, subtle shadow, orange accent for CTAs",
+        "reward_on_complete": {
+          "xp": 25,
+          "badge": null,
+          "streak_inc": 1
+        }
+      },
+      "metadata": {
+        "created_by": "generator",
+        "created_at": "2025-11-21T16:06:42.449472Z",
+        "difficulty": "beginner"
+      }
+    },
+    {
+      "module_id": "stock-market-101_m5",
+      "topic_id": "stock-market-101",
+      "title": "How Stock Prices Move",
+      "summary": "Understanding supply, demand, and market sentiment",
+      "duration_min": 5,
+      "xp_reward": 75,
+      "theory_text": "Understanding supply, demand, and market sentiment This lesson introduces the core idea and provides simple examples so beginners can act confidently. Key points and practical examples are provided for clarity.",
+      "fixed_qna": [
+        {
+          "q": "What is the main idea of this module?",
+          "a": "A concise explanation summarizing the module's focus."
+        },
+        {
+          "q": "How do I apply this in real life?",
+          "a": "Actionable steps and small experiments to practice the concept."
+        },
+        {
+          "q": "What common mistakes should I avoid?",
+          "a": "Short list of pitfalls and how to prevent them."
+        }
+      ],
+      "mcqs": [
+        {
+          "id": "mcq-1",
+          "question": "Which statement best describes the concept covered in 'How Stock Prices Move'?",
+          "choices": [
+            "A) Distractor",
+            "B) Correct summary",
+            "C) Partially correct",
+            "D) Incorrect"
+          ],
+          "correct_choice": "B",
+          "explanation": "B correctly summarizes the core concept of the module."
+        },
+        {
+          "id": "mcq-2",
+          "question": "Short scenario: Which action is the most appropriate next step?",
+          "choices": [
+            "A) Do nothing",
+            "B) Follow best practice",
+            "C) Risky move",
+            "D) Irrelevant action"
+          ],
+          "correct_choice": "B",
+          "explanation": "Following the best practice aligns with the guidance in the module."
+        },
+        {
+          "id": "mcq-3",
+          "question": "What term is most closely associated with this topic?",
+          "choices": [
+            "A) Unrelated term",
+            "B) Related key term",
+            "C) Another term",
+            "D) Not related"
+          ],
+          "correct_choice": "B",
+          "explanation": "The related key term represents the main vocabulary from the lesson."
+        }
+      ],
+      "mentor_prompts": [
+        {
+          "user_q": "Explain this in simple terms.",
+          "mentor_a": "I'll summarize the key points in 2–3 short sentences and give a practical example."
+        },
+        {
+          "user_q": "Give a small exercise I can try.",
+          "mentor_a": "Here's a small step-by-step action you can try today to practice the concept."
+        },
+        {
+          "user_q": "What mistakes to avoid?",
+          "mentor_a": "Common pitfalls and how to avoid them; not financial advice—educational only."
+        }
+      ],
+      "plaque_card": {
+        "type": "flash-card",
+        "design_hint": "rounded card, subtle shadow, orange accent for CTAs",
+        "reward_on_complete": {
+          "xp": 37,
+          "badge": null,
+          "streak_inc": 1
+        }
+      },
+      "metadata": {
+        "created_by": "generator",
+        "created_at": "2025-11-21T16:06:42.449472Z",
+        "difficulty": "beginner"
+      }
+    },
+    {
+      "module_id": "mutual-funds-sips_m6",
+      "topic_id": "mutual-funds-sips",
+      "title": "What are Mutual Funds?",
+      "summary": "Pooled investments explained simply",
+      "duration_min": 4,
+      "xp_reward": 50,
+      "theory_text": "Pooled investments explained simply This lesson introduces the core idea and provides simple examples so beginners can act confidently. Key points and practical examples are provided for clarity.",
+      "fixed_qna": [
+        {
+          "q": "What is the main idea of this module?",
+          "a": "A concise explanation summarizing the module's focus."
+        },
+        {
+          "q": "How do I apply this in real life?",
+          "a": "Actionable steps and small experiments to practice the concept."
+        },
+        {
+          "q": "What common mistakes should I avoid?",
+          "a": "Short list of pitfalls and how to prevent them."
+        }
+      ],
+      "mcqs": [
+        {
+          "id": "mcq-1",
+          "question": "Which statement best describes the concept covered in 'What are Mutual Funds?'?",
+          "choices": [
+            "A) Distractor",
+            "B) Correct summary",
+            "C) Partially correct",
+            "D) Incorrect"
+          ],
+          "correct_choice": "B",
+          "explanation": "B correctly summarizes the core concept of the module."
+        },
+        {
+          "id": "mcq-2",
+          "question": "Short scenario: Which action is the most appropriate next step?",
+          "choices": [
+            "A) Do nothing",
+            "B) Follow best practice",
+            "C) Risky move",
+            "D) Irrelevant action"
+          ],
+          "correct_choice": "B",
+          "explanation": "Following the best practice aligns with the guidance in the module."
+        },
+        {
+          "id": "mcq-3",
+          "question": "What term is most closely associated with this topic?",
+          "choices": [
+            "A) Unrelated term",
+            "B) Related key term",
+            "C) Another term",
+            "D) Not related"
+          ],
+          "correct_choice": "B",
+          "explanation": "The related key term represents the main vocabulary from the lesson."
+        }
+      ],
+      "mentor_prompts": [
+        {
+          "user_q": "Explain this in simple terms.",
+          "mentor_a": "I'll summarize the key points in 2–3 short sentences and give a practical example."
+        },
+        {
+          "user_q": "Give a small exercise I can try.",
+          "mentor_a": "Here's a small step-by-step action you can try today to practice the concept."
+        },
+        {
+          "user_q": "What mistakes to avoid?",
+          "mentor_a": "Common pitfalls and how to avoid them; not financial advice—educational only."
+        }
+      ],
+      "plaque_card": {
+        "type": "scenario-card",
+        "design_hint": "rounded card, subtle shadow, orange accent for CTAs",
+        "reward_on_complete": {
+          "xp": 25,
+          "badge": null,
+          "streak_inc": 1
+        }
+      },
+      "metadata": {
+        "created_by": "generator",
+        "created_at": "2025-11-21T16:06:42.449472Z",
+        "difficulty": "beginner"
+      }
+    },
+    {
+      "module_id": "mutual-funds-sips_m7",
+      "topic_id": "mutual-funds-sips",
+      "title": "SIP: The Smart Way",
+      "summary": "Invest regularly and build wealth systematically",
+      "duration_min": 5,
+      "xp_reward": 75,
+      "theory_text": "Invest regularly and build wealth systematically This lesson introduces the core idea and provides simple examples so beginners can act confidently. Key points and practical examples are provided for clarity.",
+      "fixed_qna": [
+        {
+          "q": "What is the main idea of this module?",
+          "a": "A concise explanation summarizing the module's focus."
+        },
+        {
+          "q": "How do I apply this in real life?",
+          "a": "Actionable steps and small experiments to practice the concept."
+        },
+        {
+          "q": "What common mistakes should I avoid?",
+          "a": "Short list of pitfalls and how to prevent them."
+        }
+      ],
+      "mcqs": [
+        {
+          "id": "mcq-1",
+          "question": "Which statement best describes the concept covered in 'SIP: The Smart Way'?",
+          "choices": [
+            "A) Distractor",
+            "B) Correct summary",
+            "C) Partially correct",
+            "D) Incorrect"
+          ],
+          "correct_choice": "B",
+          "explanation": "B correctly summarizes the core concept of the module."
+        },
+        {
+          "id": "mcq-2",
+          "question": "Short scenario: Which action is the most appropriate next step?",
+          "choices": [
+            "A) Do nothing",
+            "B) Follow best practice",
+            "C) Risky move",
+            "D) Irrelevant action"
+          ],
+          "correct_choice": "B",
+          "explanation": "Following the best practice aligns with the guidance in the module."
+        },
+        {
+          "id": "mcq-3",
+          "question": "What term is most closely associated with this topic?",
+          "choices": [
+            "A) Unrelated term",
+            "B) Related key term",
+            "C) Another term",
+            "D) Not related"
+          ],
+          "correct_choice": "B",
+          "explanation": "The related key term represents the main vocabulary from the lesson."
+        }
+      ],
+      "mentor_prompts": [
+        {
+          "user_q": "Explain this in simple terms.",
+          "mentor_a": "I'll summarize the key points in 2–3 short sentences and give a practical example."
+        },
+        {
+          "user_q": "Give a small exercise I can try.",
+          "mentor_a": "Here's a small step-by-step action you can try today to practice the concept."
+        },
+        {
+          "user_q": "What mistakes to avoid?",
+          "mentor_a": "Common pitfalls and how to avoid them; not financial advice—educational only."
+        }
+      ],
+      "plaque_card": {
+        "type": "challenge-card",
+        "design_hint": "rounded card, subtle shadow, orange accent for CTAs",
+        "reward_on_complete": {
+          "xp": 37,
+          "badge": null,
+          "streak_inc": 1
+        }
+      },
+      "metadata": {
+        "created_by": "generator",
+        "created_at": "2025-11-21T16:06:42.449472Z",
+        "difficulty": "beginner"
+      }
+    },
+    {
+      "module_id": "money-basics_m8",
+      "topic_id": "money-basics",
+      "title": "What is Money?",
+      "summary": "Definitions, functions of money (medium of exchange, unit of account, store of value).",
+      "duration_min": 3,
+      "xp_reward": 25,
+      "theory_text": "Definitions, functions of money (medium of exchange, unit of account, store of value). This lesson introduces the core idea and provides simple examples so beginners can act confidently. Key points and practical examples are provided for clarity.",
+      "fixed_qna": [
+        {
+          "q": "What is the main idea of this module?",
+          "a": "A concise explanation summarizing the module's focus."
+        },
+        {
+          "q": "How do I apply this in real life?",
+          "a": "Actionable steps and small experiments to practice the concept."
+        },
+        {
+          "q": "What common mistakes should I avoid?",
+          "a": "Short list of pitfalls and how to prevent them."
+        }
+      ],
+      "mcqs": [
+        {
+          "id": "mcq-1",
+          "question": "Which statement best describes the concept covered in 'What is Money?'?",
+          "choices": [
+            "A) Distractor",
+            "B) Correct summary",
+            "C) Partially correct",
+            "D) Incorrect"
+          ],
+          "correct_choice": "B",
+          "explanation": "B correctly summarizes the core concept of the module."
+        },
+        {
+          "id": "mcq-2",
+          "question": "Short scenario: Which action is the most appropriate next step?",
+          "choices": [
+            "A) Do nothing",
+            "B) Follow best practice",
+            "C) Risky move",
+            "D) Irrelevant action"
+          ],
+          "correct_choice": "B",
+          "explanation": "Following the best practice aligns with the guidance in the module."
+        },
+        {
+          "id": "mcq-3",
+          "question": "What term is most closely associated with this topic?",
+          "choices": [
+            "A) Unrelated term",
+            "B) Related key term",
+            "C) Another term",
+            "D) Not related"
+          ],
+          "correct_choice": "B",
+          "explanation": "The related key term represents the main vocabulary from the lesson."
+        }
+      ],
+      "mentor_prompts": [
+        {
+          "user_q": "Explain this in simple terms.",
+          "mentor_a": "I'll summarize the key points in 2–3 short sentences and give a practical example."
+        },
+        {
+          "user_q": "Give a small exercise I can try.",
+          "mentor_a": "Here's a small step-by-step action you can try today to practice the concept."
+        },
+        {
+          "user_q": "What mistakes to avoid?",
+          "mentor_a": "Common pitfalls and how to avoid them; not financial advice—educational only."
+        }
+      ],
+      "plaque_card": {
+        "type": "quiz-card",
+        "design_hint": "rounded card, subtle shadow, orange accent for CTAs",
+        "reward_on_complete": {
+          "xp": 12,
+          "badge": null,
+          "streak_inc": 1
+        }
+      },
+      "metadata": {
+        "created_by": "generator",
+        "created_at": "2025-11-21T16:06:42.449472Z",
+        "difficulty": "beginner"
+      }
+    },
+    {
+      "module_id": "budgeting_m9",
+      "topic_id": "budgeting",
+      "title": "50/30/20 and Goal-setting",
+      "summary": "How to split income, set short/medium/long-term goals, and automate savings.",
+      "duration_min": 4,
+      "xp_reward": 50,
+      "theory_text": "How to split income, set short/medium/long-term goals, and automate savings. This lesson introduces the core idea and provides simple examples so beginners can act confidently. Key points and practical examples are provided for clarity.",
+      "fixed_qna": [
+        {
+          "q": "What is the main idea of this module?",
+          "a": "A concise explanation summarizing the module's focus."
+        },
+        {
+          "q": "How do I apply this in real life?",
+          "a": "Actionable steps and small experiments to practice the concept."
+        },
+        {
+          "q": "What common mistakes should I avoid?",
+          "a": "Short list of pitfalls and how to prevent them."
+        }
+      ],
+      "mcqs": [
+        {
+          "id": "mcq-1",
+          "question": "Which statement best describes the concept covered in '50/30/20 and Goal-setting'?",
+          "choices": [
+            "A) Distractor",
+            "B) Correct summary",
+            "C) Partially correct",
+            "D) Incorrect"
+          ],
+          "correct_choice": "B",
+          "explanation": "B correctly summarizes the core concept of the module."
+        },
+        {
+          "id": "mcq-2",
+          "question": "Short scenario: Which action is the most appropriate next step?",
+          "choices": [
+            "A) Do nothing",
+            "B) Follow best practice",
+            "C) Risky move",
+            "D) Irrelevant action"
+          ],
+          "correct_choice": "B",
+          "explanation": "Following the best practice aligns with the guidance in the module."
+        },
+        {
+          "id": "mcq-3",
+          "question": "What term is most closely associated with this topic?",
+          "choices": [
+            "A) Unrelated term",
+            "B) Related key term",
+            "C) Another term",
+            "D) Not related"
+          ],
+          "correct_choice": "B",
+          "explanation": "The related key term represents the main vocabulary from the lesson."
+        }
+      ],
+      "mentor_prompts": [
+        {
+          "user_q": "Explain this in simple terms.",
+          "mentor_a": "I'll summarize the key points in 2–3 short sentences and give a practical example."
+        },
+        {
+          "user_q": "Give a small exercise I can try.",
+          "mentor_a": "Here's a small step-by-step action you can try today to practice the concept."
+        },
+        {
+          "user_q": "What mistakes to avoid?",
+          "mentor_a": "Common pitfalls and how to avoid them; not financial advice—educational only."
+        }
+      ],
+      "plaque_card": {
+        "type": "flash-card",
+        "design_hint": "rounded card, subtle shadow, orange accent for CTAs",
+        "reward_on_complete": {
+          "xp": 25,
+          "badge": null,
+          "streak_inc": 1
+        }
+      },
+      "metadata": {
+        "created_by": "generator",
+        "created_at": "2025-11-21T16:06:42.449472Z",
+        "difficulty": "beginner"
+      }
+    },
+    {
+      "module_id": "risk-diversification_m10",
+      "topic_id": "risk-diversification",
+      "title": "Risk & Diversification",
+      "summary": "Risk types, why diversification reduces risk, and simple portfolio examples for beginners.",
+      "duration_min": 4,
+      "xp_reward": 50,
+      "theory_text": "Risk types, why diversification reduces risk, and simple portfolio examples for beginners. This lesson introduces the core idea and provides simple examples so beginners can act confidently. Key points and practical examples are provided for clarity.",
+      "fixed_qna": [
+        {
+          "q": "What is the main idea of this module?",
+          "a": "A concise explanation summarizing the module's focus."
+        },
+        {
+          "q": "How do I apply this in real life?",
+          "a": "Actionable steps and small experiments to practice the concept."
+        },
+        {
+          "q": "What common mistakes should I avoid?",
+          "a": "Short list of pitfalls and how to prevent them."
+        }
+      ],
+      "mcqs": [
+        {
+          "id": "mcq-1",
+          "question": "Which statement best describes the concept covered in 'Risk & Diversification'?",
+          "choices": [
+            "A) Distractor",
+            "B) Correct summary",
+            "C) Partially correct",
+            "D) Incorrect"
+          ],
+          "correct_choice": "B",
+          "explanation": "B correctly summarizes the core concept of the module."
+        },
+        {
+          "id": "mcq-2",
+          "question": "Short scenario: Which action is the most appropriate next step?",
+          "choices": [
+            "A) Do nothing",
+            "B) Follow best practice",
+            "C) Risky move",
+            "D) Irrelevant action"
+          ],
+          "correct_choice": "B",
+          "explanation": "Following the best practice aligns with the guidance in the module."
+        },
+        {
+          "id": "mcq-3",
+          "question": "What term is most closely associated with this topic?",
+          "choices": [
+            "A) Unrelated term",
+            "B) Related key term",
+            "C) Another term",
+            "D) Not related"
+          ],
+          "correct_choice": "B",
+          "explanation": "The related key term represents the main vocabulary from the lesson."
+        }
+      ],
+      "mentor_prompts": [
+        {
+          "user_q": "Explain this in simple terms.",
+          "mentor_a": "I'll summarize the key points in 2–3 short sentences and give a practical example."
+        },
+        {
+          "user_q": "Give a small exercise I can try.",
+          "mentor_a": "Here's a small step-by-step action you can try today to practice the concept."
+        },
+        {
+          "user_q": "What mistakes to avoid?",
+          "mentor_a": "Common pitfalls and how to avoid them; not financial advice—educational only."
+        }
+      ],
+      "plaque_card": {
+        "type": "scenario-card",
+        "design_hint": "rounded card, subtle shadow, orange accent for CTAs",
+        "reward_on_complete": {
+          "xp": 25,
+          "badge": null,
+          "streak_inc": 1
+        }
+      },
+      "metadata": {
+        "created_by": "generator",
+        "created_at": "2025-11-21T16:06:42.449472Z",
+        "difficulty": "beginner"
+      }
+    },
+    {
+      "module_id": "emergency-insurance_m11",
+      "topic_id": "emergency-insurance",
+      "title": "Emergency Fund Strategy",
+      "summary": "How to build and maintain an emergency fund, when to use it, and insurance basics.",
+      "duration_min": 3,
+      "xp_reward": 50,
+      "theory_text": "How to build and maintain an emergency fund, when to use it, and insurance basics. This lesson introduces the core idea and provides simple examples so beginners can act confidently. Key points and practical examples are provided for clarity.",
+      "fixed_qna": [
+        {
+          "q": "What is the main idea of this module?",
+          "a": "A concise explanation summarizing the module's focus."
+        },
+        {
+          "q": "How do I apply this in real life?",
+          "a": "Actionable steps and small experiments to practice the concept."
+        },
+        {
+          "q": "What common mistakes should I avoid?",
+          "a": "Short list of pitfalls and how to prevent them."
+        }
+      ],
+      "mcqs": [
+        {
+          "id": "mcq-1",
+          "question": "Which statement best describes the concept covered in 'Emergency Fund Strategy'?",
+          "choices": [
+            "A) Distractor",
+            "B) Correct summary",
+            "C) Partially correct",
+            "D) Incorrect"
+          ],
+          "correct_choice": "B",
+          "explanation": "B correctly summarizes the core concept of the module."
+        },
+        {
+          "id": "mcq-2",
+          "question": "Short scenario: Which action is the most appropriate next step?",
+          "choices": [
+            "A) Do nothing",
+            "B) Follow best practice",
+            "C) Risky move",
+            "D) Irrelevant action"
+          ],
+          "correct_choice": "B",
+          "explanation": "Following the best practice aligns with the guidance in the module."
+        },
+        {
+          "id": "mcq-3",
+          "question": "What term is most closely associated with this topic?",
+          "choices": [
+            "A) Unrelated term",
+            "B) Related key term",
+            "C) Another term",
+            "D) Not related"
+          ],
+          "correct_choice": "B",
+          "explanation": "The related key term represents the main vocabulary from the lesson."
+        }
+      ],
+      "mentor_prompts": [
+        {
+          "user_q": "Explain this in simple terms.",
+          "mentor_a": "I'll summarize the key points in 2–3 short sentences and give a practical example."
+        },
+        {
+          "user_q": "Give a small exercise I can try.",
+          "mentor_a": "Here's a small step-by-step action you can try today to practice the concept."
+        },
+        {
+          "user_q": "What mistakes to avoid?",
+          "mentor_a": "Common pitfalls and how to avoid them; not financial advice—educational only."
+        }
+      ],
+      "plaque_card": {
+        "type": "challenge-card",
+        "design_hint": "rounded card, subtle shadow, orange accent for CTAs",
+        "reward_on_complete": {
+          "xp": 25,
+          "badge": null,
+          "streak_inc": 1
+        }
+      },
+      "metadata": {
+        "created_by": "generator",
+        "created_at": "2025-11-21T16:06:42.449472Z",
+        "difficulty": "beginner"
+      }
+    },
+    {
+      "module_id": "financial-goals_m12",
+      "topic_id": "financial-goals",
+      "title": "Goal Setting",
+      "summary": "How to set specific, measurable, achievable, relevant, and time-bound financial goals.",
+      "duration_min": 3,
+      "xp_reward": 50,
+      "theory_text": "How to set specific, measurable, achievable, relevant, and time-bound financial goals. This lesson introduces the core idea and provides simple examples so beginners can act confidently. Key points and practical examples are provided for clarity.",
+      "fixed_qna": [
+        {
+          "q": "What is the main idea of this module?",
+          "a": "A concise explanation summarizing the module's focus."
+        },
+        {
+          "q": "How do I apply this in real life?",
+          "a": "Actionable steps and small experiments to practice the concept."
+        },
+        {
+          "q": "What common mistakes should I avoid?",
+          "a": "Short list of pitfalls and how to prevent them."
+        }
+      ],
+      "mcqs": [
+        {
+          "id": "mcq-1",
+          "question": "Which statement best describes the concept covered in 'Goal Setting'?",
+          "choices": [
+            "A) Distractor",
+            "B) Correct summary",
+            "C) Partially correct",
+            "D) Incorrect"
+          ],
+          "correct_choice": "B",
+          "explanation": "B correctly summarizes the core concept of the module."
+        },
+        {
+          "id": "mcq-2",
+          "question": "Short scenario: Which action is the most appropriate next step?",
+          "choices": [
+            "A) Do nothing",
+            "B) Follow best practice",
+            "C) Risky move",
+            "D) Irrelevant action"
+          ],
+          "correct_choice": "B",
+          "explanation": "Following the best practice aligns with the guidance in the module."
+        },
+        {
+          "id": "mcq-3",
+          "question": "What term is most closely associated with this topic?",
+          "choices": [
+            "A) Unrelated term",
+            "B) Related key term",
+            "C) Another term",
+            "D) Not related"
+          ],
+          "correct_choice": "B",
+          "explanation": "The related key term represents the main vocabulary from the lesson."
+        }
+      ],
+      "mentor_prompts": [
+        {
+          "user_q": "Explain this in simple terms.",
+          "mentor_a": "I'll summarize the key points in 2–3 short sentences and give a practical example."
+        },
+        {
+          "user_q": "Give a small exercise I can try.",
+          "mentor_a": "Here's a small step-by-step action you can try today to practice the concept."
+        },
+        {
+          "user_q": "What mistakes to avoid?",
+          "mentor_a": "Common pitfalls and how to avoid them; not financial advice—educational only."
+        }
+      ],
+      "plaque_card": {
+        "type": "quiz-card",
+        "design_hint": "rounded card, subtle shadow, orange accent for CTAs",
+        "reward_on_complete": {
+          "xp": 25,
+          "badge": null,
+          "streak_inc": 1
+        }
+      },
+      "metadata": {
+        "created_by": "generator",
+        "created_at": "2025-11-21T16:06:42.449472Z",
+        "difficulty": "beginner"
+      }
+    },
+    {
+      "module_id": "banking-products_m13",
+      "topic_id": "banking-products",
+      "title": "Bank Accounts & FDs",
+      "summary": "Types of accounts, fixed deposits, recurring deposits, and how to choose banking products.",
+      "duration_min": 3,
+      "xp_reward": 25,
+      "theory_text": "Types of accounts, fixed deposits, recurring deposits, and how to choose banking products. This lesson introduces the core idea and provides simple examples so beginners can act confidently. Key points and practical examples are provided for clarity.",
+      "fixed_qna": [
+        {
+          "q": "What is the main idea of this module?",
+          "a": "A concise explanation summarizing the module's focus."
+        },
+        {
+          "q": "How do I apply this in real life?",
+          "a": "Actionable steps and small experiments to practice the concept."
+        },
+        {
+          "q": "What common mistakes should I avoid?",
+          "a": "Short list of pitfalls and how to prevent them."
+        }
+      ],
+      "mcqs": [
+        {
+          "id": "mcq-1",
+          "question": "Which statement best describes the concept covered in 'Bank Accounts & FDs'?",
+          "choices": [
+            "A) Distractor",
+            "B) Correct summary",
+            "C) Partially correct",
+            "D) Incorrect"
+          ],
+          "correct_choice": "B",
+          "explanation": "B correctly summarizes the core concept of the module."
+        },
+        {
+          "id": "mcq-2",
+          "question": "Short scenario: Which action is the most appropriate next step?",
+          "choices": [
+            "A) Do nothing",
+            "B) Follow best practice",
+            "C) Risky move",
+            "D) Irrelevant action"
+          ],
+          "correct_choice": "B",
+          "explanation": "Following the best practice aligns with the guidance in the module."
+        },
+        {
+          "id": "mcq-3",
+          "question": "What term is most closely associated with this topic?",
+          "choices": [
+            "A) Unrelated term",
+            "B) Related key term",
+            "C) Another term",
+            "D) Not related"
+          ],
+          "correct_choice": "B",
+          "explanation": "The related key term represents the main vocabulary from the lesson."
+        }
+      ],
+      "mentor_prompts": [
+        {
+          "user_q": "Explain this in simple terms.",
+          "mentor_a": "I'll summarize the key points in 2–3 short sentences and give a practical example."
+        },
+        {
+          "user_q": "Give a small exercise I can try.",
+          "mentor_a": "Here's a small step-by-step action you can try today to practice the concept."
+        },
+        {
+          "user_q": "What mistakes to avoid?",
+          "mentor_a": "Common pitfalls and how to avoid them; not financial advice—educational only."
+        }
+      ],
+      "plaque_card": {
+        "type": "flash-card",
+        "design_hint": "rounded card, subtle shadow, orange accent for CTAs",
+        "reward_on_complete": {
+          "xp": 12,
+          "badge": null,
+          "streak_inc": 1
+        }
+      },
+      "metadata": {
+        "created_by": "generator",
+        "created_at": "2025-11-21T16:06:42.449472Z",
+        "difficulty": "beginner"
+      }
+    },
+    {
+      "module_id": "scams-safety_m14",
+      "topic_id": "scams-safety",
+      "title": "Avoiding Scams",
+      "summary": "Red flags of investment scams, how to verify legitimacy, and safe investing practices.",
+      "duration_min": 3,
+      "xp_reward": 50,
+      "theory_text": "Red flags of investment scams, how to verify legitimacy, and safe investing practices. This lesson introduces the core idea and provides simple examples so beginners can act confidently. Key points and practical examples are provided for clarity.",
+      "fixed_qna": [
+        {
+          "q": "What is the main idea of this module?",
+          "a": "A concise explanation summarizing the module's focus."
+        },
+        {
+          "q": "How do I apply this in real life?",
+          "a": "Actionable steps and small experiments to practice the concept."
+        },
+        {
+          "q": "What common mistakes should I avoid?",
+          "a": "Short list of pitfalls and how to prevent them."
+        }
+      ],
+      "mcqs": [
+        {
+          "id": "mcq-1",
+          "question": "Which statement best describes the concept covered in 'Avoiding Scams'?",
+          "choices": [
+            "A) Distractor",
+            "B) Correct summary",
+            "C) Partially correct",
+            "D) Incorrect"
+          ],
+          "correct_choice": "B",
+          "explanation": "B correctly summarizes the core concept of the module."
+        },
+        {
+          "id": "mcq-2",
+          "question": "Short scenario: Which action is the most appropriate next step?",
+          "choices": [
+            "A) Do nothing",
+            "B) Follow best practice",
+            "C) Risky move",
+            "D) Irrelevant action"
+          ],
+          "correct_choice": "B",
+          "explanation": "Following the best practice aligns with the guidance in the module."
+        },
+        {
+          "id": "mcq-3",
+          "question": "What term is most closely associated with this topic?",
+          "choices": [
+            "A) Unrelated term",
+            "B) Related key term",
+            "C) Another term",
+            "D) Not related"
+          ],
+          "correct_choice": "B",
+          "explanation": "The related key term represents the main vocabulary from the lesson."
+        }
+      ],
+      "mentor_prompts": [
+        {
+          "user_q": "Explain this in simple terms.",
+          "mentor_a": "I'll summarize the key points in 2–3 short sentences and give a practical example."
+        },
+        {
+          "user_q": "Give a small exercise I can try.",
+          "mentor_a": "Here's a small step-by-step action you can try today to practice the concept."
+        },
+        {
+          "user_q": "What mistakes to avoid?",
+          "mentor_a": "Common pitfalls and how to avoid them; not financial advice—educational only."
+        }
+      ],
+      "plaque_card": {
+        "type": "scenario-card",
+        "design_hint": "rounded card, subtle shadow, orange accent for CTAs",
+        "reward_on_complete": {
+          "xp": 25,
+          "badge": null,
+          "streak_inc": 1
+        }
+      },
+      "metadata": {
+        "created_by": "generator",
+        "created_at": "2025-11-21T16:06:42.449472Z",
+        "difficulty": "beginner"
+      }
+    },
+    {
+      "module_id": "debt-credit_m15",
+      "topic_id": "debt-credit",
+      "title": "Interest & Credit Score",
+      "summary": "How interest compounds, how credit scores are built, and actions that improve scores.",
+      "duration_min": 5,
+      "xp_reward": 50,
+      "theory_text": "How interest compounds, how credit scores are built, and actions that improve scores. This lesson builds on basics and adds practical steps, examples, and intermediate tools to apply concepts. Key points and practical examples are provided for clarity.",
+      "fixed_qna": [
+        {
+          "q": "What is the main idea of this module?",
+          "a": "A concise explanation summarizing the module's focus."
+        },
+        {
+          "q": "How do I apply this in real life?",
+          "a": "Actionable steps and small experiments to practice the concept."
+        },
+        {
+          "q": "What common mistakes should I avoid?",
+          "a": "Short list of pitfalls and how to prevent them."
+        }
+      ],
+      "mcqs": [
+        {
+          "id": "mcq-1",
+          "question": "Which statement best describes the concept covered in 'Interest & Credit Score'?",
+          "choices": [
+            "A) Distractor",
+            "B) Correct summary",
+            "C) Partially correct",
+            "D) Incorrect"
+          ],
+          "correct_choice": "B",
+          "explanation": "B correctly summarizes the core concept of the module."
+        },
+        {
+          "id": "mcq-2",
+          "question": "Short scenario: Which action is the most appropriate next step?",
+          "choices": [
+            "A) Do nothing",
+            "B) Follow best practice",
+            "C) Risky move",
+            "D) Irrelevant action"
+          ],
+          "correct_choice": "B",
+          "explanation": "Following the best practice aligns with the guidance in the module."
+        },
+        {
+          "id": "mcq-3",
+          "question": "What term is most closely associated with this topic?",
+          "choices": [
+            "A) Unrelated term",
+            "B) Related key term",
+            "C) Another term",
+            "D) Not related"
+          ],
+          "correct_choice": "B",
+          "explanation": "The related key term represents the main vocabulary from the lesson."
+        }
+      ],
+      "mentor_prompts": [
+        {
+          "user_q": "Explain this in simple terms.",
+          "mentor_a": "I'll summarize the key points in 2–3 short sentences and give a practical example."
+        },
+        {
+          "user_q": "Give a small exercise I can try.",
+          "mentor_a": "Here's a small step-by-step action you can try today to practice the concept."
+        },
+        {
+          "user_q": "What mistakes to avoid?",
+          "mentor_a": "Common pitfalls and how to avoid them; not financial advice—educational only."
+        }
+      ],
+      "plaque_card": {
+        "type": "challenge-card",
+        "design_hint": "rounded card, subtle shadow, orange accent for CTAs",
+        "reward_on_complete": {
+          "xp": 25,
+          "badge": null,
+          "streak_inc": 1
+        }
+      },
+      "metadata": {
+        "created_by": "generator",
+        "created_at": "2025-11-21T16:06:42.449472Z",
+        "difficulty": "intermediate"
+      }
+    },
+    {
+      "module_id": "stocks-etfs_m16",
+      "topic_id": "stocks-etfs",
+      "title": "Stocks vs ETFs",
+      "summary": "Pros/cons of single stocks vs ETFs, fees, and volatility considerations.",
+      "duration_min": 4,
+      "xp_reward": 50,
+      "theory_text": "Pros/cons of single stocks vs ETFs, fees, and volatility considerations. This lesson builds on basics and adds practical steps, examples, and intermediate tools to apply concepts. Key points and practical examples are provided for clarity.",
+      "fixed_qna": [
+        {
+          "q": "What is the main idea of this module?",
+          "a": "A concise explanation summarizing the module's focus."
+        },
+        {
+          "q": "How do I apply this in real life?",
+          "a": "Actionable steps and small experiments to practice the concept."
+        },
+        {
+          "q": "What common mistakes should I avoid?",
+          "a": "Short list of pitfalls and how to prevent them."
+        }
+      ],
+      "mcqs": [
+        {
+          "id": "mcq-1",
+          "question": "Which statement best describes the concept covered in 'Stocks vs ETFs'?",
+          "choices": [
+            "A) Distractor",
+            "B) Correct summary",
+            "C) Partially correct",
+            "D) Incorrect"
+          ],
+          "correct_choice": "B",
+          "explanation": "B correctly summarizes the core concept of the module."
+        },
+        {
+          "id": "mcq-2",
+          "question": "Short scenario: Which action is the most appropriate next step?",
+          "choices": [
+            "A) Do nothing",
+            "B) Follow best practice",
+            "C) Risky move",
+            "D) Irrelevant action"
+          ],
+          "correct_choice": "B",
+          "explanation": "Following the best practice aligns with the guidance in the module."
+        },
+        {
+          "id": "mcq-3",
+          "question": "What term is most closely associated with this topic?",
+          "choices": [
+            "A) Unrelated term",
+            "B) Related key term",
+            "C) Another term",
+            "D) Not related"
+          ],
+          "correct_choice": "B",
+          "explanation": "The related key term represents the main vocabulary from the lesson."
+        }
+      ],
+      "mentor_prompts": [
+        {
+          "user_q": "Explain this in simple terms.",
+          "mentor_a": "I'll summarize the key points in 2–3 short sentences and give a practical example."
+        },
+        {
+          "user_q": "Give a small exercise I can try.",
+          "mentor_a": "Here's a small step-by-step action you can try today to practice the concept."
+        },
+        {
+          "user_q": "What mistakes to avoid?",
+          "mentor_a": "Common pitfalls and how to avoid them; not financial advice—educational only."
+        }
+      ],
+      "plaque_card": {
+        "type": "quiz-card",
+        "design_hint": "rounded card, subtle shadow, orange accent for CTAs",
+        "reward_on_complete": {
+          "xp": 25,
+          "badge": null,
+          "streak_inc": 1
+        }
+      },
+      "metadata": {
+        "created_by": "generator",
+        "created_at": "2025-11-21T16:06:42.449472Z",
+        "difficulty": "intermediate"
+      }
+    },
+    {
+      "module_id": "tax-planning_m17",
+      "topic_id": "tax-planning",
+      "title": "Tax-efficient Investing",
+      "summary": "Use tax-advantaged schemes and understand capital gains basics.",
+      "duration_min": 4,
+      "xp_reward": 75,
+      "theory_text": "Use tax-advantaged schemes and understand capital gains basics. This lesson builds on basics and adds practical steps, examples, and intermediate tools to apply concepts. Key points and practical examples are provided for clarity.",
+      "fixed_qna": [
+        {
+          "q": "What is the main idea of this module?",
+          "a": "A concise explanation summarizing the module's focus."
+        },
+        {
+          "q": "How do I apply this in real life?",
+          "a": "Actionable steps and small experiments to practice the concept."
+        },
+        {
+          "q": "What common mistakes should I avoid?",
+          "a": "Short list of pitfalls and how to prevent them."
+        }
+      ],
+      "mcqs": [
+        {
+          "id": "mcq-1",
+          "question": "Which statement best describes the concept covered in 'Tax-efficient Investing'?",
+          "choices": [
+            "A) Distractor",
+            "B) Correct summary",
+            "C) Partially correct",
+            "D) Incorrect"
+          ],
+          "correct_choice": "B",
+          "explanation": "B correctly summarizes the core concept of the module."
+        },
+        {
+          "id": "mcq-2",
+          "question": "Short scenario: Which action is the most appropriate next step?",
+          "choices": [
+            "A) Do nothing",
+            "B) Follow best practice",
+            "C) Risky move",
+            "D) Irrelevant action"
+          ],
+          "correct_choice": "B",
+          "explanation": "Following the best practice aligns with the guidance in the module."
+        },
+        {
+          "id": "mcq-3",
+          "question": "What term is most closely associated with this topic?",
+          "choices": [
+            "A) Unrelated term",
+            "B) Related key term",
+            "C) Another term",
+            "D) Not related"
+          ],
+          "correct_choice": "B",
+          "explanation": "The related key term represents the main vocabulary from the lesson."
+        }
+      ],
+      "mentor_prompts": [
+        {
+          "user_q": "Explain this in simple terms.",
+          "mentor_a": "I'll summarize the key points in 2–3 short sentences and give a practical example."
+        },
+        {
+          "user_q": "Give a small exercise I can try.",
+          "mentor_a": "Here's a small step-by-step action you can try today to practice the concept."
+        },
+        {
+          "user_q": "What mistakes to avoid?",
+          "mentor_a": "Common pitfalls and how to avoid them; not financial advice—educational only."
+        }
+      ],
+      "plaque_card": {
+        "type": "flash-card",
+        "design_hint": "rounded card, subtle shadow, orange accent for CTAs",
+        "reward_on_complete": {
+          "xp": 37,
+          "badge": null,
+          "streak_inc": 1
+        }
+      },
+      "metadata": {
+        "created_by": "generator",
+        "created_at": "2025-11-21T16:06:42.449472Z",
+        "difficulty": "intermediate"
+      }
+    },
+    {
+      "module_id": "retirement_m18",
+      "topic_id": "retirement",
+      "title": "Retirement Basics",
+      "summary": "Why start early, how much to save, and retirement account options (EPF, PPF, NPS).",
+      "duration_min": 5,
+      "xp_reward": 75,
+      "theory_text": "Why start early, how much to save, and retirement account options (EPF, PPF, NPS). This lesson builds on basics and adds practical steps, examples, and intermediate tools to apply concepts. Key points and practical examples are provided for clarity.",
+      "fixed_qna": [
+        {
+          "q": "What is the main idea of this module?",
+          "a": "A concise explanation summarizing the module's focus."
+        },
+        {
+          "q": "How do I apply this in real life?",
+          "a": "Actionable steps and small experiments to practice the concept."
+        },
+        {
+          "q": "What common mistakes should I avoid?",
+          "a": "Short list of pitfalls and how to prevent them."
+        }
+      ],
+      "mcqs": [
+        {
+          "id": "mcq-1",
+          "question": "Which statement best describes the concept covered in 'Retirement Basics'?",
+          "choices": [
+            "A) Distractor",
+            "B) Correct summary",
+            "C) Partially correct",
+            "D) Incorrect"
+          ],
+          "correct_choice": "B",
+          "explanation": "B correctly summarizes the core concept of the module."
+        },
+        {
+          "id": "mcq-2",
+          "question": "Short scenario: Which action is the most appropriate next step?",
+          "choices": [
+            "A) Do nothing",
+            "B) Follow best practice",
+            "C) Risky move",
+            "D) Irrelevant action"
+          ],
+          "correct_choice": "B",
+          "explanation": "Following the best practice aligns with the guidance in the module."
+        },
+        {
+          "id": "mcq-3",
+          "question": "What term is most closely associated with this topic?",
+          "choices": [
+            "A) Unrelated term",
+            "B) Related key term",
+            "C) Another term",
+            "D) Not related"
+          ],
+          "correct_choice": "B",
+          "explanation": "The related key term represents the main vocabulary from the lesson."
+        }
+      ],
+      "mentor_prompts": [
+        {
+          "user_q": "Explain this in simple terms.",
+          "mentor_a": "I'll summarize the key points in 2–3 short sentences and give a practical example."
+        },
+        {
+          "user_q": "Give a small exercise I can try.",
+          "mentor_a": "Here's a small step-by-step action you can try today to practice the concept."
+        },
+        {
+          "user_q": "What mistakes to avoid?",
+          "mentor_a": "Common pitfalls and how to avoid them; not financial advice—educational only."
+        }
+      ],
+      "plaque_card": {
+        "type": "scenario-card",
+        "design_hint": "rounded card, subtle shadow, orange accent for CTAs",
+        "reward_on_complete": {
+          "xp": 37,
+          "badge": null,
+          "streak_inc": 1
+        }
+      },
+      "metadata": {
+        "created_by": "generator",
+        "created_at": "2025-11-21T16:06:42.449472Z",
+        "difficulty": "intermediate"
+      }
+    },
+    {
+      "module_id": "portfolio-building_m19",
+      "topic_id": "portfolio-building",
+      "title": "Asset Allocation",
+      "summary": "How to allocate assets based on age, risk tolerance, and goals. Simple portfolio frameworks.",
+      "duration_min": 4,
+      "xp_reward": 75,
+      "theory_text": "How to allocate assets based on age, risk tolerance, and goals. Simple portfolio frameworks. This lesson builds on basics and adds practical steps, examples, and intermediate tools to apply concepts. Key points and practical examples are provided for clarity.",
+      "fixed_qna": [
+        {
+          "q": "What is the main idea of this module?",
+          "a": "A concise explanation summarizing the module's focus."
+        },
+        {
+          "q": "How do I apply this in real life?",
+          "a": "Actionable steps and small experiments to practice the concept."
+        },
+        {
+          "q": "What common mistakes should I avoid?",
+          "a": "Short list of pitfalls and how to prevent them."
+        }
+      ],
+      "mcqs": [
+        {
+          "id": "mcq-1",
+          "question": "Which statement best describes the concept covered in 'Asset Allocation'?",
+          "choices": [
+            "A) Distractor",
+            "B) Correct summary",
+            "C) Partially correct",
+            "D) Incorrect"
+          ],
+          "correct_choice": "B",
+          "explanation": "B correctly summarizes the core concept of the module."
+        },
+        {
+          "id": "mcq-2",
+          "question": "Short scenario: Which action is the most appropriate next step?",
+          "choices": [
+            "A) Do nothing",
+            "B) Follow best practice",
+            "C) Risky move",
+            "D) Irrelevant action"
+          ],
+          "correct_choice": "B",
+          "explanation": "Following the best practice aligns with the guidance in the module."
+        },
+        {
+          "id": "mcq-3",
+          "question": "What term is most closely associated with this topic?",
+          "choices": [
+            "A) Unrelated term",
+            "B) Related key term",
+            "C) Another term",
+            "D) Not related"
+          ],
+          "correct_choice": "B",
+          "explanation": "The related key term represents the main vocabulary from the lesson."
+        }
+      ],
+      "mentor_prompts": [
+        {
+          "user_q": "Explain this in simple terms.",
+          "mentor_a": "I'll summarize the key points in 2–3 short sentences and give a practical example."
+        },
+        {
+          "user_q": "Give a small exercise I can try.",
+          "mentor_a": "Here's a small step-by-step action you can try today to practice the concept."
+        },
+        {
+          "user_q": "What mistakes to avoid?",
+          "mentor_a": "Common pitfalls and how to avoid them; not financial advice—educational only."
+        }
+      ],
+      "plaque_card": {
+        "type": "challenge-card",
+        "design_hint": "rounded card, subtle shadow, orange accent for CTAs",
+        "reward_on_complete": {
+          "xp": 37,
+          "badge": null,
+          "streak_inc": 1
+        }
+      },
+      "metadata": {
+        "created_by": "generator",
+        "created_at": "2025-11-21T16:06:42.449472Z",
+        "difficulty": "intermediate"
+      }
+    },
+    {
+      "module_id": "money-psychology_m20",
+      "topic_id": "money-psychology",
+      "title": "Common Biases",
+      "summary": "Recognize and mitigate biases when investing and budgeting.",
+      "duration_min": 4,
+      "xp_reward": 75,
+      "theory_text": "Recognize and mitigate biases when investing and budgeting. This lesson builds on basics and adds practical steps, examples, and intermediate tools to apply concepts. Key points and practical examples are provided for clarity.",
+      "fixed_qna": [
+        {
+          "q": "What is the main idea of this module?",
+          "a": "A concise explanation summarizing the module's focus."
+        },
+        {
+          "q": "How do I apply this in real life?",
+          "a": "Actionable steps and small experiments to practice the concept."
+        },
+        {
+          "q": "What common mistakes should I avoid?",
+          "a": "Short list of pitfalls and how to prevent them."
+        }
+      ],
+      "mcqs": [
+        {
+          "id": "mcq-1",
+          "question": "Which statement best describes the concept covered in 'Common Biases'?",
+          "choices": [
+            "A) Distractor",
+            "B) Correct summary",
+            "C) Partially correct",
+            "D) Incorrect"
+          ],
+          "correct_choice": "B",
+          "explanation": "B correctly summarizes the core concept of the module."
+        },
+        {
+          "id": "mcq-2",
+          "question": "Short scenario: Which action is the most appropriate next step?",
+          "choices": [
+            "A) Do nothing",
+            "B) Follow best practice",
+            "C) Risky move",
+            "D) Irrelevant action"
+          ],
+          "correct_choice": "B",
+          "explanation": "Following the best practice aligns with the guidance in the module."
+        },
+        {
+          "id": "mcq-3",
+          "question": "What term is most closely associated with this topic?",
+          "choices": [
+            "A) Unrelated term",
+            "B) Related key term",
+            "C) Another term",
+            "D) Not related"
+          ],
+          "correct_choice": "B",
+          "explanation": "The related key term represents the main vocabulary from the lesson."
+        }
+      ],
+      "mentor_prompts": [
+        {
+          "user_q": "Explain this in simple terms.",
+          "mentor_a": "I'll summarize the key points in 2–3 short sentences and give a practical example."
+        },
+        {
+          "user_q": "Give a small exercise I can try.",
+          "mentor_a": "Here's a small step-by-step action you can try today to practice the concept."
+        },
+        {
+          "user_q": "What mistakes to avoid?",
+          "mentor_a": "Common pitfalls and how to avoid them; not financial advice—educational only."
+        }
+      ],
+      "plaque_card": {
+        "type": "quiz-card",
+        "design_hint": "rounded card, subtle shadow, orange accent for CTAs",
+        "reward_on_complete": {
+          "xp": 37,
+          "badge": null,
+          "streak_inc": 1
+        }
+      },
+      "metadata": {
+        "created_by": "generator",
+        "created_at": "2025-11-21T16:06:42.449472Z",
+        "difficulty": "intermediate"
+      }
+    },
+    {
+      "module_id": "market-fundamentals_m21",
+      "topic_id": "market-fundamentals",
+      "title": "Market Basics",
+      "summary": "How markets function, supply and demand, market cycles, and basic market terminology.",
+      "duration_min": 5,
+      "xp_reward": 75,
+      "theory_text": "How markets function, supply and demand, market cycles, and basic market terminology. This lesson builds on basics and adds practical steps, examples, and intermediate tools to apply concepts. Key points and practical examples are provided for clarity.",
+      "fixed_qna": [
+        {
+          "q": "What is the main idea of this module?",
+          "a": "A concise explanation summarizing the module's focus."
+        },
+        {
+          "q": "How do I apply this in real life?",
+          "a": "Actionable steps and small experiments to practice the concept."
+        },
+        {
+          "q": "What common mistakes should I avoid?",
+          "a": "Short list of pitfalls and how to prevent them."
+        }
+      ],
+      "mcqs": [
+        {
+          "id": "mcq-1",
+          "question": "Which statement best describes the concept covered in 'Market Basics'?",
+          "choices": [
+            "A) Distractor",
+            "B) Correct summary",
+            "C) Partially correct",
+            "D) Incorrect"
+          ],
+          "correct_choice": "B",
+          "explanation": "B correctly summarizes the core concept of the module."
+        },
+        {
+          "id": "mcq-2",
+          "question": "Short scenario: Which action is the most appropriate next step?",
+          "choices": [
+            "A) Do nothing",
+            "B) Follow best practice",
+            "C) Risky move",
+            "D) Irrelevant action"
+          ],
+          "correct_choice": "B",
+          "explanation": "Following the best practice aligns with the guidance in the module."
+        },
+        {
+          "id": "mcq-3",
+          "question": "What term is most closely associated with this topic?",
+          "choices": [
+            "A) Unrelated term",
+            "B) Related key term",
+            "C) Another term",
+            "D) Not related"
+          ],
+          "correct_choice": "B",
+          "explanation": "The related key term represents the main vocabulary from the lesson."
+        }
+      ],
+      "mentor_prompts": [
+        {
+          "user_q": "Explain this in simple terms.",
+          "mentor_a": "I'll summarize the key points in 2–3 short sentences and give a practical example."
+        },
+        {
+          "user_q": "Give a small exercise I can try.",
+          "mentor_a": "Here's a small step-by-step action you can try today to practice the concept."
+        },
+        {
+          "user_q": "What mistakes to avoid?",
+          "mentor_a": "Common pitfalls and how to avoid them; not financial advice—educational only."
+        }
+      ],
+      "plaque_card": {
+        "type": "flash-card",
+        "design_hint": "rounded card, subtle shadow, orange accent for CTAs",
+        "reward_on_complete": {
+          "xp": 37,
+          "badge": null,
+          "streak_inc": 1
+        }
+      },
+      "metadata": {
+        "created_by": "generator",
+        "created_at": "2025-11-21T16:06:42.449472Z",
+        "difficulty": "intermediate"
+      }
+    },
+    {
+      "module_id": "risk-management_m22",
+      "topic_id": "risk-management",
+      "title": "Types of Risk",
+      "summary": "Market risk, credit risk, inflation risk, and how to mitigate each through diversification and strategies.",
+      "duration_min": 4,
+      "xp_reward": 75,
+      "theory_text": "Market risk, credit risk, inflation risk, and how to mitigate each through diversification and strategies. This lesson builds on basics and adds practical steps, examples, and intermediate tools to apply concepts. Key points and practical examples are provided for clarity.",
+      "fixed_qna": [
+        {
+          "q": "What is the main idea of this module?",
+          "a": "A concise explanation summarizing the module's focus."
+        },
+        {
+          "q": "How do I apply this in real life?",
+          "a": "Actionable steps and small experiments to practice the concept."
+        },
+        {
+          "q": "What common mistakes should I avoid?",
+          "a": "Short list of pitfalls and how to prevent them."
+        }
+      ],
+      "mcqs": [
+        {
+          "id": "mcq-1",
+          "question": "Which statement best describes the concept covered in 'Types of Risk'?",
+          "choices": [
+            "A) Distractor",
+            "B) Correct summary",
+            "C) Partially correct",
+            "D) Incorrect"
+          ],
+          "correct_choice": "B",
+          "explanation": "B correctly summarizes the core concept of the module."
+        },
+        {
+          "id": "mcq-2",
+          "question": "Short scenario: Which action is the most appropriate next step?",
+          "choices": [
+            "A) Do nothing",
+            "B) Follow best practice",
+            "C) Risky move",
+            "D) Irrelevant action"
+          ],
+          "correct_choice": "B",
+          "explanation": "Following the best practice aligns with the guidance in the module."
+        },
+        {
+          "id": "mcq-3",
+          "question": "What term is most closely associated with this topic?",
+          "choices": [
+            "A) Unrelated term",
+            "B) Related key term",
+            "C) Another term",
+            "D) Not related"
+          ],
+          "correct_choice": "B",
+          "explanation": "The related key term represents the main vocabulary from the lesson."
+        }
+      ],
+      "mentor_prompts": [
+        {
+          "user_q": "Explain this in simple terms.",
+          "mentor_a": "I'll summarize the key points in 2–3 short sentences and give a practical example."
+        },
+        {
+          "user_q": "Give a small exercise I can try.",
+          "mentor_a": "Here's a small step-by-step action you can try today to practice the concept."
+        },
+        {
+          "user_q": "What mistakes to avoid?",
+          "mentor_a": "Common pitfalls and how to avoid them; not financial advice—educational only."
+        }
+      ],
+      "plaque_card": {
+        "type": "scenario-card",
+        "design_hint": "rounded card, subtle shadow, orange accent for CTAs",
+        "reward_on_complete": {
+          "xp": 37,
+          "badge": null,
+          "streak_inc": 1
+        }
+      },
+      "metadata": {
+        "created_by": "generator",
+        "created_at": "2025-11-21T16:06:42.449472Z",
+        "difficulty": "intermediate"
+      }
+    },
+    {
+      "module_id": "real-estate_m23",
+      "topic_id": "real-estate",
+      "title": "Real Estate Investment",
+      "summary": "Buying vs renting, REITs as an alternative, and real estate as part of your portfolio.",
+      "duration_min": 5,
+      "xp_reward": 100,
+      "theory_text": "Buying vs renting, REITs as an alternative, and real estate as part of your portfolio. Advanced topic: practical frameworks, real-world considerations, and actions for experienced learners. Key points and practical examples are provided for clarity.",
+      "fixed_qna": [
+        {
+          "q": "What is the main idea of this module?",
+          "a": "A concise explanation summarizing the module's focus."
+        },
+        {
+          "q": "How do I apply this in real life?",
+          "a": "Actionable steps and small experiments to practice the concept."
+        },
+        {
+          "q": "What common mistakes should I avoid?",
+          "a": "Short list of pitfalls and how to prevent them."
+        }
+      ],
+      "mcqs": [
+        {
+          "id": "mcq-1",
+          "question": "Which statement best describes the concept covered in 'Real Estate Investment'?",
+          "choices": [
+            "A) Distractor",
+            "B) Correct summary",
+            "C) Partially correct",
+            "D) Incorrect"
+          ],
+          "correct_choice": "B",
+          "explanation": "B correctly summarizes the core concept of the module."
+        },
+        {
+          "id": "mcq-2",
+          "question": "Short scenario: Which action is the most appropriate next step?",
+          "choices": [
+            "A) Do nothing",
+            "B) Follow best practice",
+            "C) Risky move",
+            "D) Irrelevant action"
+          ],
+          "correct_choice": "B",
+          "explanation": "Following the best practice aligns with the guidance in the module."
+        },
+        {
+          "id": "mcq-3",
+          "question": "What term is most closely associated with this topic?",
+          "choices": [
+            "A) Unrelated term",
+            "B) Related key term",
+            "C) Another term",
+            "D) Not related"
+          ],
+          "correct_choice": "B",
+          "explanation": "The related key term represents the main vocabulary from the lesson."
+        }
+      ],
+      "mentor_prompts": [
+        {
+          "user_q": "Explain this in simple terms.",
+          "mentor_a": "I'll summarize the key points in 2–3 short sentences and give a practical example."
+        },
+        {
+          "user_q": "Give a small exercise I can try.",
+          "mentor_a": "Here's a small step-by-step action you can try today to practice the concept."
+        },
+        {
+          "user_q": "What mistakes to avoid?",
+          "mentor_a": "Common pitfalls and how to avoid them; not financial advice—educational only."
+        }
+      ],
+      "plaque_card": {
+        "type": "challenge-card",
+        "design_hint": "rounded card, subtle shadow, orange accent for CTAs",
+        "reward_on_complete": {
+          "xp": 50,
+          "badge": null,
+          "streak_inc": 1
+        }
+      },
+      "metadata": {
+        "created_by": "generator",
+        "created_at": "2025-11-21T16:06:42.449472Z",
+        "difficulty": "advanced"
+      }
+    },
+    {
+      "module_id": "crypto-alternatives_m24",
+      "topic_id": "crypto-alternatives",
+      "title": "Crypto Basics",
+      "summary": "What is cryptocurrency, blockchain basics, risks, and how to approach crypto investing safely.",
+      "duration_min": 5,
+      "xp_reward": 100,
+      "theory_text": "What is cryptocurrency, blockchain basics, risks, and how to approach crypto investing safely. Advanced topic: practical frameworks, real-world considerations, and actions for experienced learners. Key points and practical examples are provided for clarity.",
+      "fixed_qna": [
+        {
+          "q": "What is the main idea of this module?",
+          "a": "A concise explanation summarizing the module's focus."
+        },
+        {
+          "q": "How do I apply this in real life?",
+          "a": "Actionable steps and small experiments to practice the concept."
+        },
+        {
+          "q": "What common mistakes should I avoid?",
+          "a": "Short list of pitfalls and how to prevent them."
+        }
+      ],
+      "mcqs": [
+        {
+          "id": "mcq-1",
+          "question": "Which statement best describes the concept covered in 'Crypto Basics'?",
+          "choices": [
+            "A) Distractor",
+            "B) Correct summary",
+            "C) Partially correct",
+            "D) Incorrect"
+          ],
+          "correct_choice": "B",
+          "explanation": "B correctly summarizes the core concept of the module."
+        },
+        {
+          "id": "mcq-2",
+          "question": "Short scenario: Which action is the most appropriate next step?",
+          "choices": [
+            "A) Do nothing",
+            "B) Follow best practice",
+            "C) Risky move",
+            "D) Irrelevant action"
+          ],
+          "correct_choice": "B",
+          "explanation": "Following the best practice aligns with the guidance in the module."
+        },
+        {
+          "id": "mcq-3",
+          "question": "What term is most closely associated with this topic?",
+          "choices": [
+            "A) Unrelated term",
+            "B) Related key term",
+            "C) Another term",
+            "D) Not related"
+          ],
+          "correct_choice": "B",
+          "explanation": "The related key term represents the main vocabulary from the lesson."
+        }
+      ],
+      "mentor_prompts": [
+        {
+          "user_q": "Explain this in simple terms.",
+          "mentor_a": "I'll summarize the key points in 2–3 short sentences and give a practical example."
+        },
+        {
+          "user_q": "Give a small exercise I can try.",
+          "mentor_a": "Here's a small step-by-step action you can try today to practice the concept."
+        },
+        {
+          "user_q": "What mistakes to avoid?",
+          "mentor_a": "Common pitfalls and how to avoid them; not financial advice—educational only."
+        }
+      ],
+      "plaque_card": {
+        "type": "quiz-card",
+        "design_hint": "rounded card, subtle shadow, orange accent for CTAs",
+        "reward_on_complete": {
+          "xp": 50,
+          "badge": null,
+          "streak_inc": 1
+        }
+      },
+      "metadata": {
+        "created_by": "generator",
+        "created_at": "2025-11-21T16:06:42.449472Z",
+        "difficulty": "advanced"
+      }
+    }
+  ]
+}

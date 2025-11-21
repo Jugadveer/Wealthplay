@@ -120,53 +120,8 @@
         }
 
         {% block extra_css %}{% endblock %}
-
-        /* Footer */
-        .footer {
-            background: #1a1a1a;
-            color: #999;
-            padding: 40px 40px 20px;
-            margin-top: auto;
-        }
-
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 40px;
-            margin-bottom: 30px;
-        }
-
-        .footer-section h3 {
-            color: white;
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 15px;
-        }
-
-        .footer-section p,
-        .footer-section a {
-            color: #999;
-            text-decoration: none;
-            font-size: 14px;
-            line-height: 1.8;
-            display: block;
-            margin-bottom: 8px;
-        }
-
-        .footer-section a:hover {
-            color: #EA580C;
-        }
-
-        .footer-bottom {
-            text-align: center;
-            padding-top: 20px;
-            border-top: 1px solid #333;
-            color: #666;
-            font-size: 13px;
-        }
-
+    </style>
+    <style>
         @media (max-width: 768px) {
             .navbar {
                 padding: 0 20px;
@@ -190,6 +145,7 @@
     {% block extra_head %}{% endblock %}
 </head>
 <body>
+    {% block hide_navbar %}{% endblock %}
     <!-- Navbar -->
     <nav class="navbar">
         <a href="/" class="navbar-brand">WealthPlay</a>
@@ -224,39 +180,7 @@
         {% block content %}{% endblock %}
     </div>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-content">
-            <div class="footer-section">
-                <h3>WealthPlay</h3>
-                <p>Your personal financial education companion. Learn, practice, and master financial literacy at your own pace.</p>
-            </div>
-            <div class="footer-section">
-                <h3>Quick Links</h3>
-                {% if user.is_authenticated %}
-                    <a href="/course/">Courses</a>
-                    <a href="/scenario/">Scenarios</a>
-                {% else %}
-                    <a href="#" onclick="openLoginModal(); return false;">Login</a>
-                    <a href="#" onclick="openSignupModal(); return false;">Sign Up</a>
-                {% endif %}
-            </div>
-            <div class="footer-section">
-                <h3>Resources</h3>
-                <a href="#">Financial Tips</a>
-                <a href="#">Investment Guide</a>
-                <a href="#">FAQ</a>
-            </div>
-            <div class="footer-section">
-                <h3>Contact</h3>
-                <p>Email: support@wealthplay.com</p>
-                <p>Support available 24/7</p>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2025 WealthPlay. All rights reserved.</p>
-        </div>
-    </footer>
+    <!-- Footer Removed -->
 
     <!-- Login Modal -->
     <div id="loginModal" class="auth-modal" style="display: none;">

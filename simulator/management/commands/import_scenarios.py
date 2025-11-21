@@ -3,10 +3,10 @@ Management command to import scenarios from scenarios.json
 Run: python manage.py import_scenarios
 """
 from django.core.management.base import BaseCommand
-from django.core.management import call_command
 import json
 import os
 from django.conf import settings
+from simulator.models import Scenario, DecisionOption
 
 
 class Command(BaseCommand):
@@ -32,27 +32,91 @@ class Command(BaseCommand):
         
         self.stdout.write(f'Found {len(scenarios_data)} scenarios and {len(options_data)} decision options')
         
-        # Import using Django's loaddata
-        # Create a temporary fixture file
-        temp_fixture = os.path.join(settings.BASE_DIR, 'temp_scenarios_fixture.json')
+        # Import scenarios (update or create)
+        scenarios_imported = 0
+        scenarios_updated = 0
+        for scenario_item in scenarios_data:
+            pk = scenario_item['pk']
+            fields = scenario_item['fields']
+            
+            scenario, created = Scenario.objects.update_or_create(
+                id=pk,
+                defaults={
+                    'title': fields['title'],
+                    'description': fields['description'],
+                    'starting_balance': fields['starting_balance']
+                }
+            )
+            
+            if created:
+                scenarios_imported += 1
+            else:
+                scenarios_updated += 1
         
-        try:
-            # Write only scenarios and options (skip user logs)
-            fixture_data = scenarios_data + options_data
-            
-            with open(temp_fixture, 'w', encoding='utf-8') as f:
-                json.dump(fixture_data, f, indent=4, ensure_ascii=False)
-            
-            # Use loaddata to import
-            call_command('loaddata', temp_fixture, verbosity=0)
-            
-            self.stdout.write(self.style.SUCCESS(f'Successfully imported {len(scenarios_data)} scenarios'))
-            self.stdout.write(self.style.SUCCESS(f'Successfully imported {len(options_data)} decision options'))
-            
-        except Exception as e:
-            self.stdout.write(self.style.ERROR(f'Error importing: {str(e)}'))
-        finally:
-            # Clean up temp file
-            if os.path.exists(temp_fixture):
-                os.remove(temp_fixture)
+        # Import decision options (delete existing for each scenario first, then import)
+        options_imported = 0
+        options_updated = 0
+        
+        # Group options by scenario
+        options_by_scenario = {}
+        for option_item in options_data:
+            scenario_id = option_item['fields']['scenario']
+            if scenario_id not in options_by_scenario:
+                options_by_scenario[scenario_id] = []
+            options_by_scenario[scenario_id].append(option_item)
+        
+        # Import options for each scenario
+        for scenario_id, option_items in options_by_scenario.items():
+            try:
+                scenario = Scenario.objects.get(id=scenario_id)
+                # Delete existing options for this scenario
+                DecisionOption.objects.filter(scenario=scenario).delete()
+                
+                # Import new options
+                for option_item in option_items:
+                    pk = option_item['pk']
+                    fields = option_item['fields']
+                    
+                    # Ensure score is an integer (handle both string and int in JSON)
+                    score_value = fields.get('score', 0)
+                    if isinstance(score_value, str):
+                        try:
+                            score_value = int(score_value)
+                        except (ValueError, TypeError):
+                            score_value = 0
+                    try:
+                        score_value = int(score_value) if score_value else 0
+                    except (TypeError, ValueError):
+                        score_value = 0
+                    
+                    # Use update_or_create to ensure options are properly imported
+                    option, created = DecisionOption.objects.update_or_create(
+                        id=pk,
+                        defaults={
+                            'scenario': scenario,
+                            'text': fields['text'],
+                            'decision_type': fields['decision_type'],
+                            'balance_impact': fields['balance_impact'],
+                            'confidence_delta': fields.get('confidence_delta', 0),
+                            'risk_score_delta': fields.get('risk_score_delta', 0),
+                            'future_growth_rate': fields.get('future_growth_rate', 0.0),
+                            'score': score_value,
+                            'why_it_matters': fields.get('why_it_matters', ''),
+                            'mentor_feedback': fields.get('mentor_feedback', '')
+                        }
+                    )
+                    options_imported += 1
+                    if score_value > 0:
+                        self.stdout.write(f'  Imported option "{fields["text"]}" with score {score_value}')
+                    
+            except Scenario.DoesNotExist:
+                self.stdout.write(self.style.WARNING(f'Scenario {scenario_id} not found, skipping options'))
+        
+        self.stdout.write(self.style.SUCCESS(
+            f'\nImport Summary:\n'
+            f'  Scenarios: {scenarios_imported} imported, {scenarios_updated} updated\n'
+            f'  Decision Options: {options_imported} imported\n'
+            f'  Total Scenarios in DB: {Scenario.objects.count()}\n'
+            f'  Total Options in DB: {DecisionOption.objects.count()}'
+        ))
 

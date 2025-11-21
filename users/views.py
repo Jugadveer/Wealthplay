@@ -1,11 +1,16 @@
 from rest_framework import viewsets, status
-from rest_framework.decorators import action
+from rest_framework.decorators import api_view, action
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from django.utils import timezone
-from .models import UserProgress, QuizAttempt
+from django.contrib.auth import login, authenticate
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+from django.http import JsonResponse
+from .models import UserProgress, QuizAttempt, UserProfile, DemoPortfolio
 from .serializers import UserProgressSerializer, QuizAttemptSerializer
 from courses.models import Course, Lesson
+import json
 
 
 class UserProgressViewSet(viewsets.ModelViewSet):
@@ -90,3 +95,159 @@ class QuizAttemptViewSet(viewsets.ModelViewSet):
 
         serializer = self.get_serializer(attempt)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_http_methods
+
+@csrf_exempt
+@require_http_methods(["POST"])
+def save_onboarding(request):
+    """Save onboarding quiz answers and create/update user profile"""
+    
+    if not request.user.is_authenticated:
+        return JsonResponse({
+            'status': 'error',
+            'message': 'Authentication required'
+        }, status=401)
+    
+    try:
+        # Get data from FormData (POST request)
+        # Try request.POST first (FormData), then request.data (JSON)
+        financial_goal = request.POST.get('financial_goal', '') or (hasattr(request, 'data') and request.data.get('financial_goal', '') or '')
+        investment_experience = request.POST.get('investment_experience', '') or (hasattr(request, 'data') and request.data.get('investment_experience', '') or '')
+        risk_comfort = request.POST.get('risk_comfort', '') or (hasattr(request, 'data') and request.data.get('risk_comfort', '') or '')
+        initial_investment = request.POST.get('initial_investment', '') or (hasattr(request, 'data') and request.data.get('initial_investment', '') or '')
+        investment_timeline = request.POST.get('investment_timeline', '') or (hasattr(request, 'data') and request.data.get('investment_timeline', '') or '')
+        
+        profile, created = UserProfile.objects.get_or_create(
+            user=request.user,
+            defaults={
+                'xp': 0,
+                'level': 'beginner',
+                'confidence_score': 0.0,
+                'onboarding_completed': False
+            }
+        )
+        
+        # Update onboarding answers
+        profile.financial_goal = financial_goal
+        profile.investment_experience = investment_experience
+        profile.risk_comfort = risk_comfort
+        profile.initial_investment = initial_investment
+        profile.investment_timeline = investment_timeline
+        profile.onboarding_completed = True
+        
+        # Calculate initial level based on experience
+        experience = profile.investment_experience
+        if experience == 'very_experienced':
+            profile.level = 'advanced'
+            profile.xp = 400  # Start with enough XP for advanced courses
+        elif experience == 'experienced':
+            profile.level = 'intermediate'
+            profile.xp = 200  # Start with some XP for intermediate courses
+        elif experience == 'basics':
+            profile.level = 'beginner'
+            profile.xp = 50
+        else:
+            profile.level = 'beginner'
+            profile.xp = 0
+        
+        profile.save()
+        
+        # Create demo portfolio if doesn't exist
+        DemoPortfolio.objects.get_or_create(
+            user=request.user,
+            defaults={
+                'holdings': {},
+                'total_value': 50000.00
+            }
+        )
+        
+        return JsonResponse({
+            'status': 'success',
+            'level': profile.level,
+            'xp': profile.xp,
+            'message': 'Onboarding completed successfully'
+        })
+    
+    except Exception as e:
+        return JsonResponse({
+            'status': 'error',
+            'message': str(e)
+        }, status=400)
+
+
+def calculate_level_from_answers(answers):
+    """Calculate user level from onboarding answers"""
+    experience = answers.get('investment_experience', '')
+    if experience in ['experienced', 'very_experienced']:
+        return 'intermediate'
+    elif experience == 'basics':
+        return 'beginner'
+    return 'beginner'
+
+
+@api_view(['GET'])
+def get_user_profile(request):
+    """Get user profile with level, XP, and onboarding data"""
+    if not request.user.is_authenticated:
+        return JsonResponse({'error': 'Authentication required'}, status=401)
+    
+    try:
+        profile = UserProfile.objects.get(user=request.user)
+        return JsonResponse({
+            'level': profile.level,
+            'xp': profile.xp,
+            'confidence_score': profile.confidence_score,
+            'financial_goal': profile.financial_goal,
+            'investment_experience': profile.investment_experience,
+            'risk_comfort': profile.risk_comfort,
+            'initial_investment': profile.initial_investment,
+            'investment_timeline': profile.investment_timeline,
+            'onboarding_completed': profile.onboarding_completed,
+            'demo_balance': float(profile.demo_balance)
+        })
+    except UserProfile.DoesNotExist:
+        return JsonResponse({
+            'level': 'beginner',
+            'xp': 0,
+            'confidence_score': 0.0,
+            'onboarding_completed': False,
+            'demo_balance': 50000.00
+        })
+
+
+@csrf_exempt
+@login_required
+@api_view(['POST'])
+def award_xp(request):
+    """API endpoint to award XP to user"""
+    try:
+        profile = UserProfile.objects.get(user=request.user)
+        amount = int(request.data.get('amount', 0))
+        source = request.data.get('source', 'unknown')
+        
+        if amount > 0:
+            profile.xp += amount
+            profile.save()
+            
+            # Check if level up
+            old_level = profile.level
+            new_level = profile.calculate_level_from_xp()
+            
+            return JsonResponse({
+                'success': True,
+                'amount_awarded': amount,
+                'new_total': profile.xp,
+                'old_total': profile.xp - amount,
+                'leveled_up': old_level != new_level,
+                'new_level': new_level
+            })
+        else:
+            return JsonResponse({'success': False, 'error': 'Invalid amount'}, status=400)
+            
+    except UserProfile.DoesNotExist:
+        return JsonResponse({'success': False, 'error': 'Profile not found'}, status=404)
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)}, status=400)

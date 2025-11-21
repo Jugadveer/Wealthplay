@@ -124,11 +124,8 @@ def mentor_respond(request):
     1. Fixed Q&A (immediate authoritative answers)
     2. Ollama LLM with course context (for additional queries)
     """
-    if not COURSE_MENTOR_AVAILABLE:
-        return JsonResponse({
-            "reply": "Sorry, the course mentor is currently unavailable.",
-            "type": "error"
-        }, status=503)
+    # Always try to respond, even if Ollama is unavailable (will use fixed Q&A or fallback)
+    # The mentor_respond function handles fallbacks internally
     
     try:
         data = request.data if hasattr(request, 'data') else json.loads(request.body)
@@ -190,8 +187,12 @@ def mentor_respond(request):
                 time_display=timezone.now().strftime('%H:%M')
             )
         
+        # Map "answer" to "reply" for frontend compatibility
+        reply = result.get("answer", "") or result.get("reply", "")
+        
         return JsonResponse({
-            "reply": answer,
+            "reply": reply,
+            "answer": reply,  # Also include "answer" key
             "type": result.get("type", "llm"),
             "source": result.get("source", ""),
             "confidence": result.get("confidence", 0),

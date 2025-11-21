@@ -176,7 +176,10 @@ def generate_ollama_response(course, module, user_question, ollama_model="phi3")
     """
     Generate response using Ollama with course context and few-shot examples
     """
-    ollama = Client()
+    try:
+        ollama = Client(host=os.environ.get('OLLAMA_HOST', 'http://localhost:11434'))
+    except Exception as e:
+        raise Exception(f"Could not connect to Ollama: {str(e)}. Please ensure Ollama is running.")
     
     # Build system prompt
     system_prompt = """You are an empathetic, practical financial mentor speaking to first-time earners. Keep answers short (2-4 short paragraphs), avoid jargon unless user asks for definitions, include one simple actionable next-step and note sources. When unsure, say you are unsure and suggest where to learn (cite module source)."""
@@ -187,17 +190,38 @@ Module: {module.get('title', '')}
 Module Summary: {module.get('summary', '')}
 Source: {course.get('source', '')}"""
     
-    # Build few-shot examples from fixed Q&A
+    # Build few-shot examples from fixed Q&A or database
     messages = [
         {"role": "system", "content": system_prompt},
         {"role": "system", "content": context_msg}
     ]
     
-    # Add up to 3 fixed Q&A as few-shot examples
+    # Try to get enriched content from database first
     fixed_qna = module.get("fixed_qna", [])
+    if not fixed_qna:
+        # Try loading from database
+        try:
+            from courses.models import ModuleContent
+            full_module_id = f"{course.get('id', '')}_{module.get('id', '')}"
+            try:
+                module_content = ModuleContent.objects.get(module_id=full_module_id)
+                # Get Q&A from database
+                qna_pairs = module_content.qna_pairs.all()[:3]
+                fixed_qna = [{"q": qa.question, "a": qa.answer} for qa in qna_pairs]
+                # Also add theory text to context
+                if module_content.theory_text:
+                    theory_context = f"Theory: {module_content.theory_text[:300]}"
+                    messages.append({"role": "system", "content": theory_context})
+            except ModuleContent.DoesNotExist:
+                pass
+        except Exception as e:
+            print(f"Could not load from database: {e}")
+    
+    # Add up to 3 fixed Q&A as few-shot examples
     for qa in fixed_qna[:3]:
-        messages.append({"role": "user", "content": qa.get("q", "")})
-        messages.append({"role": "assistant", "content": qa.get("a", "")})
+        if isinstance(qa, dict):
+            messages.append({"role": "user", "content": qa.get("q", "")})
+            messages.append({"role": "assistant", "content": qa.get("a", "")})
     
     # Add user's question
     messages.append({"role": "user", "content": user_question})
@@ -245,8 +269,23 @@ def mentor_respond(course_id, module_id=None, question=""):
             "confidence": 0
         }
     
-    # Layer 1: Check fixed Q&A
+    # Layer 1: Check fixed Q&A (from JSON or database)
     fixed_qna = module.get("fixed_qna", [])
+    
+    # Try to get enriched Q&A from database if not in module
+    if not fixed_qna:
+        try:
+            from courses.models import ModuleContent
+            full_module_id = f"{course_id}_{module_id or ''}"
+            try:
+                module_content = ModuleContent.objects.get(module_id=full_module_id)
+                qna_pairs = module_content.qna_pairs.all()
+                fixed_qna = [{"q": qa.question, "a": qa.answer} for qa in qna_pairs]
+            except ModuleContent.DoesNotExist:
+                pass
+        except Exception as e:
+            print(f"Could not load Q&A from database: {e}")
+    
     match = fuzzy_match_q(fixed_qna, question, cutoff=0.7)
     
     if match:
@@ -272,9 +311,35 @@ def mentor_respond(course_id, module_id=None, question=""):
             "confidence": 0.85
         }
     except Exception as e:
+        # If Ollama fails, provide a helpful fallback response using module content
+        module_summary = module.get("summary", "")
+        theory_text = module.get("theory_text", "")
+        
+        # Try to get enriched content from database
+        try:
+            from courses.models import ModuleContent
+            full_module_id = f"{course_id}_{module_id or ''}"
+            try:
+                module_content = ModuleContent.objects.get(module_id=full_module_id)
+                theory_text = module_content.theory_text or theory_text
+                module_summary = module_content.summary or module_summary
+            except ModuleContent.DoesNotExist:
+                pass
+        except:
+            pass
+        
+        # Create a fallback answer from module content
+        if theory_text:
+            fallback_answer = f"Based on {module.get('title', 'this module')}: {theory_text[:200]}..."
+        elif module_summary:
+            fallback_answer = f"{module_summary} This is educational content about {module.get('title', 'this topic')}."
+        else:
+            fallback_answer = f"I can help explain {module.get('title', 'this topic')}. Please check if Ollama is running for detailed AI responses, or refer to the module content above."
+        
         return {
-            "type": "error",
-            "answer": f"Sorry, I encountered an error: {str(e)}. Please ensure Ollama is running and the model is available.",
-            "confidence": 0
+            "type": "fallback",
+            "answer": fallback_answer + f"\n\nNote: Full AI responses require Ollama to be running. Error: {str(e)[:100]}",
+            "source": course.get("source", ""),
+            "confidence": 0.6
         }
 
