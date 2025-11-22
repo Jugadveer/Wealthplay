@@ -1,10 +1,20 @@
 [
   {
-    "question": "Is it safer to buy ETFs than one stock?",
-    "answer": "Generally yes — ETFs provide immediate diversification, which lowers idiosyncratic risk compared to a single stock."
+    "id": 1207,
+    "question": "What is the 'tracking error' of an index ETF?",
+    "answer": "Tracking error is the difference between the return of the ETF and the return of the benchmark index it is supposed to track. A lower tracking error indicates the ETF is doing a better job of mirroring the index's performance.",
+    "explanation": "Tracking error is essentially how 'good' the ETF is at its job of matching the index. You want this number to be as close to zero as possible."
   },
   {
-    "question": "Do ETFs have fees?",
-    "answer": "Yes — ETFs have an expense ratio. Choose low-cost ETFs for long-term investing."
+    "id": 1208,
+    "question": "Why do some investors still buy individual stocks despite the higher risk?",
+    "answer": "Individual stocks offer the potential for market-beating returns (alpha) that are impossible to achieve through a diversified ETF. Successful stock picking can generate explosive wealth, provided the investor has done adequate research.",
+    "explanation": "Stocks are for 'alpha' (outperformance); ETFs are for 'beta' (market performance). The risk is worth the shot at massive gain for some."
+  },
+  {
+    "id": 1209,
+    "question": "In terms of trading, how are ETFs different from traditional Mutual Funds?",
+    "answer": "ETFs can be bought and sold throughout the day, just like stocks, at the current market price. Traditional Mutual Funds are only priced and traded once per day after the market closes, using that day's NAV.",
+    "explanation": "The continuous trading feature gives ETFs superior intraday liquidity compared to mutual funds."
   }
 ]

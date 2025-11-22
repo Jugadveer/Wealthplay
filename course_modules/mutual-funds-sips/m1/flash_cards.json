@@ -1,1 +1,20 @@
-[]
+[
+  {
+    "id": 601,
+    "topic": "Mutual Fund Defined",
+    "theory_title": "Pooled Investments",
+    "theory_content": "A **Mutual Fund** is a professional pooled investment vehicle that collects money from many investors and invests it in stocks, bonds, money market instruments, and/or other assets. They are managed by professional fund managers."
+  },
+  {
+    "id": 602,
+    "topic": "Net Asset Value (NAV)",
+    "theory_title": "The Price of a Fund Unit",
+    "theory_content": "The **NAV** (Net Asset Value) is the price per unit of a mutual fund. It is calculated daily by taking the total value of all assets in the fund, subtracting liabilities, and dividing by the number of outstanding units. When you invest, you buy units at the current NAV."
+  },
+  {
+    "id": 603,
+    "topic": "Key Benefits",
+    "theory_title": "Diversification and Expertise",
+    "theory_content": "Mutual funds offer instant **Diversification** (a single fund invests in dozens/hundreds of assets) and **Professional Management** (experts make the buying/selling decisions). This makes them an excellent tool for beginners."
+  }
+]

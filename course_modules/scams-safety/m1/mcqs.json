@@ -1,1 +1,47 @@
-[]
+[
+  {
+    "id": 1004,
+    "question": "Which phrase is the strongest indicator that an investment opportunity is a scam?",
+    "options": [
+      "Diversification is key.",
+      "Returns are guaranteed at 25% per year.",
+      "Fees are applied annually.",
+      "It requires a long-term lock-in."
+    ],
+    "correct_answer": "Returns are guaranteed at 25% per year.",
+    "ai_feedback": {
+      "correct": "Exactly! No legitimate investment can guarantee high returns. This is the biggest warning sign.",
+      "incorrect": "Guaranteed, high returns are impossible in the real financial world. This is the most definite red flag of a scam."
+    }
+  },
+  {
+    "id": 1005,
+    "question": "Before investing with a financial advisor or firm, what is the most important step?",
+    "options": [
+      "Read their brochure.",
+      "Verify their registration with the country's financial regulator.",
+      "Ask a friend for their opinion.",
+      "Check their social media followers."
+    ],
+    "correct_answer": "Verify their registration with the country's financial regulator.",
+    "ai_feedback": {
+      "correct": "Nice job! Regulatory verification ensures the entity is legal and accountable.",
+      "incorrect": "Safety first! Always verify that any financial institution is properly licensed and registered with the appropriate government regulatory body."
+    }
+  },
+  {
+    "id": 1006,
+    "question": "In a Ponzi scheme, who provides the money used to pay returns to the earliest investors?",
+    "options": [
+      "The scheme operator's personal savings.",
+      "Profits from successful external investments.",
+      "Money contributed by new investors.",
+      "A government bailout fund."
+    ],
+    "correct_answer": "Money contributed by new investors.",
+    "ai_feedback": {
+      "correct": "That's right! Ponzi schemes are circular frauds, relying entirely on new money to pay old debts.",
+      "incorrect": "Ponzi schemes are based on fraud. The 'returns' paid out are simply the capital taken from the newest participants."
+    }
+  }
+]

@@ -1,10 +1,20 @@
 [
   {
-    "question": "How do I spot investment scams?",
-    "answer": "Warning signs: guaranteed high returns, pressure to invest quickly, unregistered entities, too-good-to-be-true promises."
+    "id": 1007,
+    "question": "What is phishing, and how is it used to target investors?",
+    "answer": "Phishing is a deceptive attempt to acquire sensitive information (passwords, bank details) by disguising as a trustworthy entity via email or text. Scammers target investors by sending fake alerts about brokerage accounts or tax refunds.",
+    "explanation": "Never click suspicious links or give credentials, even if the email looks professional. Always go directly to the official website."
   },
   {
-    "question": "How do I verify if an investment is legitimate?",
-    "answer": "Check if registered with SEBI, verify credentials, read fine print, never invest based solely on social media ads or unsolicited calls."
+    "id": 1008,
+    "question": "What does 'due diligence' mean in investing?",
+    "answer": "Due diligence is the reasonable steps taken by an investor to investigate and verify the facts of a potential investment, including checking the company's financials, management, and regulatory status, before committing funds.",
+    "explanation": "Due diligence means doing your homework. Never rely on someone else's word alone."
+  },
+  {
+    "id": 1009,
+    "question": "Why is it important to use strong, unique passwords for brokerage accounts?",
+    "answer": "Brokerage accounts hold significant assets, making them prime targets for hackers. A strong, unique password prevents a breach on one site from compromising your entire investment portfolio.",
+    "explanation": "Treat your brokerage login with the highest level of security, as it is the gateway to all your financial wealth."
   }
 ]

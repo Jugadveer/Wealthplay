@@ -1,1 +1,47 @@
-[]
+[
+  {
+    "id": 1404,
+    "question": "Based on the power of compounding, which investor will likely have the largest retirement fund?",
+    "options": [
+      "An investor who starts at age 40 and saves $\text{₹}20,000$ per month.",
+      "An investor who starts at age 25 and saves $\text{₹}10,000$ per month.",
+      "An investor who invests a lump sum at age 60.",
+      "An investor who only saves in cash."
+    ],
+    "correct_answer": "An investor who starts at age 25 and saves $\text{₹}10,000$ per month.",
+    "ai_feedback": {
+      "correct": "Correct! The investor who starts earliest allows their money the maximum time to compound, which is usually the winning strategy.",
+      "incorrect": "Time is the key ingredient. The 25-year-old has 15 extra years of compounding, which usually outweighs the higher contributions of the later starter."
+    }
+  },
+  {
+    "id": 1405,
+    "question": "To use the $4%$ Rule, if your desired annual retirement expense is $\text{₹}12,00,000$, your estimated corpus target should be:",
+    "options": [
+      "$\text{₹}1,20,00,000$ ($\text{₹}1.2$ Crore).",
+      "$\text{₹}3,00,00,000$ ($\text{₹}3$ Crore).",
+      "$\text{₹}25,00,000$ ($\text{₹}25$ Lakh).",
+      "$\text{₹}4,80,00,000$ ($\text{₹}4.8$ Crore)."
+    ],
+    "correct_answer": "$\text{₹}3,00,00,000$ ($\text{₹}3$ Crore).",
+    "ai_feedback": {
+      "correct": "You got it! $\text{₹}12,00,000 \times 25 = \text{₹}3,00,00,000$. This is the mathematical basis of the $4%$ rule.",
+      "incorrect": "The target is $25$ times your annual expense. ($\text{₹}12,00,000 \times 25 = \text{₹}3 \text{ Crore}$)."
+    }
+  },
+  {
+    "id": 1406,
+    "question": "Which retirement plan is considered a market-linked defined contribution scheme, often used voluntarily for long-term savings?",
+    "options": [
+      "Fixed Deposit.",
+      "Employee Provident Fund (EPF).",
+      "National Pension System (NPS).",
+      "Credit Card."
+    ],
+    "correct_answer": "National Pension System (NPS).",
+    "ai_feedback": {
+      "correct": "Correct! NPS is the market-linked, voluntary retirement savings vehicle in India.",
+      "incorrect": "NPS (National Pension System) is a flexible, market-linked retirement tool. EPF is generally mandatory and has a fixed interest rate."
+    }
+  }
+]

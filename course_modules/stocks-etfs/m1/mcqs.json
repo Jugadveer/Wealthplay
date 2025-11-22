@@ -1,1 +1,47 @@
-[]
+[
+  {
+    "id": 1204,
+    "question": "Which product offers instant and broad diversification with a single purchase?",
+    "options": [
+      "Individual Stock.",
+      "Corporate Bond.",
+      "Exchange Traded Fund (ETF).",
+      "Fixed Deposit."
+    ],
+    "correct_answer": "Exchange Traded Fund (ETF).",
+    "ai_feedback": {
+      "correct": "You got it! ETFs hold a basket of assets, giving you immediate diversification and lower risk.",
+      "incorrect": "ETFs are designed to provide instant diversification by holding dozens or hundreds of underlying stocks or bonds."
+    }
+  },
+  {
+    "id": 1205,
+    "question": "The risk of an individual company going bankrupt is categorized as:",
+    "options": [
+      "Systematic Risk.",
+      "Credit Risk.",
+      "Unsystematic Risk.",
+      "Liquidity Risk."
+    ],
+    "correct_answer": "Unsystematic Risk.",
+    "ai_feedback": {
+      "correct": "Correct! Unsystematic risk is company-specific and can be mitigated by holding an ETF (diversification).",
+      "incorrect": "The risk of a single company failure is unsystematic risk. Since an ETF holds many companies, this risk is largely mitigated."
+    }
+  },
+  {
+    "id": 1206,
+    "question": "A Passive ETF that tracks a major market index will typically have a very low:",
+    "options": [
+      "Trading volume.",
+      "Diversification level.",
+      "Expense ratio.",
+      "Volatility level."
+    ],
+    "correct_answer": "Expense ratio.",
+    "ai_feedback": {
+      "correct": "Nice job! Passive management is cheaper than active, resulting in very low expense ratios for index-tracking ETFs.",
+      "incorrect": "Because passive ETFs require minimal active management, they usually have much lower expense ratios (fees) than actively managed funds or stocks."
+    }
+  }
+]

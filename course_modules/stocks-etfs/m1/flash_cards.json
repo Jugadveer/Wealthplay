@@ -1,1 +1,20 @@
-[]
+[
+  {
+    "id": 1201,
+    "topic": "Individual Stocks",
+    "theory_title": "High Risk, High Reward",
+    "theory_content": "An individual stock offers the highest potential reward but carries the highest **unsystematic risk** (company-specific risk). Success depends entirely on the performance of that one company. It requires significant research (due diligence) to be successful."
+  },
+  {
+    "id": 1202,
+    "topic": "ETFs Defined",
+    "theory_title": "Exchange Traded Funds",
+    "theory_content": "An **ETF** (Exchange Traded Fund) is a security that tracks an index, sector, commodity, or other asset, but trades like a regular stock on an exchange. It is essentially a basket of assets in a single security, providing instant diversification and low cost."
+  },
+  {
+    "id": 1203,
+    "topic": "Key Differences: Risk/Reward",
+    "theory_title": "Portfolio Role",
+    "theory_content": "ETFs are low-risk tools for long-term core holdings (providing broad market exposure). Individual stocks are high-risk tools for speculative growth or value investing (providing concentrated bets). A balanced portfolio uses both."
+  }
+]

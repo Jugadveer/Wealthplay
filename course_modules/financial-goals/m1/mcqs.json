@@ -1,1 +1,47 @@
-[]
+[
+  {
+    "id": 904,
+    "question": "Saving for retirement, which is 30 years away, is an example of which type of financial goal?",
+    "options": [
+      "Short-term.",
+      "Medium-term.",
+      "Long-term.",
+      "S.M.A.R.T.-term."
+    ],
+    "correct_answer": "Long-term.",
+    "ai_feedback": {
+      "correct": "Correct! Anything over 10 years is firmly in the long-term category, ideal for growth assets.",
+      "incorrect": "Retirement is the classic example of a long-term goal, requiring a time horizon of 10 or more years."
+    }
+  },
+  {
+    "id": 905,
+    "question": "In the S.M.A.R.T. goal framework, setting a specific dollar amount to save relates to which two letters?",
+    "options": [
+      "Achievable and Relevant.",
+      "Specific and Measurable.",
+      "Relevant and Time-bound.",
+      "Specific and Achievable."
+    ],
+    "correct_answer": "Specific and Measurable.",
+    "ai_feedback": {
+      "correct": "Nice job! The dollar amount makes the goal clear (Specific) and provides a clear metric for tracking progress (Measurable).",
+      "incorrect": "The dollar amount is essential for making the goal Specific (clear) and Measurable (trackable). Time-bound would be the due date."
+    }
+  },
+  {
+    "id": 906,
+    "question": "Which goal should typically be prioritized over long-term investment growth?",
+    "options": [
+      "Buying the latest smartphone.",
+      "Paying off high-interest credit card debt.",
+      "Funding a future vacation.",
+      "Purchasing a low-risk bond."
+    ],
+    "correct_answer": "Paying off high-interest credit card debt.",
+    "ai_feedback": {
+      "correct": "Exactly! The guaranteed 'return' from avoiding 20-30% credit card interest usually beats any investment return.",
+      "incorrect": "Paying off high-interest debt provides a guaranteed return equal to the interest rate, which is almost always the best financial move before aggressive investing."
+    }
+  }
+]

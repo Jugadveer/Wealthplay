@@ -390,6 +390,31 @@
         </div>
     </div>
 
+    <!-- PROGRESS STATISTICS -->
+    <div class="cards-section" style="margin-top: 40px;">
+        <div style="flex: 1; background: white; border-radius: 12px; padding: 30px; box-shadow: 0 2px 6px rgba(0,0,0,0.08);">
+            <div style="font-size: 18px; font-weight: bold; margin-bottom: 20px; color: #333;">Your Progress</div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 20px;">
+                <div>
+                    <div style="font-size: 32px; font-weight: bold; color: #EA580C;">{{ completed_modules }}</div>
+                    <div style="font-size: 14px; color: #666; margin-top: 5px;">Modules Completed</div>
+                </div>
+                <div>
+                    <div style="font-size: 32px; font-weight: bold; color: #EA580C;">{{ total_flashcards_flipped }}</div>
+                    <div style="font-size: 14px; color: #666; margin-top: 5px;">Flashcards Flipped</div>
+                </div>
+                <div>
+                    <div style="font-size: 32px; font-weight: bold; color: #EA580C;">{{ total_mcqs_completed }}</div>
+                    <div style="font-size: 14px; color: #666; margin-top: 5px;">MCQs Completed</div>
+                </div>
+                <div>
+                    <div style="font-size: 32px; font-weight: bold; color: #EA580C;">{{ total_xp_earned }}</div>
+                    <div style="font-size: 14px; color: #666; margin-top: 5px;">Total XP Earned</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- TODAY'S TIP -->
     <div class="tip-card">
         <div class="tip-label">Today's tip</div>

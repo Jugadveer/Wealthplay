@@ -1,1 +1,20 @@
-[]
+[
+  {
+    "id": 510,
+    "topic": "Supply and Demand",
+    "theory_title": "The Price Mechanism",
+    "theory_content": "Stock prices are fundamentally determined by the relationship between **Supply** (sellers) and **Demand** (buyers). If demand for a stock is high (more buyers than sellers), the price rises. If supply is high (more sellers than buyers), the price falls. [Image of stock market supply and demand curve]"
+  },
+  {
+    "id": 511,
+    "topic": "Market Sentiment",
+    "theory_title": "The Psychological Factor",
+    "theory_content": "**Market Sentiment** refers to the overall attitude of investors toward a particular stock or the market as a whole. Fear (negative sentiment) leads to selling and falling prices; greed or excitement (positive sentiment) leads to buying and rising prices. Sentiment can often cause prices to move irrationally in the short term."
+  },
+  {
+    "id": 512,
+    "topic": "Fundamental vs. Technical Factors",
+    "theory_title": "Drivers of Long-term vs. Short-term Price",
+    "theory_content": "**Fundamental Factors** (company earnings, balance sheet, industry growth) drive long-term price movements. **Technical Factors** (trading volume, chart patterns, moving averages) drive short-term trading movements based on investor behavior."
+  }
+]

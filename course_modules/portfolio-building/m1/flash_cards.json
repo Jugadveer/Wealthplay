@@ -1,1 +1,20 @@
-[]
+[
+  {
+    "id": 1501,
+    "topic": "The Core Allocation",
+    "theory_title": "Stocks, Bonds, and Cash",
+    "theory_content": "A basic portfolio is built from three asset classes: **Stocks/Equities** (high-risk/high-growth), **Bonds/Fixed Income** (low-risk/low-growth/income), and **Cash** (zero-risk/liquidity). The proportion of each is known as the asset allocation."
+  },
+  {
+    "id": 1502,
+    "topic": "Allocation Strategy",
+    "theory_title": "The 100 Minus Age Rule",
+    "theory_content": "A simple rule of thumb for asset allocation is to subtract your age from 100 to get the percentage of your portfolio that should be invested in stocks/equities. For a 30-year-old, this suggests 70% stocks and 30% bonds, reflecting that risk tolerance decreases with age."
+  },
+  {
+    "id": 1503,
+    "topic": "Rebalancing",
+    "theory_title": "Maintaining the Mix",
+    "theory_content": "Rebalancing is the process of periodically buying or selling assets to bring the portfolio back to its original target allocation. If stocks perform well, they grow to, say, 80% of the portfolio. Rebalancing requires selling some stock gains and buying bonds to restore the target 70%/30% mix, effectively forcing you to 'sell high and buy low'."
+  }
+]

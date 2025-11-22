@@ -1,10 +1,20 @@
 [
   {
-    "question": "What is long-term capital gains?",
-    "answer": "Profit from selling investments after a defined period; tax rates often differ from short-term gains."
+    "id": 1307,
+    "question": "Why is 'tax-deferred' growth better than fully taxable growth?",
+    "answer": "With tax-deferred growth, the capital that would have been paid as tax is kept invested, allowing it to continue earning returns and compounding until retirement. This dramatically increases the final corpus.",
+    "explanation": "You get to invest the government's money (the tax owed) for decades, earning returns on it until you eventually pay the tax later."
   },
   {
-    "question": "What are tax-saving investments?",
-    "answer": "ELSS mutual funds, PPF, NPS, and tax-saving FDs can help reduce your taxable income under Section 80C."
+    "id": 1308,
+    "question": "If I receive a dividend, is it a Capital Gain or taxable Income?",
+    "answer": "Dividends are typically treated as taxable income in the year they are received. They are not Capital Gains, as they are not the result of selling the underlying asset.",
+    "explanation": "Dividends are income; Capital Gains are profit from the sale of an asset. They are taxed differently."
+  },
+  {
+    "id": 1309,
+    "question": "What is the major downside of withdrawing money from a typical retirement account early?",
+    "answer": "Early withdrawal usually results in the immediate tax payment on the withdrawn amount *plus* a significant financial penalty (e.g., $10%$ of the withdrawn amount), making it very costly.",
+    "explanation": "Retirement accounts are meant for retirement. The high penalties are designed to discourage using these funds early."
   }
 ]

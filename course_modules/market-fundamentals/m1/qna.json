@@ -1,10 +1,20 @@
 [
   {
-    "question": "What is a bull market?",
-    "answer": "A period when stock prices are rising generally, typically 20% or more from recent lows. Investor confidence is high."
+    "id": 1707,
+    "question": "What is the difference between an index and an index fund (ETF)?",
+    "answer": "An index is a *theoretical* basket used for measurement (a number). An index fund or ETF is an *actual* investment product that buys the securities in the index, allowing you to invest in the index itself.",
+    "explanation": "You can't buy the S&P 500 index, but you can buy an ETF that tracks it."
   },
   {
-    "question": "What is a bear market?",
-    "answer": "A period when stock prices are falling generally, typically 20% or more from recent highs. Investor confidence is low."
+    "id": 1708,
+    "question": "How does high trading volume affect a stock's liquidity?",
+    "answer": "High trading volume means many shares are being bought and sold, which dramatically increases liquidity. This makes it easier for a large investor to buy or sell without causing a major price fluctuation.",
+    "explanation": "Volume is the lifeblood of liquidity. More volume means faster, easier execution for everyone."
+  },
+  {
+    "id": 1709,
+    "question": "What is the key takeaway of understanding market cycles for a long-term investor?",
+    "answer": "The key takeaway is that bear markets (downtrends) are temporary and inevitable. A long-term investor should use the downturn as a buying opportunity (accumulation) and avoid panic-selling.",
+    "explanation": "The long-term trend of the market is up. Cycles are just noise in the long-term compounding process."
   }
 ]

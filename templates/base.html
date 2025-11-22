@@ -8,6 +8,8 @@
     <title>{% block title %}WealthPlay - Financial Learning Platform{% endblock %}</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/design-tokens.css' %}">
+    <link rel="stylesheet" href="{% static 'css/components.css' %}">
     <style>
         * {
             margin: 0;
@@ -23,45 +25,82 @@
             flex-direction: column;
         }
 
-        /* Navbar */
+        /* Navbar - Modern Design */
         .navbar {
-            background: #EA580C;
-            color: white;
-            padding: 0 40px;
+            background: var(--brand-1);
+            color: var(--white);
+            padding: 0 var(--container-padding);
             height: 70px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            box-shadow: var(--card-shadow);
             position: sticky;
             top: 0;
-            z-index: 1000;
+            z-index: var(--z-sticky);
+        }
+
+        .header-gradient {
+            height: 3px;
+            background: linear-gradient(90deg, var(--brand-1), var(--brand-2), var(--brand-1));
+            background-size: 200% 100%;
+            animation: shimmer 3s linear infinite;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
         }
 
         .navbar-brand {
-            font-size: 24px;
-            font-weight: 800;
-            letter-spacing: -1px;
+            font-size: var(--fs-xl);
+            font-weight: var(--fw-bold);
+            letter-spacing: -0.5px;
             text-decoration: none;
-            color: white;
+            color: var(--white);
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            transition: transform var(--transition-fast) var(--easing);
+        }
+
+        .navbar-brand:hover {
+            transform: scale(1.02);
         }
 
         .navbar-links {
             display: flex;
             align-items: center;
-            gap: 30px;
+            gap: var(--space-xl);
         }
 
         .navbar-links a {
-            color: white;
+            color: var(--white);
             text-decoration: none;
-            font-weight: 500;
-            font-size: 15px;
-            transition: opacity 0.3s;
+            font-weight: var(--fw-medium);
+            font-size: var(--fs-md);
+            position: relative;
+            padding: var(--space-sm) 0;
+            transition: all var(--transition-fast) var(--easing);
+        }
+
+        .navbar-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--white);
+            transition: width var(--transition-medium) var(--easing);
         }
 
         .navbar-links a:hover {
-            opacity: 0.8;
+            transform: translateY(-3px);
+        }
+
+        .navbar-links a:hover::after {
+            width: 100%;
         }
 
         .navbar-auth {
@@ -71,45 +110,62 @@
         }
 
         .btn-auth {
-            padding: 10px 24px;
+            padding: var(--space-md) var(--space-lg);
             border: none;
-            border-radius: 6px;
-            font-weight: 600;
-            font-size: 14px;
+            border-radius: var(--radius-full);
+            font-weight: var(--fw-semibold);
+            font-size: var(--fs-sm);
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all var(--transition-fast) var(--easing);
             text-decoration: none;
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-xs);
         }
 
         .btn-login {
-            background: white;
-            color: #EA580C;
+            background: var(--white);
+            color: var(--brand-1);
         }
 
         .btn-login:hover {
-            background: #f5f5f5;
-            transform: translateY(-1px);
+            background: var(--muted-1);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-login:active {
+            transform: scale(0.96);
         }
 
         .btn-signup {
             background: transparent;
-            color: white;
-            border: 2px solid white;
+            color: var(--white);
+            border: 2px solid var(--white);
         }
 
         .btn-signup:hover {
-            background: rgba(255,255,255,0.1);
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .btn-signup:active {
+            transform: scale(0.96);
         }
 
         .btn-logout {
-            background: rgba(255,255,255,0.2);
-            color: white;
-            border: 2px solid rgba(255,255,255,0.3);
+            background: rgba(255, 255, 255, 0.2);
+            color: var(--white);
+            border: 2px solid rgba(255, 255, 255, 0.3);
         }
 
         .btn-logout:hover {
-            background: rgba(255,255,255,0.3);
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .btn-logout:active {
+            transform: scale(0.96);
         }
 
         /* Main Content */
@@ -148,32 +204,54 @@
     {% block hide_navbar %}{% endblock %}
     <!-- Navbar -->
     <nav class="navbar">
-        <a href="/" class="navbar-brand">WealthPlay</a>
+        <a href="/" class="navbar-brand">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                <line x1="12" y1="22.08" x2="12" y2="12"></line>
+            </svg>
+            WealthPlay
+        </a>
         <div class="navbar-links">
             {% if user.is_authenticated %}
-                <a href="/course/">Courses</a>
-                <a href="/scenario/">Scenarios</a>
+                <a href="/course/" class="nav-link">Courses</a>
+                <a href="/scenario/" class="nav-link">Scenarios</a>
             {% endif %}
         </div>
         <div class="navbar-auth">
             {% if user.is_authenticated %}
-                <span style="font-size: 14px; margin-right: 10px;">Welcome, {{ user.username }}</span>
+                <span style="font-size: var(--fs-sm); margin-right: var(--space-md); font-weight: var(--fw-medium);">Welcome, {{ user.username }}</span>
                 <form method="post" action="/course/auth/logout/" style="display: inline;">
                     {% csrf_token %}
-                    <button type="submit" class="btn-auth btn-logout">
-                        <i class="fas fa-sign-out-alt"></i> Logout
+                    <button type="submit" class="btn-auth btn-logout" aria-label="Logout">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                            <polyline points="16 17 21 12 16 7"></polyline>
+                            <line x1="21" y1="12" x2="9" y2="12"></line>
+                        </svg>
+                        Logout
                     </button>
                 </form>
             {% else %}
-                <button class="btn-auth btn-login" onclick="openLoginModal()">
-                    <i class="fas fa-sign-in-alt"></i> Login
+                <button class="btn-auth btn-login" onclick="openLoginModal()" aria-label="Login">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+                        <polyline points="10 17 15 12 10 7"></polyline>
+                        <line x1="15" y1="12" x2="3" y2="12"></line>
+                    </svg>
+                    Login
                 </button>
-                <button class="btn-auth btn-signup" onclick="openSignupModal()">
-                    <i class="fas fa-user-plus"></i> Sign Up
+                <button class="btn-auth btn-signup" onclick="openSignupModal()" aria-label="Sign Up">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                    Sign Up
                 </button>
             {% endif %}
         </div>
     </nav>
+    <div class="header-gradient"></div>
 
     <!-- Main Content -->
     <div class="main-wrapper">
@@ -183,23 +261,33 @@
     <!-- Footer Removed -->
 
     <!-- Login Modal -->
-    <div id="loginModal" class="auth-modal" style="display: none;">
+    <div id="loginModal" class="auth-modal" role="dialog" aria-modal="true" aria-labelledby="login-title">
         <div class="auth-modal-content">
-            <span class="auth-close" onclick="closeLoginModal()">&times;</span>
-            <h2>Login to WealthPlay</h2>
+            <button class="auth-close" onclick="closeLoginModal()" aria-label="Close login modal">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+            <h2 id="login-title">Login to WealthPlay</h2>
             <form id="loginForm" method="post" action="/course/auth/login/">
                 {% csrf_token %}
                 <div class="auth-form-group">
                     <label for="login-username">Username</label>
-                    <input type="text" id="login-username" name="username" required autocomplete="username">
+                    <input type="text" id="login-username" name="username" required autocomplete="username" aria-required="true">
                 </div>
                 <div class="auth-form-group">
                     <label for="login-password">Password</label>
-                    <input type="password" id="login-password" name="password" required autocomplete="current-password">
+                    <input type="password" id="login-password" name="password" required autocomplete="current-password" aria-required="true">
                 </div>
-                <div id="login-error" class="auth-error" style="display: none;"></div>
+                <div id="login-error" class="auth-error" style="display: none;" role="alert" aria-live="polite"></div>
                 <button type="submit" class="auth-submit-btn">
-                    <i class="fas fa-sign-in-alt"></i> Login
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+                        <polyline points="10 17 15 12 10 7"></polyline>
+                        <line x1="15" y1="12" x2="3" y2="12"></line>
+                    </svg>
+                    Login
                 </button>
                 <p class="auth-switch">
                     Don't have an account? <a href="#" onclick="closeLoginModal(); openSignupModal(); return false;">Sign Up</a>
@@ -209,31 +297,40 @@
     </div>
 
     <!-- Signup Modal -->
-    <div id="signupModal" class="auth-modal" style="display: none;">
+    <div id="signupModal" class="auth-modal" role="dialog" aria-modal="true" aria-labelledby="signup-title">
         <div class="auth-modal-content">
-            <span class="auth-close" onclick="closeSignupModal()">&times;</span>
-            <h2>Create Your Account</h2>
+            <button class="auth-close" onclick="closeSignupModal()" aria-label="Close signup modal">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+            <h2 id="signup-title">Create Your Account</h2>
             <form id="signupForm" method="post" action="/course/auth/signup/">
                 {% csrf_token %}
                 <div class="auth-form-group">
                     <label for="signup-username">Username</label>
-                    <input type="text" id="signup-username" name="username" required autocomplete="username" minlength="3">
+                    <input type="text" id="signup-username" name="username" required autocomplete="username" minlength="3" aria-required="true">
                 </div>
                 <div class="auth-form-group">
                     <label for="signup-email">Email</label>
-                    <input type="email" id="signup-email" name="email" required autocomplete="email">
+                    <input type="email" id="signup-email" name="email" required autocomplete="email" aria-required="true">
                 </div>
                 <div class="auth-form-group">
                     <label for="signup-password">Password</label>
-                    <input type="password" id="signup-password" name="password" required autocomplete="new-password" minlength="6">
+                    <input type="password" id="signup-password" name="password" required autocomplete="new-password" minlength="6" aria-required="true">
                 </div>
                 <div class="auth-form-group">
                     <label for="signup-password2">Confirm Password</label>
-                    <input type="password" id="signup-password2" name="password2" required autocomplete="new-password">
+                    <input type="password" id="signup-password2" name="password2" required autocomplete="new-password" aria-required="true">
                 </div>
-                <div id="signup-error" class="auth-error" style="display: none;"></div>
+                <div id="signup-error" class="auth-error" style="display: none;" role="alert" aria-live="polite"></div>
                 <button type="submit" class="auth-submit-btn">
-                    <i class="fas fa-user-plus"></i> Sign Up
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                    Sign Up
                 </button>
                 <p class="auth-switch">
                     Already have an account? <a href="#" onclick="closeSignupModal(); openLoginModal(); return false;">Login</a>
@@ -243,185 +340,228 @@
     </div>
 
     <style>
-        /* Auth Modal Styles */
+        /* Auth Modal Styles - Modern Design */
         .auth-modal {
             display: none;
             position: fixed;
-            z-index: 10000;
+            z-index: var(--z-modal-backdrop);
             left: 0;
             top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0,0,0,0.7);
-            backdrop-filter: blur(5px);
-            animation: fadeIn 0.3s;
+            background-color: rgba(10, 12, 16, 0.35);
+            backdrop-filter: blur(4px);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity var(--transition-medium) var(--easing);
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+        .auth-modal.open {
+            opacity: 1;
+            pointer-events: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .auth-modal-content {
-            background-color: white;
-            margin: 5% auto;
-            padding: 40px;
-            border-radius: 12px;
+            background-color: var(--white);
+            padding: var(--space-2xl);
+            border-radius: var(--radius-1);
             width: 90%;
             max-width: 450px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-            animation: slideDown 0.3s;
+            box-shadow: var(--modal-shadow);
+            transform: translateY(8px) scale(0.98);
+            opacity: 0;
+            transition: all var(--transition-medium) var(--easing);
             position: relative;
         }
 
-        @keyframes slideDown {
-            from {
-                transform: translateY(-50px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
+        .auth-modal.open .auth-modal-content {
+            transform: translateY(0) scale(1);
+            opacity: 1;
         }
 
         .auth-close {
             position: absolute;
-            right: 20px;
-            top: 20px;
-            font-size: 28px;
-            font-weight: bold;
-            color: #999;
+            right: var(--space-md);
+            top: var(--space-md);
+            width: 32px;
+            height: 32px;
+            border: none;
+            background: var(--muted-2);
+            border-radius: var(--radius-full);
             cursor: pointer;
-            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--transition-fast) var(--easing);
+            z-index: 1;
+            color: var(--text-muted);
+            font-size: 20px;
+            line-height: 1;
         }
 
         .auth-close:hover {
-            color: #EA580C;
+            background: var(--muted-3);
+            transform: rotate(90deg);
+            color: var(--brand-1);
         }
 
         .auth-modal-content h2 {
-            color: #EA580C;
-            margin-bottom: 30px;
-            font-size: 28px;
-            font-weight: 700;
+            color: var(--brand-1);
+            margin-bottom: var(--space-xl);
+            font-size: var(--fs-xl);
+            font-weight: var(--fw-bold);
         }
 
         .auth-form-group {
-            margin-bottom: 20px;
+            margin-bottom: var(--space-lg);
         }
 
         .auth-form-group label {
             display: block;
-            margin-bottom: 8px;
-            color: #333;
-            font-weight: 500;
-            font-size: 14px;
+            margin-bottom: var(--space-sm);
+            color: var(--text);
+            font-weight: var(--fw-medium);
+            font-size: var(--fs-sm);
         }
 
         .auth-form-group input {
             width: 100%;
-            padding: 12px 16px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 15px;
-            transition: border-color 0.3s;
-            font-family: 'Inter', sans-serif;
+            padding: var(--space-md) var(--space-md);
+            border: 2px solid var(--muted-3);
+            border-radius: var(--radius-2);
+            font-size: var(--fs-md);
+            transition: all var(--transition-fast) var(--easing);
+            font-family: var(--font-base);
+            color: var(--text);
         }
 
         .auth-form-group input:focus {
             outline: none;
-            border-color: #EA580C;
+            border-color: var(--brand-1);
+            box-shadow: 0 0 0 4px rgba(255, 106, 43, 0.1);
         }
 
         .auth-error {
-            background: #fee;
-            color: #c33;
-            padding: 12px;
-            border-radius: 6px;
-            margin-bottom: 15px;
-            font-size: 14px;
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--accent-red);
+            padding: var(--space-md);
+            border-radius: var(--radius-2);
+            margin-bottom: var(--space-md);
+            font-size: var(--fs-sm);
+            border: 1px solid rgba(239, 68, 68, 0.2);
         }
 
         .auth-submit-btn {
             width: 100%;
-            padding: 14px;
-            background: #EA580C;
-            color: white;
+            padding: var(--space-md);
+            background: linear-gradient(135deg, var(--brand-1), var(--brand-2));
+            color: var(--white);
             border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
+            border-radius: var(--radius-full);
+            font-size: var(--fs-md);
+            font-weight: var(--fw-semibold);
             cursor: pointer;
-            transition: background 0.3s, transform 0.2s;
-            font-family: 'Inter', sans-serif;
-            margin-top: 10px;
+            transition: all var(--transition-fast) var(--easing);
+            font-family: var(--font-base);
+            margin-top: var(--space-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-xs);
         }
 
         .auth-submit-btn:hover {
-            background: #d8430f;
-            transform: translateY(-1px);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 106, 43, 0.3);
         }
 
         .auth-submit-btn:active {
-            transform: translateY(0);
+            transform: scale(0.96);
         }
 
         .auth-switch {
             text-align: center;
-            margin-top: 20px;
-            color: #666;
-            font-size: 14px;
+            margin-top: var(--space-lg);
+            color: var(--text-muted);
+            font-size: var(--fs-sm);
         }
 
         .auth-switch a {
-            color: #EA580C;
+            color: var(--brand-1);
             text-decoration: none;
-            font-weight: 600;
+            font-weight: var(--fw-semibold);
+            transition: color var(--transition-fast) var(--easing);
         }
 
         .auth-switch a:hover {
+            color: var(--brand-2);
             text-decoration: underline;
         }
     </style>
 
+    <script src="{% static 'js/micro-interactions.js' %}"></script>
     <script>
-        // Modal Functions
+        // Modal Functions with new design system
         function openLoginModal() {
-            document.getElementById('loginModal').style.display = 'block';
+            const modal = document.getElementById('loginModal');
+            modal.classList.add('open');
             document.body.style.overflow = 'hidden';
+            // Focus first input
+            setTimeout(() => {
+                const firstInput = modal.querySelector('input[type="text"]');
+                if (firstInput) firstInput.focus();
+            }, 100);
         }
 
         function closeLoginModal() {
-            document.getElementById('loginModal').style.display = 'none';
+            const modal = document.getElementById('loginModal');
+            modal.classList.remove('open');
             document.body.style.overflow = 'auto';
             document.getElementById('loginForm').reset();
             document.getElementById('login-error').style.display = 'none';
         }
 
         function openSignupModal() {
-            document.getElementById('signupModal').style.display = 'block';
+            const modal = document.getElementById('signupModal');
+            modal.classList.add('open');
             document.body.style.overflow = 'hidden';
+            // Focus first input
+            setTimeout(() => {
+                const firstInput = modal.querySelector('input[type="text"]');
+                if (firstInput) firstInput.focus();
+            }, 100);
         }
 
         function closeSignupModal() {
-            document.getElementById('signupModal').style.display = 'none';
+            const modal = document.getElementById('signupModal');
+            modal.classList.remove('open');
             document.body.style.overflow = 'auto';
             document.getElementById('signupForm').reset();
             document.getElementById('signup-error').style.display = 'none';
         }
 
-        // Close modal when clicking outside
-        window.onclick = function(event) {
+        // Close modal when clicking outside or pressing ESC
+        document.addEventListener('click', function(event) {
             const loginModal = document.getElementById('loginModal');
             const signupModal = document.getElementById('signupModal');
-            if (event.target == loginModal) {
+            if (event.target === loginModal) {
                 closeLoginModal();
             }
-            if (event.target == signupModal) {
+            if (event.target === signupModal) {
                 closeSignupModal();
             }
-        }
+        });
+
+        // Close on ESC key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeLoginModal();
+                closeSignupModal();
+            }
+        });
 
         // Handle form submissions
         document.getElementById('loginForm')?.addEventListener('submit', async function(e) {

@@ -1,1 +1,47 @@
-[]
+[
+  {
+    "id": 1104,
+    "question": "If you have $\text{₹}1,00,000$ in debt that compounds monthly at a high rate, what happens to the debt over time?",
+    "options": [
+      "It grows linearly.",
+      "It grows exponentially.",
+      "It shrinks automatically.",
+      "It is converted to simple interest."
+    ],
+    "correct_answer": "It grows exponentially.",
+    "ai_feedback": {
+      "correct": "Nice job! High-interest compound debt grows exponentially, making it difficult to pay off if only minimum payments are made.",
+      "incorrect": "The power of compounding is a double-edged sword. It causes debt to grow exponentially, which is why credit card debt is so hard to pay off."
+    }
+  },
+  {
+    "id": 1105,
+    "question": "Which action has the most negative impact on your credit score?",
+    "options": [
+      "Closing an old credit card.",
+      "Using only $10%$ of your credit limit.",
+      "Missing a loan payment by 60 days.",
+      "Applying for a new loan."
+    ],
+    "correct_answer": "Missing a loan payment by 60 days.",
+    "ai_feedback": {
+      "correct": "Correct! Payment history is the single most important factor. Missing a payment is a huge red flag.",
+      "incorrect": "Payment history accounts for the largest portion of your score. Missing a payment, especially significantly, is highly damaging."
+    }
+  },
+  {
+    "id": 1106,
+    "question": "What is the key benefit of having a high credit score?",
+    "options": [
+      "Guaranteed investment returns.",
+      "Lower interest rates on future loans and credit cards.",
+      "Access to the stock market.",
+      "Higher salary offers."
+    ],
+    "correct_answer": "Lower interest rates on future loans and credit cards.",
+    "ai_feedback": {
+      "correct": "Exactly! A high score translates directly into saved money through lower borrowing costs.",
+      "incorrect": "Lenders use your score to gauge risk. A higher score means they see you as less risky, offering you better interest rates, which saves you thousands over the life of a loan."
+    }
+  }
+]

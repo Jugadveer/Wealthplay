@@ -1,1 +1,20 @@
-[]
+[
+  {
+    "id": 1701,
+    "topic": "Market Cycles",
+    "theory_title": "The Four Phases",
+    "theory_content": "Markets typically move through four cycles: **Accumulation** (smart money buys low), **Uptrend/Markup** (prices rise, public joins), **Distribution** (smart money sells high), and **Downtrend/Mark Down** (prices fall, public panics and sells). These cycles highlight the importance of patience and long-term perspective. "
+  },
+  {
+    "id": 1702,
+    "topic": "Liquidity",
+    "theory_title": "Ease of Trading",
+    "theory_content": "**Liquidity** refers to how easily an asset can be converted into cash without affecting its market price. A highly liquid stock (like large-cap index stocks) can be bought or sold instantly. Low-liquidity assets (like real estate) are harder to sell quickly."
+  },
+  {
+    "id": 1703,
+    "topic": "Market Index",
+    "theory_title": "The Market Thermometer",
+    "theory_content": "A **Market Index** (e.g., Nifty 50, S&P 500) is a statistical measure that tracks the performance of a basket of stocks. It serves as a benchmark for the overall health of the stock market or a specific sector. You use an index to measure whether your portfolio is 'beating the market'."
+  }
+]

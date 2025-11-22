@@ -1,1 +1,47 @@
-[]
+[
+  {
+    "id": 204,
+    "question": "According to the 50/30/20 rule, which item should be categorized under 'Needs'?",
+    "options": [
+      "An annual international vacation.",
+      "Monthly rent payments.",
+      "A new video game console.",
+      "Dining out at a high-end restaurant."
+    ],
+    "correct_answer": "Monthly rent payments.",
+    "ai_feedback": {
+      "correct": "That's right! Monthly rent is a non-negotiable, essential expense, placing it in the 50% 'Needs' category.",
+      "incorrect": "Incorrect. 'Needs' are essential expenses like monthly rent, not discretionary items like vacations or dining out."
+    }
+  },
+  {
+    "id": 205,
+    "question": "What does the '20' in the 50/30/20 rule primarily cover?",
+    "options": [
+      "Entertainment and luxury expenses.",
+      "Housing and utilities.",
+      "High-interest debt payoff and investments.",
+      "Taxes and social security payments."
+    ],
+    "correct_answer": "High-interest debt payoff and investments.",
+    "ai_feedback": {
+      "correct": "You got it! The 20% is dedicated entirely to your financial future: savings, investments, and tackling high-interest debt.",
+      "incorrect": "Try again. The 20% is for savings and financial goals, which includes building wealth and paying down debt aggressively."
+    }
+  },
+  {
+    "id": 206,
+    "question": "Which type of financial goal is typically funded by the 20% category?",
+    "options": [
+      "Short-term goals (under 1 year) only.",
+      "Long-term goals (over 5 years) only.",
+      "A mix of short-term (emergency fund) and long-term (retirement) goals.",
+      "Credit card payments exclusively."
+    ],
+    "correct_answer": "A mix of short-term (emergency fund) and long-term (retirement) goals.",
+    "ai_feedback": {
+      "correct": "Nice job! The 20% covers all future goals, from liquid short-term savings (emergency fund) to long-term wealth building (retirement).",
+      "incorrect": "Incorrect. The 20% must cover both immediate future needs (like an emergency fund) and distant future goals (like retirement)."
+    }
+  }
+]

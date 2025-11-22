@@ -1,10 +1,20 @@
 [
   {
-    "question": "What makes stock prices go up and down?",
-    "answer": "Stock prices move based on supply and demand, company performance, economic factors, and market sentiment. Good news typically drives prices up, while bad news can cause declines."
+    "id": 516,
+    "question": "What is the role of a stock exchange in price movement?",
+    "answer": "The stock exchange provides a centralized, transparent platform where buyers and sellers meet. It does not set the price, but it ensures that the prevailing price is the fair market price based on the current supply and demand.",
+    "explanation": "The exchange is the auctioneer, making sure trades happen efficiently at the meeting point of supply and demand."
   },
   {
-    "question": "Should I worry about daily price movements?",
-    "answer": "For long-term investors, daily fluctuations are normal. Focus on the company's fundamentals and your investment goals rather than short-term price movements."
+    "id": 517,
+    "question": "How do interest rates affect stock prices?",
+    "answer": "Higher interest rates make borrowing more expensive for companies (hurting profits) and make fixed-income investments (like bonds) more attractive compared to stocks. This typically leads to a drop in stock prices.",
+    "explanation": "Interest rates represent the 'risk-free' return. If rates rise, the hurdle for stocks to be competitive also rises."
+  },
+  {
+    "id": 518,
+    "question": "Explain 'price discovery' in the context of the stock market.",
+    "answer": "Price discovery is the process of determining the true price of an asset in the marketplace. It is achieved through the continuous interaction of buyers (bids) and sellers (asks) on the exchange, incorporating all available information instantly.",
+    "explanation": "Every trade contributes to price discovery, instantly updating the market's collective judgment of the stock's worth."
   }
 ]

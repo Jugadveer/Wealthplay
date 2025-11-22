@@ -1,1 +1,20 @@
-[]
+[
+  {
+    "id": 419,
+    "topic": "Compounding Defined",
+    "theory_title": "The Magic of 'Returns on Returns'",
+    "theory_content": "Compounding is the process where the earnings from an investment are reinvested to generate their own earnings. It is 'interest on interest' or 'returns on returns.' The growth is exponential, not linear, making it the single most powerful factor in long-term wealth creation. [Image of compounding vs simple interest chart showing exponential growth over 20 years]"
+  },
+  {
+    "id": 420,
+    "topic": "The Three Drivers",
+    "theory_title": "Time, Rate, and Consistency",
+    "theory_content": "Compounding is driven by three factors: 1. **Time** (the longer you compound, the more powerful it is). 2. **Rate of Return** (a higher rate accelerates growth). 3. **Consistency** (regular contributions and reinvestment are key). Time is often cited as the most important factor, favoring the early investor."
+  },
+  {
+    "id": 421,
+    "topic": "The Early Bird Advantage",
+    "theory_title": "The Cost of Delaying Investment",
+    "theory_content": "An investor who starts saving small amounts early (e.g., age 25) will almost always accumulate more wealth than an investor who starts later (e.g., age 35) but saves significantly larger amounts. This is because the early investor's money has more years to compound exponentially."
+  }
+]

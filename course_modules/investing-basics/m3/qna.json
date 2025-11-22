@@ -1,10 +1,20 @@
 [
   {
-    "question": "What is compound interest?",
-    "answer": "Compound interest is when you earn returns on both your original investment and the returns you've already earned. Over time, this creates exponential growth."
+    "id": 425,
+    "question": "Why is compounding described as exponential growth?",
+    "answer": "Because the growth rate is applied not only to the initial principal but also to the accumulated interest from all previous periods. The base for growth continually increases, causing the total value to grow faster and faster over time.",
+    "explanation": "Linear growth adds the same amount each period; exponential growth adds an ever-increasing amount, thanks to the bigger base."
   },
   {
-    "question": "How does starting early help?",
-    "answer": "Starting early gives your investments more time to compound. Even small amounts invested regularly in your 20s can grow to substantial wealth by retirement due to the power of compounding."
+    "id": 426,
+    "question": "What is the 'Rule of 72' and how does it relate to compounding?",
+    "answer": "The Rule of 72 is a quick estimation tool: divide 72 by the annual rate of return to estimate how many years it will take for your investment to double. For example, a 6% return means your money doubles in approximately 12 years (72 / 6 = 12).",
+    "explanation": "It's a handy tool to quickly estimate the power of compounding at any given return rate."
+  },
+  {
+    "id": 427,
+    "question": "Can compounding work against you?",
+    "answer": "Yes, absolutely. Compounding works against you when it comes to high-interest debt, such as credit cards. The interest you owe compounds, increasing your debt exponentially unless you pay it off aggressively.",
+    "explanation": "The 'interest on interest' principle is a double-edged sword—a huge benefit for investments, a huge burden for debt."
   }
 ]

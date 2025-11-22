@@ -2,7 +2,6 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from .views import (
     CourseViewSet, TopicViewSet, LessonViewSet, MentorPersonaViewSet,
-    course_home, course_detail, lesson_detail,
     login_view, signup_view, logout_view,
     get_courses_with_progress, start_lesson, complete_lesson
 )
@@ -37,10 +36,8 @@ urlpatterns = [
     path('auth/signup/', signup_view, name='signup'),
     path('auth/logout/', logout_view, name='logout'),
     
-    # Page routes (for /course/)
-    path('', course_home, name='course_home'),
-    path('<str:course_id>/', course_detail, name='course_detail'),
-    path('<str:course_id>/<str:module_id>/', lesson_detail, name='lesson_detail'),
+    # Page routes removed - React handles all page rendering
+    # All course pages are now served via React Router at /course
     
     # API routes (for /api/courses/) - DRF router (comes last)
     path('', include(router.urls)),

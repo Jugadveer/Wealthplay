@@ -1,1 +1,20 @@
-[]
+[
+  {
+    "id": 101,
+    "topic": "Medium of Exchange",
+    "theory_title": "The Core Function",
+    "theory_content": "Money's most important function is to act as a **Medium of Exchange**. This means it is a widely accepted intermediary used in transactions to buy goods and services. Before money, societies relied on the **barter system**, which required a 'double coincidence of wants'. Money eliminates this problem by providing a universally accepted medium."
+  },
+  {
+    "id": 102,
+    "topic": "Unit of Account",
+    "theory_title": "A Standard Measure",
+    "theory_content": "Money functions as a **Unit of Account**, meaning it provides a common numerical measure of the relative value of all goods and services. By assigning a currency value (e.g., $10$ or ₹$100$), money allows for easy comparison, calculation of profit/loss, and budget formulation."
+  },
+  {
+    "id": 103,
+    "topic": "Store of Value",
+    "theory_title": "Transferring Purchasing Power",
+    "theory_content": "Money acts as a **Store of Value**, which means it holds its purchasing power over time and can be saved for future use. While cash is imperfect (due to inflation), it is a liquid way to transfer wealth from the present to the future."
+  }
+]

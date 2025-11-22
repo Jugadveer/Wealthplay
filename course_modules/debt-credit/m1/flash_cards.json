@@ -1,1 +1,20 @@
-[]
+[
+  {
+    "id": 1101,
+    "topic": "Simple vs. Compound Interest (Debt)",
+    "theory_title": "The Debt Accelerator",
+    "theory_content": "**Simple interest** is calculated only on the principal amount. **Compound interest** (used by credit cards and many loans) is calculated on the principal *plus* the accumulated interest, causing the debt to grow exponentially. This makes high-interest compound debt extremely dangerous."
+  },
+  {
+    "id": 1102,
+    "topic": "Credit Score Defined",
+    "theory_title": "Your Financial Report Card",
+    "theory_content": "A **Credit Score** (e.g., CIBIL score) is a numerical summary of your creditworthiness, based on your payment history and debt management. Lenders use it to assess risk and determine interest rates. A higher score means lower interest rates on loans."
+  },
+  {
+    "id": 1103,
+    "topic": "Improving Your Score",
+    "theory_title": "Key Score Drivers",
+    "theory_content": "The biggest drivers of a credit score are: 1. **Payment History** (pay bills on time, always). 2. **Credit Utilization** (keep credit card balances low, ideally under $30%$ of the limit). 3. **Length of Credit History** (the older your accounts, the better)."
+  }
+]

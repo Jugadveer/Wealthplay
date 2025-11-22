@@ -1,1 +1,20 @@
-[]
+[
+  {
+    "id": 410,
+    "topic": "The Risk-Return Trade-off",
+    "theory_title": "The Core Investment Principle",
+    "theory_content": "The **Risk-Return Trade-off** is the principle that potential returns rise with an increase in risk. To achieve higher returns, an investor must typically accept a higher possibility of loss. Low-risk assets (like bank FDs) offer low returns, while high-risk assets (like individual stocks) offer the potential for high returns but also high losses. [Image of risk-return graph showing a positive linear relationship]"
+  },
+  {
+    "id": 411,
+    "topic": "Defining Risk",
+    "theory_title": "Measuring Uncertainty",
+    "theory_content": "In finance, risk is the uncertainty of an investment's return. It is often measured by **volatility** (how much an asset's price fluctuates). Higher volatility means higher risk. Examples of risk include market risk (the whole market falling) and credit risk (a borrower failing to pay debt)."
+  },
+  {
+    "id": 412,
+    "topic": "Investor Profile",
+    "theory_title": "Risk Tolerance and Time Horizon",
+    "theory_content": "Your acceptable risk level depends on two factors: **Risk Tolerance** (your emotional capacity to handle losses) and **Time Horizon** (how long until you need the money). Younger investors with a longer time horizon can generally afford to take on more risk because they have time to recover from market downturns."
+  }
+]

@@ -1,10 +1,20 @@
 [
   {
-    "question": "What is the relationship between risk and reward?",
-    "answer": "Generally, higher potential returns come with higher risk. Safe investments like FDs offer low returns but guaranteed safety. Stocks can offer higher returns but with more volatility."
+    "id": 416,
+    "question": "What is the difference between risk tolerance and risk capacity?",
+    "answer": "Risk tolerance is psychological/emotional—how much loss you can *mentally* bear without panicking. Risk capacity is financial—how much loss you *can afford* to bear without derailing your necessary financial goals.",
+    "explanation": "You might have a high tolerance, but if you need the money next week, your capacity is low. Capacity is objective, tolerance is subjective."
   },
   {
-    "question": "How do I know my risk tolerance?",
-    "answer": "Consider your age, financial goals, timeline, and comfort with market fluctuations. Younger investors can typically take more risk, while those nearing retirement may prefer safer options."
+    "id": 417,
+    "question": "Give an example of a low-risk, low-return asset and a high-risk, high-return asset.",
+    "answer": "Low Risk/Low Return: A bank Fixed Deposit or Government Bond. High Risk/High Return: An individual stock in a new, unproven technology company or Cryptocurrencies.",
+    "explanation": "This demonstrates the trade-off: Safety provides minimal growth; speculation offers massive growth potential but high failure risk."
+  },
+  {
+    "id": 418,
+    "question": "How does inflation increase the *real* risk of an investment?",
+    "answer": "Inflation increases the risk that an investment's return will not be enough to increase your purchasing power. An investment with a 5% return is riskier in a 6% inflation environment than in a 2% inflation environment.",
+    "explanation": "Inflation is the hidden risk that makes you poorer even when your nominal value is growing."
   }
 ]

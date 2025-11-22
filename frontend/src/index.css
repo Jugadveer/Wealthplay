@@ -1,0 +1,135 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --brand-1: #ff6a2b;
+  --brand-2: #f97316;
+  --accent-green: #06b6a4;
+  --accent-red: #ef4444;
+  --accent-blue: #3b82f6;
+  --muted-1: #f7f8f9;
+  --muted-2: #eef2f4;
+  --muted-3: #d1d5db;
+  --text-main: #21303a;
+  --text-muted: #6b7b86;
+  --text-light: #9ca3af;
+  --white: #ffffff;
+  --black: #000000;
+  --card-shadow: 0 8px 30px rgba(34, 40, 49, 0.06);
+  --card-shadow-hover: 0 12px 40px rgba(34, 40, 49, 0.12);
+  --modal-shadow: 0 20px 60px rgba(34, 40, 49, 0.15);
+  --radius-1: 12px;
+  --radius-2: 8px;
+  --radius-3: 16px;
+  --radius-full: 9999px;
+  --transition-fast: 180ms;
+  --transition-medium: 360ms;
+  --transition-slow: 500ms;
+  --easing: cubic-bezier(0.2, 0.9, 0.3, 1);
+  --easing-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --max-width: 1180px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--text-main);
+  background-color: var(--muted-1);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Utility animations */
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+@keyframes progress-shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+@keyframes xp-bounce {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+}
+
+@keyframes modalEnter {
+  from {
+    transform: translateY(8px) scale(0.98);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+/* Ensure modals are always on top */
+[role="dialog"] {
+  z-index: 9999 !important;
+}
+
+.fade-slide-up {
+  animation: fadeSlideUp 0.5s ease-out forwards;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+@keyframes fadeSlideUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Focus styles for accessibility */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--brand-1);
+  outline-offset: 2px;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--muted-1);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--muted-3);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+

@@ -1,10 +1,20 @@
 [
   {
-    "question": "What is loss aversion?",
-    "answer": "People feel losses more strongly than equivalent gains, causing overly conservative or reactive decisions."
+    "id": 1607,
+    "question": "What is 'Herding Behavior' and why is it dangerous?",
+    "answer": "Herding Behavior is the psychological tendency to follow the actions of a larger group of investors (e.g., buying because everyone else is buying). It is dangerous because it often leads to buying assets at inflated prices (bubbles) and selling at market lows (panics).",
+    "explanation": "When everyone is doing it, it's often too late. Successful investing requires independent thinking."
   },
   {
-    "question": "How to fight herd behavior?",
-    "answer": "Use rules (regular investing, checklists) and re-check decisions against goals instead of following the crowd."
+    "id": 1608,
+    "question": "How can an investor use the principle of Rebalancing to fight Loss Aversion?",
+    "answer": "Rebalancing forces the investor to sell assets that have gained value (the winners) to buy assets that have underperformed (the losers). This disciplined, automated action overrides the emotional urge to hold onto winners too long or panic-sell losers.",
+    "explanation": "Use rules and automation to make decisions, not emotions."
+  },
+  {
+    "id": 1609,
+    "question": "Explain 'Recency Bias' in investing.",
+    "answer": "Recency bias is the tendency to assume that recent events will continue into the future. For example, assuming the market will crash because it has been falling for the last six months, or assuming a stock will keep rising because it rose last week.",
+    "explanation": "Recency bias ignores long-term historical averages and focuses only on what happened most recently."
   }
 ]

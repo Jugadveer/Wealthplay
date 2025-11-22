@@ -1,1 +1,47 @@
-[]
+[
+  {
+    "id": 304,
+    "question": "Which banking product is best suited for keeping an emergency fund that needs immediate access?",
+    "options": [
+      "Fixed Deposit",
+      "Recurring Deposit",
+      "Savings Account",
+      "Mutual Fund"
+    ],
+    "correct_answer": "Savings Account",
+    "ai_feedback": {
+      "correct": "Correct! A Savings Account offers the high liquidity necessary for an emergency fund.",
+      "incorrect": "Incorrect. An emergency fund must be liquid. Fixed Deposits lock up money, making a Savings Account the better choice."
+    }
+  },
+  {
+    "id": 305,
+    "question": "The primary drawback of a Fixed Deposit compared to a Savings Account is:",
+    "options": [
+      "Lower interest rate.",
+      "No deposit insurance.",
+      "Low liquidity (penalties for early withdrawal).",
+      "The interest rate is variable."
+    ],
+    "correct_answer": "Low liquidity (penalties for early withdrawal).",
+    "ai_feedback": {
+      "correct": "Exactly! FDs trade liquidity for a higher, fixed interest rate. Early withdrawal usually incurs a penalty.",
+      "incorrect": "The main drawback is liquidity. While FDs offer higher interest, you face penalties if you need to withdraw the funds before the maturity date."
+    }
+  },
+  {
+    "id": 306,
+    "question": "A Recurring Deposit (RD) is most useful for achieving which financial objective?",
+    "options": [
+      "Generating highest long-term returns.",
+      "Making systematic, disciplined monthly savings.",
+      "Earning daily interest.",
+      "Buying and selling stocks."
+    ],
+    "correct_answer": "Making systematic, disciplined monthly savings.",
+    "ai_feedback": {
+      "correct": "Nice! RDs enforce discipline by requiring a fixed monthly contribution, perfect for a specific, near-term goal.",
+      "incorrect": "Try again. RDs are designed for disciplined saving by requiring a fixed monthly contribution, not for market investing."
+    }
+  }
+]

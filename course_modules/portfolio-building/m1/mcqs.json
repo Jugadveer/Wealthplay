@@ -1,1 +1,47 @@
-[]
+[
+  {
+    "id": 1504,
+    "question": "Using the '100 Minus Age' rule, what is the recommended stock allocation for a 50-year-old investor?",
+    "options": [
+      "20%",
+      "50%",
+      "70%",
+      "100%"
+    ],
+    "correct_answer": "50%",
+    "ai_feedback": {
+      "correct": "You got it! 100 - 50 = 50% in stocks, shifting towards less risk as retirement approaches.",
+      "incorrect": "The calculation is 100 - 50 = 50%. As investors age, they should reduce equity exposure to protect their capital."
+    }
+  },
+  {
+    "id": 1505,
+    "question": "What is the purpose of including Fixed Income (Bonds) in a portfolio dominated by Stocks?",
+    "options": [
+      "To increase overall risk.",
+      "To provide an uncorrelated hedge and reduce volatility.",
+      "To maximize capital gains.",
+      "To reduce all investment fees."
+    ],
+    "correct_answer": "To provide an uncorrelated hedge and reduce volatility.",
+    "ai_feedback": {
+      "correct": "Exactly! Bonds often act as a buffer, rising in value when stocks fall, which smooths out the portfolio's overall volatility.",
+      "incorrect": "Bonds serve to balance the portfolio. They tend to perform differently than stocks, which reduces overall portfolio volatility (risk) through negative correlation."
+    }
+  },
+  {
+    "id": 1506,
+    "question": "If your portfolio allocation drifts to 80% Stocks/20% Bonds (target was 70%/30%), the act of selling stocks and buying bonds to return to the target is called:",
+    "options": [
+      "Dollar-Cost Averaging.",
+      "Tax Loss Harvesting.",
+      "Rebalancing.",
+      "Liquidity Management."
+    ],
+    "correct_answer": "Rebalancing.",
+    "ai_feedback": {
+      "correct": "Nice! Rebalancing is the discipline of maintaining your chosen risk level by forcing yourself to sell winners and buy losers.",
+      "incorrect": "This maintenance process is called Rebalancing. It forces you to stick to your risk profile by selling the asset that has outperformed and buying the one that has underperformed."
+    }
+  }
+]

@@ -1,1 +1,20 @@
-[]
+[
+  {
+    "id": 1001,
+    "topic": "The Red Flag: Guaranteed Returns",
+    "theory_title": "The Biggest Lie in Investing",
+    "theory_content": "The number one red flag of an investment scam is the promise of **guaranteed, high returns with no risk**. All legitimate investments carry risk. Scams like Ponzi schemes rely on luring victims with unrealistic promises. If it sounds too good to be true, it always is."
+  },
+  {
+    "id": 1002,
+    "topic": "Verifying Legitimacy",
+    "theory_title": "Check the Regulator",
+    "theory_content": "Always verify that the investment entity (broker, fund house, financial advisor) is registered with the country's financial regulatory body (e.g., SEBI in India, SEC/FINRA in the US). Check for a license number and look up the entity's history online for warnings or complaints."
+  },
+  {
+    "id": 1003,
+    "topic": "The Ponzi Scheme",
+    "theory_title": "How Pyramid Scams Work",
+    "theory_content": "A **Ponzi Scheme** is a fraudulent investment operation where returns are paid to older investors using money collected from new investors, rather than from actual profits. The scheme collapses when the flow of new investors stops. Always ask: 'Where is the money actually being invested?'"
+  }
+]

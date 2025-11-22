@@ -1,1 +1,47 @@
-[]
+[
+  {
+    "id": 422,
+    "question": "Compounding is best described as earning returns on:",
+    "options": [
+      "Only the initial capital invested.",
+      "Only the new money contributed monthly.",
+      "The initial capital plus accumulated previous returns.",
+      "The bank's interest rate alone."
+    ],
+    "correct_answer": "The initial capital plus accumulated previous returns.",
+    "ai_feedback": {
+      "correct": "Precisely! Compounding is the beautiful process of your returns earning returns, causing exponential growth.",
+      "incorrect": "Incorrect. The magic of compounding is that your gains are added to the principal, and those gains start generating their own returns."
+    }
+  },
+  {
+    "id": 423,
+    "question": "Which variable has the greatest long-term impact on the power of compounding?",
+    "options": [
+      "The amount of the final investment.",
+      "The investment's rate of return.",
+      "The total time spent in the market.",
+      "The frequency of stock trading."
+    ],
+    "correct_answer": "The total time spent in the market.",
+    "ai_feedback": {
+      "correct": "Nice job! While return rate matters, the *time* available for the exponential curve to take effect is the most powerful determinant.",
+      "incorrect": "Time is the greatest ally. The more time your money has to grow and compound, the less important initial capital or even a slightly lower return rate becomes."
+    }
+  },
+  {
+    "id": 424,
+    "question": "If you are investing for a 30-year goal, you should prioritize **time** over **timing** the market. This refers to:",
+    "options": [
+      "Selling quickly during market downturns.",
+      "Starting to invest as soon as possible.",
+      "Making one large lump-sum investment.",
+      "Focusing on bonds instead of stocks."
+    ],
+    "correct_answer": "Starting to invest as soon as possible.",
+    "ai_feedback": {
+      "correct": "Exactly! 'Time in the market' is about starting early to maximize compounding, which is far more effective than trying to perfectly 'time' when the market will rise.",
+      "incorrect": "The phrase 'time in the market beats timing the market' means starting now to let compounding work, instead of waiting for the 'perfect' buying opportunity."
+    }
+  }
+]

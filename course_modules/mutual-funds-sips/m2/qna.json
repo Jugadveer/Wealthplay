@@ -1,10 +1,20 @@
 [
   {
-    "question": "What is a SIP?",
-    "answer": "A Systematic Investment Plan (SIP) lets you invest a fixed amount regularly (monthly/weekly) into a mutual fund. It's like a recurring deposit but for investments."
+    "id": 616,
+    "question": "Is a SIP better than a lump-sum investment?",
+    "answer": "Statistically, lump-sum investing (investing all cash at once) often outperforms a SIP in consistently rising markets. However, for most investors, SIP is recommended because it is more risk-mitigating, affordable, and removes the stress of market timing.",
+    "explanation": "SIP is generally superior for most people because it is psychologically easier and spreads the risk over time."
   },
   {
-    "question": "How does rupee-cost averaging help?",
-    "answer": "Rupee-cost averaging means you buy more units when prices are low and fewer when prices are high, automatically averaging your purchase price over time and reducing the impact of market timing."
+    "id": 617,
+    "question": "How does a SIP help with compounding?",
+    "answer": "A SIP ensures that new money is consistently entering the market and immediately begins the compounding process. This frequent and regular investment is what maximizes the long-term compounding effect.",
+    "explanation": "Compounding needs two things: time and consistent capital input. SIP handles the consistent input perfectly."
+  },
+  {
+    "id": 618,
+    "question": "Can I stop or pause a SIP?",
+    "answer": "Yes, most fund houses allow you to easily stop or pause a SIP when necessary, providing flexibility to manage cash flow without penalizing your existing investment corpus.",
+    "explanation": "This flexibility makes SIPs a great tool for long-term investment, as your financial situation can always change."
   }
 ]

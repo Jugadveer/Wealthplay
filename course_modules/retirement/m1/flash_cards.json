@@ -1,1 +1,20 @@
-[]
+[
+  {
+    "id": 1401,
+    "topic": "The 'Why Start Early' Factor",
+    "theory_title": "Time is Your Greatest Asset",
+    "theory_content": "Due to compounding, the most critical factor in retirement planning is **starting early**. A delay of just 5 to 10 years can require you to save 3x or 4x more per month to catch up. The first 10 years of compounding often contribute more to your final corpus than the next 20 years of contributions. "
+  },
+  {
+    "id": 1402,
+    "topic": "Target Corpus Estimation",
+    "theory_title": "The 4% Rule (Simplified)",
+    "theory_content": "A common rule of thumb for retirement withdrawal is the **4% Rule**. It suggests that if you withdraw 4% of your portfolio's value in the first year of retirement (adjusted for inflation thereafter), the money has a high probability of lasting 30 years. This means your target corpus should be 25 times your desired annual expenses (100% / 4% = 25)."
+  },
+  {
+    "id": 1403,
+    "topic": "Retirement Accounts",
+    "theory_title": "EPF, PPF, NPS",
+    "theory_content": "In many countries, government-backed schemes serve as the foundation of retirement. **EPF** (Employee Provident Fund) and **PPF** (Public Provident Fund) are common in India. **NPS** (National Pension System) is a voluntary, market-linked defined contribution plan designed for long-term saving, often offering tax benefits."
+  }
+]

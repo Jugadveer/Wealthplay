@@ -1,10 +1,20 @@
 [
   {
-    "question": "What is the simplest definition of money?",
-    "answer": "Money is anything widely accepted in exchange for goods and services; it serves as a medium of exchange, a unit of account, and a store of value."
+    "id": 107,
+    "question": "What is the difference between money and wealth?",
+    "answer": "Money is generally defined as any asset that serves the three core functions (medium of exchange, unit of account, store of value). Wealth is a broader term that refers to the total stock of valuable assets owned by an individual or entity, which includes money but also investments, real estate, and other durable goods.",
+    "explanation": "Wealth is the total picture of your assets; money is just the most liquid part of it."
   },
   {
-    "question": "Why is inflation important for first-time earners?",
-    "answer": "Inflation reduces purchasing power over time — saving without returns can erode value. That's why understanding simple investing or high-yield savings matters."
+    "id": 108,
+    "question": "Why is 'portability' an important property for money?",
+    "answer": "Portability is essential because money must be easily carried and transported to facilitate transactions across different locations. If money were not portable, its effectiveness as a medium of exchange would be severely limited.",
+    "explanation": "Money needs to be easy to move around! Imagine trying to pay for coffee with a heavy gold bar—that's why portability is key."
+  },
+  {
+    "id": 109,
+    "question": "In a hypothetical scenario, if gold is used for trading, is it fulfilling the function of a Unit of Account?",
+    "answer": "Yes, it is. If everyone agrees to quote the price of goods in terms of the weight or unit of gold (e.g., 'that cow costs 5 ounces of gold'), then gold is successfully acting as a Unit of Account, providing a common standard for measuring value.",
+    "explanation": "The Unit of Account function is about the agreement on a standard measure, regardless of the physical form of the money (gold, shell, or fiat currency)."
   }
 ]

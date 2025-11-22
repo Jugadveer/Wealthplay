@@ -1,1 +1,20 @@
-[]
+[
+  {
+    "id": 610,
+    "topic": "SIP Defined",
+    "theory_title": "Systematic Investment Plan",
+    "theory_content": "A **SIP** (Systematic Investment Plan) is a method of investing a fixed amount of money at regular intervals (e.g., monthly) into a mutual fund. It is a strategy of discipline, not an investment product itself."
+  },
+  {
+    "id": 611,
+    "topic": "Dollar-Cost Averaging (DCA)",
+    "theory_title": "Mitigating Market Volatility",
+    "theory_content": "The primary benefit of a SIP is **Dollar-Cost Averaging (DCA)**. By investing a fixed amount regularly, you buy more units when the price (NAV) is low and fewer units when the price is high. This lowers your average cost per unit over time, mitigating the risk of investing all your money at a market peak. "
+  },
+  {
+    "id": 612,
+    "topic": "Discipline and Consistency",
+    "theory_title": "Overcoming Emotional Biases",
+    "theory_content": "SIPs promote crucial investor discipline by removing the temptation to 'time the market' (guessing when to buy/sell). They automate consistency, ensuring you stay invested through market highs and lows, which is key to long-term compounding."
+  }
+]

@@ -1,10 +1,20 @@
 [
   {
-    "question": "What are the main types of investment risk?",
-    "answer": "Market risk (prices go down), credit risk (borrower defaults), inflation risk (purchasing power erodes), and liquidity risk (can't sell quickly)."
+    "id": 1807,
+    "question": "How does diversification mitigate risk that is *not* systematic?",
+    "answer": "Diversification reduces unsystematic risk because it assumes the negative event affecting one company (e.g., poor earnings) is independent of the positive event affecting another company in a different sector, smoothing out the returns.",
+    "explanation": "Spreading money across multiple, uncorrelated companies means one failure won't sink the entire portfolio."
   },
   {
-    "question": "How do I reduce risk?",
-    "answer": "Diversify across asset classes, invest for long-term, avoid putting all money in one investment, and maintain emergency fund."
+    "id": 1808,
+    "question": "What is 'Liquidity Risk'?",
+    "answer": "Liquidity risk is the risk that you cannot sell an asset quickly enough at its fair market price to prevent a loss. It is high for assets like real estate or small, thinly traded stocks.",
+    "explanation": "If you *need* to sell now, liquidity risk means you may have to accept a much lower price to find a buyer immediately."
+  },
+  {
+    "id": 1809,
+    "question": "When should an investor use a mental stop-loss versus an automated stop-loss order?",
+    "answer": "An automated stop-loss order is best for active traders. A mental stop-loss is better for long-term investors, as automated orders can be triggered by temporary market volatility, forcing the long-term investor to sell unnecessarily.",
+    "explanation": "Automated stops prevent emotional panic, but they can force a sale at a bad time. Mental stops are for avoiding emotional panic but require discipline."
   }
 ]

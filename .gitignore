@@ -66,3 +66,13 @@ htmlcov/
 frontend_preview.html
 ref.html
 
+# Markdown files
+*.md
+!PROJECT_DOCUMENTATION.md
+!RUN.md
+
+# Ollama setup files
+setup_ollama.sh
+setup_ollama.bat
+OLLAMA_SETUP.md
+

@@ -1,1 +1,47 @@
-[]
+[
+  {
+    "id": 804,
+    "question": "What is the recommended size for a fully funded emergency fund?",
+    "options": [
+      "1 month of salary.",
+      "1 year of salary.",
+      "3 to 6 months of essential living expenses.",
+      "The equivalent of your biggest debt."
+    ],
+    "correct_answer": "3 to 6 months of essential living expenses.",
+    "ai_feedback": {
+      "correct": "Correct! 3 to 6 months is the standard safety cushion for most people.",
+      "incorrect": "The minimum recommended safety net is 3 to 6 months of essential living expenses, not your salary."
+    }
+  },
+  {
+    "id": 805,
+    "question": "The most important quality of an account holding your emergency fund is:",
+    "options": [
+      "Highest possible return.",
+      "Highest liquidity.",
+      "Tax efficiency.",
+      "Long lock-in period."
+    ],
+    "correct_answer": "Highest liquidity.",
+    "ai_feedback": {
+      "correct": "You got it! Liquidity ensures you can access the cash the moment the emergency strikes.",
+      "incorrect": "The purpose of the fund is rapid access. Therefore, liquidity is the single most important factor, outweighing return."
+    }
+  },
+  {
+    "id": 806,
+    "question": "What is the core function of insurance?",
+    "options": [
+      "To generate investment returns.",
+      "To eliminate risk entirely.",
+      "To transfer financial risk to another party.",
+      "To pay off mortgages."
+    ],
+    "correct_answer": "To transfer financial risk to another party.",
+    "ai_feedback": {
+      "correct": "Exactly! You pay the premium to transfer the large, unpredictable financial burden of a loss to the insurer.",
+      "incorrect": "Insurance doesn't eliminate risk; it transfers the *financial consequence* of that risk to the insurance company in exchange for a premium."
+    }
+  }
+]

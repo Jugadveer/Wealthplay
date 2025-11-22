@@ -1,1 +1,47 @@
-[]
+[
+  {
+    "id": 1604,
+    "question": "An investor refuses to sell a stock that is down $50%$ because they 'need to get back the price they paid for it.' This is an example of which bias?",
+    "options": [
+      "Confirmation Bias.",
+      "Anchoring.",
+      "Herding Behavior.",
+      "Recency Bias."
+    ],
+    "correct_answer": "Anchoring.",
+    "ai_feedback": {
+      "correct": "Correct! They are anchored to the past purchase price, even though the market value has clearly fallen.",
+      "incorrect": "The investor is anchored to the original purchase price. They refuse to sell because they value the stock based on that anchor, not on its current market value."
+    }
+  },
+  {
+    "id": 1605,
+    "question": "Which bias causes investors to sell their best-performing stocks quickly to 'lock in the profit'?",
+    "options": [
+      "Loss Aversion.",
+      "Hindsight Bias.",
+      "Availability Bias.",
+      "Familiarity Bias."
+    ],
+    "correct_answer": "Loss Aversion.",
+    "ai_feedback": {
+      "correct": "You got it! Loss Aversion makes the potential for a loss feel so bad that they rush to take a small gain, limiting their long-term growth.",
+      "incorrect": "Loss Aversion makes the risk of the gain disappearing feel worse than the opportunity cost of selling too early. They sell winners early to avoid a potential loss."
+    }
+  },
+  {
+    "id": 1606,
+    "question": "To mitigate Confirmation Bias, an investor should actively seek out information that:",
+    "options": [
+      "Confirms their existing belief.",
+      "Is only positive about the investment.",
+      "Is contrary or negative to their position.",
+      "Is provided by an influencer."
+    ],
+    "correct_answer": "Is contrary or negative to their position.",
+    "ai_feedback": {
+      "correct": "Exactly! Seeking out contradictory evidence is the only way to challenge your assumptions and make objective decisions.",
+      "incorrect": "Confirmation bias means you only want to hear positive news. To overcome it, you must actively look for and analyze the negative or contradictory views."
+    }
+  }
+]

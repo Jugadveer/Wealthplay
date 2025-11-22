@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="csrf-token" content="" />
+    <title>WealthPlay - Financial Learning Platform</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+    <script>
+      // Fetch CSRF token on page load
+      fetch('/api/csrf-token/', {
+        credentials: 'include'
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.csrfToken) {
+          document.cookie = `csrftoken=${data.csrfToken}; path=/; SameSite=Lax`;
+          const meta = document.querySelector('meta[name=csrf-token]');
+          if (meta) meta.content = data.csrfToken;
+        }
+      })
+      .catch(err => console.warn('Could not fetch CSRF token:', err));
+    </script>
+  </body>
+</html>
+

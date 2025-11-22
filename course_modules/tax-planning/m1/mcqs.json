@@ -1,1 +1,47 @@
-[]
+[
+  {
+    "id": 1304,
+    "question": "Capital Gains are typically taxed at a lower rate if the investment is held for how long?",
+    "options": [
+      "Less than 6 months (Short-Term).",
+      "More than 1 year (Long-Term).",
+      "Exactly 5 years.",
+      "It is always taxed at the same rate."
+    ],
+    "correct_answer": "More than 1 year (Long-Term).",
+    "ai_feedback": {
+      "correct": "Exactly! Long-term capital gains are incentivized with lower tax rates to promote patient investing.",
+      "incorrect": "Tax systems typically favor long-term holding. Capital gains held for over a year are generally taxed at a lower rate than short-term gains."
+    }
+  },
+  {
+    "id": 1305,
+    "question": "What is the primary benefit of a tax-advantaged retirement account?",
+    "options": [
+      "It eliminates all investment risk.",
+      "It guarantees a $10%$ return.",
+      "It allows investments to grow tax-free or tax-deferred.",
+      "It can be withdrawn from at any time without penalty."
+    ],
+    "correct_answer": "It allows investments to grow tax-free or tax-deferred.",
+    "ai_feedback": {
+      "correct": "Correct! Tax shielding is the immense benefit. Avoiding tax on growth dramatically accelerates compounding.",
+      "incorrect": "The tax benefit is paramount. By shielding growth from yearly taxes, you maximize the power of compounding over decades."
+    }
+  },
+  {
+    "id": 1306,
+    "question": "The strategy of selling investments at a loss to reduce taxes owed on profitable sales is called:",
+    "options": [
+      "Tax Loss Harvesting.",
+      "Dividend Capture.",
+      "Income Splitting.",
+      "Tax Arbitrage."
+    ],
+    "correct_answer": "Tax Loss Harvesting.",
+    "ai_feedback": {
+      "correct": "Nice job! Tax loss harvesting is a common, legal strategy to optimize the tax impact of your investing activities.",
+      "incorrect": "It is called Tax Loss Harvesting. You intentionally 'realize' a loss to offset a taxable gain, lowering your total capital gains tax liability."
+    }
+  }
+]

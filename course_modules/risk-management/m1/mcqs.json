@@ -1,1 +1,47 @@
-[]
+[
+  {
+    "id": 1804,
+    "question": "If a corporate bond issuer declares bankruptcy and cannot repay its loan, an investor is exposed to which type of risk?",
+    "options": [
+      "Inflation Risk.",
+      "Liquidity Risk.",
+      "Unsystematic Risk.",
+      "Credit Risk."
+    ],
+    "correct_answer": "Credit Risk.",
+    "ai_feedback": {
+      "correct": "Correct! Credit risk is the risk of default by the debtor (the company that issued the bond).",
+      "incorrect": "This is Credit Risk, the chance that the borrower fails to honor their financial obligations. Credit risk is the main concern in fixed-income investing."
+    }
+  },
+  {
+    "id": 1805,
+    "question": "An investor sets a Stop-Loss Order at $10%$ below their purchase price. The main purpose of this action is to:",
+    "options": [
+      "Guarantee a profit.",
+      "Limit the potential financial loss.",
+      "Increase the trading volume.",
+      "Buy more shares at a low price."
+    ],
+    "correct_answer": "Limit the potential financial loss.",
+    "ai_feedback": {
+      "correct": "Exactly! The stop-loss is a defensive measure to cap the downside and protect capital.",
+      "incorrect": "A stop-loss order is a risk management tool. Its function is purely defensive: to automatically sell and limit the maximum possible loss."
+    }
+  },
+  {
+    "id": 1806,
+    "question": "Holding cash for 20 years for a retirement goal exposes the investor primarily to which risk?",
+    "options": [
+      "Credit Risk.",
+      "Inflation Risk.",
+      "Systematic Market Risk.",
+      "Liquidity Risk."
+    ],
+    "correct_answer": "Inflation Risk.",
+    "ai_feedback": {
+      "correct": "Nice job! The purchasing power of cash is guaranteed to be eaten away by inflation over such a long period.",
+      "incorrect": "Holding cash for a long time virtually guarantees that inflation will erode its purchasing power, making Inflation Risk the highest threat."
+    }
+  }
+]

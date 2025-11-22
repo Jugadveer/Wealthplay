@@ -1,5 +1,5 @@
 """
-Course views for serving courses from financial_course.json
+Course views for serving courses from course_modules folders
 """
 import json
 import os
@@ -11,17 +11,8 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
-
-# Try both possible file names
-COURSES_JSON_PATH = None
-for filename in ['financial_course.json', 'financial_courses.json']:
-    path = os.path.join(settings.BASE_DIR, filename)
-    if os.path.exists(path):
-        COURSES_JSON_PATH = path
-        break
-
-if not COURSES_JSON_PATH:
-    COURSES_JSON_PATH = os.path.join(settings.BASE_DIR, 'financial_course.json')
+# Import the new folder-based loader
+from .load_from_folders import load_courses_from_folders, get_module_from_folder
 
 
 def transform_topic_to_course(topic):
@@ -76,54 +67,25 @@ def transform_topic_to_course(topic):
 
 
 def load_courses_data():
-    """Load courses from JSON file - use as-is, no transformation"""
-    if not COURSES_JSON_PATH or not os.path.exists(COURSES_JSON_PATH):
-        print(f"Courses JSON file not found at: {COURSES_JSON_PATH}")
-        return []
-    
-    try:
-        with open(COURSES_JSON_PATH, 'r', encoding='utf-8') as f:
-            data = json.load(f)
-            
-            # Handle different JSON structures
-            if isinstance(data, list):
-                # Direct array of courses (expected format)
-                print(f"Loaded {len(data)} courses from {COURSES_JSON_PATH}")
-                return data
-            elif isinstance(data, dict):
-                # Object with 'topics' or 'courses' key
-                if 'topics' in data and isinstance(data['topics'], list):
-                    # Transform topics to courses format
-                    topics = data['topics']
-                    courses = [transform_topic_to_course(topic) for topic in topics]
-                    print(f"Loaded {len(courses)} courses from {COURSES_JSON_PATH} (transformed from topics)")
-                    return courses
-                elif 'courses' in data and isinstance(data['courses'], list):
-                    print(f"Loaded {len(data['courses'])} courses from {COURSES_JSON_PATH}")
-                    return data['courses']
-                else:
-                    print(f"JSON structure not recognized. Keys: {list(data.keys())}")
-                    return []
-            else:
-                print(f"Unexpected JSON structure: {type(data)}")
-                return []
-    except json.JSONDecodeError as e:
-        print(f"JSON decode error: {e}")
-        return []
-    except Exception as e:
-        print(f"Error loading courses: {e}")
-        import traceback
-        traceback.print_exc()
-        return []
+    """Load courses from course_modules folders"""
+    courses = load_courses_from_folders()
+    if courses:
+        print(f"Loaded {len(courses)} courses from course_modules folders")
+    else:
+        print("No courses found in course_modules folders")
+    return courses
 
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def get_courses(request):
     """Get all courses from JSON, filtered by user level"""
-    from users.models import UserProfile
+    from users.models import UserProfile, UserProgress
     
-    courses = load_courses_data()
+    # Use folder-based loading first
+    courses = load_courses_from_folders()
+    if not courses or not isinstance(courses, list):
+        courses = load_courses_data()
     
     # Ensure we return an array
     if not isinstance(courses, list):
@@ -139,35 +101,67 @@ def get_courses(request):
             # Filter courses based on level and XP
             filtered_courses = []
             for course in courses:
-                course_level = course.get('level', 'beginner')
+                # Get course level and normalize to lowercase
+                course_level_raw = course.get('level', 'beginner')
+                course_level = course_level_raw.lower() if isinstance(course_level_raw, str) else 'beginner'
                 xp_required = course.get('xp_to_unlock', 0)
                 
-                # Level hierarchy: beginner < intermediate < advanced
-                level_hierarchy = {'beginner': 0, 'intermediate': 1, 'advanced': 2}
-                user_level_num = level_hierarchy.get(user_level, 0)
-                course_level_num = level_hierarchy.get(course_level, 0)
+                # First check if user has enough XP
+                has_enough_xp = (xp_required <= user_xp)
                 
-                # Unlock logic:
-                # 1. User can access courses at their level or below (beginner < intermediate < advanced)
-                # 2. User can access courses they have enough XP for
-                # 3. If user is intermediate/advanced, they can access beginner courses
-                can_access = False
-                
-                if course_level_num <= user_level_num:
-                    # User is at or above course level (e.g., intermediate can access beginner)
-                    can_access = (xp_required <= user_xp)  # Still need enough XP
-                elif user_level_num > 0 and course_level == 'beginner':
-                    # Intermediate/advanced users can access beginner courses if they have XP
-                    can_access = (xp_required <= user_xp)
+                # Then check level access
+                if user_level == 'beginner':
+                    # Beginner users can only access beginner courses (must meet XP requirement)
+                    can_access = (course_level == 'beginner' and has_enough_xp)
+                elif user_level == 'intermediate':
+                    # Intermediate users can access beginner and intermediate courses (must meet XP requirement)
+                    can_access = (course_level in ['beginner', 'intermediate'] and has_enough_xp)
+                elif user_level == 'advanced':
+                    # Advanced users can access all courses (must meet XP requirement)
+                    can_access = has_enough_xp
                 else:
-                    # Course level is higher than user level - check XP
-                    can_access = (xp_required <= user_xp)
+                    # Default: no access
+                    can_access = False
+                
+                # Calculate course progress
+                # Get modules from course - they should already be loaded from load_courses_from_folders
+                modules = course.get('modules', [])
+                # If no modules in course dict, try to load from folder structure
+                if not modules:
+                    course_id = course.get('id')
+                    if course_id:
+                        # Count modules by checking folder structure
+                        from pathlib import Path
+                        from django.conf import settings
+                        course_modules_dir = Path(settings.BASE_DIR) / 'course_modules' / course_id
+                        if course_modules_dir.exists():
+                            module_folders = [d for d in course_modules_dir.iterdir() if d.is_dir() and d.name.startswith('m')]
+                            modules = [{'id': mf.name} for mf in sorted(module_folders)]
+                
+                completed_count = 0
+                total_modules_count = len(modules) if modules else 0
+                
+                # Count completed modules
+                for mod in modules:
+                    module_id = mod.get('id') if isinstance(mod, dict) else str(mod)
+                    progress = UserProgress.objects.filter(
+                        user=request.user,
+                        course_id=course.get('id'),
+                        module_id=module_id,
+                        status='completed'
+                    ).first()
+                    if progress:
+                        completed_count += 1
                 
                 # Mark course as locked/unlocked
                 course['locked'] = not can_access
                 course['user_can_access'] = can_access
                 course['user_level'] = user_level
                 course['user_xp'] = user_xp
+                course['completed_modules'] = completed_count
+                total_modules_count = len(modules) if modules else 0
+                course['total_modules'] = total_modules_count
+                course['progress_percent'] = (completed_count / total_modules_count * 100) if total_modules_count > 0 else 0
                 
                 filtered_courses.append(course)
             
@@ -189,8 +183,11 @@ def get_courses(request):
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def get_course_detail(request, course_id):
-    """Get a specific course by ID"""
-    courses = load_courses_data()
+    """Get a specific course by ID from course_modules folders"""
+    # Use folder-based loading first
+    courses = load_courses_from_folders()
+    if not courses:
+        courses = load_courses_data()
     
     # Ensure courses is a list
     if not isinstance(courses, list):
@@ -226,222 +223,181 @@ def get_course_detail(request, course_id):
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def get_module_detail(request, course_id, module_id):
-    """Get a specific module from a course with enriched content"""
-    from courses.models import ModuleContent
+    """Get a specific module from course_modules folder"""
+    # Load from folder structure
+    result = get_module_from_folder(course_id, module_id)
     
-    # Try to get enriched content from database first
-    full_module_id = f"{course_id}_{module_id}"
-    try:
-        module_content = ModuleContent.objects.get(module_id=full_module_id)
-        
-        # Build enriched response
-        response_data = {
-            "course": {
-                "id": course_id,
-                "title": module_content.title,
-                "source": ""  # Can be added later
-            },
-            "module": {
-                "id": module_id,
-                "title": module_content.title,
-                "summary": module_content.summary,
-                "theory_text": module_content.theory_text,
-                "duration_min": module_content.duration_min,
-                "xp_reward": module_content.xp_reward,
-                "fixed_qna": [
-                    {"q": qna.question, "a": qna.answer}
-                    for qna in module_content.qna_pairs.all().order_by('order')
-                ],
-                "mcqs": [
-                    {
-                        "id": mcq.mcq_id,
-                        "question": mcq.question,
-                        "choices": mcq.choices,
-                        "correct_choice": mcq.correct_choice,
-                        "explanation": mcq.explanation
-                    }
-                    for mcq in module_content.mcqs.all().order_by('order')
-                ],
-                "mentor_prompts": [
-                    {
-                        "user_q": prompt.user_question,
-                        "mentor_a": prompt.mentor_answer_seed
-                    }
-                    for prompt in module_content.mentor_prompts.all().order_by('order')
-                ],
-                "plaque_card": module_content.plaque_card,
-                "metadata": module_content.metadata
-            }
-        }
-        return Response(response_data)
-    except ModuleContent.DoesNotExist:
-        # Fallback to JSON file if not in database
-        courses = load_courses_data()
-        course = next((c for c in courses if c.get("id") == course_id), None)
-        
-        if not course:
-            return Response({"error": "Course not found"}, status=404)
-        
-        module = next((m for m in course.get("modules", []) if m.get("id") == module_id), None)
-        
-        if not module:
-            return Response({"error": "Module not found"}, status=404)
-        
-        return Response({
-            "course": {
-                "id": course.get("id"),
-                "title": course.get("title"),
-                "source": course.get("source")
-            },
-            "module": module
-        })
+    if not result:
+        return Response({"error": "Module not found"}, status=404)
+    
+    module, course = result
+    
+    return Response({
+        "course": {
+            "id": course.get("id"),
+            "title": course.get("title"),
+            "source": "course_modules"
+        },
+        "module": module
+    })
 
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def submit_mcq_answer(request, module_id, mcq_id):
     """Submit MCQ answer and award XP"""
-    from courses.models import ModuleContent, ModuleMCQ, UserMCQAttempt
     from users.models import UserProfile
+    import json
     
-    try:
-        module_content = ModuleContent.objects.get(module_id=module_id)
-        mcq = ModuleMCQ.objects.get(module_content=module_content, mcq_id=mcq_id)
+    # Parse module_id (format: course_id_module_id)
+    if '_' in module_id:
+        course_id, module_id_only = module_id.rsplit('_', 1)
+    else:
+        # Try to find course by searching modules
+        courses = load_courses_data()
+        course_id = None
+        module_id_only = module_id
+        for course in courses:
+            for mod in course.get('modules', []):
+                if mod.get('id') == module_id:
+                    course_id = course.get('id')
+                    break
+            if course_id:
+                break
         
-        selected_choice = request.data.get('selected_choice', '').upper()
-        is_correct = (selected_choice == mcq.correct_choice.upper())
-        
-        # Get or create attempt - allow re-attempts by updating if exists
-        attempt, created = UserMCQAttempt.objects.get_or_create(
-            user=request.user,
-            mcq=mcq,
-            defaults={
-                'selected_choice': selected_choice,
-                'is_correct': is_correct
-            }
-        )
-        
-        # Update attempt if re-attempting
-        if not created:
-            attempt.selected_choice = selected_choice
-            attempt.is_correct = is_correct
-            attempt.save()
-        
-        # Award XP if correct and not already awarded
-        xp_awarded = 0
-        if is_correct:
-            # Award XP on first correct attempt only
-            if created:
-                # Award portion of module XP - ensure at least 15 XP per MCQ for progression
-                # Total module XP should be split: 40% MCQs (3 MCQs = ~13% each), 40% flash cards, 20% completion
-                total_mcqs = module_content.mcqs.count()
-                if total_mcqs > 0:
-                    xp_per_mcq = max(15, (module_content.xp_reward * 40) // (100 * total_mcqs))
-                else:
-                    xp_per_mcq = max(15, module_content.xp_reward // 3)
-                
-                # Update user profile
-                profile, _ = UserProfile.objects.get_or_create(user=request.user)
-                profile.xp += xp_per_mcq
-                profile.save()
-                
-                attempt.xp_awarded = xp_per_mcq
-                attempt.save()
-                xp_awarded = xp_per_mcq
-            else:
-                # Already attempted - return previously awarded XP
-                xp_awarded = attempt.xp_awarded or 0
-        
-        return Response({
-            'is_correct': is_correct,
-            'correct_choice': mcq.correct_choice,
-            'explanation': mcq.explanation,
-            'xp_awarded': xp_awarded,
-            'user_xp': UserProfile.objects.get(user=request.user).xp
-        })
-        
-    except ModuleContent.DoesNotExist:
+        if not course_id:
+            return Response({"error": "Module not found"}, status=404)
+    
+    # Load module from folder
+    result = get_module_from_folder(course_id, module_id_only)
+    if not result:
         return Response({"error": "Module not found"}, status=404)
-    except ModuleMCQ.DoesNotExist:
+    
+    module, course = result
+    mcqs = module.get('mcqs', [])
+    
+    # Find the specific MCQ
+    mcq = None
+    for m in mcqs:
+        if str(m.get('id')) == str(mcq_id):
+            mcq = m
+            break
+    
+    if not mcq:
         return Response({"error": "MCQ not found"}, status=404)
-    except Exception as e:
-        return Response({"error": str(e)}, status=500)
+    
+    # Get selected choice
+    choice_idx = request.data.get('choice')
+    selected_answer = request.data.get('selected_answer', '')
+    
+    # Determine correct answer
+    correct_answer = mcq.get('correct_answer')
+    choices = mcq.get('choices') or mcq.get('options', [])
+    correct_choice_idx = mcq.get('correct_choice')
+    
+    # Check if answer is correct
+    if choice_idx is not None:
+        is_correct = (choice_idx == correct_choice_idx) or (choices[choice_idx] == correct_answer if choice_idx < len(choices) else False)
+    else:
+        is_correct = (selected_answer == correct_answer)
+    
+    # Award XP if correct (only once per MCQ)
+    from users.models import UserProgress
+    progress, _ = UserProgress.objects.get_or_create(
+        user=request.user,
+        course_id=course_id,
+        module_id=module_id_only,
+        defaults={'status': 'in_progress'}
+    )
+    
+    # Check if this MCQ was already answered correctly
+    mcqs_progress = progress.mcqs_progress or {}
+    mcq_progress_data = mcqs_progress.get(str(mcq_id), {})
+    already_correct = mcq_progress_data.get('correct', False)
+    
+    xp_awarded = 0
+    if is_correct and not already_correct:
+        profile, _ = UserProfile.objects.get_or_create(user=request.user)
+        xp_per_mcq = 15  # Default XP per MCQ
+        profile.xp += xp_per_mcq
+        profile.save()
+        xp_awarded = xp_per_mcq
+        progress.xp_awarded += xp_per_mcq
+    
+    # Update MCQ progress
+    mcqs_progress[str(mcq_id)] = {
+        'answered': True,
+        'correct': is_correct,
+        'attempts': mcq_progress_data.get('attempts', 0) + 1,
+        'allow_retry': not is_correct  # Allow retry if incorrect
+    }
+    progress.mcqs_progress = mcqs_progress
+    progress.save()
+    
+    # Get AI feedback
+    ai_feedback = mcq.get('ai_feedback', {})
+    feedback_message = ai_feedback.get('correct' if is_correct else 'incorrect', '')
+    
+    return Response({
+        'correct': is_correct,
+        'correct_answer': correct_answer,
+        'correct_choice': correct_choice_idx,
+        'explanation': feedback_message or mcq.get('explanation', ''),
+        'xp_awarded': xp_awarded,
+        'user_xp': UserProfile.objects.get(user=request.user).xp,
+        'isCorrect': is_correct,  # For frontend compatibility
+        'mcq_progress': mcqs_progress.get(str(mcq_id), {})
+    })
 
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_all_flash_cards(request, module_id):
-    """Get all flash cards (3-4) for a module"""
-    from courses.models import ModuleContent
+    """Get all flash cards for a module from course_modules folder"""
+    # Parse module_id (format: course_id_module_id)
+    if '_' in module_id:
+        course_id, module_id_only = module_id.rsplit('_', 1)
+    else:
+        # Try to find course by searching modules
+        courses = load_courses_data()
+        course_id = None
+        module_id_only = module_id
+        for course in courses:
+            for mod in course.get('modules', []):
+                if mod.get('id') == module_id:
+                    course_id = course.get('id')
+                    break
+            if course_id:
+                break
+        
+        if not course_id:
+            return Response({"error": "Module not found"}, status=404)
     
-    try:
-        module_content = ModuleContent.objects.get(module_id=module_id)
-        
-        # Generate 3-4 flash cards from module content
-        fixed_qna = list(module_content.qna_pairs.all())
-        theory_text = module_content.theory_text or ''
-        
-        flash_cards = []
-        
-        # Create flash cards from fixed Q&A (up to 4)
-        for i, qna in enumerate(fixed_qna[:4]):
-            # Split theory text into chunks for key concepts
-            theory_sentences = theory_text.split('.') if theory_text else []
-            start_idx = (i * len(theory_sentences)) // min(len(fixed_qna), 4) if theory_sentences else 0
-            end_idx = ((i + 1) * len(theory_sentences)) // min(len(fixed_qna), 4) if theory_sentences else 0
-            
-            key_concept_text = '. '.join([s.strip() for s in theory_sentences[start_idx:end_idx] if s.strip()])
-            if not key_concept_text:
-                key_concept_text = theory_text[:300] if theory_text else module_content.summary or f"Key concepts from {module_content.title}"
-            
-            flash_cards.append({
-                'id': f'flashcard-{i+1}',
-                'key_concept': key_concept_text[:400],
-                'question': qna.question,
-                'answer': qna.answer,
-                'reward': {'xp': max(10, (module_content.xp_reward * 20) // 100)}
-            })
-        
-        # If not enough Q&A, create additional flash cards from theory
-        while len(flash_cards) < 3 and theory_text:
-            idx = len(flash_cards)
-            theory_sentences = theory_text.split('.')
-            chunk_size = len(theory_sentences) // 3
-            start_idx = idx * chunk_size
-            end_idx = (idx + 1) * chunk_size if idx < 2 else len(theory_sentences)
-            
-            key_concept_text = '. '.join([s.strip() for s in theory_sentences[start_idx:end_idx] if s.strip()])
-            if key_concept_text:
-                flash_cards.append({
-                    'id': f'flashcard-{idx+1}',
-                    'key_concept': key_concept_text[:400],
-                    'question': f"What is the key concept {idx+1} from {module_content.title}?",
-                    'answer': module_content.summary or theory_text[:200],
-                    'reward': {'xp': max(10, (module_content.xp_reward * 20) // 100)}
-                })
-        
-        # Ensure at least 3 flash cards
-        if len(flash_cards) < 3:
-            for i in range(len(flash_cards), 3):
-                flash_cards.append({
-                    'id': f'flashcard-{i+1}',
-                    'key_concept': module_content.summary or f"Key concepts from {module_content.title}",
-                    'question': f"What is the main concept of {module_content.title}?",
-                    'answer': module_content.summary or "Please review the module content.",
-                    'reward': {'xp': max(10, (module_content.xp_reward * 20) // 100)}
-                })
-        
-        return Response({
-            'flash_cards': flash_cards[:4],  # Max 4 flash cards
-            'total': len(flash_cards[:4])
-        })
-        
-    except ModuleContent.DoesNotExist:
+    # Load module from folder
+    result = get_module_from_folder(course_id, module_id_only)
+    if not result:
         return Response({"error": "Module not found"}, status=404)
-    except Exception as e:
-        import traceback
-        traceback.print_exc()
-        return Response({"error": str(e)}, status=500)
+    
+    module, course = result
+    flash_cards = module.get('flash_cards', [])
+    
+    # Transform flash cards to expected format
+    transformed_cards = []
+    for i, card in enumerate(flash_cards[:4]):  # Max 4 cards
+        transformed_cards.append({
+            'id': card.get('id', f'flashcard-{i+1}'),
+            'topic': card.get('topic', ''),
+            'theory_title': card.get('theory_title', ''),
+            'theory_content': card.get('theory_content', ''),
+            'question': card.get('question', card.get('topic', '')),
+            'answer': card.get('answer', card.get('theory_content', '')),
+            'reward': {'xp': 25}  # Default XP per flash card
+        })
+    
+    return Response({
+        'flash_cards': transformed_cards,
+        'total': len(transformed_cards)
+    })
 
 
 @api_view(['GET'])

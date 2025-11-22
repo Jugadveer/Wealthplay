@@ -1,1 +1,47 @@
-[]
+[
+  {
+    "id": 504,
+    "question": "When you purchase a stock, you are buying:",
+    "options": [
+      "A loan to the company.",
+      "A guarantee of a fixed return.",
+      "Fractional ownership in the company.",
+      "A fixed-income security."
+    ],
+    "correct_answer": "Fractional ownership in the company.",
+    "ai_feedback": {
+      "correct": "Correct! A stock is equity, representing ownership.",
+      "incorrect": "Incorrect. Stocks are equity, which means ownership. Bonds are loans (debt), and stocks offer no guaranteed returns."
+    }
+  },
+  {
+    "id": 505,
+    "question": "The vast majority of daily stock trading takes place on which market?",
+    "options": [
+      "The Primary Market (IPOs).",
+      "The Secondary Market (Stock Exchanges).",
+      "The Bond Market.",
+      "The Commodity Market."
+    ],
+    "correct_answer": "The Secondary Market (Stock Exchanges).",
+    "ai_feedback": {
+      "correct": "Nice job! Exchanges like the NYSE or NSE are the secondary markets where existing shares change hands between investors.",
+      "incorrect": "The Primary Market is only for new issues. Daily trading of existing stocks occurs in the Secondary Market, facilitated by stock exchanges."
+    }
+  },
+  {
+    "id": 506,
+    "question": "A payout of a company's profit to its shareholders is called a:",
+    "options": [
+      "Coupon Payment.",
+      "Dividend.",
+      "Capital Gain.",
+      "Principal Return."
+    ],
+    "correct_answer": "Dividend.",
+    "ai_feedback": {
+      "correct": "Exactly! Dividends are one of two ways investors earn money from stocks (the other being capital gains).",
+      "incorrect": "A dividend is a direct payment of profit to shareholders. A coupon payment is the interest paid on a bond."
+    }
+  }
+]

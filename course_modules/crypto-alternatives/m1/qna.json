@@ -1,10 +1,20 @@
 [
   {
-    "question": "Should I invest in cryptocurrency?",
-    "answer": "Crypto is highly speculative and volatile. Only invest what you can afford to lose, and keep it to a small portion (5-10%) of portfolio if at all."
+    "id": 2007,
+    "question": "What is 'Fiat Money' and how does it differ from cryptocurrency?",
+    "answer": "Fiat money is currency issued and backed by a government (e.g., USD, INR). Its value is derived from government trust and decree. Cryptocurrency is decentralized and its value is derived from market demand and its network's utility.",
+    "explanation": "Fiat is centralized and government-backed; Crypto is decentralized and technology-backed."
   },
   {
-    "question": "What are the risks?",
-    "answer": "High volatility, regulatory uncertainty, security risks, and potential for total loss. Treat as high-risk speculative investment."
+    "id": 2008,
+    "question": "Why is the high volatility of cryptocurrency considered its primary investment risk?",
+    "answer": "High volatility means prices can drop rapidly (e.g., $50%$ in a day), making capital preservation difficult and rendering it unsuitable for short-term or essential financial goals.",
+    "explanation": "The extreme price swings mean you can lose a significant portion of your investment in a very short period."
+  },
+  {
+    "id": 2009,
+    "question": "What are 'alternatives' in a portfolio context?",
+    "answer": "Alternatives are non-traditional investments like private equity, hedge funds, and commodities (gold, silver). They are typically used to further diversify a portfolio because their returns are often uncorrelated with stocks and bonds.",
+    "explanation": "Alternatives provide a different source of returns that helps smooth out portfolio volatility."
   }
 ]

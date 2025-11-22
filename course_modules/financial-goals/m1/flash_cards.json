@@ -1,1 +1,20 @@
-[]
+[
+  {
+    "id": 901,
+    "topic": "Goal Types",
+    "theory_title": "Short, Medium, and Long Term",
+    "theory_content": "**Short-term goals** (1-3 years): Emergency fund, small vacation. **Medium-term goals** (3-10 years): Car down payment, wedding. **Long-term goals** (10+ years): Retirement, child's education. The time horizon dictates the appropriate investment vehicle (safe for short-term, growth for long-term)."
+  },
+  {
+    "id": 902,
+    "topic": "S.M.A.R.T. Goals",
+    "theory_title": "The Blueprint for Success",
+    "theory_content": "S.M.A.R.T. goals are **S**pecific, **M**easurable, **A**chievable, **R**elevant, and **T**ime-bound. Applying this framework turns vague aspirations ('save more money') into an actionable, trackable plan ('save $\text{₹}1,00,000$ for a down payment by end of 2026')."
+  },
+  {
+    "id": 903,
+    "topic": "Prioritization",
+    "theory_title": "The Hierarchy of Needs",
+    "theory_content": "Financial goals should be prioritized: 1. **Liquidity/Safety** (Emergency Fund). 2. **Debt Reduction** (high-interest loans). 3. **Long-Term Growth** (Retirement). You should fund your emergency savings and tackle high-interest debt *before* aggressively investing for distant goals."
+  }
+]

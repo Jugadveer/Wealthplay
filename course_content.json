@@ -1,0 +1,2321 @@
+{
+    "courses": [
+      {
+        "course_id": 1,
+        "title": "Money Basics",
+        "level": "Beginner",
+        "modules": [
+          {
+            "module_id": "m1",
+            "title": "What is Money?",
+            "flash_cards": [
+              {
+                "id": 101,
+                "topic": "Medium of Exchange",
+                "theory_title": "The Core Function",
+                "theory_content": "Money’s most important function is to act as a **Medium of Exchange**. This means it is a widely accepted intermediary used in transactions to buy goods and services. Before money, societies relied on the **barter system**, which required a 'double coincidence of wants'. Money eliminates this problem by providing a universally accepted medium."
+              },
+              {
+                "id": 102,
+                "topic": "Unit of Account",
+                "theory_title": "A Standard Measure",
+                "theory_content": "Money functions as a **Unit of Account**, meaning it provides a common numerical measure of the relative value of all goods and services. By assigning a currency value (e.g., $10$ or ₹$100$), money allows for easy comparison, calculation of profit/loss, and budget formulation."
+              },
+              {
+                "id": 103,
+                "topic": "Store of Value",
+                "theory_title": "Transferring Purchasing Power",
+                "theory_content": "Money acts as a **Store of Value**, which means it holds its purchasing power over time and can be saved for future use. While cash is imperfect (due to inflation), it is a liquid way to transfer wealth from the present to the future."
+              }
+            ],
+            "mcqs": [
+              {
+                "id": 104,
+                "question": "In a barter system, trade requires the mutual possession of desired goods, a concept known as:",
+                "options": [
+                  "Price Discovery",
+                  "Coincident Trade Exchange",
+                  "Double Coincidence of Wants",
+                  "Liquid Asset Requirement"
+                ],
+                "correct_answer": "Double Coincidence of Wants",
+                "ai_feedback": {
+                  "correct": "Nice, good job! A double coincidence of wants is the main challenge of a barter system, which money elegantly solves.",
+                  "incorrect": "Not quite. A barter system's main challenge is the 'Double Coincidence of Wants'—you both need to want what the other has. Money acts as a universal medium to fix this."
+                }
+              },
+              {
+                "id": 105,
+                "question": "Which quality of money is primarily challenged by high inflation rates?",
+                "options": [
+                  "Portability",
+                  "Unit of Account",
+                  "Medium of Exchange",
+                  "Store of Value"
+                ],
+                "correct_answer": "Store of Value",
+                "ai_feedback": {
+                  "correct": "That’s right! When prices rise, the value stored in cash decreases, challenging its Store of Value function.",
+                  "incorrect": "Try again. Inflation, or the rising cost of goods, directly reduces what money can buy in the future, thus eroding its ability to function as a Store of Value."
+                }
+              },
+              {
+                "id": 106,
+                "question": "Which of the following is NOT a primary function of money?",
+                "options": [
+                  "A measure of value (Unit of Account)",
+                  "A medium of exchange",
+                  "A generator of interest (Source of Return)",
+                  "A store of value"
+                ],
+                "correct_answer": "A generator of interest (Source of Return)",
+                "ai_feedback": {
+                  "correct": "Exactly! Money itself does not generate returns; that's the job of investments. The three core functions are Unit of Account, Medium of Exchange, and Store of Value.",
+                  "incorrect": "Incorrect. The three core functions are Medium of Exchange, Unit of Account, and Store of Value. Generating interest is a characteristic of investments, not money itself."
+                }
+              }
+            ],
+            "qna": [
+              {
+                "id": 107,
+                "question": "What is the difference between money and wealth?",
+                "answer": "Money is generally defined as any asset that serves the three core functions (medium of exchange, unit of account, store of value). Wealth is a broader term that refers to the total stock of valuable assets owned by an individual or entity, which includes money but also investments, real estate, and other durable goods.",
+                "explanation": "Wealth is the total picture of your assets; money is just the most liquid part of it."
+              },
+              {
+                "id": 108,
+                "question": "Why is 'portability' an important property for money?",
+                "answer": "Portability is essential because money must be easily carried and transported to facilitate transactions across different locations. If money were not portable, its effectiveness as a medium of exchange would be severely limited.",
+                "explanation": "Money needs to be easy to move around! Imagine trying to pay for coffee with a heavy gold bar—that's why portability is key."
+              },
+              {
+                "id": 109,
+                "question": "In a hypothetical scenario, if gold is used for trading, is it fulfilling the function of a Unit of Account?",
+                "answer": "Yes, it is. If everyone agrees to quote the price of goods in terms of the weight or unit of gold (e.g., 'that cow costs 5 ounces of gold'), then gold is successfully acting as a Unit of Account, providing a common standard for measuring value.",
+                "explanation": "The Unit of Account function is about the agreement on a standard measure, regardless of the physical form of the money (gold, shell, or fiat currency)."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "course_id": 2,
+        "title": "Budgeting & Saving",
+        "level": "Beginner",
+        "modules": [
+          {
+            "module_id": "m1",
+            "title": "50/30/20 and Goal-setting",
+            "flash_cards": [
+              {
+                "id": 201,
+                "topic": "The 50/30/20 Rule",
+                "theory_title": "A Simple Allocation Framework",
+                "theory_content": "The 50/30/20 rule dictates how to divide your **after-tax income** into three main categories: 50% for Needs, 30% for Wants, and 20% for Savings and Investments. It balances essential spending with lifestyle choices and future security."
+              },
+              {
+                "id": 202,
+                "topic": "Needs vs. Wants",
+                "theory_title": "Categorizing Expenses",
+                "theory_content": "The 50% category is for **Needs** (rent, utilities, basic groceries). The 30% category is for **Wants** (dining out, streaming services, hobbies). Correctly categorizing these is key to making the 50/30/20 rule work."
+              },
+              {
+                "id": 203,
+                "topic": "Automating the 20%",
+                "theory_title": "Savings and Investment Priority",
+                "theory_content": "The 20% must be dedicated to **Savings and Investments** (emergency fund, retirement, debt payoff). The best strategy is to 'pay yourself first' by setting up automatic transfers immediately after payday to ensure consistent progress."
+              }
+            ],
+            "mcqs": [
+              {
+                "id": 204,
+                "question": "According to the 50/30/20 rule, which item should be categorized under 'Needs'?",
+                "options": [
+                  "An annual international vacation.",
+                  "Monthly rent payments.",
+                  "A new video game console.",
+                  "Dining out at a high-end restaurant."
+                ],
+                "correct_answer": "Monthly rent payments.",
+                "ai_feedback": {
+                  "correct": "That's right! Monthly rent is a non-negotiable, essential expense, placing it in the 50% 'Needs' category.",
+                  "incorrect": "Incorrect. 'Needs' are essential expenses like monthly rent, not discretionary items like vacations or dining out."
+                }
+              },
+              {
+                "id": 205,
+                "question": "What does the '20' in the 50/30/20 rule primarily cover?",
+                "options": [
+                  "Entertainment and luxury expenses.",
+                  "Housing and utilities.",
+                  "High-interest debt payoff and investments.",
+                  "Taxes and social security payments."
+                ],
+                "correct_answer": "High-interest debt payoff and investments.",
+                "ai_feedback": {
+                  "correct": "You got it! The 20% is dedicated entirely to your financial future: savings, investments, and tackling high-interest debt.",
+                  "incorrect": "Try again. The 20% is for savings and financial goals, which includes building wealth and paying down debt aggressively."
+                }
+              },
+              {
+                "id": 206,
+                "question": "Which type of financial goal is typically funded by the 20% category?",
+                "options": [
+                  "Short-term goals (under 1 year) only.",
+                  "Long-term goals (over 5 years) only.",
+                  "A mix of short-term (emergency fund) and long-term (retirement) goals.",
+                  "Credit card payments exclusively."
+                ],
+                "correct_answer": "A mix of short-term (emergency fund) and long-term (retirement) goals.",
+                "ai_feedback": {
+                  "correct": "Nice job! The 20% covers all future goals, from liquid short-term savings (emergency fund) to long-term wealth building (retirement).",
+                  "incorrect": "Incorrect. The 20% must cover both immediate future needs (like an emergency fund) and distant future goals (like retirement)."
+                }
+              }
+            ],
+            "qna": [
+              {
+                "id": 207,
+                "question": "How do you apply the S.M.A.R.T. criteria to financial goal setting?",
+                "answer": "S.M.A.R.T. stands for Specific, Measurable, Achievable, Relevant, and Time-bound. For example, instead of saying 'Save more money,' a S.M.A.R.T. goal is: 'Save $5,000 for a down payment by December 31, 2026, by setting aside $200 per month.'",
+                "explanation": "Using S.M.A.R.T. makes your goals actionable and trackable, dramatically increasing your chances of success. It turns a dream into a plan."
+              },
+              {
+                "id": 208,
+                "question": "If my 'Needs' (50%) category consistently exceeds 50% of my income, what should I do?",
+                "answer": "If your needs exceed 50%, your budget is unbalanced. You need to either increase your income or reduce your cost of living. Focus first on high-cost needs like housing and transportation, as these offer the biggest opportunities for cuts (e.g., finding a cheaper apartment or reducing car reliance).",
+                "explanation": "If your needs are too high, you have no financial margin. Reducing 'Needs' is a priority before cutting 'Wants' entirely."
+              },
+              {
+                "id": 209,
+                "question": "What is the difference between saving and investing within the 20% category?",
+                "answer": "Saving involves setting aside money in highly liquid, low-risk accounts (like a high-yield savings account or Fixed Deposit) for short-term goals or emergencies. Investing involves placing money into assets (stocks, mutual funds) with the expectation of higher growth over the long term, accepting greater risk for greater potential returns.",
+                "explanation": "Saving is for safety and liquidity; investing is for growth and beating inflation over time. Both are critical parts of the 20%."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "course_id": 3,
+        "title": "Banking Products",
+        "level": "Beginner",
+        "modules": [
+          {
+            "module_id": "m1",
+            "title": "Bank Accounts & FDs",
+            "flash_cards": [
+              {
+                "id": 301,
+                "topic": "Savings Account",
+                "theory_title": "Liquidity and Safety",
+                "theory_content": "A Savings Account is designed for day-to-day liquidity and holding your emergency fund. It offers low interest, but the funds are accessible instantly. Look for accounts with low fees, high interest rates (if possible), and safety features like deposit insurance."
+              },
+              {
+                "id": 302,
+                "topic": "Fixed Deposits (FD)",
+                "theory_title": "Guaranteed Returns",
+                "theory_content": "A Fixed Deposit (or Term Deposit) is a safe way to earn a fixed rate of interest for a set period. Your money is locked away until maturity, offering higher interest than a savings account. It’s ideal for goals with a set time horizon (e.g., saving for a car in 3 years)."
+              },
+              {
+                "id": 303,
+                "topic": "Recurring Deposits (RD)",
+                "theory_title": "Disciplined Saving",
+                "theory_content": "A Recurring Deposit is a disciplined savings instrument where you commit to depositing a fixed amount every month for a set term. It also earns a fixed interest rate, often comparable to an FD, and is excellent for building capital incrementally for a specific goal."
+              }
+            ],
+            "mcqs": [
+              {
+                "id": 304,
+                "question": "Which banking product is best suited for keeping an emergency fund that needs immediate access?",
+                "options": [
+                  "Fixed Deposit",
+                  "Recurring Deposit",
+                  "Savings Account",
+                  "Mutual Fund"
+                ],
+                "correct_answer": "Savings Account",
+                "ai_feedback": {
+                  "correct": "Correct! A Savings Account offers the high liquidity necessary for an emergency fund.",
+                  "incorrect": "Incorrect. An emergency fund must be liquid. Fixed Deposits lock up money, making a Savings Account the better choice."
+                }
+              },
+              {
+                "id": 305,
+                "question": "The primary drawback of a Fixed Deposit compared to a Savings Account is:",
+                "options": [
+                  "Lower interest rate.",
+                  "No deposit insurance.",
+                  "Low liquidity (penalties for early withdrawal).",
+                  "The interest rate is variable."
+                ],
+                "correct_answer": "Low liquidity (penalties for early withdrawal).",
+                "ai_feedback": {
+                  "correct": "Exactly! FDs trade liquidity for a higher, fixed interest rate. Early withdrawal usually incurs a penalty.",
+                  "incorrect": "The main drawback is liquidity. While FDs offer higher interest, you face penalties if you need to withdraw the funds before the maturity date."
+                }
+              },
+              {
+                "id": 306,
+                "question": "A Recurring Deposit (RD) is most useful for achieving which financial objective?",
+                "options": [
+                  "Generating highest long-term returns.",
+                  "Making systematic, disciplined monthly savings.",
+                  "Earning daily interest.",
+                  "Buying and selling stocks."
+                ],
+                "correct_answer": "Making systematic, disciplined monthly savings.",
+                "ai_feedback": {
+                  "correct": "Nice! RDs enforce discipline by requiring a fixed monthly contribution, perfect for a specific, near-term goal.",
+                  "incorrect": "Try again. RDs are designed for disciplined saving by requiring a fixed monthly contribution, not for market investing."
+                }
+              }
+            ],
+            "qna": [
+              {
+                "id": 307,
+                "question": "What is the key advantage of a Fixed Deposit over a standard Savings Account?",
+                "answer": "Fixed Deposits offer a guaranteed, higher rate of return than a typical savings account because the bank knows it can use your funds for a fixed period (i.e., you sacrifice liquidity for return).",
+                "explanation": "FDs give you certainty: a guaranteed, higher interest rate that won't change, unlike variable savings rates."
+              },
+              {
+                "id": 308,
+                "question": "When comparing two savings accounts, what are the three most important factors to check?",
+                "answer": "1. Interest Rate (the return you earn). 2. Fees and Charges (minimum balance, maintenance fees). 3. Deposit Insurance (safety guarantee).",
+                "explanation": "Always prioritize the safety and net return (interest minus fees) when choosing a place to keep your cash."
+              },
+              {
+                "id": 309,
+                "question": "If I withdraw my money from an FD early, what usually happens?",
+                "answer": "Banks typically impose a penalty, which is usually a reduction in the interest rate earned or a flat fee, meaning you receive less than the initially promised interest.",
+                "explanation": "The bank penalizes you for breaking the 'fixed' agreement, reducing the interest you earned to compensate for the early liquidity."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "course_id": 4,
+        "title": "Investing Basics",
+        "level": "Beginner",
+        "modules": [
+          {
+            "module_id": "m1",
+            "title": "What is Investing?",
+            "flash_cards": [
+              {
+                "id": 401,
+                "topic": "The Inflation Trap",
+                "theory_title": "Why Saving Isn't Enough",
+                "theory_content": "Saving is essential, but keeping all your money in a traditional savings account is a losing strategy due to **Inflation**. If your savings interest rate is 2% and inflation is 5%, your money is losing 3% of its real value every year. [Image of inflation chart showing price of an item increasing over 20 years]"
+              },
+              {
+                "id": 402,
+                "topic": "Investing Defined",
+                "theory_title": "Putting Money to Work",
+                "theory_content": "Investing is the act of allocating capital to an asset (stocks, bonds, real estate) with the expectation of generating a profit or return over time. The primary goal is to have your money **grow faster than the rate of inflation**."
+              },
+              {
+                "id": 403,
+                "topic": "Opportunity Cost",
+                "theory_title": "The Cost of Inaction",
+                "theory_content": "The **Opportunity Cost** of saving instead of investing is the potential growth you miss out on. By holding large sums in low-yield accounts, you miss the opportunity for those funds to benefit from long-term market growth."
+              }
+            ],
+            "mcqs": [
+              {
+                "id": 404,
+                "question": "Which statement best describes the difference between saving and investing?",
+                "options": [
+                  "Saving is high-risk, investing is low-risk.",
+                  "Saving is for long-term goals, investing is for short-term goals.",
+                  "Saving is placing funds in liquid accounts, investing is allocating funds to growth assets.",
+                  "Saving always beats inflation, investing rarely does."
+                ],
+                "correct_answer": "Saving is placing funds in liquid accounts, investing is allocating funds to growth assets.",
+                "ai_feedback": {
+                  "correct": "Perfect! Saving is for safety and liquidity; investing is for long-term growth and capital appreciation.",
+                  "incorrect": "Remember, saving prioritizes security and liquidity for short-term needs, while investing targets long-term growth by taking calculated risks."
+                }
+              },
+              {
+                "id": 405,
+                "question": "What is the term for the decrease in the value of money over time?",
+                "options": [
+                  "Deflation",
+                  "Compounding",
+                  "Interest",
+                  "Inflation"
+                ],
+                "correct_answer": "Inflation",
+                "ai_feedback": {
+                  "correct": "That’s right! Inflation is the single biggest threat to long-term savings.",
+                  "incorrect": "Incorrect. Inflation is the general rise in prices, which makes your money worth less over time."
+                }
+              },
+              {
+                "id": 406,
+                "question": "For which financial goal is saving typically the most appropriate strategy?",
+                "options": [
+                  "Retirement funding (30 years away).",
+                  "Buying a house (15 years away).",
+                  "Funding an emergency fund (0-1 year horizon).",
+                  "Child's education fund (20 years away)."
+                ],
+                "correct_answer": "Funding an emergency fund (0-1 year horizon).",
+                "ai_feedback": {
+                  "correct": "Spot on! The emergency fund needs to be instantly accessible and safe, making savings accounts the best tool.",
+                  "incorrect": "Long-term goals like retirement and education require growth to beat inflation. Saving is only appropriate for short-term, high-priority needs like an emergency fund."
+                }
+              }
+            ],
+            "qna": [
+              {
+                "id": 407,
+                "question": "What does it mean to calculate your 'real' return on savings?",
+                "answer": "Real return is the nominal (stated) rate of return on an asset minus the rate of inflation. For example, if your savings account gives 3% interest (nominal return) but inflation is 4%, your real return is -1%.",
+                "explanation": "Real return shows you the actual increase in your purchasing power after accounting for the silent tax of inflation."
+              },
+              {
+                "id": 408,
+                "question": "If investing involves risk, why is it still recommended for long-term goals like retirement?",
+                "answer": "For goals 10+ years away, the risk of *not* investing (i.e., the risk of inflation) often outweighs the short-term volatility risk of the market. Historically, equities provide the necessary growth to outpace inflation.",
+                "explanation": "The greatest long-term risk isn't market volatility; it's the certainty that inflation will erode your money if it doesn't grow."
+              },
+              {
+                "id": 409,
+                "question": "Can I use my savings account to invest?",
+                "answer": "No. A savings account is a place to hold cash, not an investment instrument. To invest, you must move the money from your savings account into a brokerage account, which then allows you to purchase investment assets like stocks, bonds, or mutual funds.",
+                "explanation": "You need a brokerage account (or Demat account) to participate in the actual capital markets and buy assets."
+              }
+            ]
+          },
+          {
+            "module_id": "m2",
+            "title": "Risk vs Reward",
+            "flash_cards": [
+              {
+                "id": 410,
+                "topic": "The Risk-Return Trade-off",
+                "theory_title": "The Core Investment Principle",
+                "theory_content": "The **Risk-Return Trade-off** is the principle that potential returns rise with an increase in risk. To achieve higher returns, an investor must typically accept a higher possibility of loss. Low-risk assets (like bank FDs) offer low returns, while high-risk assets (like individual stocks) offer the potential for high returns but also high losses. [Image of risk-return graph showing a positive linear relationship]"
+              },
+              {
+                "id": 411,
+                "topic": "Defining Risk",
+                "theory_title": "Measuring Uncertainty",
+                "theory_content": "In finance, risk is the uncertainty of an investment's return. It is often measured by **volatility** (how much an asset's price fluctuates). Higher volatility means higher risk. Examples of risk include market risk (the whole market falling) and credit risk (a borrower failing to pay debt)."
+              },
+              {
+                "id": 412,
+                "topic": "Investor Profile",
+                "theory_title": "Risk Tolerance and Time Horizon",
+                "theory_content": "Your acceptable risk level depends on two factors: **Risk Tolerance** (your emotional capacity to handle losses) and **Time Horizon** (how long until you need the money). Younger investors with a longer time horizon can generally afford to take on more risk because they have time to recover from market downturns."
+              }
+            ],
+            "mcqs": [
+              {
+                "id": 413,
+                "question": "According to the Risk-Return Trade-off, if an investment has a very high potential return, it likely also has a:",
+                "options": [
+                  "Very short time horizon.",
+                  "Very low liquidity.",
+                  "Very low risk of loss.",
+                  "Very high risk of loss."
+                ],
+                "correct_answer": "Very high risk of loss.",
+                "ai_feedback": {
+                  "correct": "Excellent! Higher returns always come hand-in-hand with higher risk and volatility.",
+                  "incorrect": "Remember the fundamental trade-off: to earn more, you must be willing to risk more. High potential return means high potential risk."
+                }
+              },
+              {
+                "id": 414,
+                "question": "For a 25-year-old saving for retirement at age 60, which factor is most beneficial in allowing them to accept higher risk?",
+                "options": [
+                  "Low market volatility.",
+                  "Short time horizon.",
+                  "Long time horizon.",
+                  "Low cash reserves."
+                ],
+                "correct_answer": "Long time horizon.",
+                "ai_feedback": {
+                  "correct": "Correct! A long time horizon gives them decades for the market to recover from any downturns, mitigating short-term risk.",
+                  "incorrect": "The longer the time horizon (35 years in this case), the more capable the investor is of enduring market volatility and capturing long-term growth."
+                }
+              },
+              {
+                "id": 415,
+                "question": "In finance, risk is commonly measured by which factor?",
+                "options": [
+                  "Interest rate.",
+                  "Volatility (price fluctuation).",
+                  "Total number of shares outstanding.",
+                  "Dividend yield."
+                ],
+                "correct_answer": "Volatility (price fluctuation).",
+                "ai_feedback": {
+                  "correct": "You got it! Volatility quantifies the uncertainty of returns, making it the standard measure of risk.",
+                  "incorrect": "Volatility, or the degree of price fluctuation, is the most common way risk is quantified in the financial world."
+                }
+              }
+            ],
+            "qna": [
+              {
+                "id": 416,
+                "question": "What is the difference between risk tolerance and risk capacity?",
+                "answer": "Risk tolerance is psychological/emotional—how much loss you can *mentally* bear without panicking. Risk capacity is financial—how much loss you *can afford* to bear without derailing your necessary financial goals.",
+                "explanation": "You might have a high tolerance, but if you need the money next week, your capacity is low. Capacity is objective, tolerance is subjective."
+              },
+              {
+                "id": 417,
+                "question": "Give an example of a low-risk, low-return asset and a high-risk, high-return asset.",
+                "answer": "Low Risk/Low Return: A bank Fixed Deposit or Government Bond. High Risk/High Return: An individual stock in a new, unproven technology company or Cryptocurrencies.",
+                "explanation": "This demonstrates the trade-off: Safety provides minimal growth; speculation offers massive growth potential but high failure risk."
+              },
+              {
+                "id": 418,
+                "question": "How does inflation increase the *real* risk of an investment?",
+                "answer": "Inflation increases the risk that an investment's return will not be enough to increase your purchasing power. An investment with a 5% return is riskier in a 6% inflation environment than in a 2% inflation environment.",
+                "explanation": "Inflation is the hidden risk that makes you poorer even when your nominal value is growing."
+              }
+            ]
+          },
+          {
+            "module_id": "m3",
+            "title": "Power of Compounding",
+            "flash_cards": [
+              {
+                "id": 419,
+                "topic": "Compounding Defined",
+                "theory_title": "The Magic of 'Returns on Returns'",
+                "theory_content": "Compounding is the process where the earnings from an investment are reinvested to generate their own earnings. It is 'interest on interest' or 'returns on returns.' The growth is exponential, not linear, making it the single most powerful factor in long-term wealth creation. [Image of compounding vs simple interest chart showing exponential growth over 20 years]"
+              },
+              {
+                "id": 420,
+                "topic": "The Three Drivers",
+                "theory_title": "Time, Rate, and Consistency",
+                "theory_content": "Compounding is driven by three factors: 1. **Time** (the longer you compound, the more powerful it is). 2. **Rate of Return** (a higher rate accelerates growth). 3. **Consistency** (regular contributions and reinvestment are key). Time is often cited as the most important factor, favoring the early investor."
+              },
+              {
+                "id": 421,
+                "topic": "The Early Bird Advantage",
+                "theory_title": "The Cost of Delaying Investment",
+                "theory_content": "An investor who starts saving small amounts early (e.g., age 25) will almost always accumulate more wealth than an investor who starts later (e.g., age 35) but saves significantly larger amounts. This is because the early investor's money has more years to compound exponentially."
+              }
+            ],
+            "mcqs": [
+              {
+                "id": 422,
+                "question": "Compounding is best described as earning returns on:",
+                "options": [
+                  "Only the initial capital invested.",
+                  "Only the new money contributed monthly.",
+                  "The initial capital plus accumulated previous returns.",
+                  "The bank's interest rate alone."
+                ],
+                "correct_answer": "The initial capital plus accumulated previous returns.",
+                "ai_feedback": {
+                  "correct": "Precisely! Compounding is the beautiful process of your returns earning returns, causing exponential growth.",
+                  "incorrect": "Incorrect. The magic of compounding is that your gains are added to the principal, and those gains start generating their own returns."
+                }
+              },
+              {
+                "id": 423,
+                "question": "Which variable has the greatest long-term impact on the power of compounding?",
+                "options": [
+                  "The amount of the final investment.",
+                  "The investment's rate of return.",
+                  "The total time spent in the market.",
+                  "The frequency of stock trading."
+                ],
+                "correct_answer": "The total time spent in the market.",
+                "ai_feedback": {
+                  "correct": "Nice job! While return rate matters, the *time* available for the exponential curve to take effect is the most powerful determinant.",
+                  "incorrect": "Time is the greatest ally. The more time your money has to grow and compound, the less important initial capital or even a slightly lower return rate becomes."
+                }
+              },
+              {
+                "id": 424,
+                "question": "If you are investing for a 30-year goal, you should prioritize **time** over **timing** the market. This refers to:",
+                "options": [
+                  "Selling quickly during market downturns.",
+                  "Starting to invest as soon as possible.",
+                  "Making one large lump-sum investment.",
+                  "Focusing on bonds instead of stocks."
+                ],
+                "correct_answer": "Starting to invest as soon as possible.",
+                "ai_feedback": {
+                  "correct": "Exactly! 'Time in the market' is about starting early to maximize compounding, which is far more effective than trying to perfectly 'time' when the market will rise.",
+                  "incorrect": "The phrase 'time in the market beats timing the market' means starting now to let compounding work, instead of waiting for the 'perfect' buying opportunity."
+                }
+              }
+            ],
+            "qna": [
+              {
+                "id": 425,
+                "question": "Why is compounding described as exponential growth?",
+                "answer": "Because the growth rate is applied not only to the initial principal but also to the accumulated interest from all previous periods. The base for growth continually increases, causing the total value to grow faster and faster over time.",
+                "explanation": "Linear growth adds the same amount each period; exponential growth adds an ever-increasing amount, thanks to the bigger base."
+              },
+              {
+                "id": 426,
+                "question": "What is the 'Rule of 72' and how does it relate to compounding?",
+                "answer": "The Rule of 72 is a quick estimation tool: divide 72 by the annual rate of return to estimate how many years it will take for your investment to double. For example, a 6% return means your money doubles in approximately 12 years (72 / 6 = 12).",
+                "explanation": "It’s a handy tool to quickly estimate the power of compounding at any given return rate."
+              },
+              {
+                "id": 427,
+                "question": "Can compounding work against you?",
+                "answer": "Yes, absolutely. Compounding works against you when it comes to high-interest debt, such as credit cards. The interest you owe compounds, increasing your debt exponentially unless you pay it off aggressively.",
+                "explanation": "The 'interest on interest' principle is a double-edged sword—a huge benefit for investments, a huge burden for debt."
+              }
+            ]
+          },
+          {
+            "module_id": "m4",
+            "title": "Risk & Diversification",
+            "flash_cards": [
+              {
+                "id": 701,
+                "topic": "Diversification Principle",
+                "theory_title": "The Only Free Lunch in Finance",
+                "theory_content": "Diversification is the strategy of spreading your investments across different assets, sectors, and geographical regions. The goal is to reduce **unsystematic risk** (company-specific risk). The principle is: when one investment performs poorly, another performs well, balancing out the portfolio's overall returns. "
+              },
+              {
+                "id": 702,
+                "topic": "Asset Allocation",
+                "theory_title": "The Mix of Investments",
+                "theory_content": "Asset allocation is the process of deciding the optimal mix of different asset classes (e.g., 60% Stocks, 30% Bonds, 10% Cash) based on your risk tolerance and time horizon. This decision is responsible for approximately $90\%$ of a portfolio's long-term returns and risk profile."
+              },
+              {
+                "id": 703,
+                "topic": "Systematic vs. Unsystematic Risk",
+                "theory_title": "Controllable vs. Uncontrollable",
+                "theory_content": "**Unsystematic Risk** (or Idiosyncratic Risk) is specific to a company or industry (e.g., a CEO resigns). This risk **can be reduced** through diversification. **Systematic Risk** (or Market Risk) is the risk inherent to the entire market (e.g., an economic recession). This risk **cannot be reduced** through diversification."
+              }
+            ],
+            "mcqs": [
+              {
+                "id": 704,
+                "question": "Which type of risk can be effectively eliminated through proper diversification?",
+                "options": [
+                  "Systematic Risk (Market Risk)",
+                  "Inflation Risk",
+                  "Unsystematic Risk (Company-Specific Risk)",
+                  "Liquidity Risk"
+                ],
+                "correct_answer": "Unsystematic Risk (Company-Specific Risk)",
+                "ai_feedback": {
+                  "correct": "You got it! Unsystematic risk—like a single stock performing poorly—is exactly what diversification is designed to offset.",
+                  "incorrect": "Incorrect. Diversification protects against unsystematic risk. You cannot diversify away systematic risk because it affects the entire market."
+                }
+              },
+              {
+                "id": 705,
+                "question": "Asset Allocation is considered the most important determinant of long-term investment returns because it determines the:",
+                "options": [
+                  "Number of shares bought.",
+                  "Tax efficiency of the portfolio.",
+                  "Overall risk and potential return profile.",
+                  "Selection of the fund manager."
+                ],
+                "correct_answer": "Overall risk and potential return profile.",
+                "ai_feedback": {
+                  "correct": "Exactly! The split between high-risk (stocks) and low-risk (bonds) assets dictates the portfolio's final risk and return trajectory.",
+                  "incorrect": "Asset allocation is about the mix of assets. This mix determines the *total* risk taken and, therefore, the long-term return potential."
+                }
+              },
+              {
+                "id": 706,
+                "question": "An investor whose portfolio is $100\%$ invested in one country's technology sector is primarily exposed to:",
+                "options": [
+                  "High diversification.",
+                  "Low systematic risk.",
+                  "Concentration risk.",
+                  "Low volatility."
+                ],
+                "correct_answer": "Concentration risk.",
+                "ai_feedback": {
+                  "correct": "Nice job! Investing heavily in one area creates concentration risk, which is the opposite of diversification.",
+                  "incorrect": "That portfolio is exposed to concentration risk, meaning if that one sector or country performs poorly, the entire portfolio suffers large losses."
+                }
+              }
+            ],
+            "qna": [
+              {
+                "id": 707,
+                "question": "What is negative correlation, and why is it desirable for diversification?",
+                "answer": "Negative correlation means two assets tend to move in opposite directions (e.g., when stocks go up, bonds go down). This is desirable because it means the portfolio experiences less volatility—one asset's loss is offset by the other's gain.",
+                "explanation": "Assets that zig when others zag provide a smoothing effect, which is the whole point of diversification."
+              },
+              {
+                "id": 708,
+                "question": "Can diversification guarantee a profit?",
+                "answer": "No. Diversification can reduce the *risk* of a large loss from any single investment, but it cannot guarantee a profit or protect against systematic (market-wide) losses like a recession.",
+                "explanation": "Diversification is risk management, not profit generation. It makes the ride smoother but doesn't change the destination of the entire market."
+              },
+              {
+                "id": 709,
+                "question": "What is the most common example of asset classes used for diversification?",
+                "answer": "The most common asset classes for diversification are **Equities (Stocks)**, **Fixed Income (Bonds)**, and **Cash/Cash Equivalents**.",
+                "explanation": "These three asset classes form the foundation of almost all basic diversified investment portfolios."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "course_id": 5,
+        "title": "Stock Market 101",
+        "level": "Beginner",
+        "modules": [
+          {
+            "module_id": "m1",
+            "title": "What are Stocks?",
+            "flash_cards": [
+              {
+                "id": 501,
+                "topic": "Stock Ownership",
+                "theory_title": "Owning a Piece of the Company",
+                "theory_content": "A **stock** (or share/equity) represents fractional ownership in a publicly traded company. When you buy a stock, you become a shareholder, meaning you own a tiny piece of the company's assets and earnings. This is why stocks are also called 'equities'."
+              },
+              {
+                "id": 502,
+                "topic": "Primary vs. Secondary Market",
+                "theory_title": "Where Shares are Traded",
+                "theory_content": "The **Primary Market** is where a company first sells shares to the public through an Initial Public Offering (IPO). The **Secondary Market** is where investors buy and sell existing shares among themselves (this happens on stock exchanges like the NSE or NYSE). Most day-to-day trading occurs in the Secondary Market."
+              },
+              {
+                "id": 503,
+                "topic": "Dividends",
+                "theory_title": "Your Share of Profits",
+                "theory_content": "A **dividend** is a payment made by a corporation to its shareholders, usually as a distribution of its profits. Not all companies pay dividends; growth companies often reinvest all profits back into the business."
+              }
+            ],
+            "mcqs": [
+              {
+                "id": 504,
+                "question": "When you purchase a stock, you are buying:",
+                "options": [
+                  "A loan to the company.",
+                  "A guarantee of a fixed return.",
+                  "Fractional ownership in the company.",
+                  "A fixed-income security."
+                ],
+                "correct_answer": "Fractional ownership in the company.",
+                "ai_feedback": {
+                  "correct": "Correct! A stock is equity, representing ownership.",
+                  "incorrect": "Incorrect. Stocks are equity, which means ownership. Bonds are loans (debt), and stocks offer no guaranteed returns."
+                }
+              },
+              {
+                "id": 505,
+                "question": "The vast majority of daily stock trading takes place on which market?",
+                "options": [
+                  "The Primary Market (IPOs).",
+                  "The Secondary Market (Stock Exchanges).",
+                  "The Bond Market.",
+                  "The Commodity Market."
+                ],
+                "correct_answer": "The Secondary Market (Stock Exchanges).",
+                "ai_feedback": {
+                  "correct": "Nice job! Exchanges like the NYSE or NSE are the secondary markets where existing shares change hands between investors.",
+                  "incorrect": "The Primary Market is only for new issues. Daily trading of existing stocks occurs in the Secondary Market, facilitated by stock exchanges."
+                }
+              },
+              {
+                "id": 506,
+                "question": "A payout of a company's profit to its shareholders is called a:",
+                "options": [
+                  "Coupon Payment.",
+                  "Dividend.",
+                  "Capital Gain.",
+                  "Principal Return."
+                ],
+                "correct_answer": "Dividend.",
+                "ai_feedback": {
+                  "correct": "Exactly! Dividends are one of two ways investors earn money from stocks (the other being capital gains).",
+                  "incorrect": "A dividend is a direct payment of profit to shareholders. A coupon payment is the interest paid on a bond."
+                }
+              }
+            ],
+            "qna": [
+              {
+                "id": 507,
+                "question": "What is the difference between a capital gain and a dividend?",
+                "answer": "A capital gain is the profit realized when you sell a stock for a higher price than you bought it for. A dividend is a periodic cash payment received while you still hold the stock.",
+                "explanation": "Capital gains are realized when you sell; dividends are passive income received while you own the asset."
+              },
+              {
+                "id": 508,
+                "question": "If a company goes bankrupt, what happens to the common stockholders?",
+                "answer": "Common stockholders are the last to be paid after all debt holders (bondholders and banks) and preferred stockholders. In most bankruptcy cases, common stockholders lose their entire investment.",
+                "explanation": "This illustrates the risk of ownership: high potential reward, but last in line during liquidation."
+              },
+              {
+                "id": 509,
+                "question": "What does IPO stand for and what is its significance?",
+                "answer": "IPO stands for Initial Public Offering. It is the process by which a privately held company first offers its shares to the public on a stock exchange, raising capital and entering the primary market.",
+                "explanation": "The IPO is the transition point where a company goes from being privately owned to publicly traded."
+              }
+            ]
+          },
+          {
+            "module_id": "m2",
+            "title": "How Stock Prices Move",
+            "flash_cards": [
+              {
+                "id": 510,
+                "topic": "Supply and Demand",
+                "theory_title": "The Price Mechanism",
+                "theory_content": "Stock prices are fundamentally determined by the relationship between **Supply** (sellers) and **Demand** (buyers). If demand for a stock is high (more buyers than sellers), the price rises. If supply is high (more sellers than buyers), the price falls. [Image of stock market supply and demand curve]"
+              },
+              {
+                "id": 511,
+                "topic": "Market Sentiment",
+                "theory_title": "The Psychological Factor",
+                "theory_content": "**Market Sentiment** refers to the overall attitude of investors toward a particular stock or the market as a whole. Fear (negative sentiment) leads to selling and falling prices; greed or excitement (positive sentiment) leads to buying and rising prices. Sentiment can often cause prices to move irrationally in the short term."
+              },
+              {
+                "id": 512,
+                "topic": "Fundamental vs. Technical Factors",
+                "theory_title": "Drivers of Long-term vs. Short-term Price",
+                "theory_content": "**Fundamental Factors** (company earnings, balance sheet, industry growth) drive long-term price movements. **Technical Factors** (trading volume, chart patterns, moving averages) drive short-term trading movements based on investor behavior."
+              }
+            ],
+            "mcqs": [
+              {
+                "id": 513,
+                "question": "If there are significantly more investors trying to sell a stock than trying to buy it, what happens to the stock price?",
+                "options": [
+                  "It remains stable.",
+                  "It rises due to competition.",
+                  "It falls due to excess supply.",
+                  "It is halted by the exchange."
+                ],
+                "correct_answer": "It falls due to excess supply.",
+                "ai_feedback": {
+                  "correct": "You got it! High supply and low demand always drive the price down.",
+                  "incorrect": "The basic rule is supply and demand. If sellers (supply) outweigh buyers (demand), the price must drop until a buyer is found."
+                }
+              },
+              {
+                "id": 514,
+                "question": "Market Sentiment refers to the collective feelings of investors. In the short term, which emotion can be a major driver of price bubbles?",
+                "options": [
+                  "Apathy.",
+                  "Fear.",
+                  "Greed.",
+                  "Prudence."
+                ],
+                "correct_answer": "Greed.",
+                "ai_feedback": {
+                  "correct": "Exactly! Unchecked greed leads to excessive demand and irrational buying, often resulting in market bubbles.",
+                  "incorrect": "Greed, or the fear of missing out (FOMO), drives prices up irrationally as investors chase returns, often leading to bubbles."
+                }
+              },
+              {
+                "id": 515,
+                "question": "Which factor is considered a 'Fundamental Factor' driving the long-term price of a stock?",
+                "options": [
+                  "The company's quarterly earnings report.",
+                  "The 50-day moving average.",
+                  "The daily trading volume.",
+                  "The stock's chart pattern."
+                ],
+                "correct_answer": "The company's quarterly earnings report.",
+                "ai_feedback": {
+                  "correct": "Correct! Earnings reflect the actual health and profitability of the business, a fundamental driver of value.",
+                  "incorrect": "Fundamental factors relate to the business itself. Earnings, revenue, and assets are fundamental. Moving averages and volume are technical factors."
+                }
+              }
+            ],
+            "qna": [
+              {
+                "id": 516,
+                "question": "What is the role of a stock exchange in price movement?",
+                "answer": "The stock exchange provides a centralized, transparent platform where buyers and sellers meet. It does not set the price, but it ensures that the prevailing price is the fair market price based on the current supply and demand.",
+                "explanation": "The exchange is the auctioneer, making sure trades happen efficiently at the meeting point of supply and demand."
+              },
+              {
+                "id": 517,
+                "question": "How do interest rates affect stock prices?",
+                "answer": "Higher interest rates make borrowing more expensive for companies (hurting profits) and make fixed-income investments (like bonds) more attractive compared to stocks. This typically leads to a drop in stock prices.",
+                "explanation": "Interest rates represent the 'risk-free' return. If rates rise, the hurdle for stocks to be competitive also rises."
+              },
+              {
+                "id": 518,
+                "question": "Explain 'price discovery' in the context of the stock market.",
+                "answer": "Price discovery is the process of determining the true price of an asset in the marketplace. It is achieved through the continuous interaction of buyers (bids) and sellers (asks) on the exchange, incorporating all available information instantly.",
+                "explanation": "Every trade contributes to price discovery, instantly updating the market's collective judgment of the stock's worth."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "course_id": 6,
+        "title": "Mutual Funds & SIPs",
+        "level": "Beginner",
+        "modules": [
+          {
+            "module_id": "m1",
+            "title": "What are Mutual Funds?",
+            "flash_cards": [
+              {
+                "id": 601,
+                "topic": "Mutual Fund Defined",
+                "theory_title": "Pooled Investments",
+                "theory_content": "A **Mutual Fund** is a professional pooled investment vehicle that collects money from many investors and invests it in stocks, bonds, money market instruments, and/or other assets. They are managed by professional fund managers."
+              },
+              {
+                "id": 602,
+                "topic": "Net Asset Value (NAV)",
+                "theory_title": "The Price of a Fund Unit",
+                "theory_content": "The **NAV** (Net Asset Value) is the price per unit of a mutual fund. It is calculated daily by taking the total value of all assets in the fund, subtracting liabilities, and dividing by the number of outstanding units. When you invest, you buy units at the current NAV."
+              },
+              {
+                "id": 603,
+                "topic": "Key Benefits",
+                "theory_title": "Diversification and Expertise",
+                "theory_content": "Mutual funds offer instant **Diversification** (a single fund invests in dozens/hundreds of assets) and **Professional Management** (experts make the buying/selling decisions). This makes them an excellent tool for beginners."
+              }
+            ],
+            "mcqs": [
+              {
+                "id": 604,
+                "question": "The professional who manages the assets and makes investment decisions within a Mutual Fund is called the:",
+                "options": [
+                  "Stock Broker.",
+                  "Underwriter.",
+                  "Fund Manager.",
+                  "Portfolio Analyst."
+                ],
+                "correct_answer": "Fund Manager.",
+                "ai_feedback": {
+                  "correct": "You are absolutely correct! The Fund Manager is the expert who implements the fund's strategy.",
+                  "incorrect": "Incorrect. Mutual Funds are run by a dedicated Fund Manager who researches and selects the investments on behalf of the investors."
+                }
+              },
+              {
+                "id": 605,
+                "question": "How is the Net Asset Value (NAV) of a mutual fund calculated?",
+                "options": [
+                  "Based on the last traded price of the biggest stock it holds.",
+                  "Total Assets minus Liabilities, divided by total units.",
+                  "Total money collected in the last month.",
+                  "Fixed by the government regulator."
+                ],
+                "correct_answer": "Total Assets minus Liabilities, divided by total units.",
+                "ai_feedback": {
+                  "correct": "Nice one! NAV is the true measure of the fund's per-unit worth, calculated daily.",
+                  "incorrect": "The NAV represents the fund's book value. It's calculated by taking the total value of the assets, subtracting any debts, and dividing by the total number of units held by investors."
+                }
+              },
+              {
+                "id": 606,
+                "question": "A key advantage of a mutual fund for a beginner investor is immediate:",
+                "options": [
+                  "Guaranteed returns.",
+                  "Tax deduction.",
+                  "Diversification.",
+                  "High liquidity."
+                ],
+                "correct_answer": "Diversification.",
+                "ai_feedback": {
+                  "correct": "Exactly! A single purchase instantly diversifies your money across many assets, greatly reducing unsystematic risk.",
+                  "incorrect": "The biggest immediate benefit is diversification. Since the fund holds many stocks/bonds, your money is instantly spread out, reducing risk."
+                }
+              }
+            ],
+            "qna": [
+              {
+                "id": 607,
+                "question": "What is the difference between an Active Fund and a Passive Fund?",
+                "answer": "An Active Fund tries to *beat* the market by having a manager select specific stocks (often high fees). A Passive Fund (or Index Fund) simply tracks a market index (like the S&P 500) and usually has lower fees.",
+                "explanation": "Active funds aim for outperformance, passive funds aim to match the market performance at the lowest possible cost."
+              },
+              {
+                "id": 608,
+                "question": "Why do mutual funds charge an Expense Ratio?",
+                "answer": "The Expense Ratio is the annual fee charged by the fund to cover management fees, administrative costs, and marketing expenses. This fee is automatically deducted from the fund's total assets.",
+                "explanation": "The expense ratio is the price you pay for professional management and administration. Lower is generally better."
+              },
+              {
+                "id": 609,
+                "question": "If the NAV of a fund is ₹100 and you invest ₹10,000, how many units do you get?",
+                "answer": "You get 100 units ($\text{Investment} / \text{NAV} = \text{Units}$, so $\text{₹}10,000 / \text{₹}100 = 100 \text{ units}$).",
+                "explanation": "This simple calculation shows how the total value of your investment is translated into ownership units of the fund."
+              }
+            ]
+          },
+          {
+            "module_id": "m2",
+            "title": "SIP: The Smart Way",
+            "flash_cards": [
+              {
+                "id": 610,
+                "topic": "SIP Defined",
+                "theory_title": "Systematic Investment Plan",
+                "theory_content": "A **SIP** (Systematic Investment Plan) is a method of investing a fixed amount of money at regular intervals (e.g., monthly) into a mutual fund. It is a strategy of discipline, not an investment product itself."
+              },
+              {
+                "id": 611,
+                "topic": "Dollar-Cost Averaging (DCA)",
+                "theory_title": "Mitigating Market Volatility",
+                "theory_content": "The primary benefit of a SIP is **Dollar-Cost Averaging (DCA)**. By investing a fixed amount regularly, you buy more units when the price (NAV) is low and fewer units when the price is high. This lowers your average cost per unit over time, mitigating the risk of investing all your money at a market peak. "
+              },
+              {
+                "id": 612,
+                "topic": "Discipline and Consistency",
+                "theory_title": "Overcoming Emotional Biases",
+                "theory_content": "SIPs promote crucial investor discipline by removing the temptation to 'time the market' (guessing when to buy/sell). They automate consistency, ensuring you stay invested through market highs and lows, which is key to long-term compounding."
+              }
+            ],
+            "mcqs": [
+              {
+                "id": 613,
+                "question": "The main benefit of a SIP is that it helps you utilize the principle of:",
+                "options": [
+                  "Market Timing.",
+                  "Concentration Risk.",
+                  "Short Selling.",
+                  "Dollar-Cost Averaging (DCA)."
+                ],
+                "correct_answer": "Dollar-Cost Averaging (DCA).",
+                "ai_feedback": {
+                  "correct": "Correct! DCA is the core mechanism of SIPs, reducing the impact of market volatility.",
+                  "incorrect": "Incorrect. SIPs are synonymous with Dollar-Cost Averaging, a strategy that lowers your average cost per unit by investing regularly."
+                }
+              },
+              {
+                "id": 614,
+                "question": "When the NAV of a mutual fund falls, a fixed SIP investment will automatically buy:",
+                "options": [
+                  "Fewer units.",
+                  "More units.",
+                  "The same number of units.",
+                  "No units."
+                ],
+                "correct_answer": "More units.",
+                "ai_feedback": {
+                  "correct": "You got it! This is the 'averaging down' effect of DCA—getting more units when they are cheap.",
+                  "incorrect": "If the price falls and your investment amount is fixed, you buy more units. This is the simple math behind Dollar-Cost Averaging."
+                }
+              },
+              {
+                "id": 615,
+                "question": "A SIP helps an investor overcome which major emotional mistake?",
+                "options": [
+                  "Over-diversification.",
+                  "Investing too early in life.",
+                  "Trying to time the market.",
+                  "Ignoring expense ratios."
+                ],
+                "correct_answer": "Trying to time the market.",
+                "ai_feedback": {
+                  "correct": "Exactly! SIPs enforce discipline, preventing the emotional decision of waiting for a market low.",
+                  "incorrect": "The disciplined nature of SIP prevents the emotional mistake of trying to guess the market's perfect entry and exit points."
+                }
+              }
+            ],
+            "qna": [
+              {
+                "id": 616,
+                "question": "Is a SIP better than a lump-sum investment?",
+                "answer": "Statistically, lump-sum investing (investing all cash at once) often outperforms a SIP in consistently rising markets. However, for most investors, SIP is recommended because it is more risk-mitigating, affordable, and removes the stress of market timing.",
+                "explanation": "SIP is generally superior for most people because it is psychologically easier and spreads the risk over time."
+              },
+              {
+                "id": 617,
+                "question": "How does a SIP help with compounding?",
+                "answer": "A SIP ensures that new money is consistently entering the market and immediately begins the compounding process. This frequent and regular investment is what maximizes the long-term compounding effect.",
+                "explanation": "Compounding needs two things: time and consistent capital input. SIP handles the consistent input perfectly."
+              },
+              {
+                "id": 618,
+                "question": "Can I stop or pause a SIP?",
+                "answer": "Yes, most fund houses allow you to easily stop or pause a SIP when necessary, providing flexibility to manage cash flow without penalizing your existing investment corpus.",
+                "explanation": "This flexibility makes SIPs a great tool for long-term investment, as your financial situation can always change."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "course_id": 8,
+        "title": "Emergency Fund & Insurance",
+        "level": "Beginner",
+        "modules": [
+          {
+            "module_id": "m1",
+            "title": "Emergency Fund Strategy",
+            "flash_cards": [
+              {
+                "id": 801,
+                "topic": "Emergency Fund Goal",
+                "theory_title": "The Financial Safety Net",
+                "theory_content": "An **Emergency Fund** is a readily available pool of cash intended to cover 3 to 6 months of essential living expenses (rent, groceries, utilities). Its sole purpose is to protect you from high-interest debt (like credit cards or loans) when unexpected events occur (job loss, medical emergency, car repair)."
+              },
+              {
+                "id": 802,
+                "topic": "Liquidity is King",
+                "theory_title": "Where to Store the Fund",
+                "theory_content": "The fund must be held in accounts that are highly **liquid** (easily and instantly accessible), such as a high-yield savings account or a Fixed Deposit with a flexible withdrawal option. It should **NOT** be invested in volatile assets like stocks or mutual funds."
+              },
+              {
+                "id": 803,
+                "topic": "Insurance Basics",
+                "theory_title": "Risk Transfer",
+                "theory_content": "Insurance is a mechanism to **transfer risk**. By paying a small, predictable premium (cost) regularly, you transfer the financial risk of a catastrophic loss (like hospitalization or death) to an insurance company. The two most essential types are Health Insurance and Term Life Insurance."
+              }
+            ],
+            "mcqs": [
+              {
+                "id": 804,
+                "question": "What is the recommended size for a fully funded emergency fund?",
+                "options": [
+                  "1 month of salary.",
+                  "1 year of salary.",
+                  "3 to 6 months of essential living expenses.",
+                  "The equivalent of your biggest debt."
+                ],
+                "correct_answer": "3 to 6 months of essential living expenses.",
+                "ai_feedback": {
+                  "correct": "Correct! 3 to 6 months is the standard safety cushion for most people.",
+                  "incorrect": "The minimum recommended safety net is 3 to 6 months of essential living expenses, not your salary."
+                }
+              },
+              {
+                "id": 805,
+                "question": "The most important quality of an account holding your emergency fund is:",
+                "options": [
+                  "Highest possible return.",
+                  "Highest liquidity.",
+                  "Tax efficiency.",
+                  "Long lock-in period."
+                ],
+                "correct_answer": "Highest liquidity.",
+                "ai_feedback": {
+                  "correct": "You got it! Liquidity ensures you can access the cash the moment the emergency strikes.",
+                  "incorrect": "The purpose of the fund is rapid access. Therefore, liquidity is the single most important factor, outweighing return."
+                }
+              },
+              {
+                "id": 806,
+                "question": "What is the core function of insurance?",
+                "options": [
+                  "To generate investment returns.",
+                  "To eliminate risk entirely.",
+                  "To transfer financial risk to another party.",
+                  "To pay off mortgages."
+                ],
+                "correct_answer": "To transfer financial risk to another party.",
+                "ai_feedback": {
+                  "correct": "Exactly! You pay the premium to transfer the large, unpredictable financial burden of a loss to the insurer.",
+                  "incorrect": "Insurance doesn't eliminate risk; it transfers the *financial consequence* of that risk to the insurance company in exchange for a premium."
+                }
+              }
+            ],
+            "qna": [
+              {
+                "id": 807,
+                "question": "What is the risk of keeping your emergency fund in stocks?",
+                "answer": "The risk is that when an emergency occurs (e.g., job loss), the stock market may also be down (recession), forcing you to sell your investments at a loss to cover your expenses.",
+                "explanation": "You should never put money you need in the short term into volatile assets."
+              },
+              {
+                "id": 808,
+                "question": "What is the primary difference between Health Insurance and Term Life Insurance?",
+                "answer": "Health Insurance covers the cost of medical treatments and hospitalization. Term Life Insurance provides a lump sum payment to your beneficiaries if you die during the term of the policy, securing their financial future.",
+                "explanation": "Health insurance protects your assets *while you are alive*; Term Life protects your family *after you are gone*."
+              },
+              {
+                "id": 809,
+                "question": "When should I use my emergency fund?",
+                "answer": "Use it only for true, unexpected emergencies: job loss, large deductible for a medical event, or an essential home/car repair. Do NOT use it for discretionary spending like vacations or splurges.",
+                "explanation": "If it's predictable or optional, it's not an emergency. The fund is for disasters, not desires."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "course_id": 9,
+        "title": "Financial Goals",
+        "level": "Beginner",
+        "modules": [
+          {
+            "module_id": "m1",
+            "title": "Goal Setting",
+            "flash_cards": [
+              {
+                "id": 901,
+                "topic": "Goal Types",
+                "theory_title": "Short, Medium, and Long Term",
+                "theory_content": "**Short-term goals** (1-3 years): Emergency fund, small vacation. **Medium-term goals** (3-10 years): Car down payment, wedding. **Long-term goals** (10+ years): Retirement, child's education. The time horizon dictates the appropriate investment vehicle (safe for short-term, growth for long-term)."
+              },
+              {
+                "id": 902,
+                "topic": "S.M.A.R.T. Goals",
+                "theory_title": "The Blueprint for Success",
+                "theory_content": "S.M.A.R.T. goals are **S**pecific, **M**easurable, **A**chievable, **R**elevant, and **T**ime-bound. Applying this framework turns vague aspirations ('save more money') into an actionable, trackable plan ('save $\text{₹}1,00,000$ for a down payment by end of 2026')."
+              },
+              {
+                "id": 903,
+                "topic": "Prioritization",
+                "theory_title": "The Hierarchy of Needs",
+                "theory_content": "Financial goals should be prioritized: 1. **Liquidity/Safety** (Emergency Fund). 2. **Debt Reduction** (high-interest loans). 3. **Long-Term Growth** (Retirement). You should fund your emergency savings and tackle high-interest debt *before* aggressively investing for distant goals."
+              }
+            ],
+            "mcqs": [
+              {
+                "id": 904,
+                "question": "Saving for retirement, which is 30 years away, is an example of which type of financial goal?",
+                "options": [
+                  "Short-term.",
+                  "Medium-term.",
+                  "Long-term.",
+                  "S.M.A.R.T.-term."
+                ],
+                "correct_answer": "Long-term.",
+                "ai_feedback": {
+                  "correct": "Correct! Anything over 10 years is firmly in the long-term category, ideal for growth assets.",
+                  "incorrect": "Retirement is the classic example of a long-term goal, requiring a time horizon of 10 or more years."
+                }
+              },
+              {
+                "id": 905,
+                "question": "In the S.M.A.R.T. goal framework, setting a specific dollar amount to save relates to which two letters?",
+                "options": [
+                  "Achievable and Relevant.",
+                  "Specific and Measurable.",
+                  "Relevant and Time-bound.",
+                  "Specific and Achievable."
+                ],
+                "correct_answer": "Specific and Measurable.",
+                "ai_feedback": {
+                  "correct": "Nice job! The dollar amount makes the goal clear (Specific) and provides a clear metric for tracking progress (Measurable).",
+                  "incorrect": "The dollar amount is essential for making the goal Specific (clear) and Measurable (trackable). Time-bound would be the due date."
+                }
+              },
+              {
+                "id": 906,
+                "question": "Which goal should typically be prioritized over long-term investment growth?",
+                "options": [
+                  "Buying the latest smartphone.",
+                  "Paying off high-interest credit card debt.",
+                  "Funding a future vacation.",
+                  "Purchasing a low-risk bond."
+                ],
+                "correct_answer": "Paying off high-interest credit card debt.",
+                "ai_feedback": {
+                  "correct": "Exactly! The guaranteed 'return' from avoiding 20-30% credit card interest usually beats any investment return.",
+                  "incorrect": "Paying off high-interest debt provides a guaranteed return equal to the interest rate, which is almost always the best financial move before aggressive investing."
+                }
+              }
+            ],
+            "qna": [
+              {
+                "id": 907,
+                "question": "How does your time horizon affect your investment choices for a goal?",
+                "answer": "A shorter time horizon requires less volatile assets (e.g., bonds, FDs) because there isn't enough time to recover from a market crash. A longer time horizon allows for more volatile, growth-focused assets (e.g., stocks) to maximize compounding.",
+                "explanation": "Safety for short-term, growth for long-term. Always match the asset's risk to the goal's timeline."
+              },
+              {
+                "id": 908,
+                "question": "Give an example of turning a vague goal into a S.M.A.R.T. goal.",
+                "answer": "Vague: 'I want to buy a new car.' S.M.A.R.T.: 'I will save $\text{₹}5,00,000$ for a car down payment by depositing $\text{₹}20,000$ per month into a separate account, completing the goal by March 2028.'",
+                "explanation": "Notice the S.M.A.R.T. goal includes the amount (M), the deadline (T), and the required action (A)."
+              },
+              {
+                "id": 909,
+                "question": "Why is the 'Achievable' component of S.M.A.R.T. goals important?",
+                "answer": "If a goal is not Achievable (e.g., saving $\text{₹}1 \text{ Crore}$ in one year on a $\text{₹}50,000$ salary), you will likely become frustrated, lose motivation, and abandon the entire plan. Achievable goals promote consistency and success.",
+                "explanation": "Setting realistic goals prevents burnout and ensures you stay motivated on your financial journey."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "course_id": 10,
+        "title": "Scams & Safety",
+        "level": "Beginner",
+        "modules": [
+          {
+            "module_id": "m1",
+            "title": "Avoiding Scams",
+            "flash_cards": [
+              {
+                "id": 1001,
+                "topic": "The Red Flag: Guaranteed Returns",
+                "theory_title": "The Biggest Lie in Investing",
+                "theory_content": "The number one red flag of an investment scam is the promise of **guaranteed, high returns with no risk**. All legitimate investments carry risk. Scams like Ponzi schemes rely on luring victims with unrealistic promises. If it sounds too good to be true, it always is."
+              },
+              {
+                "id": 1002,
+                "topic": "Verifying Legitimacy",
+                "theory_title": "Check the Regulator",
+                "theory_content": "Always verify that the investment entity (broker, fund house, financial advisor) is registered with the country's financial regulatory body (e.g., SEBI in India, SEC/FINRA in the US). Check for a license number and look up the entity's history online for warnings or complaints."
+              },
+              {
+                "id": 1003,
+                "topic": "The Ponzi Scheme",
+                "theory_title": "How Pyramid Scams Work",
+                "theory_content": "A **Ponzi Scheme** is a fraudulent investment operation where returns are paid to older investors using money collected from new investors, rather than from actual profits. The scheme collapses when the flow of new investors stops. Always ask: 'Where is the money actually being invested?'"
+              }
+            ],
+            "mcqs": [
+              {
+                "id": 1004,
+                "question": "Which phrase is the strongest indicator that an investment opportunity is a scam?",
+                "options": [
+                  "Diversification is key.",
+                  "Returns are guaranteed at 25% per year.",
+                  "Fees are applied annually.",
+                  "It requires a long-term lock-in."
+                ],
+                "correct_answer": "Returns are guaranteed at 25% per year.",
+                "ai_feedback": {
+                  "correct": "Exactly! No legitimate investment can guarantee high returns. This is the biggest warning sign.",
+                  "incorrect": "Guaranteed, high returns are impossible in the real financial world. This is the most definite red flag of a scam."
+                }
+              },
+              {
+                "id": 1005,
+                "question": "Before investing with a financial advisor or firm, what is the most important step?",
+                "options": [
+                  "Read their brochure.",
+                  "Verify their registration with the country's financial regulator.",
+                  "Ask a friend for their opinion.",
+                  "Check their social media followers."
+                ],
+                "correct_answer": "Verify their registration with the country's financial regulator.",
+                "ai_feedback": {
+                  "correct": "Nice job! Regulatory verification ensures the entity is legal and accountable.",
+                  "incorrect": "Safety first! Always verify that any financial institution is properly licensed and registered with the appropriate government regulatory body."
+                }
+              },
+              {
+                "id": 1006,
+                "question": "In a Ponzi scheme, who provides the money used to pay returns to the earliest investors?",
+                "options": [
+                  "The scheme operator's personal savings.",
+                  "Profits from successful external investments.",
+                  "Money contributed by new investors.",
+                  "A government bailout fund."
+                ],
+                "correct_answer": "Money contributed by new investors.",
+                "ai_feedback": {
+                  "correct": "That's right! Ponzi schemes are circular frauds, relying entirely on new money to pay old debts.",
+                  "incorrect": "Ponzi schemes are based on fraud. The 'returns' paid out are simply the capital taken from the newest participants."
+                }
+              }
+            ],
+            "qna": [
+              {
+                "id": 1007,
+                "question": "What is phishing, and how is it used to target investors?",
+                "answer": "Phishing is a deceptive attempt to acquire sensitive information (passwords, bank details) by disguising as a trustworthy entity via email or text. Scammers target investors by sending fake alerts about brokerage accounts or tax refunds.",
+                "explanation": "Never click suspicious links or give credentials, even if the email looks professional. Always go directly to the official website."
+              },
+              {
+                "id": 1008,
+                "question": "What does 'due diligence' mean in investing?",
+                "answer": "Due diligence is the reasonable steps taken by an investor to investigate and verify the facts of a potential investment, including checking the company's financials, management, and regulatory status, before committing funds.",
+                "explanation": "Due diligence means doing your homework. Never rely on someone else's word alone."
+              },
+              {
+                "id": 1009,
+                "question": "Why is it important to use strong, unique passwords for brokerage accounts?",
+                "answer": "Brokerage accounts hold significant assets, making them prime targets for hackers. A strong, unique password prevents a breach on one site from compromising your entire investment portfolio.",
+                "explanation": "Treat your brokerage login with the highest level of security, as it is the gateway to all your financial wealth."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "course_id": 11,
+        "title": "Debt & Credit",
+        "level": "Intermediate",
+        "modules": [
+          {
+            "module_id": "m1",
+            "title": "Interest & Credit Score",
+            "flash_cards": [
+              {
+                "id": 1101,
+                "topic": "Simple vs. Compound Interest (Debt)",
+                "theory_title": "The Debt Accelerator",
+                "theory_content": "**Simple interest** is calculated only on the principal amount. **Compound interest** (used by credit cards and many loans) is calculated on the principal *plus* the accumulated interest, causing the debt to grow exponentially. This makes high-interest compound debt extremely dangerous."
+              },
+              {
+                "id": 1102,
+                "topic": "Credit Score Defined",
+                "theory_title": "Your Financial Report Card",
+                "theory_content": "A **Credit Score** (e.g., CIBIL score) is a numerical summary of your creditworthiness, based on your payment history and debt management. Lenders use it to assess risk and determine interest rates. A higher score means lower interest rates on loans."
+              },
+              {
+                "id": 1103,
+                "topic": "Improving Your Score",
+                "theory_title": "Key Score Drivers",
+                "theory_content": "The biggest drivers of a credit score are: 1. **Payment History** (pay bills on time, always). 2. **Credit Utilization** (keep credit card balances low, ideally under $30\%$ of the limit). 3. **Length of Credit History** (the older your accounts, the better)."
+              }
+            ],
+            "mcqs": [
+              {
+                "id": 1104,
+                "question": "If you have $\text{₹}1,00,000$ in debt that compounds monthly at a high rate, what happens to the debt over time?",
+                "options": [
+                  "It grows linearly.",
+                  "It grows exponentially.",
+                  "It shrinks automatically.",
+                  "It is converted to simple interest."
+                ],
+                "correct_answer": "It grows exponentially.",
+                "ai_feedback": {
+                  "correct": "Nice job! High-interest compound debt grows exponentially, making it difficult to pay off if only minimum payments are made.",
+                  "incorrect": "The power of compounding is a double-edged sword. It causes debt to grow exponentially, which is why credit card debt is so hard to pay off."
+                }
+              },
+              {
+                "id": 1105,
+                "question": "Which action has the most negative impact on your credit score?",
+                "options": [
+                  "Closing an old credit card.",
+                  "Using only $10\%$ of your credit limit.",
+                  "Missing a loan payment by 60 days.",
+                  "Applying for a new loan."
+                ],
+                "correct_answer": "Missing a loan payment by 60 days.",
+                "ai_feedback": {
+                  "correct": "Correct! Payment history is the single most important factor. Missing a payment is a huge red flag.",
+                  "incorrect": "Payment history accounts for the largest portion of your score. Missing a payment, especially significantly, is highly damaging."
+                }
+              },
+              {
+                "id": 1106,
+                "question": "What is the key benefit of having a high credit score?",
+                "options": [
+                  "Guaranteed investment returns.",
+                  "Lower interest rates on future loans and credit cards.",
+                  "Access to the stock market.",
+                  "Higher salary offers."
+                ],
+                "correct_answer": "Lower interest rates on future loans and credit cards.",
+                "ai_feedback": {
+                  "correct": "Exactly! A high score translates directly into saved money through lower borrowing costs.",
+                  "incorrect": "Lenders use your score to gauge risk. A higher score means they see you as less risky, offering you better interest rates, which saves you thousands over the life of a loan."
+                }
+              }
+            ],
+            "qna": [
+              {
+                "id": 1107,
+                "question": "What is 'Credit Utilization Ratio' and why should I keep it low?",
+                "answer": "It is the amount of credit you are using divided by your total available credit limit (e.g., if you have a $\text{₹}1,00,000$ limit and use $\text{₹}30,000$, your ratio is $30\%$). You should keep it below $30\%$ (ideally below $10\%$) because a high ratio signals to lenders that you are heavily reliant on credit and may be a risk.",
+                "explanation": "A low ratio is the financial equivalent of wearing a clean shirt—it makes you look responsible to lenders."
+              },
+              {
+                "id": 1108,
+                "question": "Should I pay off all my debt before I start investing?",
+                "answer": "Prioritize paying off 'bad debt' (high-interest debt like credit cards or payday loans) first, as their guaranteed interest cost usually exceeds any potential investment return. For 'good debt' (low-interest debt like a mortgage or student loan), you should pay the minimum and invest the rest to achieve a higher net return.",
+                "explanation": "If the debt interest rate is higher than your expected investment return, pay the debt first."
+              },
+              {
+                "id": 1109,
+                "question": "How long does a negative item (like a missed payment) stay on my credit report?",
+                "answer": "A missed payment or default typically stays on your credit report for 7 to 10 years, severely impacting your score and ability to borrow during that time.",
+                "explanation": "Your payment history has a long memory. This is why consistent, timely payments are paramount for credit health."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "course_id": 12,
+        "title": "Stocks & ETFs",
+        "level": "Intermediate",
+        "modules": [
+          {
+            "module_id": "m1",
+            "title": "Stocks vs ETFs",
+            "flash_cards": [
+              {
+                "id": 1201,
+                "topic": "Individual Stocks",
+                "theory_title": "High Risk, High Reward",
+                "theory_content": "An individual stock offers the highest potential reward but carries the highest **unsystematic risk** (company-specific risk). Success depends entirely on the performance of that one company. It requires significant research (due diligence) to be successful."
+              },
+              {
+                "id": 1202,
+                "topic": "ETFs Defined",
+                "theory_title": "Exchange Traded Funds",
+                "theory_content": "An **ETF** (Exchange Traded Fund) is a security that tracks an index, sector, commodity, or other asset, but trades like a regular stock on an exchange. It is essentially a basket of assets in a single security, providing instant diversification and low cost."
+              },
+              {
+                "id": 1203,
+                "topic": "Key Differences: Risk/Reward",
+                "theory_title": "Portfolio Role",
+                "theory_content": "ETFs are low-risk tools for long-term core holdings (providing broad market exposure). Individual stocks are high-risk tools for speculative growth or value investing (providing concentrated bets). A balanced portfolio uses both."
+              }
+            ],
+            "mcqs": [
+              {
+                "id": 1204,
+                "question": "Which product offers instant and broad diversification with a single purchase?",
+                "options": [
+                  "Individual Stock.",
+                  "Corporate Bond.",
+                  "Exchange Traded Fund (ETF).",
+                  "Fixed Deposit."
+                ],
+                "correct_answer": "Exchange Traded Fund (ETF).",
+                "ai_feedback": {
+                  "correct": "You got it! ETFs hold a basket of assets, giving you immediate diversification and lower risk.",
+                  "incorrect": "ETFs are designed to provide instant diversification by holding dozens or hundreds of underlying stocks or bonds."
+                }
+              },
+              {
+                "id": 1205,
+                "question": "The risk of an individual company going bankrupt is categorized as:",
+                "options": [
+                  "Systematic Risk.",
+                  "Credit Risk.",
+                  "Unsystematic Risk.",
+                  "Liquidity Risk."
+                ],
+                "correct_answer": "Unsystematic Risk.",
+                "ai_feedback": {
+                  "correct": "Correct! Unsystematic risk is company-specific and can be mitigated by holding an ETF (diversification).",
+                  "incorrect": "The risk of a single company failure is unsystematic risk. Since an ETF holds many companies, this risk is largely mitigated."
+                }
+              },
+              {
+                "id": 1206,
+                "question": "A Passive ETF that tracks a major market index will typically have a very low:",
+                "options": [
+                  "Trading volume.",
+                  "Diversification level.",
+                  "Expense ratio.",
+                  "Volatility level."
+                ],
+                "correct_answer": "Expense ratio.",
+                "ai_feedback": {
+                  "correct": "Nice job! Passive management is cheaper than active, resulting in very low expense ratios for index-tracking ETFs.",
+                  "incorrect": "Because passive ETFs require minimal active management, they usually have much lower expense ratios (fees) than actively managed funds or stocks."
+                }
+              }
+            ],
+            "qna": [
+              {
+                "id": 1207,
+                "question": "What is the 'tracking error' of an index ETF?",
+                "answer": "Tracking error is the difference between the return of the ETF and the return of the benchmark index it is supposed to track. A lower tracking error indicates the ETF is doing a better job of mirroring the index's performance.",
+                "explanation": "Tracking error is essentially how 'good' the ETF is at its job of matching the index. You want this number to be as close to zero as possible."
+              },
+              {
+                "id": 1208,
+                "question": "Why do some investors still buy individual stocks despite the higher risk?",
+                "answer": "Individual stocks offer the potential for market-beating returns (alpha) that are impossible to achieve through a diversified ETF. Successful stock picking can generate explosive wealth, provided the investor has done adequate research.",
+                "explanation": "Stocks are for 'alpha' (outperformance); ETFs are for 'beta' (market performance). The risk is worth the shot at massive gain for some."
+              },
+              {
+                "id": 1209,
+                "question": "In terms of trading, how are ETFs different from traditional Mutual Funds?",
+                "answer": "ETFs can be bought and sold throughout the day, just like stocks, at the current market price. Traditional Mutual Funds are only priced and traded once per day after the market closes, using that day's NAV.",
+                "explanation": "The continuous trading feature gives ETFs superior intraday liquidity compared to mutual funds."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "course_id": 13,
+        "title": "Tax Planning",
+        "level": "Intermediate",
+        "modules": [
+          {
+            "module_id": "m1",
+            "title": "Tax-efficient Investing",
+            "flash_cards": [
+              {
+                "id": 1301,
+                "topic": "Capital Gains Basics",
+                "theory_title": "Tax on Investment Profit",
+                "theory_content": "A **Capital Gain** is the profit you make from selling an investment (stock, house, fund) for more than you paid for it. This profit is subject to tax. Gains are typically classified as **Short-Term** (held for less than 1 year) or **Long-Term** (held for more than 1 year), with long-term gains usually taxed at a lower rate to incentivize holding periods."
+              },
+              {
+                "id": 1302,
+                "topic": "Tax-Advantaged Accounts",
+                "theory_title": "Shielding Your Growth",
+                "theory_content": "Many governments offer special tax-advantaged accounts (e.g., EPF, PPF, NPS, or Roth/Traditional IRAs in the US) that allow your investments to grow tax-deferred or tax-free. Maxing out these accounts is the cornerstone of tax-efficient investing."
+              },
+              {
+                "id": 1303,
+                "topic": "Tax Harvesting",
+                "theory_title": "Reducing Your Bill",
+                "theory_content": "Capital Loss Harvesting is the strategy of selling investments that have lost value to 'realize' the loss, which can then be used to offset taxable capital gains realized elsewhere in your portfolio, reducing your total tax bill."
+              }
+            ],
+            "mcqs": [
+              {
+                "id": 1304,
+                "question": "Capital Gains are typically taxed at a lower rate if the investment is held for how long?",
+                "options": [
+                  "Less than 6 months (Short-Term).",
+                  "More than 1 year (Long-Term).",
+                  "Exactly 5 years.",
+                  "It is always taxed at the same rate."
+                ],
+                "correct_answer": "More than 1 year (Long-Term).",
+                "ai_feedback": {
+                  "correct": "Exactly! Long-term capital gains are incentivized with lower tax rates to promote patient investing.",
+                  "incorrect": "Tax systems typically favor long-term holding. Capital gains held for over a year are generally taxed at a lower rate than short-term gains."
+                }
+              },
+              {
+                "id": 1305,
+                "question": "What is the primary benefit of a tax-advantaged retirement account?",
+                "options": [
+                  "It eliminates all investment risk.",
+                  "It guarantees a $10\%$ return.",
+                  "It allows investments to grow tax-free or tax-deferred.",
+                  "It can be withdrawn from at any time without penalty."
+                ],
+                "correct_answer": "It allows investments to grow tax-free or tax-deferred.",
+                "ai_feedback": {
+                  "correct": "Correct! Tax shielding is the immense benefit. Avoiding tax on growth dramatically accelerates compounding.",
+                  "incorrect": "The tax benefit is paramount. By shielding growth from yearly taxes, you maximize the power of compounding over decades."
+                }
+              },
+              {
+                "id": 1306,
+                "question": "The strategy of selling investments at a loss to reduce taxes owed on profitable sales is called:",
+                "options": [
+                  "Tax Loss Harvesting.",
+                  "Dividend Capture.",
+                  "Income Splitting.",
+                  "Tax Arbitrage."
+                ],
+                "correct_answer": "Tax Loss Harvesting.",
+                "ai_feedback": {
+                  "correct": "Nice job! Tax loss harvesting is a common, legal strategy to optimize the tax impact of your investing activities.",
+                  "incorrect": "It is called Tax Loss Harvesting. You intentionally 'realize' a loss to offset a taxable gain, lowering your total capital gains tax liability."
+                }
+              }
+            ],
+            "qna": [
+              {
+                "id": 1307,
+                "question": "Why is 'tax-deferred' growth better than fully taxable growth?",
+                "answer": "With tax-deferred growth, the capital that would have been paid as tax is kept invested, allowing it to continue earning returns and compounding until retirement. This dramatically increases the final corpus.",
+                "explanation": "You get to invest the government's money (the tax owed) for decades, earning returns on it until you eventually pay the tax later."
+              },
+              {
+                "id": 1308,
+                "question": "If I receive a dividend, is it a Capital Gain or taxable Income?",
+                "answer": "Dividends are typically treated as taxable income in the year they are received. They are not Capital Gains, as they are not the result of selling the underlying asset.",
+                "explanation": "Dividends are income; Capital Gains are profit from the sale of an asset. They are taxed differently."
+              },
+              {
+                "id": 1309,
+                "question": "What is the major downside of withdrawing money from a typical retirement account early?",
+                "answer": "Early withdrawal usually results in the immediate tax payment on the withdrawn amount *plus* a significant financial penalty (e.g., $10\%$ of the withdrawn amount), making it very costly.",
+                "explanation": "Retirement accounts are meant for retirement. The high penalties are designed to discourage using these funds early."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "course_id": 14,
+        "title": "Retirement Planning",
+        "level": "Intermediate",
+        "modules": [
+          {
+            "module_id": "m1",
+            "title": "Retirement Basics",
+            "flash_cards": [
+              {
+                "id": 1401,
+                "topic": "The 'Why Start Early' Factor",
+                "theory_title": "Time is Your Greatest Asset",
+                "theory_content": "Due to compounding, the most critical factor in retirement planning is **starting early**. A delay of just $5$ to $10$ years can require you to save 3x or 4x more per month to catch up. The first $10$ years of compounding often contribute more to your final corpus than the next $20$ years of contributions. "
+              },
+              {
+                "id": 1402,
+                "topic": "Target Corpus Estimation",
+                "theory_title": "The $\mathbf{4\%}$ Rule (Simplified)",
+                "theory_content": "A common rule of thumb for retirement withdrawal is the **$4\%$ Rule**. It suggests that if you withdraw $4\%$ of your portfolio's value in the first year of retirement (adjusted for inflation thereafter), the money has a high probability of lasting 30 years. This means your target corpus should be $25$ times your desired annual expenses ($100\% / 4\% = 25$)."
+              },
+              {
+                "id": 1403,
+                "topic": "Retirement Accounts",
+                "theory_title": "EPF, PPF, NPS",
+                "theory_content": "In many countries, government-backed schemes serve as the foundation of retirement. **EPF** (Employee Provident Fund) and **PPF** (Public Provident Fund) are common in India. **NPS** (National Pension System) is a voluntary, market-linked defined contribution plan designed for long-term saving, often offering tax benefits."
+              }
+            ],
+            "mcqs": [
+              {
+                "id": 1404,
+                "question": "Based on the power of compounding, which investor will likely have the largest retirement fund?",
+                "options": [
+                  "An investor who starts at age 40 and saves $\text{₹}20,000$ per month.",
+                  "An investor who starts at age 25 and saves $\text{₹}10,000$ per month.",
+                  "An investor who invests a lump sum at age 60.",
+                  "An investor who only saves in cash."
+                ],
+                "correct_answer": "An investor who starts at age 25 and saves $\text{₹}10,000$ per month.",
+                "ai_feedback": {
+                  "correct": "Correct! The investor who starts earliest allows their money the maximum time to compound, which is usually the winning strategy.",
+                  "incorrect": "Time is the key ingredient. The 25-year-old has 15 extra years of compounding, which usually outweighs the higher contributions of the later starter."
+                }
+              },
+              {
+                "id": 1405,
+                "question": "To use the $4\%$ Rule, if your desired annual retirement expense is $\text{₹}12,00,000$, your estimated corpus target should be:",
+                "options": [
+                  "$\text{₹}1,20,00,000$ ($\text{₹}1.2$ Crore).",
+                  "$\text{₹}3,00,00,000$ ($\text{₹}3$ Crore).",
+                  "$\text{₹}25,00,000$ ($\text{₹}25$ Lakh).",
+                  "$\text{₹}4,80,00,000$ ($\text{₹}4.8$ Crore)."
+                ],
+                "correct_answer": "$\text{₹}3,00,00,000$ ($\text{₹}3$ Crore).",
+                "ai_feedback": {
+                  "correct": "You got it! $\text{₹}12,00,000 \times 25 = \text{₹}3,00,00,000$. This is the mathematical basis of the $4\%$ rule.",
+                  "incorrect": "The target is $25$ times your annual expense. ($\text{₹}12,00,000 \times 25 = \text{₹}3 \text{ Crore}$)."
+                }
+              },
+              {
+                "id": 1406,
+                "question": "Which retirement plan is considered a market-linked defined contribution scheme, often used voluntarily for long-term savings?",
+                "options": [
+                  "Fixed Deposit.",
+                  "Employee Provident Fund (EPF).",
+                  "National Pension System (NPS).",
+                  "Credit Card."
+                ],
+                "correct_answer": "National Pension System (NPS).",
+                "ai_feedback": {
+                  "correct": "Correct! NPS is the market-linked, voluntary retirement savings vehicle in India.",
+                  "incorrect": "NPS (National Pension System) is a flexible, market-linked retirement tool. EPF is generally mandatory and has a fixed interest rate."
+                }
+              }
+            ],
+            "qna": [
+              {
+                "id": 1407,
+                "question": "How does inflation impact your retirement planning target?",
+                "answer": "Inflation means that your current expenses will be much higher in the future. You must calculate your annual expense target in today's money and then project that amount forward using an estimated inflation rate to get your real target corpus.",
+                "explanation": "You are not planning for today's cost of living, but the cost of living $30$ years from now. Inflation makes this number much larger."
+              },
+              {
+                "id": 1408,
+                "question": "Why do financial advisors recommend shifting from stocks to bonds/cash as retirement approaches?",
+                "answer": "This shift is called 'de-risking.' It protects the accumulated corpus from sudden market crashes just before or at the start of retirement, ensuring the investor doesn't have to sell assets at a loss.",
+                "explanation": "As the time horizon shortens, preserving capital becomes more important than maximizing growth."
+              },
+              {
+                "id": 1409,
+                "question": "What is the primary risk associated with the $4\%$ Rule?",
+                "answer": "The primary risk is **Sequence of Returns Risk**. If a major market crash occurs during the first few years of retirement, the portfolio may be depleted too quickly, leading the fund to fail prematurely.",
+                "explanation": "Early returns matter most. A big loss early on makes it very difficult for the portfolio to recover."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "course_id": 15,
+        "title": "Portfolio Building",
+        "level": "Intermediate",
+        "modules": [
+          {
+            "module_id": "m1",
+            "title": "Asset Allocation",
+            "flash_cards": [
+              {
+                "id": 1501,
+                "topic": "The Core Allocation",
+                "theory_title": "Stocks, Bonds, and Cash",
+                "theory_content": "A basic portfolio is built from three asset classes: **Stocks/Equities** (high-risk/high-growth), **Bonds/Fixed Income** (low-risk/low-growth/income), and **Cash** (zero-risk/liquidity). The proportion of each is known as the asset allocation."
+              },
+              {
+                "id": 1502,
+                "topic": "Allocation Strategy",
+                "theory_title": "The 100 Minus Age Rule",
+                "theory_content": "A simple rule of thumb for asset allocation is to subtract your age from $100$ to get the percentage of your portfolio that should be invested in stocks/equities. For a 30-year-old, this suggests $70\%$ stocks and $30\%$ bonds, reflecting that risk tolerance decreases with age."
+              },
+              {
+                "id": 1503,
+                "topic": "Rebalancing",
+                "theory_title": "Maintaining the Mix",
+                "theory_content": "Rebalancing is the process of periodically buying or selling assets to bring the portfolio back to its original target allocation. If stocks perform well, they grow to, say, $80\%$ of the portfolio. Rebalancing requires selling some stock gains and buying bonds to restore the target $70\%/30\%$ mix, effectively forcing you to 'sell high and buy low'."
+              }
+            ],
+            "mcqs": [
+              {
+                "id": 1504,
+                "question": "Using the '100 Minus Age' rule, what is the recommended stock allocation for a 50-year-old investor?",
+                "options": [
+                  "$\mathbf{20\%}$",
+                  "$\mathbf{50\%}$",
+                  "$\mathbf{70\%}$",
+                  "$\mathbf{100\%}$"
+                ],
+                "correct_answer": "$\mathbf{50\%}$",
+                "ai_feedback": {
+                  "correct": "You got it! $\mathbf{100 - 50 = 50\%}$ in stocks, shifting towards less risk as retirement approaches.",
+                  "incorrect": "The calculation is $\mathbf{100 - 50 = 50\%}$. As investors age, they should reduce equity exposure to protect their capital."
+                }
+              },
+              {
+                "id": 1505,
+                "question": "What is the purpose of including Fixed Income (Bonds) in a portfolio dominated by Stocks?",
+                "options": [
+                  "To increase overall risk.",
+                  "To provide an uncorrelated hedge and reduce volatility.",
+                  "To maximize capital gains.",
+                  "To reduce all investment fees."
+                ],
+                "correct_answer": "To provide an uncorrelated hedge and reduce volatility.",
+                "ai_feedback": {
+                  "correct": "Exactly! Bonds often act as a buffer, rising in value when stocks fall, which smooths out the portfolio's overall volatility.",
+                  "incorrect": "Bonds serve to balance the portfolio. They tend to perform differently than stocks, which reduces overall portfolio volatility (risk) through negative correlation."
+                }
+              },
+              {
+                "id": 1506,
+                "question": "If your portfolio allocation drifts to $80\%$ Stocks/$20\%$ Bonds (target was $70\%/30\%$), the act of selling stocks and buying bonds to return to the target is called:",
+                "options": [
+                  "Dollar-Cost Averaging.",
+                  "Tax Loss Harvesting.",
+                  "Rebalancing.",
+                  "Liquidity Management."
+                ],
+                "correct_answer": "Rebalancing.",
+                "ai_feedback": {
+                  "correct": "Nice! Rebalancing is the discipline of maintaining your chosen risk level by forcing yourself to sell winners and buy losers.",
+                  "incorrect": "This maintenance process is called Rebalancing. It forces you to stick to your risk profile by selling the asset that has outperformed and buying the one that has underperformed."
+                }
+              }
+            ],
+            "qna": [
+              {
+                "id": 1507,
+                "question": "How do you define a 'Core' vs. 'Satellite' investment strategy?",
+                "answer": "The Core (e.g., $80\%$ of the portfolio) is typically diversified, low-cost index funds/ETFs for stable growth. The Satellite (e.g., $20\%$) is individual stocks or sector bets used to try and beat the market, accepting higher risk for higher reward potential.",
+                "explanation": "The core provides stability and market return; the satellite provides the potential for alpha (outperformance)."
+              },
+              {
+                "id": 1508,
+                "question": "Why is 'staying the course' the most important rule in asset allocation?",
+                "answer": "It means avoiding the urge to panic-sell during market crashes or chase gains during bubbles. Your allocation is based on long-term goals and should only change when your time horizon or risk tolerance changes, not because of market noise.",
+                "explanation": "Emotional trading destroys wealth. Sticking to your plan prevents you from locking in losses or buying at the peak."
+              },
+              {
+                "id": 1509,
+                "question": "What are 'international equities' and why are they important for diversification?",
+                "answer": "International equities are stocks from companies outside your home country. They are important because they reduce geographical risk—a bad economy in your home country might not affect a foreign economy, providing a diversification hedge.",
+                "explanation": "You should diversify not just across asset types but also across countries to maximize risk reduction."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "course_id": 16,
+        "title": "Money Psychology",
+        "level": "Intermediate",
+        "modules": [
+          {
+            "module_id": "m1",
+            "title": "Common Biases",
+            "flash_cards": [
+              {
+                "id": 1601,
+                "topic": "Confirmation Bias",
+                "theory_title": "Seeking Out Agreement",
+                "theory_content": "This is the tendency to seek out, interpret, and favor information that confirms your existing beliefs while ignoring contradictory evidence. In investing, it leads to only reading bullish articles about a stock you already own, preventing you from seeing legitimate risks."
+              },
+              {
+                "id": 1602,
+                "topic": "Loss Aversion",
+                "theory_title": "The Pain of Losing",
+                "theory_content": "Loss Aversion is the psychological tendency to feel the pain of a loss approximately twice as powerfully as the pleasure of an equivalent gain. This bias often causes investors to hold onto 'losing' investments too long (hoping to break even) and sell 'winning' investments too soon (to secure the profit)."
+              },
+              {
+                "id": 1603,
+                "topic": "Anchoring",
+                "theory_title": "Sticking to the First Price",
+                "theory_content": "Anchoring is the bias where investors rely too heavily on the first piece of information offered (the 'anchor') when making decisions. For example, an investor holds a stock because they 'anchored' its value to the high price they initially paid for it, ignoring its current lower market value."
+              }
+            ],
+            "mcqs": [
+              {
+                "id": 1604,
+                "question": "An investor refuses to sell a stock that is down $50\%$ because they 'need to get back the price they paid for it.' This is an example of which bias?",
+                "options": [
+                  "Confirmation Bias.",
+                  "Anchoring.",
+                  "Herding Behavior.",
+                  "Recency Bias."
+                ],
+                "correct_answer": "Anchoring.",
+                "ai_feedback": {
+                  "correct": "Correct! They are anchored to the past purchase price, even though the market value has clearly fallen.",
+                  "incorrect": "The investor is anchored to the original purchase price. They refuse to sell because they value the stock based on that anchor, not on its current market value."
+                }
+              },
+              {
+                "id": 1605,
+                "question": "Which bias causes investors to sell their best-performing stocks quickly to 'lock in the profit'?",
+                "options": [
+                  "Loss Aversion.",
+                  "Hindsight Bias.",
+                  "Availability Bias.",
+                  "Familiarity Bias."
+                ],
+                "correct_answer": "Loss Aversion.",
+                "ai_feedback": {
+                  "correct": "You got it! Loss Aversion makes the potential for a loss feel so bad that they rush to take a small gain, limiting their long-term growth.",
+                  "incorrect": "Loss Aversion makes the risk of the gain disappearing feel worse than the opportunity cost of selling too early. They sell winners early to avoid a potential loss."
+                }
+              },
+              {
+                "id": 1606,
+                "question": "To mitigate Confirmation Bias, an investor should actively seek out information that:",
+                "options": [
+                  "Confirms their existing belief.",
+                  "Is only positive about the investment.",
+                  "Is contrary or negative to their position.",
+                  "Is provided by an influencer."
+                ],
+                "correct_answer": "Is contrary or negative to their position.",
+                "ai_feedback": {
+                  "correct": "Exactly! Seeking out contradictory evidence is the only way to challenge your assumptions and make objective decisions.",
+                  "incorrect": "Confirmation bias means you only want to hear positive news. To overcome it, you must actively look for and analyze the negative or contradictory views."
+                }
+              }
+            ],
+            "qna": [
+              {
+                "id": 1607,
+                "question": "What is 'Herding Behavior' and why is it dangerous?",
+                "answer": "Herding Behavior is the psychological tendency to follow the actions of a larger group of investors (e.g., buying because everyone else is buying). It is dangerous because it often leads to buying assets at inflated prices (bubbles) and selling at market lows (panics).",
+                "explanation": "When everyone is doing it, it's often too late. Successful investing requires independent thinking."
+              },
+              {
+                "id": 1608,
+                "question": "How can an investor use the principle of Rebalancing to fight Loss Aversion?",
+                "answer": "Rebalancing forces the investor to sell assets that have gained value (the winners) to buy assets that have underperformed (the losers). This disciplined, automated action overrides the emotional urge to hold onto winners too long or panic-sell losers.",
+                "explanation": "Use rules and automation to make decisions, not emotions."
+              },
+              {
+                "id": 1609,
+                "question": "Explain 'Recency Bias' in investing.",
+                "answer": "Recency bias is the tendency to assume that recent events will continue into the future. For example, assuming the market will crash because it has been falling for the last six months, or assuming a stock will keep rising because it rose last week.",
+                "explanation": "Recency bias ignores long-term historical averages and focuses only on what happened most recently."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "course_id": 17,
+        "title": "Market Fundamentals",
+        "level": "Intermediate",
+        "modules": [
+          {
+            "module_id": "m1",
+            "title": "Market Basics",
+            "flash_cards": [
+              {
+                "id": 1701,
+                "topic": "Market Cycles",
+                "theory_title": "The Four Phases",
+                "theory_content": "Markets typically move through four cycles: **Accumulation** (smart money buys low), **Uptrend/Markup** (prices rise, public joins), **Distribution** (smart money sells high), and **Downtrend/Mark Down** (prices fall, public panics and sells). These cycles highlight the importance of patience and long-term perspective. "
+              },
+              {
+                "id": 1702,
+                "topic": "Liquidity",
+                "theory_title": "Ease of Trading",
+                "theory_content": "**Liquidity** refers to how easily an asset can be converted into cash without affecting its market price. A highly liquid stock (like large-cap index stocks) can be bought or sold instantly. Low-liquidity assets (like real estate) are harder to sell quickly."
+              },
+              {
+                "id": 1703,
+                "topic": "Market Index",
+                "theory_title": "The Market Thermometer",
+                "theory_content": "A **Market Index** (e.g., Nifty 50, S&P 500) is a statistical measure that tracks the performance of a basket of stocks. It serves as a benchmark for the overall health of the stock market or a specific sector. You use an index to measure whether your portfolio is 'beating the market'."
+              }
+            ],
+            "mcqs": [
+              {
+                "id": 1704,
+                "question": "Which of the four market cycles is typically characterized by 'smart money' buying assets while the general public is still fearful and selling?",
+                "options": [
+                  "Downtrend/Mark Down.",
+                  "Distribution.",
+                  "Accumulation.",
+                  "Uptrend/Markup."
+                ],
+                "correct_answer": "Accumulation.",
+                "ai_feedback": {
+                  "correct": "You are correct! Accumulation is the phase where institutional investors begin to build positions after a market low, characterized by sideways trading.",
+                  "incorrect": "The accumulation phase occurs after a downturn. This is when informed investors quietly start buying before the next major price rise."
+                }
+              },
+              {
+                "id": 1705,
+                "question": "Which asset is generally considered the most liquid?",
+                "options": [
+                  "A rare piece of art.",
+                  "A residential property.",
+                  "An individual blue-chip stock.",
+                  "A private business equity stake."
+                ],
+                "correct_answer": "An individual blue-chip stock.",
+                "ai_feedback": {
+                  "correct": "Exactly! Stocks in major, blue-chip companies can be sold instantly on an exchange with minimal impact on price.",
+                  "incorrect": "Liquidity is about speed and minimal price impact. Stocks, especially large-cap ones, are highly liquid because they can be sold quickly on a major exchange."
+                }
+              },
+              {
+                "id": 1706,
+                "question": "If your portfolio return is $12\%$ in a year, and the S\&P 500 (the market index) returned $15\%$, you have:",
+                "options": [
+                  "Beaten the market.",
+                  "Underperformed the market.",
+                  "Matched the market.",
+                  "Achieved negative alpha."
+                ],
+                "correct_answer": "Underperformed the market.",
+                "ai_feedback": {
+                  "correct": "Correct! Since the benchmark index (15%) is higher than your return (12%), you underperformed. The difference is negative alpha.",
+                  "incorrect": "The S&P 500 is the benchmark. If your return is lower than the benchmark, you have underperformed the market."
+                }
+              }
+            ],
+            "qna": [
+              {
+                "id": 1707,
+                "question": "What is the difference between an index and an index fund (ETF)?",
+                "answer": "An index is a *theoretical* basket used for measurement (a number). An index fund or ETF is an *actual* investment product that buys the securities in the index, allowing you to invest in the index itself.",
+                "explanation": "You can't buy the S&P 500 index, but you can buy an ETF that tracks it."
+              },
+              {
+                "id": 1708,
+                "question": "How does high trading volume affect a stock's liquidity?",
+                "answer": "High trading volume means many shares are being bought and sold, which dramatically increases liquidity. This makes it easier for a large investor to buy or sell without causing a major price fluctuation.",
+                "explanation": "Volume is the lifeblood of liquidity. More volume means faster, easier execution for everyone."
+              },
+              {
+                "id": 1709,
+                "question": "What is the key takeaway of understanding market cycles for a long-term investor?",
+                "answer": "The key takeaway is that bear markets (downtrends) are temporary and inevitable. A long-term investor should use the downturn as a buying opportunity (accumulation) and avoid panic-selling.",
+                "explanation": "The long-term trend of the market is up. Cycles are just noise in the long-term compounding process."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "course_id": 18,
+        "title": "Risk Management",
+        "level": "Intermediate",
+        "modules": [
+          {
+            "module_id": "m1",
+            "title": "Types of Risk",
+            "flash_cards": [
+              {
+                "id": 1801,
+                "topic": "Inflation Risk",
+                "theory_title": "Erosion of Purchasing Power",
+                "theory_content": "The risk that the returns on an investment will be eroded by inflation, meaning the investment's value hasn't grown fast enough to keep up with rising prices. This is why low-interest savings accounts carry a high inflation risk for long-term goals."
+              },
+              {
+                "id": 1802,
+                "topic": "Credit Risk",
+                "theory_title": "Default by Borrower",
+                "theory_content": "**Credit Risk** is the risk that a bond issuer or loan borrower (a company or government) will default on its debt obligation by failing to make interest payments or repaying the principal. It is the main risk in bond investing."
+              },
+              {
+                "id": 1803,
+                "topic": "Mitigation: Stop-Loss Orders",
+                "theory_title": "Automated Loss Protection",
+                "theory_content": "A **Stop-Loss Order** is an order placed with a broker to automatically sell a security when it reaches a certain price. It is a critical tool for risk management, designed to limit an investor's loss on a security position if the price falls, overriding emotional biases."
+              }
+            ],
+            "mcqs": [
+              {
+                "id": 1804,
+                "question": "If a corporate bond issuer declares bankruptcy and cannot repay its loan, an investor is exposed to which type of risk?",
+                "options": [
+                  "Inflation Risk.",
+                  "Liquidity Risk.",
+                  "Unsystematic Risk.",
+                  "Credit Risk."
+                ],
+                "correct_answer": "Credit Risk.",
+                "ai_feedback": {
+                  "correct": "Correct! Credit risk is the risk of default by the debtor (the company that issued the bond).",
+                  "incorrect": "This is Credit Risk, the chance that the borrower fails to honor their financial obligations. Credit risk is the main concern in fixed-income investing."
+                }
+              },
+              {
+                "id": 1805,
+                "question": "An investor sets a Stop-Loss Order at $10\%$ below their purchase price. The main purpose of this action is to:",
+                "options": [
+                  "Guarantee a profit.",
+                  "Limit the potential financial loss.",
+                  "Increase the trading volume.",
+                  "Buy more shares at a low price."
+                ],
+                "correct_answer": "Limit the potential financial loss.",
+                "ai_feedback": {
+                  "correct": "Exactly! The stop-loss is a defensive measure to cap the downside and protect capital.",
+                  "incorrect": "A stop-loss order is a risk management tool. Its function is purely defensive: to automatically sell and limit the maximum possible loss."
+                }
+              },
+              {
+                "id": 1806,
+                "question": "Holding cash for 20 years for a retirement goal exposes the investor primarily to which risk?",
+                "options": [
+                  "Credit Risk.",
+                  "Inflation Risk.",
+                  "Systematic Market Risk.",
+                  "Liquidity Risk."
+                ],
+                "correct_answer": "Inflation Risk.",
+                "ai_feedback": {
+                  "correct": "Nice job! The purchasing power of cash is guaranteed to be eaten away by inflation over such a long period.",
+                  "incorrect": "Holding cash for a long time virtually guarantees that inflation will erode its purchasing power, making Inflation Risk the highest threat."
+                }
+              }
+            ],
+            "qna": [
+              {
+                "id": 1807,
+                "question": "How does diversification mitigate risk that is *not* systematic?",
+                "answer": "Diversification reduces unsystematic risk because it assumes the negative event affecting one company (e.g., poor earnings) is independent of the positive event affecting another company in a different sector, smoothing out the returns.",
+                "explanation": "Spreading money across multiple, uncorrelated companies means one failure won't sink the entire portfolio."
+              },
+              {
+                "id": 1808,
+                "question": "What is 'Liquidity Risk'?",
+                "answer": "Liquidity risk is the risk that you cannot sell an asset quickly enough at its fair market price to prevent a loss. It is high for assets like real estate or small, thinly traded stocks.",
+                "explanation": "If you *need* to sell now, liquidity risk means you may have to accept a much lower price to find a buyer immediately."
+              },
+              {
+                "id": 1809,
+                "question": "When should an investor use a mental stop-loss versus an automated stop-loss order?",
+                "answer": "An automated stop-loss order is best for active traders. A mental stop-loss is better for long-term investors, as automated orders can be triggered by temporary market volatility, forcing the long-term investor to sell unnecessarily.",
+                "explanation": "Automated stops prevent emotional panic, but they can force a sale at a bad time. Mental stops are for avoiding emotional panic but require discipline."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "course_id": 19,
+        "title": "Real Estate Basics",
+        "level": "Advanced",
+        "modules": [
+          {
+            "module_id": "m1",
+            "title": "Real Estate Investment",
+            "flash_cards": [
+              {
+                "id": 1901,
+                "topic": "Buy vs. Rent",
+                "theory_title": "Lifestyle and Financial Decisions",
+                "theory_content": "The decision to **buy** vs. **rent** is complex. Buying offers potential appreciation and tax benefits but requires high upfront capital and comes with maintenance costs and low liquidity. Renting offers flexibility, lower commitment, and capital that can be invested elsewhere."
+              },
+              {
+                "id": 1902,
+                "topic": "REITs Defined",
+                "theory_title": "Real Estate Investment Trusts",
+                "theory_content": "A **REIT** (Real Estate Investment Trust) is a company that owns or finances income-producing real estate. They trade on stock exchanges like stocks, providing a liquid way for investors to participate in the real estate market without actually buying property. REITs are often required to distribute $90\%$ of their taxable income as dividends."
+              },
+              {
+                "id": 1903,
+                "topic": "Leverage and Illiquidity",
+                "theory_title": "Key Real Estate Characteristics",
+                "theory_content": "Real estate is characterized by high **leverage** (using debt/mortgage to control a large asset) which magnifies returns, and high **illiquidity** (it takes months to sell). These factors make it a high-commitment investment."
+              }
+            ],
+            "mcqs": [
+              {
+                "id": 1904,
+                "question": "Which investment product allows an investor to gain liquid, diversified exposure to commercial real estate?",
+                "options": [
+                  "Individual Corporate Bond.",
+                  "REIT (Real Estate Investment Trust).",
+                  "Fixed Deposit.",
+                  "Commodities Future."
+                ],
+                "correct_answer": "REIT (Real Estate Investment Trust).",
+                "ai_feedback": {
+                  "correct": "That's right! REITs are bought and sold on the stock market, providing the liquidity that physical real estate lacks.",
+                  "incorrect": "REITs are the primary liquid vehicle for real estate exposure. They trade like a stock but hold income-producing property."
+                }
+              },
+              {
+                "id": 1905,
+                "question": "The use of a mortgage to purchase a property is an example of:",
+                "options": [
+                  "Diversification.",
+                  "Liquidity.",
+                  "Positive Leverage.",
+                  "Negative Correlation."
+                ],
+                "correct_answer": "Positive Leverage.",
+                "ai_feedback": {
+                  "correct": "You got it! Leverage allows you to control a high-value asset with a small down payment, magnifying potential gains.",
+                  "incorrect": "A mortgage is debt used to amplify returns. This is called leverage in finance."
+                }
+              },
+              {
+                "id": 1906,
+                "question": "The primary risk of physical real estate compared to a stock is:",
+                "options": [
+                  "High liquidity.",
+                  "High illiquidity.",
+                  "Zero maintenance costs.",
+                  "Guaranteed appreciation."
+                ],
+                "correct_answer": "High illiquidity.",
+                "ai_feedback": {
+                  "correct": "Correct! It can take months or years to sell property, unlike stocks, making it highly illiquid.",
+                  "incorrect": "Illiquidity is the biggest drawback. If you need cash quickly, you cannot sell a house in a day."
+                }
+              }
+            ],
+            "qna": [
+              {
+                "id": 1907,
+                "question": "Why is real estate considered a good hedge against inflation?",
+                "answer": "Real estate is considered an inflation hedge because as inflation rises, property values and rental income tend to rise as well, increasing the asset's nominal value and cash flow, which preserves the investor's purchasing power.",
+                "explanation": "The income and value of the asset increase with the general cost of living."
+              },
+              {
+                "id": 1908,
+                "question": "What is the key difference between a REIT and a real estate mutual fund?",
+                "answer": "A REIT is a company that directly owns or finances property and trades on an exchange like a stock. A real estate mutual fund primarily invests in the *stocks and bonds* of real estate *companies*, not the physical property itself.",
+                "explanation": "REITs are closer to direct ownership; mutual funds are indirect investment in the sector."
+              },
+              {
+                "id": 1909,
+                "question": "What is negative leverage?",
+                "answer": "Negative leverage occurs when the cost of borrowing (mortgage interest rate) is higher than the rate of return or appreciation generated by the property, leading to a net financial loss.",
+                "explanation": "Leverage is only good if the asset's return exceeds the debt cost. Negative leverage means the debt is actively destroying wealth."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "course_id": 20,
+        "title": "Crypto & Alternatives",
+        "level": "Advanced",
+        "modules": [
+          {
+            "module_id": "m1",
+            "title": "Crypto Basics",
+            "flash_cards": [
+              {
+                "id": 2001,
+                "topic": "Cryptocurrency Defined",
+                "theory_title": "Digital, Decentralized Currency",
+                "theory_content": "A **Cryptocurrency** is a digital or virtual currency secured by cryptography, making it nearly impossible to counterfeit. It is typically decentralized, meaning it is not subject to government or bank control. Bitcoin and Ethereum are the most well-known examples."
+              },
+              {
+                "id": 2002,
+                "topic": "Blockchain Basics",
+                "theory_title": "The Distributed Ledger",
+                "theory_content": "The **Blockchain** is the underlying technology of most cryptocurrencies. It is a decentralized, distributed, and immutable digital public ledger that records transactions across many computers, making the data highly transparent and tamper-proof. "
+              },
+              {
+                "id": 2003,
+                "topic": "The Volatility Risk",
+                "theory_title": "High Risk, High Volatility",
+                "theory_content": "Cryptocurrency is highly speculative and subject to extreme price volatility. This is due to its high novelty, lack of regulatory oversight, and dependency on public sentiment. It should only be a small, speculative portion of a well-diversified portfolio."
+              }
+            ],
+            "mcqs": [
+              {
+                "id": 2004,
+                "question": "The underlying technology that records and secures transactions for most cryptocurrencies is called the:",
+                "options": [
+                  "Stock Exchange.",
+                  "Fiat System.",
+                  "Central Bank Ledger.",
+                  "Blockchain."
+                ],
+                "correct_answer": "Blockchain.",
+                "ai_feedback": {
+                  "correct": "You got it! The Blockchain is the distributed ledger that validates and secures all transactions.",
+                  "incorrect": "The Blockchain is the fundamental technology. It is a decentralized public ledger that ensures all transactions are transparent and tamper-proof."
+                }
+              },
+              {
+                "id": 2005,
+                "question": "Cryptocurrency is generally considered decentralized because:",
+                "options": [
+                  "It is traded only in specific countries.",
+                  "It is controlled by a single government body.",
+                  "It operates without a central authority (like a bank or government).",
+                  "It is backed by physical gold reserves."
+                ],
+                "correct_answer": "It operates without a central authority (like a bank or government).",
+                "ai_feedback": {
+                  "correct": "Correct! Decentralization means control is distributed across the network, eliminating the need for a central intermediary.",
+                  "incorrect": "Decentralization means no central control. It operates through a distributed network of users rather than a single bank or government."
+                }
+              },
+              {
+                "id": 2006,
+                "question": "For a typical retirement investor, cryptocurrency should be viewed as a tool for:",
+                "options": [
+                  "Core savings due to low risk.",
+                  "Liquidity management.",
+                  "Long-term guaranteed income.",
+                  "A small, high-risk speculative allocation."
+                ],
+                "correct_answer": "A small, high-risk speculative allocation.",
+                "ai_feedback": {
+                  "correct": "Exactly! Due to its extreme volatility, it should never be a core component of a standard portfolio.",
+                  "incorrect": "Cryptocurrency's high volatility means it belongs in the speculative category, constituting a very small portion of a total portfolio."
+                }
+              }
+            ],
+            "qna": [
+              {
+                "id": 2007,
+                "question": "What is 'Fiat Money' and how does it differ from cryptocurrency?",
+                "answer": "Fiat money is currency issued and backed by a government (e.g., USD, INR). Its value is derived from government trust and decree. Cryptocurrency is decentralized and its value is derived from market demand and its network's utility.",
+                "explanation": "Fiat is centralized and government-backed; Crypto is decentralized and technology-backed."
+              },
+              {
+                "id": 2008,
+                "question": "Why is the high volatility of cryptocurrency considered its primary investment risk?",
+                "answer": "High volatility means prices can drop rapidly (e.g., $50\%$ in a day), making capital preservation difficult and rendering it unsuitable for short-term or essential financial goals.",
+                "explanation": "The extreme price swings mean you can lose a significant portion of your investment in a very short period."
+              },
+              {
+                "id": 2009,
+                "question": "What are 'alternatives' in a portfolio context?",
+                "answer": "Alternatives are non-traditional investments like private equity, hedge funds, and commodities (gold, silver). They are typically used to further diversify a portfolio because their returns are often uncorrelated with stocks and bonds.",
+                "explanation": "Alternatives provide a different source of returns that helps smooth out portfolio volatility."
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }

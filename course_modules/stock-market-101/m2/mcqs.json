@@ -1,1 +1,47 @@
-[]
+[
+  {
+    "id": 513,
+    "question": "If there are significantly more investors trying to sell a stock than trying to buy it, what happens to the stock price?",
+    "options": [
+      "It remains stable.",
+      "It rises due to competition.",
+      "It falls due to excess supply.",
+      "It is halted by the exchange."
+    ],
+    "correct_answer": "It falls due to excess supply.",
+    "ai_feedback": {
+      "correct": "You got it! High supply and low demand always drive the price down.",
+      "incorrect": "The basic rule is supply and demand. If sellers (supply) outweigh buyers (demand), the price must drop until a buyer is found."
+    }
+  },
+  {
+    "id": 514,
+    "question": "Market Sentiment refers to the collective feelings of investors. In the short term, which emotion can be a major driver of price bubbles?",
+    "options": [
+      "Apathy.",
+      "Fear.",
+      "Greed.",
+      "Prudence."
+    ],
+    "correct_answer": "Greed.",
+    "ai_feedback": {
+      "correct": "Exactly! Unchecked greed leads to excessive demand and irrational buying, often resulting in market bubbles.",
+      "incorrect": "Greed, or the fear of missing out (FOMO), drives prices up irrationally as investors chase returns, often leading to bubbles."
+    }
+  },
+  {
+    "id": 515,
+    "question": "Which factor is considered a 'Fundamental Factor' driving the long-term price of a stock?",
+    "options": [
+      "The company's quarterly earnings report.",
+      "The 50-day moving average.",
+      "The daily trading volume.",
+      "The stock's chart pattern."
+    ],
+    "correct_answer": "The company's quarterly earnings report.",
+    "ai_feedback": {
+      "correct": "Correct! Earnings reflect the actual health and profitability of the business, a fundamental driver of value.",
+      "incorrect": "Fundamental factors relate to the business itself. Earnings, revenue, and assets are fundamental. Moving averages and volume are technical factors."
+    }
+  }
+]

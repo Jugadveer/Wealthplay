@@ -1,10 +1,20 @@
 [
   {
-    "question": "What's the difference between savings and current account?",
-    "answer": "Savings accounts earn interest and have transaction limits. Current accounts are for businesses with higher transaction volumes."
+    "id": 307,
+    "question": "What is the key advantage of a Fixed Deposit over a standard Savings Account?",
+    "answer": "Fixed Deposits offer a guaranteed, higher rate of return than a typical savings account because the bank knows it can use your funds for a fixed period (i.e., you sacrifice liquidity for return).",
+    "explanation": "FDs give you certainty: a guaranteed, higher interest rate that won't change, unlike variable savings rates."
   },
   {
-    "question": "Are FDs safe?",
-    "answer": "Yes, FDs are considered very safe as they're insured up to ₹5 lakhs per bank by DICGC. Returns are guaranteed but lower than other investments."
+    "id": 308,
+    "question": "When comparing two savings accounts, what are the three most important factors to check?",
+    "answer": "1. Interest Rate (the return you earn). 2. Fees and Charges (minimum balance, maintenance fees). 3. Deposit Insurance (safety guarantee).",
+    "explanation": "Always prioritize the safety and net return (interest minus fees) when choosing a place to keep your cash."
+  },
+  {
+    "id": 309,
+    "question": "If I withdraw my money from an FD early, what usually happens?",
+    "answer": "Banks typically impose a penalty, which is usually a reduction in the interest rate earned or a flat fee, meaning you receive less than the initially promised interest.",
+    "explanation": "The bank penalizes you for breaking the 'fixed' agreement, reducing the interest you earned to compensate for the early liquidity."
   }
 ]

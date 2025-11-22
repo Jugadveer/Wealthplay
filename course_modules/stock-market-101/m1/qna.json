@@ -1,10 +1,20 @@
 [
   {
-    "question": "What is a stock?",
-    "answer": "A stock represents ownership in a company. When you buy a stock, you own a small piece of that company and can benefit from its growth and profits."
+    "id": 507,
+    "question": "What is the difference between a capital gain and a dividend?",
+    "answer": "A capital gain is the profit realized when you sell a stock for a higher price than you bought it for. A dividend is a periodic cash payment received while you still hold the stock.",
+    "explanation": "Capital gains are realized when you sell; dividends are passive income received while you own the asset."
   },
   {
-    "question": "How do I make money from stocks?",
-    "answer": "You can make money from stocks in two ways: through dividends (company profits shared with shareholders) and through capital appreciation (selling the stock for more than you paid)."
+    "id": 508,
+    "question": "If a company goes bankrupt, what happens to the common stockholders?",
+    "answer": "Common stockholders are the last to be paid after all debt holders (bondholders and banks) and preferred stockholders. In most bankruptcy cases, common stockholders lose their entire investment.",
+    "explanation": "This illustrates the risk of ownership: high potential reward, but last in line during liquidation."
+  },
+  {
+    "id": 509,
+    "question": "What does IPO stand for and what is its significance?",
+    "answer": "IPO stands for Initial Public Offering. It is the process by which a privately held company first offers its shares to the public on a stock exchange, raising capital and entering the primary market.",
+    "explanation": "The IPO is the transition point where a company goes from being privately owned to publicly traded."
   }
 ]

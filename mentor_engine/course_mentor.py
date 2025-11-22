@@ -177,7 +177,31 @@ def generate_ollama_response(course, module, user_question, ollama_model="phi3")
     Generate response using Ollama with course context and few-shot examples
     """
     try:
-        ollama = Client(host=os.environ.get('OLLAMA_HOST', 'http://localhost:11434'))
+        ollama_host = os.environ.get('OLLAMA_HOST', 'http://localhost:11434')
+        ollama = Client(host=ollama_host)
+        
+        # Handle empty or None model string
+        if not ollama_model or ollama_model.strip() == '':
+            ollama_model = "phi3"
+        
+        # Test connection by listing models
+        try:
+            models = ollama.list()
+            model_names = [m.get('name', '') for m in models.get('models', [])]
+            # Try common model names if phi3 is not available
+            if ollama_model not in model_names:
+                if 'llama3' in model_names:
+                    ollama_model = 'llama3'
+                elif 'llama2' in model_names:
+                    ollama_model = 'llama2'
+                elif 'mistral' in model_names:
+                    ollama_model = 'mistral'
+                elif len(model_names) > 0:
+                    ollama_model = model_names[0]
+                else:
+                    raise Exception("No Ollama models found. Please install a model: ollama pull llama3")
+        except Exception as e:
+            raise Exception(f"Could not connect to Ollama at {ollama_host}: {str(e)}. Please ensure Ollama is running.")
     except Exception as e:
         raise Exception(f"Could not connect to Ollama: {str(e)}. Please ensure Ollama is running.")
     
@@ -227,16 +251,28 @@ Source: {course.get('source', '')}"""
     messages.append({"role": "user", "content": user_question})
     
     try:
-        # Call Ollama chat API
+        # Call Ollama chat API with timeout
+        import requests
         response = ollama.chat(
             model=ollama_model,
-            messages=messages
+            messages=messages,
+            options={
+                'temperature': 0.7,
+                'top_p': 0.9
+            }
         )
         
         answer = response.get("message", {}).get("content", "")
+        if not answer:
+            raise Exception("Empty response from Ollama")
         return answer
+    except requests.exceptions.ConnectionError as e:
+        raise Exception(f"Could not connect to Ollama server. Please ensure Ollama is running on {ollama_host}")
     except Exception as e:
-        raise Exception(f"Ollama error: {str(e)}")
+        error_msg = str(e)
+        if "model" in error_msg.lower() or "not found" in error_msg.lower():
+            raise Exception(f"Model '{ollama_model}' not found. Please install it: ollama pull {ollama_model}")
+        raise Exception(f"Ollama error: {error_msg}")
 
 
 def mentor_respond(course_id, module_id=None, question=""):
@@ -301,6 +337,9 @@ def mentor_respond(course_id, module_id=None, question=""):
     try:
         # Get Ollama model from environment or use default
         ollama_model = os.environ.get("OLLAMA_MODEL", "phi3")
+        # Handle empty string
+        if not ollama_model or ollama_model.strip() == '':
+            ollama_model = "phi3"
         
         answer = generate_ollama_response(course, module, question, ollama_model)
         

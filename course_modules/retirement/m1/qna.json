@@ -1,10 +1,20 @@
 [
   {
-    "question": "When should I start saving for retirement?",
-    "answer": "Start as early as possible — even small amounts in your 20s can grow significantly due to compound interest."
+    "id": 1407,
+    "question": "How does inflation impact your retirement planning target?",
+    "answer": "Inflation means that your current expenses will be much higher in the future. You must calculate your annual expense target in today's money and then project that amount forward using an estimated inflation rate to get your real target corpus.",
+    "explanation": "You are not planning for today's cost of living, but the cost of living $30$ years from now. Inflation makes this number much larger."
   },
   {
-    "question": "How much do I need for retirement?",
-    "answer": "A common rule is 25-30x your annual expenses. Use retirement calculators to estimate based on your lifestyle and inflation."
+    "id": 1408,
+    "question": "Why do financial advisors recommend shifting from stocks to bonds/cash as retirement approaches?",
+    "answer": "This shift is called 'de-risking.' It protects the accumulated corpus from sudden market crashes just before or at the start of retirement, ensuring the investor doesn't have to sell assets at a loss.",
+    "explanation": "As the time horizon shortens, preserving capital becomes more important than maximizing growth."
+  },
+  {
+    "id": 1409,
+    "question": "What is the primary risk associated with the $4%$ Rule?",
+    "answer": "The primary risk is **Sequence of Returns Risk**. If a major market crash occurs during the first few years of retirement, the portfolio may be depleted too quickly, leading the fund to fail prematurely.",
+    "explanation": "Early returns matter most. A big loss early on makes it very difficult for the portfolio to recover."
   }
 ]

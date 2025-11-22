@@ -1,1 +1,47 @@
-[]
+[
+  {
+    "id": 1704,
+    "question": "Which of the four market cycles is typically characterized by 'smart money' buying assets while the general public is still fearful and selling?",
+    "options": [
+      "Downtrend/Mark Down.",
+      "Distribution.",
+      "Accumulation.",
+      "Uptrend/Markup."
+    ],
+    "correct_answer": "Accumulation.",
+    "ai_feedback": {
+      "correct": "You are correct! Accumulation is the phase where institutional investors begin to build positions after a market low, characterized by sideways trading.",
+      "incorrect": "The accumulation phase occurs after a downturn. This is when informed investors quietly start buying before the next major price rise."
+    }
+  },
+  {
+    "id": 1705,
+    "question": "Which asset is generally considered the most liquid?",
+    "options": [
+      "A rare piece of art.",
+      "A residential property.",
+      "An individual blue-chip stock.",
+      "A private business equity stake."
+    ],
+    "correct_answer": "An individual blue-chip stock.",
+    "ai_feedback": {
+      "correct": "Exactly! Stocks in major, blue-chip companies can be sold instantly on an exchange with minimal impact on price.",
+      "incorrect": "Liquidity is about speed and minimal price impact. Stocks, especially large-cap ones, are highly liquid because they can be sold quickly on a major exchange."
+    }
+  },
+  {
+    "id": 1706,
+    "question": "If your portfolio return is 12% in a year, and the S&P 500 (the market index) returned 15%, you have:",
+    "options": [
+      "Beaten the market.",
+      "Underperformed the market.",
+      "Matched the market.",
+      "Achieved negative alpha."
+    ],
+    "correct_answer": "Underperformed the market.",
+    "ai_feedback": {
+      "correct": "Correct! Since the benchmark index (15%) is higher than your return (12%), you underperformed. The difference is negative alpha.",
+      "incorrect": "The S&P 500 is the benchmark. If your return is lower than the benchmark, you have underperformed the market."
+    }
+  }
+]

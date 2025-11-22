@@ -1,1 +1,20 @@
-[]
+[
+  {
+    "id": 301,
+    "topic": "Savings Account",
+    "theory_title": "Liquidity and Safety",
+    "theory_content": "A Savings Account is designed for day-to-day liquidity and holding your emergency fund. It offers low interest, but the funds are accessible instantly. Look for accounts with low fees, high interest rates (if possible), and safety features like deposit insurance."
+  },
+  {
+    "id": 302,
+    "topic": "Fixed Deposits (FD)",
+    "theory_title": "Guaranteed Returns",
+    "theory_content": "A Fixed Deposit (or Term Deposit) is a safe way to earn a fixed rate of interest for a set period. Your money is locked away until maturity, offering higher interest than a savings account. It's ideal for goals with a set time horizon (e.g., saving for a car in 3 years)."
+  },
+  {
+    "id": 303,
+    "topic": "Recurring Deposits (RD)",
+    "theory_title": "Disciplined Saving",
+    "theory_content": "A Recurring Deposit is a disciplined savings instrument where you commit to depositing a fixed amount every month for a set term. It also earns a fixed interest rate, often comparable to an FD, and is excellent for building capital incrementally for a specific goal."
+  }
+]

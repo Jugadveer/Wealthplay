@@ -10,6 +10,7 @@ from django.utils import timezone
 from .models import Course, Topic, Lesson, MentorPersona
 from .serializers import CourseSerializer, TopicSerializer, LessonSerializer, MentorPersonaSerializer
 from .course_views import load_courses_data, get_course_detail, get_module_detail
+from .load_from_folders import load_courses_from_folders
 from users.models import UserProgress, UserProfile
 import json
 
@@ -42,38 +43,8 @@ class MentorPersonaViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = MentorPersonaSerializer
 
 
-# Page Views - Course listing page
-@login_required(login_url='/')
-def course_home(request):
-    """Course listing page with progress tracking"""
-    return render(request, 'courses/course_listing.html', {
-        'user': request.user
-    })
-
-
-@login_required(login_url='/')
-def course_detail(request, course_id=None):
-    """Course detail page - serves JSON-based course detail"""
-    if not course_id:
-        courses = load_courses_data()
-        if courses and len(courses) > 0:
-            course_id = courses[0]["id"]
-            return redirect(f'/course/{course_id}/')
-    
-    return render(request, 'courses/course_detail.html', {
-        'course_id': course_id,
-        'user': request.user
-    })
-
-
-@login_required(login_url='/')
-def lesson_detail(request, course_id, module_id):
-    """Lesson detail page - shows lesson content with Q&A and mentor chat"""
-    return render(request, 'courses/lesson_detail.html', {
-        'course_id': course_id,
-        'module_id': module_id,
-        'user': request.user
-    })
+# Page Views removed - React frontend handles all page rendering
+# All course pages are now served via React Router
 
 
 # API endpoints for course/lesson management
@@ -175,7 +146,10 @@ def start_lesson(request, course_id, module_id):
 @permission_classes([IsAuthenticated])
 def complete_lesson(request, course_id, module_id):
     """Mark lesson as completed, award XP, and unlock next lessons"""
-    courses = load_courses_data()
+    # Use folder-based loading first
+    courses = load_courses_from_folders()
+    if not courses:
+        courses = load_courses_data()
     course = next((c for c in courses if c.get('id') == course_id), None)
     
     if not course:
@@ -235,79 +209,132 @@ def complete_lesson(request, course_id, module_id):
 
 # Auth views
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_http_methods
 
-@csrf_exempt
+@api_view(['POST'])
+@permission_classes([AllowAny])
 def login_view(request):
     from django.contrib.auth import authenticate, login
     from django.http import JsonResponse
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        if not username or not password:
-            return JsonResponse({'success': False, 'error': 'Username and password are required'}, status=400)
-        user = authenticate(request, username=username, password=password)
-        if user:
-            login(request, user)
-            return JsonResponse({'success': True, 'redirect': '/'})
-        return JsonResponse({'success': False, 'error': 'Invalid credentials'}, status=401)
-    return JsonResponse({'success': False, 'error': 'Method not allowed'}, status=405)
+    import json
+    
+    # Try to get data from POST (FormData) first
+    username = request.POST.get('username')
+    password = request.POST.get('password')
+    
+    # If not in POST, try request.body (JSON)
+    if not username or not password:
+        try:
+            if hasattr(request, 'body') and request.body:
+                body_data = json.loads(request.body)
+                username = body_data.get('username') or username
+                password = body_data.get('password') or password
+        except (json.JSONDecodeError, AttributeError):
+            pass
+    
+    # Debug logging
+    print(f"Login attempt - Username: {username}, Password: {'***' if password else 'None'}")
+    print(f"POST data keys: {list(request.POST.keys())}")
+    print(f"Request content type: {request.content_type}")
+    
+    username = (username or '').strip()
+    password = password or ''
+    
+    if not username:
+        return JsonResponse({'success': False, 'error': 'Username is required'}, status=400)
+    if not password:
+        return JsonResponse({'success': False, 'error': 'Password is required'}, status=400)
+        
+    user = authenticate(request, username=username, password=password)
+    if user:
+        login(request, user)
+        # Login users always go to dashboard - onboarding is only for new signups
+        return JsonResponse({
+            'success': True, 
+            'redirect': '/dashboard',
+            'needs_onboarding': False
+        })
+    return JsonResponse({'success': False, 'error': 'Invalid credentials'}, status=401)
 
 
-@csrf_exempt
+@api_view(['POST'])
+@permission_classes([AllowAny])
 def signup_view(request):
     from django.contrib.auth.models import User
     from django.contrib.auth import login, authenticate
     from django.http import JsonResponse
-    if request.method == 'POST':
-        username = request.POST.get('username', '').strip()
-        email = request.POST.get('email', '').strip()
-        password = request.POST.get('password', '')
-        password2 = request.POST.get('password2', '')
-        
-        if not username or len(username) < 3:
-            return JsonResponse({'success': False, 'error': 'Username must be at least 3 characters'}, status=400)
-        
-        if User.objects.filter(username=username).exists():
-            return JsonResponse({'success': False, 'error': 'Username already exists'}, status=400)
-        
-        if not email:
-            return JsonResponse({'success': False, 'error': 'Email is required'}, status=400)
-        
-        if User.objects.filter(email=email).exists():
-            return JsonResponse({'success': False, 'error': 'Email already registered'}, status=400)
-        
-        if password != password2:
-            return JsonResponse({'success': False, 'error': 'Passwords do not match'}, status=400)
-        
-        if not password or len(password) < 6:
-            return JsonResponse({'success': False, 'error': 'Password must be at least 6 characters'}, status=400)
-        
+    import json
+    
+    # Try to get data from POST (FormData) first
+    username = request.POST.get('username', '').strip()
+    email = request.POST.get('email', '').strip()
+    password = request.POST.get('password', '')
+    password2 = request.POST.get('password2', '')
+    
+    # If not in POST, try request.body (JSON)
+    if not username or not email:
         try:
-            user = User.objects.create_user(username=username, email=email, password=password)
-            
-            # Create user profile
-            from users.models import UserProfile
-            UserProfile.objects.create(
-                user=user,
-                level='beginner',
-                xp=0,
-                onboarding_completed=False
-            )
-            
-            login(request, user)
-            return JsonResponse({
-                'success': True, 
-                'redirect': '/',
-                'needs_onboarding': True  # Signal that onboarding should be shown
-            })
-        except Exception as e:
-            return JsonResponse({'success': False, 'error': str(e)}, status=500)
-    return JsonResponse({'success': False, 'error': 'Method not allowed'}, status=405)
+            if hasattr(request, 'body') and request.body:
+                body_data = json.loads(request.body)
+                username = (body_data.get('username') or username).strip()
+                email = (body_data.get('email') or email).strip()
+                password = body_data.get('password') or password
+                password2 = body_data.get('password2') or password2
+        except (json.JSONDecodeError, AttributeError):
+            pass
+    
+    # Debug logging
+    print(f"Signup attempt - Username: {username}, Email: {email}, Password: {'***' if password else 'None'}")
+    print(f"POST data keys: {list(request.POST.keys())}")
+    print(f"Request content type: {request.content_type}")
+    
+    if not username or len(username) < 3:
+        return JsonResponse({'success': False, 'error': 'Username must be at least 3 characters'}, status=400)
+    
+    if User.objects.filter(username=username).exists():
+        return JsonResponse({'success': False, 'error': 'Username already exists'}, status=400)
+    
+    if not email:
+        return JsonResponse({'success': False, 'error': 'Email is required'}, status=400)
+    
+    if User.objects.filter(email=email).exists():
+        return JsonResponse({'success': False, 'error': 'Email already registered'}, status=400)
+    
+    if password != password2:
+        return JsonResponse({'success': False, 'error': 'Passwords do not match'}, status=400)
+    
+    if not password or len(password) < 6:
+        return JsonResponse({'success': False, 'error': 'Password must be at least 6 characters'}, status=400)
+    
+    try:
+        user = User.objects.create_user(username=username, email=email, password=password)
+        
+        # Create user profile
+        from users.models import UserProfile
+        UserProfile.objects.create(
+            user=user,
+            level='beginner',
+            xp=0,
+            onboarding_completed=False
+        )
+        
+        login(request, user)
+        return JsonResponse({
+            'success': True, 
+            'redirect': '/onboarding',
+            'needs_onboarding': True  # Signal that onboarding should be shown
+        })
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)}, status=500)
 
 
+@api_view(['POST'])
+@permission_classes([AllowAny])
 def logout_view(request):
     from django.contrib.auth import logout
-    if request.method == 'POST':
-        logout(request)
-        return redirect('/')
-    return redirect('/')
+    from django.http import JsonResponse
+    
+    logout(request)
+    
+    # Return JSON for AJAX requests (React)
+    return JsonResponse({'success': True})

@@ -1,1 +1,47 @@
-[]
+[
+  {
+    "id": 604,
+    "question": "The professional who manages the assets and makes investment decisions within a Mutual Fund is called the:",
+    "options": [
+      "Stock Broker.",
+      "Underwriter.",
+      "Fund Manager.",
+      "Portfolio Analyst."
+    ],
+    "correct_answer": "Fund Manager.",
+    "ai_feedback": {
+      "correct": "You are absolutely correct! The Fund Manager is the expert who implements the fund's strategy.",
+      "incorrect": "Incorrect. Mutual Funds are run by a dedicated Fund Manager who researches and selects the investments on behalf of the investors."
+    }
+  },
+  {
+    "id": 605,
+    "question": "How is the Net Asset Value (NAV) of a mutual fund calculated?",
+    "options": [
+      "Based on the last traded price of the biggest stock it holds.",
+      "Total Assets minus Liabilities, divided by total units.",
+      "Total money collected in the last month.",
+      "Fixed by the government regulator."
+    ],
+    "correct_answer": "Total Assets minus Liabilities, divided by total units.",
+    "ai_feedback": {
+      "correct": "Nice one! NAV is the true measure of the fund's per-unit worth, calculated daily.",
+      "incorrect": "The NAV represents the fund's book value. It's calculated by taking the total value of the assets, subtracting any debts, and dividing by the total number of units held by investors."
+    }
+  },
+  {
+    "id": 606,
+    "question": "A key advantage of a mutual fund for a beginner investor is immediate:",
+    "options": [
+      "Guaranteed returns.",
+      "Tax deduction.",
+      "Diversification.",
+      "High liquidity."
+    ],
+    "correct_answer": "Diversification.",
+    "ai_feedback": {
+      "correct": "Exactly! A single purchase instantly diversifies your money across many assets, greatly reducing unsystematic risk.",
+      "incorrect": "The biggest immediate benefit is diversification. Since the fund holds many stocks/bonds, your money is instantly spread out, reducing risk."
+    }
+  }
+]

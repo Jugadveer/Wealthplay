@@ -1,1 +1,47 @@
-[]
+[
+  {
+    "id": 104,
+    "question": "In a barter system, trade requires the mutual possession of desired goods, a concept known as:",
+    "options": [
+      "Price Discovery",
+      "Coincident Trade Exchange",
+      "Double Coincidence of Wants",
+      "Liquid Asset Requirement"
+    ],
+    "correct_answer": "Double Coincidence of Wants",
+    "ai_feedback": {
+      "correct": "Nice, good job! A double coincidence of wants is the main challenge of a barter system, which money elegantly solves.",
+      "incorrect": "Not quite. A barter system's main challenge is the 'Double Coincidence of Wants'—you both need to want what the other has. Money acts as a universal medium to fix this."
+    }
+  },
+  {
+    "id": 105,
+    "question": "Which quality of money is primarily challenged by high inflation rates?",
+    "options": [
+      "Portability",
+      "Unit of Account",
+      "Medium of Exchange",
+      "Store of Value"
+    ],
+    "correct_answer": "Store of Value",
+    "ai_feedback": {
+      "correct": "That's right! When prices rise, the value stored in cash decreases, challenging its Store of Value function.",
+      "incorrect": "Try again. Inflation, or the rising cost of goods, directly reduces what money can buy in the future, thus eroding its ability to function as a Store of Value."
+    }
+  },
+  {
+    "id": 106,
+    "question": "Which of the following is NOT a primary function of money?",
+    "options": [
+      "A measure of value (Unit of Account)",
+      "A medium of exchange",
+      "A generator of interest (Source of Return)",
+      "A store of value"
+    ],
+    "correct_answer": "A generator of interest (Source of Return)",
+    "ai_feedback": {
+      "correct": "Exactly! Money itself does not generate returns; that's the job of investments. The three core functions are Unit of Account, Medium of Exchange, and Store of Value.",
+      "incorrect": "Incorrect. The three core functions are Medium of Exchange, Unit of Account, and Store of Value. Generating interest is a characteristic of investments, not money itself."
+    }
+  }
+]

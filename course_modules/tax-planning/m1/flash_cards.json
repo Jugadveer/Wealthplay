@@ -1,1 +1,20 @@
-[]
+[
+  {
+    "id": 1301,
+    "topic": "Capital Gains Basics",
+    "theory_title": "Tax on Investment Profit",
+    "theory_content": "A **Capital Gain** is the profit you make from selling an investment (stock, house, fund) for more than you paid for it. This profit is subject to tax. Gains are typically classified as **Short-Term** (held for less than 1 year) or **Long-Term** (held for more than 1 year), with long-term gains usually taxed at a lower rate to incentivize holding periods."
+  },
+  {
+    "id": 1302,
+    "topic": "Tax-Advantaged Accounts",
+    "theory_title": "Shielding Your Growth",
+    "theory_content": "Many governments offer special tax-advantaged accounts (e.g., EPF, PPF, NPS, or Roth/Traditional IRAs in the US) that allow your investments to grow tax-deferred or tax-free. Maxing out these accounts is the cornerstone of tax-efficient investing."
+  },
+  {
+    "id": 1303,
+    "topic": "Tax Harvesting",
+    "theory_title": "Reducing Your Bill",
+    "theory_content": "Capital Loss Harvesting is the strategy of selling investments that have lost value to 'realize' the loss, which can then be used to offset taxable capital gains realized elsewhere in your portfolio, reducing your total tax bill."
+  }
+]

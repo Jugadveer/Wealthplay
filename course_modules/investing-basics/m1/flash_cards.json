@@ -1,1 +1,20 @@
-[]
+[
+  {
+    "id": 401,
+    "topic": "The Inflation Trap",
+    "theory_title": "Why Saving Isn't Enough",
+    "theory_content": "Saving is essential, but keeping all your money in a traditional savings account is a losing strategy due to **Inflation**. If your savings interest rate is 2% and inflation is 5%, your money is losing 3% of its real value every year. [Image of inflation chart showing price of an item increasing over 20 years]"
+  },
+  {
+    "id": 402,
+    "topic": "Investing Defined",
+    "theory_title": "Putting Money to Work",
+    "theory_content": "Investing is the act of allocating capital to an asset (stocks, bonds, real estate) with the expectation of generating a profit or return over time. The primary goal is to have your money **grow faster than the rate of inflation**."
+  },
+  {
+    "id": 403,
+    "topic": "Opportunity Cost",
+    "theory_title": "The Cost of Inaction",
+    "theory_content": "The **Opportunity Cost** of saving instead of investing is the potential growth you miss out on. By holding large sums in low-yield accounts, you miss the opportunity for those funds to benefit from long-term market growth."
+  }
+]

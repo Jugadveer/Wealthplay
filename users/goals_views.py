@@ -35,14 +35,24 @@ def create_goal(request):
     try:
         data = json.loads(request.body)
         
+        # Validate required fields
+        if not data.get('name'):
+            return JsonResponse({'success': False, 'error': 'Goal name is required'}, status=400)
+        if not data.get('target_amount'):
+            return JsonResponse({'success': False, 'error': 'Target amount is required'}, status=400)
+        if not data.get('monthly_sip'):
+            return JsonResponse({'success': False, 'error': 'Monthly SIP is required'}, status=400)
+        if not data.get('time_to_goal'):
+            return JsonResponse({'success': False, 'error': 'Time to goal is required'}, status=400)
+        
         goal = FinancialGoal.objects.create(
             user=request.user,
             name=data.get('name'),
             icon=data.get('icon', 'wallet'),
-            target_amount=data.get('target_amount'),
-            current_amount=data.get('current_amount', 0),
-            monthly_sip=data.get('monthly_sip'),
-            time_to_goal_months=data.get('time_to_goal'),
+            target_amount=float(data.get('target_amount')),
+            current_amount=float(data.get('current_amount', 0)),
+            monthly_sip=float(data.get('monthly_sip')),
+            time_to_goal_months=int(data.get('time_to_goal')),
             color=data.get('color', 'from-brand-primary to-orange-500'),
             icon_bg=data.get('icon_bg', 'bg-brand-50 text-brand-600'),
         )
@@ -63,8 +73,11 @@ def create_goal(request):
                 'remaining_amount': float(goal.remaining_amount),
             }
         })
+    except json.JSONDecodeError:
+        return JsonResponse({'success': False, 'error': 'Invalid JSON data'}, status=400)
     except Exception as e:
-        return JsonResponse({'success': False, 'error': str(e)}, status=400)
+        import traceback
+        return JsonResponse({'success': False, 'error': str(e), 'traceback': traceback.format_exc()}, status=400)
 
 
 @csrf_exempt

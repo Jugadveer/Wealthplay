@@ -1,1 +1,20 @@
-[]
+[
+  {
+    "id": 2001,
+    "topic": "Cryptocurrency Defined",
+    "theory_title": "Digital, Decentralized Currency",
+    "theory_content": "A **Cryptocurrency** is a digital or virtual currency secured by cryptography, making it nearly impossible to counterfeit. It is typically decentralized, meaning it is not subject to government or bank control. Bitcoin and Ethereum are the most well-known examples."
+  },
+  {
+    "id": 2002,
+    "topic": "Blockchain Basics",
+    "theory_title": "The Distributed Ledger",
+    "theory_content": "The **Blockchain** is the underlying technology of most cryptocurrencies. It is a decentralized, distributed, and immutable digital public ledger that records transactions across many computers, making the data highly transparent and tamper-proof. "
+  },
+  {
+    "id": 2003,
+    "topic": "The Volatility Risk",
+    "theory_title": "High Risk, High Volatility",
+    "theory_content": "Cryptocurrency is highly speculative and subject to extreme price volatility. This is due to its high novelty, lack of regulatory oversight, and dependency on public sentiment. It should only be a small, speculative portion of a well-diversified portfolio."
+  }
+]

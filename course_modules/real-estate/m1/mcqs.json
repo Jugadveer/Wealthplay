@@ -1,1 +1,47 @@
-[]
+[
+  {
+    "id": 1904,
+    "question": "Which investment product allows an investor to gain liquid, diversified exposure to commercial real estate?",
+    "options": [
+      "Individual Corporate Bond.",
+      "REIT (Real Estate Investment Trust).",
+      "Fixed Deposit.",
+      "Commodities Future."
+    ],
+    "correct_answer": "REIT (Real Estate Investment Trust).",
+    "ai_feedback": {
+      "correct": "That's right! REITs are bought and sold on the stock market, providing the liquidity that physical real estate lacks.",
+      "incorrect": "REITs are the primary liquid vehicle for real estate exposure. They trade like a stock but hold income-producing property."
+    }
+  },
+  {
+    "id": 1905,
+    "question": "The use of a mortgage to purchase a property is an example of:",
+    "options": [
+      "Diversification.",
+      "Liquidity.",
+      "Positive Leverage.",
+      "Negative Correlation."
+    ],
+    "correct_answer": "Positive Leverage.",
+    "ai_feedback": {
+      "correct": "You got it! Leverage allows you to control a high-value asset with a small down payment, magnifying potential gains.",
+      "incorrect": "A mortgage is debt used to amplify returns. This is called leverage in finance."
+    }
+  },
+  {
+    "id": 1906,
+    "question": "The primary risk of physical real estate compared to a stock is:",
+    "options": [
+      "High liquidity.",
+      "High illiquidity.",
+      "Zero maintenance costs.",
+      "Guaranteed appreciation."
+    ],
+    "correct_answer": "High illiquidity.",
+    "ai_feedback": {
+      "correct": "Correct! It can take months or years to sell property, unlike stocks, making it highly illiquid.",
+      "incorrect": "Illiquidity is the biggest drawback. If you need cash quickly, you cannot sell a house in a day."
+    }
+  }
+]

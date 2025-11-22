@@ -1,10 +1,20 @@
 [
   {
-    "question": "What is compound interest?",
-    "answer": "Compound interest is interest on interest — your debt or investment grows faster when interest accumulates on previously earned interest."
+    "id": 1107,
+    "question": "What is 'Credit Utilization Ratio' and why should I keep it low?",
+    "answer": "It is the amount of credit you are using divided by your total available credit limit (e.g., if you have a $\text{₹}1,00,000$ limit and use $\text{₹}30,000$, your ratio is $30%$). You should keep it below $30%$ (ideally below $10%$) because a high ratio signals to lenders that you are heavily reliant on credit and may be a risk.",
+    "explanation": "A low ratio is the financial equivalent of wearing a clean shirt—it makes you look responsible to lenders."
   },
   {
-    "question": "How does credit card use affect score?",
-    "answer": "Timely payments and low utilization help. Maxing out a card or missing payments hurts your credit score."
+    "id": 1108,
+    "question": "Should I pay off all my debt before I start investing?",
+    "answer": "Prioritize paying off 'bad debt' (high-interest debt like credit cards or payday loans) first, as their guaranteed interest cost usually exceeds any potential investment return. For 'good debt' (low-interest debt like a mortgage or student loan), you should pay the minimum and invest the rest to achieve a higher net return.",
+    "explanation": "If the debt interest rate is higher than your expected investment return, pay the debt first."
+  },
+  {
+    "id": 1109,
+    "question": "How long does a negative item (like a missed payment) stay on my credit report?",
+    "answer": "A missed payment or default typically stays on your credit report for 7 to 10 years, severely impacting your score and ability to borrow during that time.",
+    "explanation": "Your payment history has a long memory. This is why consistent, timely payments are paramount for credit health."
   }
 ]

@@ -1,10 +1,20 @@
 [
   {
-    "question": "What is a mutual fund?",
-    "answer": "A mutual fund pools money from many investors to buy a diversified portfolio of stocks, bonds, or other assets. It's managed by professional fund managers."
+    "id": 607,
+    "question": "What is the difference between an Active Fund and a Passive Fund?",
+    "answer": "An Active Fund tries to *beat* the market by having a manager select specific stocks (often high fees). A Passive Fund (or Index Fund) simply tracks a market index (like the S&P 500) and usually has lower fees.",
+    "explanation": "Active funds aim for outperformance, passive funds aim to match the market performance at the lowest possible cost."
   },
   {
-    "question": "Why invest in mutual funds instead of individual stocks?",
-    "answer": "Mutual funds provide instant diversification, professional management, and lower risk than picking individual stocks. They're ideal for beginners who want exposure to markets without stock-picking expertise."
+    "id": 608,
+    "question": "Why do mutual funds charge an Expense Ratio?",
+    "answer": "The Expense Ratio is the annual fee charged by the fund to cover management fees, administrative costs, and marketing expenses. This fee is automatically deducted from the fund's total assets.",
+    "explanation": "The expense ratio is the price you pay for professional management and administration. Lower is generally better."
+  },
+  {
+    "id": 609,
+    "question": "If the NAV of a fund is ₹100 and you invest ₹10,000, how many units do you get?",
+    "answer": "You get 100 units ($\text{Investment} / \text{NAV} = \text{Units}$, so $\text{₹}10,000 / \text{₹}100 = 100 \text{ units}$).",
+    "explanation": "This simple calculation shows how the total value of your investment is translated into ownership units of the fund."
   }
 ]

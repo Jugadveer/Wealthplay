@@ -1,0 +1,20 @@
+[
+  {
+    "id": 701,
+    "topic": "Diversification Principle",
+    "theory_title": "The Only Free Lunch in Finance",
+    "theory_content": "Diversification is the strategy of spreading your investments across different assets, sectors, and geographical regions. The goal is to reduce **unsystematic risk** (company-specific risk). The principle is: when one investment performs poorly, another performs well, balancing out the portfolio's overall returns. "
+  },
+  {
+    "id": 702,
+    "topic": "Asset Allocation",
+    "theory_title": "The Mix of Investments",
+    "theory_content": "Asset allocation is the process of deciding the optimal mix of different asset classes (e.g., 60% Stocks, 30% Bonds, 10% Cash) based on your risk tolerance and time horizon. This decision is responsible for approximately $90%$ of a portfolio's long-term returns and risk profile."
+  },
+  {
+    "id": 703,
+    "topic": "Systematic vs. Unsystematic Risk",
+    "theory_title": "Controllable vs. Uncontrollable",
+    "theory_content": "**Unsystematic Risk** (or Idiosyncratic Risk) is specific to a company or industry (e.g., a CEO resigns). This risk **can be reduced** through diversification. **Systematic Risk** (or Market Risk) is the risk inherent to the entire market (e.g., an economic recession). This risk **cannot be reduced** through diversification."
+  }
+]

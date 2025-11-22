@@ -1,1 +1,47 @@
-[]
+[
+  {
+    "id": 404,
+    "question": "Which statement best describes the difference between saving and investing?",
+    "options": [
+      "Saving is high-risk, investing is low-risk.",
+      "Saving is for long-term goals, investing is for short-term goals.",
+      "Saving is placing funds in liquid accounts, investing is allocating funds to growth assets.",
+      "Saving always beats inflation, investing rarely does."
+    ],
+    "correct_answer": "Saving is placing funds in liquid accounts, investing is allocating funds to growth assets.",
+    "ai_feedback": {
+      "correct": "Perfect! Saving is for safety and liquidity; investing is for long-term growth and capital appreciation.",
+      "incorrect": "Remember, saving prioritizes security and liquidity for short-term needs, while investing targets long-term growth by taking calculated risks."
+    }
+  },
+  {
+    "id": 405,
+    "question": "What is the term for the decrease in the value of money over time?",
+    "options": [
+      "Deflation",
+      "Compounding",
+      "Interest",
+      "Inflation"
+    ],
+    "correct_answer": "Inflation",
+    "ai_feedback": {
+      "correct": "That's right! Inflation is the single biggest threat to long-term savings.",
+      "incorrect": "Incorrect. Inflation is the general rise in prices, which makes your money worth less over time."
+    }
+  },
+  {
+    "id": 406,
+    "question": "For which financial goal is saving typically the most appropriate strategy?",
+    "options": [
+      "Retirement funding (30 years away).",
+      "Buying a house (15 years away).",
+      "Funding an emergency fund (0-1 year horizon).",
+      "Child's education fund (20 years away)."
+    ],
+    "correct_answer": "Funding an emergency fund (0-1 year horizon).",
+    "ai_feedback": {
+      "correct": "Spot on! The emergency fund needs to be instantly accessible and safe, making savings accounts the best tool.",
+      "incorrect": "Long-term goals like retirement and education require growth to beat inflation. Saving is only appropriate for short-term, high-priority needs like an emergency fund."
+    }
+  }
+]

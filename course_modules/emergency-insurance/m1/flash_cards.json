@@ -1,1 +1,20 @@
-[]
+[
+  {
+    "id": 801,
+    "topic": "Emergency Fund Goal",
+    "theory_title": "The Financial Safety Net",
+    "theory_content": "An **Emergency Fund** is a readily available pool of cash intended to cover 3 to 6 months of essential living expenses (rent, groceries, utilities). Its sole purpose is to protect you from high-interest debt (like credit cards or loans) when unexpected events occur (job loss, medical emergency, car repair)."
+  },
+  {
+    "id": 802,
+    "topic": "Liquidity is King",
+    "theory_title": "Where to Store the Fund",
+    "theory_content": "The fund must be held in accounts that are highly **liquid** (easily and instantly accessible), such as a high-yield savings account or a Fixed Deposit with a flexible withdrawal option. It should **NOT** be invested in volatile assets like stocks or mutual funds."
+  },
+  {
+    "id": 803,
+    "topic": "Insurance Basics",
+    "theory_title": "Risk Transfer",
+    "theory_content": "Insurance is a mechanism to **transfer risk**. By paying a small, predictable premium (cost) regularly, you transfer the financial risk of a catastrophic loss (like hospitalization or death) to an insurance company. The two most essential types are Health Insurance and Term Life Insurance."
+  }
+]

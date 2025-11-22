@@ -1,10 +1,20 @@
 [
   {
-    "question": "What is investing?",
-    "answer": "Investing means putting your money into assets like stocks, bonds, or mutual funds that have the potential to grow over time, helping you build wealth beyond what savings accounts offer."
+    "id": 407,
+    "question": "What does it mean to calculate your 'real' return on savings?",
+    "answer": "Real return is the nominal (stated) rate of return on an asset minus the rate of inflation. For example, if your savings account gives 3% interest (nominal return) but inflation is 4%, your real return is -1%.",
+    "explanation": "Real return shows you the actual increase in your purchasing power after accounting for the silent tax of inflation."
   },
   {
-    "question": "Why should I invest instead of just saving?",
-    "answer": "While saving keeps your money safe, investing helps it grow. Over time, even small investments can grow significantly due to compound interest, helping you beat inflation and build wealth."
+    "id": 408,
+    "question": "If investing involves risk, why is it still recommended for long-term goals like retirement?",
+    "answer": "For goals 10+ years away, the risk of *not* investing (i.e., the risk of inflation) often outweighs the short-term volatility risk of the market. Historically, equities provide the necessary growth to outpace inflation.",
+    "explanation": "The greatest long-term risk isn't market volatility; it's the certainty that inflation will erode your money if it doesn't grow."
+  },
+  {
+    "id": 409,
+    "question": "Can I use my savings account to invest?",
+    "answer": "No. A savings account is a place to hold cash, not an investment instrument. To invest, you must move the money from your savings account into a brokerage account, which then allows you to purchase investment assets like stocks, bonds, or mutual funds.",
+    "explanation": "You need a brokerage account (or Demat account) to participate in the actual capital markets and buy assets."
   }
 ]

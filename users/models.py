@@ -70,9 +70,9 @@ class UserProfile(models.Model):
 
     def calculate_level_from_xp(self):
         """Calculate level based on XP"""
-        if self.xp < 200:
+        if self.xp < 750:
             return 'beginner'
-        elif self.xp < 500:
+        elif self.xp < 1200:
             return 'intermediate'
         else:
             return 'advanced'
@@ -104,6 +104,10 @@ class UserProgress(models.Model):
     completed_at = models.DateTimeField(null=True, blank=True)
     last_accessed = models.DateTimeField(auto_now=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    
+    # Progress tracking fields
+    flashcards_flipped = models.JSONField(default=list, blank=True)  # List of flashcard IDs that have been flipped
+    mcqs_progress = models.JSONField(default=dict, blank=True)  # {mcq_id: {answered: bool, correct: bool, attempts: int}}
 
     class Meta:
         unique_together = [

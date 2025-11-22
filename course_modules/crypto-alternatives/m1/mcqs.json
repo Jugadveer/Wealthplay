@@ -1,1 +1,47 @@
-[]
+[
+  {
+    "id": 2004,
+    "question": "The underlying technology that records and secures transactions for most cryptocurrencies is called the:",
+    "options": [
+      "Stock Exchange.",
+      "Fiat System.",
+      "Central Bank Ledger.",
+      "Blockchain."
+    ],
+    "correct_answer": "Blockchain.",
+    "ai_feedback": {
+      "correct": "You got it! The Blockchain is the distributed ledger that validates and secures all transactions.",
+      "incorrect": "The Blockchain is the fundamental technology. It is a decentralized public ledger that ensures all transactions are transparent and tamper-proof."
+    }
+  },
+  {
+    "id": 2005,
+    "question": "Cryptocurrency is generally considered decentralized because:",
+    "options": [
+      "It is traded only in specific countries.",
+      "It is controlled by a single government body.",
+      "It operates without a central authority (like a bank or government).",
+      "It is backed by physical gold reserves."
+    ],
+    "correct_answer": "It operates without a central authority (like a bank or government).",
+    "ai_feedback": {
+      "correct": "Correct! Decentralization means control is distributed across the network, eliminating the need for a central intermediary.",
+      "incorrect": "Decentralization means no central control. It operates through a distributed network of users rather than a single bank or government."
+    }
+  },
+  {
+    "id": 2006,
+    "question": "For a typical retirement investor, cryptocurrency should be viewed as a tool for:",
+    "options": [
+      "Core savings due to low risk.",
+      "Liquidity management.",
+      "Long-term guaranteed income.",
+      "A small, high-risk speculative allocation."
+    ],
+    "correct_answer": "A small, high-risk speculative allocation.",
+    "ai_feedback": {
+      "correct": "Exactly! Due to its extreme volatility, it should never be a core component of a standard portfolio.",
+      "incorrect": "Cryptocurrency's high volatility means it belongs in the speculative category, constituting a very small portion of a total portfolio."
+    }
+  }
+]

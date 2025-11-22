@@ -1,0 +1,20 @@
+[
+  {
+    "id": 707,
+    "question": "What is negative correlation, and why is it desirable for diversification?",
+    "answer": "Negative correlation means two assets tend to move in opposite directions (e.g., when stocks go up, bonds go down). This is desirable because it means the portfolio experiences less volatility—one asset's loss is offset by the other's gain.",
+    "explanation": "Assets that zig when others zag provide a smoothing effect, which is the whole point of diversification."
+  },
+  {
+    "id": 708,
+    "question": "Can diversification guarantee a profit?",
+    "answer": "No. Diversification can reduce the *risk* of a large loss from any single investment, but it cannot guarantee a profit or protect against systematic (market-wide) losses like a recession.",
+    "explanation": "Diversification is risk management, not profit generation. It makes the ride smoother but doesn't change the destination of the entire market."
+  },
+  {
+    "id": 709,
+    "question": "What is the most common example of asset classes used for diversification?",
+    "answer": "The most common asset classes for diversification are **Equities (Stocks)**, **Fixed Income (Bonds)**, and **Cash/Cash Equivalents**.",
+    "explanation": "These three asset classes form the foundation of almost all basic diversified investment portfolios."
+  }
+]

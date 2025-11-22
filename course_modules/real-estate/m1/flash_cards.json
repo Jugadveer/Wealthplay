@@ -1,1 +1,20 @@
-[]
+[
+  {
+    "id": 1901,
+    "topic": "Buy vs. Rent",
+    "theory_title": "Lifestyle and Financial Decisions",
+    "theory_content": "The decision to **buy** vs. **rent** is complex. Buying offers potential appreciation and tax benefits but requires high upfront capital and comes with maintenance costs and low liquidity. Renting offers flexibility, lower commitment, and capital that can be invested elsewhere."
+  },
+  {
+    "id": 1902,
+    "topic": "REITs Defined",
+    "theory_title": "Real Estate Investment Trusts",
+    "theory_content": "A **REIT** (Real Estate Investment Trust) is a company that owns or finances income-producing real estate. They trade on stock exchanges like stocks, providing a liquid way for investors to participate in the real estate market without actually buying property. REITs are often required to distribute $90%$ of their taxable income as dividends."
+  },
+  {
+    "id": 1903,
+    "topic": "Leverage and Illiquidity",
+    "theory_title": "Key Real Estate Characteristics",
+    "theory_content": "Real estate is characterized by high **leverage** (using debt/mortgage to control a large asset) which magnifies returns, and high **illiquidity** (it takes months to sell). These factors make it a high-commitment investment."
+  }
+]

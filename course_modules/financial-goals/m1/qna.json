@@ -1,10 +1,20 @@
 [
   {
-    "question": "How do I set financial goals?",
-    "answer": "Use SMART framework: Specific, Measurable, Achievable, Relevant, Time-bound. Start with short-term goals and build to long-term."
+    "id": 907,
+    "question": "How does your time horizon affect your investment choices for a goal?",
+    "answer": "A shorter time horizon requires less volatile assets (e.g., bonds, FDs) because there isn't enough time to recover from a market crash. A longer time horizon allows for more volatile, growth-focused assets (e.g., stocks) to maximize compounding.",
+    "explanation": "Safety for short-term, growth for long-term. Always match the asset's risk to the goal's timeline."
   },
   {
-    "question": "What goals should I prioritize?",
-    "answer": "Emergency fund first, then high-interest debt payoff, followed by retirement savings, then other goals like buying a home."
+    "id": 908,
+    "question": "Give an example of turning a vague goal into a S.M.A.R.T. goal.",
+    "answer": "Vague: 'I want to buy a new car.' S.M.A.R.T.: 'I will save $\text{₹}5,00,000$ for a car down payment by depositing $\text{₹}20,000$ per month into a separate account, completing the goal by March 2028.'",
+    "explanation": "Notice the S.M.A.R.T. goal includes the amount (M), the deadline (T), and the required action (A)."
+  },
+  {
+    "id": 909,
+    "question": "Why is the 'Achievable' component of S.M.A.R.T. goals important?",
+    "answer": "If a goal is not Achievable (e.g., saving $\text{₹}1 \text{ Crore}$ in one year on a $\text{₹}50,000$ salary), you will likely become frustrated, lose motivation, and abandon the entire plan. Achievable goals promote consistency and success.",
+    "explanation": "Setting realistic goals prevents burnout and ensures you stay motivated on your financial journey."
   }
 ]

@@ -5,7 +5,7 @@ from .models import UserProgress, QuizAttempt, UserProfile, DemoPortfolio
 class UserProgressSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProgress
-        fields = ['id', 'user', 'course_id', 'module_id', 'status', 'progress_percent', 'xp_awarded', 'started_at', 'completed_at', 'last_accessed']
+        fields = ['id', 'user', 'course_id', 'module_id', 'status', 'progress_percent', 'xp_awarded', 'started_at', 'completed_at', 'last_accessed', 'flashcards_flipped', 'mcqs_progress']
 
 
 class QuizAttemptSerializer(serializers.ModelSerializer):

@@ -1,1 +1,20 @@
-[]
+[
+  {
+    "id": 1601,
+    "topic": "Confirmation Bias",
+    "theory_title": "Seeking Out Agreement",
+    "theory_content": "This is the tendency to seek out, interpret, and favor information that confirms your existing beliefs while ignoring contradictory evidence. In investing, it leads to only reading bullish articles about a stock you already own, preventing you from seeing legitimate risks."
+  },
+  {
+    "id": 1602,
+    "topic": "Loss Aversion",
+    "theory_title": "The Pain of Losing",
+    "theory_content": "Loss Aversion is the psychological tendency to feel the pain of a loss approximately twice as powerfully as the pleasure of an equivalent gain. This bias often causes investors to hold onto 'losing' investments too long (hoping to break even) and sell 'winning' investments too soon (to secure the profit)."
+  },
+  {
+    "id": 1603,
+    "topic": "Anchoring",
+    "theory_title": "Sticking to the First Price",
+    "theory_content": "Anchoring is the bias where investors rely too heavily on the first piece of information offered (the 'anchor') when making decisions. For example, an investor holds a stock because they 'anchored' its value to the high price they initially paid for it, ignoring its current lower market value."
+  }
+]

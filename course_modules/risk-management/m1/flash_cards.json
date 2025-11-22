@@ -1,1 +1,20 @@
-[]
+[
+  {
+    "id": 1801,
+    "topic": "Inflation Risk",
+    "theory_title": "Erosion of Purchasing Power",
+    "theory_content": "The risk that the returns on an investment will be eroded by inflation, meaning the investment's value hasn't grown fast enough to keep up with rising prices. This is why low-interest savings accounts carry a high inflation risk for long-term goals."
+  },
+  {
+    "id": 1802,
+    "topic": "Credit Risk",
+    "theory_title": "Default by Borrower",
+    "theory_content": "**Credit Risk** is the risk that a bond issuer or loan borrower (a company or government) will default on its debt obligation by failing to make interest payments or repaying the principal. It is the main risk in bond investing."
+  },
+  {
+    "id": 1803,
+    "topic": "Mitigation: Stop-Loss Orders",
+    "theory_title": "Automated Loss Protection",
+    "theory_content": "A **Stop-Loss Order** is an order placed with a broker to automatically sell a security when it reaches a certain price. It is a critical tool for risk management, designed to limit an investor's loss on a security position if the price falls, overriding emotional biases."
+  }
+]

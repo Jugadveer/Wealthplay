@@ -1,10 +1,20 @@
 [
   {
-    "question": "What is 50/30/20?",
-    "answer": "A simple rule: 50% needs, 30% wants, 20% savings/debt repayment. Use it as a starting point and tweak by personal goals."
+    "id": 207,
+    "question": "How do you apply the S.M.A.R.T. criteria to financial goal setting?",
+    "answer": "S.M.A.R.T. stands for Specific, Measurable, Achievable, Relevant, and Time-bound. For example, instead of saying 'Save more money,' a S.M.A.R.T. goal is: 'Save $5,000 for a down payment by December 31, 2026, by setting aside $200 per month.'",
+    "explanation": "Using S.M.A.R.T. makes your goals actionable and trackable, dramatically increasing your chances of success. It turns a dream into a plan."
   },
   {
-    "question": "How big should an emergency fund be?",
-    "answer": "Aim for 3–6 months of essential expenses. Start with a small target (₹5,000–₹10,000) and grow it steadily."
+    "id": 208,
+    "question": "If my 'Needs' (50%) category consistently exceeds 50% of my income, what should I do?",
+    "answer": "If your needs exceed 50%, your budget is unbalanced. You need to either increase your income or reduce your cost of living. Focus first on high-cost needs like housing and transportation, as these offer the biggest opportunities for cuts (e.g., finding a cheaper apartment or reducing car reliance).",
+    "explanation": "If your needs are too high, you have no financial margin. Reducing 'Needs' is a priority before cutting 'Wants' entirely."
+  },
+  {
+    "id": 209,
+    "question": "What is the difference between saving and investing within the 20% category?",
+    "answer": "Saving involves setting aside money in highly liquid, low-risk accounts (like a high-yield savings account or Fixed Deposit) for short-term goals or emergencies. Investing involves placing money into assets (stocks, mutual funds) with the expectation of higher growth over the long term, accepting greater risk for greater potential returns.",
+    "explanation": "Saving is for safety and liquidity; investing is for growth and beating inflation over time. Both are critical parts of the 20%."
   }
 ]

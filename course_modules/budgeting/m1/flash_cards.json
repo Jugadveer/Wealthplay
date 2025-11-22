@@ -1,1 +1,20 @@
-[]
+[
+  {
+    "id": 201,
+    "topic": "The 50/30/20 Rule",
+    "theory_title": "A Simple Allocation Framework",
+    "theory_content": "The 50/30/20 rule dictates how to divide your **after-tax income** into three main categories: 50% for Needs, 30% for Wants, and 20% for Savings and Investments. It balances essential spending with lifestyle choices and future security."
+  },
+  {
+    "id": 202,
+    "topic": "Needs vs. Wants",
+    "theory_title": "Categorizing Expenses",
+    "theory_content": "The 50% category is for **Needs** (rent, utilities, basic groceries). The 30% category is for **Wants** (dining out, streaming services, hobbies). Correctly categorizing these is key to making the 50/30/20 rule work."
+  },
+  {
+    "id": 203,
+    "topic": "Automating the 20%",
+    "theory_title": "Savings and Investment Priority",
+    "theory_content": "The 20% must be dedicated to **Savings and Investments** (emergency fund, retirement, debt payoff). The best strategy is to 'pay yourself first' by setting up automatic transfers immediately after payday to ensure consistent progress."
+  }
+]

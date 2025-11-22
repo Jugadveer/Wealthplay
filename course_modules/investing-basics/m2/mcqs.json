@@ -1,1 +1,47 @@
-[]
+[
+  {
+    "id": 413,
+    "question": "According to the Risk-Return Trade-off, if an investment has a very high potential return, it likely also has a:",
+    "options": [
+      "Very short time horizon.",
+      "Very low liquidity.",
+      "Very low risk of loss.",
+      "Very high risk of loss."
+    ],
+    "correct_answer": "Very high risk of loss.",
+    "ai_feedback": {
+      "correct": "Excellent! Higher returns always come hand-in-hand with higher risk and volatility.",
+      "incorrect": "Remember the fundamental trade-off: to earn more, you must be willing to risk more. High potential return means high potential risk."
+    }
+  },
+  {
+    "id": 414,
+    "question": "For a 25-year-old saving for retirement at age 60, which factor is most beneficial in allowing them to accept higher risk?",
+    "options": [
+      "Low market volatility.",
+      "Short time horizon.",
+      "Long time horizon.",
+      "Low cash reserves."
+    ],
+    "correct_answer": "Long time horizon.",
+    "ai_feedback": {
+      "correct": "Correct! A long time horizon gives them decades for the market to recover from any downturns, mitigating short-term risk.",
+      "incorrect": "The longer the time horizon (35 years in this case), the more capable the investor is of enduring market volatility and capturing long-term growth."
+    }
+  },
+  {
+    "id": 415,
+    "question": "In finance, risk is commonly measured by which factor?",
+    "options": [
+      "Interest rate.",
+      "Volatility (price fluctuation).",
+      "Total number of shares outstanding.",
+      "Dividend yield."
+    ],
+    "correct_answer": "Volatility (price fluctuation).",
+    "ai_feedback": {
+      "correct": "You got it! Volatility quantifies the uncertainty of returns, making it the standard measure of risk.",
+      "incorrect": "Volatility, or the degree of price fluctuation, is the most common way risk is quantified in the financial world."
+    }
+  }
+]

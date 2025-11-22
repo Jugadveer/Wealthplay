@@ -1,1 +1,47 @@
-[]
+[
+  {
+    "id": 613,
+    "question": "The main benefit of a SIP is that it helps you utilize the principle of:",
+    "options": [
+      "Market Timing.",
+      "Concentration Risk.",
+      "Short Selling.",
+      "Dollar-Cost Averaging (DCA)."
+    ],
+    "correct_answer": "Dollar-Cost Averaging (DCA).",
+    "ai_feedback": {
+      "correct": "Correct! DCA is the core mechanism of SIPs, reducing the impact of market volatility.",
+      "incorrect": "Incorrect. SIPs are synonymous with Dollar-Cost Averaging, a strategy that lowers your average cost per unit by investing regularly."
+    }
+  },
+  {
+    "id": 614,
+    "question": "When the NAV of a mutual fund falls, a fixed SIP investment will automatically buy:",
+    "options": [
+      "Fewer units.",
+      "More units.",
+      "The same number of units.",
+      "No units."
+    ],
+    "correct_answer": "More units.",
+    "ai_feedback": {
+      "correct": "You got it! This is the 'averaging down' effect of DCA—getting more units when they are cheap.",
+      "incorrect": "If the price falls and your investment amount is fixed, you buy more units. This is the simple math behind Dollar-Cost Averaging."
+    }
+  },
+  {
+    "id": 615,
+    "question": "A SIP helps an investor overcome which major emotional mistake?",
+    "options": [
+      "Over-diversification.",
+      "Investing too early in life.",
+      "Trying to time the market.",
+      "Ignoring expense ratios."
+    ],
+    "correct_answer": "Trying to time the market.",
+    "ai_feedback": {
+      "correct": "Exactly! SIPs enforce discipline, preventing the emotional decision of waiting for a market low.",
+      "incorrect": "The disciplined nature of SIP prevents the emotional mistake of trying to guess the market's perfect entry and exit points."
+    }
+  }
+]

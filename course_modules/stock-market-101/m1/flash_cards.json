@@ -1,1 +1,20 @@
-[]
+[
+  {
+    "id": 501,
+    "topic": "Stock Ownership",
+    "theory_title": "Owning a Piece of the Company",
+    "theory_content": "A **stock** (or share/equity) represents fractional ownership in a publicly traded company. When you buy a stock, you become a shareholder, meaning you own a tiny piece of the company's assets and earnings. This is why stocks are also called 'equities'."
+  },
+  {
+    "id": 502,
+    "topic": "Primary vs. Secondary Market",
+    "theory_title": "Where Shares are Traded",
+    "theory_content": "The **Primary Market** is where a company first sells shares to the public through an Initial Public Offering (IPO). The **Secondary Market** is where investors buy and sell existing shares among themselves (this happens on stock exchanges like the NSE or NYSE). Most day-to-day trading occurs in the Secondary Market."
+  },
+  {
+    "id": 503,
+    "topic": "Dividends",
+    "theory_title": "Your Share of Profits",
+    "theory_content": "A **dividend** is a payment made by a corporation to its shareholders, usually as a distribution of its profits. Not all companies pay dividends; growth companies often reinvest all profits back into the business."
+  }
+]

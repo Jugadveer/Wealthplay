@@ -1,10 +1,20 @@
 [
   {
-    "question": "How much should I keep in emergency fund?",
-    "answer": "Aim for 3-6 months of essential expenses. Start small and build gradually."
+    "id": 807,
+    "question": "What is the risk of keeping your emergency fund in stocks?",
+    "answer": "The risk is that when an emergency occurs (e.g., job loss), the stock market may also be down (recession), forcing you to sell your investments at a loss to cover your expenses.",
+    "explanation": "You should never put money you need in the short term into volatile assets."
   },
   {
-    "question": "What insurance do I need first?",
-    "answer": "Start with health insurance, then term life insurance. Asset insurance (home, vehicle) comes next based on your assets."
+    "id": 808,
+    "question": "What is the primary difference between Health Insurance and Term Life Insurance?",
+    "answer": "Health Insurance covers the cost of medical treatments and hospitalization. Term Life Insurance provides a lump sum payment to your beneficiaries if you die during the term of the policy, securing their financial future.",
+    "explanation": "Health insurance protects your assets *while you are alive*; Term Life protects your family *after you are gone*."
+  },
+  {
+    "id": 809,
+    "question": "When should I use my emergency fund?",
+    "answer": "Use it only for true, unexpected emergencies: job loss, large deductible for a medical event, or an essential home/car repair. Do NOT use it for discretionary spending like vacations or splurges.",
+    "explanation": "If it's predictable or optional, it's not an emergency. The fund is for disasters, not desires."
   }
 ]

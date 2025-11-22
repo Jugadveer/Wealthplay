@@ -99,6 +99,7 @@ class QuizAttemptViewSet(viewsets.ModelViewSet):
 
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
+from django.http import JsonResponse
 
 @csrf_exempt
 @require_http_methods(["POST"])
@@ -124,7 +125,7 @@ def save_onboarding(request):
             user=request.user,
             defaults={
                 'xp': 0,
-                'level': 'beginner',
+                'level': 'beginner',  # Will be recalculated below
                 'confidence_score': 0.0,
                 'onboarding_completed': False
             }
@@ -138,20 +139,51 @@ def save_onboarding(request):
         profile.investment_timeline = investment_timeline
         profile.onboarding_completed = True
         
-        # Calculate initial level based on experience
+        # Calculate initial level based on comprehensive assessment
+        # Scoring system that considers multiple factors
+        level_score = 0
         experience = profile.investment_experience
+        risk_comfort = profile.risk_comfort
+        initial_investment = profile.initial_investment
+        financial_goal = profile.financial_goal
+        
+        # Investment experience scoring (primary factor - 0-3 points)
         if experience == 'very_experienced':
-            profile.level = 'advanced'
-            profile.xp = 400  # Start with enough XP for advanced courses
+            level_score += 3
         elif experience == 'experienced':
-            profile.level = 'intermediate'
-            profile.xp = 200  # Start with some XP for intermediate courses
+            level_score += 2
         elif experience == 'basics':
-            profile.level = 'beginner'
-            profile.xp = 50
+            level_score += 1
+        else:  # beginner
+            level_score += 0
+        
+        # Risk comfort scoring (0-2 points)
+        if risk_comfort == 'aggressive':
+            level_score += 2
+        elif risk_comfort == 'balanced':
+            level_score += 1
+        else:  # safe
+            level_score += 0
+        
+        # Initial investment scoring (0-1 points) - indicates commitment
+        if initial_investment in ['50k_2l', 'over_2l']:
+            level_score += 1
+        
+        # Financial goal scoring (0-1 points)
+        if financial_goal in ['long_term_wealth', 'extra_income']:
+            level_score += 1
+        
+        # Determine level based on total score (0-7 points)
+        # Advanced: 5-7 points, Intermediate: 3-4 points, Beginner: 0-2 points
+        if level_score >= 5:
+            profile.level = 'advanced'
+            profile.xp = 1200  # Start with enough XP for advanced courses
+        elif level_score >= 3:
+            profile.level = 'intermediate'
+            profile.xp = 750  # Start with enough XP for intermediate courses
         else:
             profile.level = 'beginner'
-            profile.xp = 0
+            profile.xp = 50  # Give some starting XP
         
         profile.save()
         
@@ -164,10 +196,19 @@ def save_onboarding(request):
             }
         )
         
+        # Return level info for frontend display
+        level_display = {
+            'beginner': 'Beginner',
+            'intermediate': 'Intermediate',
+            'advanced': 'Advanced'
+        }
+        
         return JsonResponse({
             'status': 'success',
             'level': profile.level,
+            'level_display': level_display.get(profile.level, 'Beginner'),
             'xp': profile.xp,
+            'level_score': level_score,
             'message': 'Onboarding completed successfully'
         })
     
