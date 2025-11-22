@@ -425,7 +425,7 @@ def sell_stock(request):
         # Ensure both sides are Decimal for addition
         if not isinstance(portfolio.balance, Decimal):
             portfolio.balance = Decimal(str(portfolio.balance))
-        portfolio.balance = portfolio.balance + sale_amount
+        portfolio.balance = Decimal(str(portfolio.balance)) + sale_amount
         portfolio.save()
         
         # Calculate and return updated portfolio data

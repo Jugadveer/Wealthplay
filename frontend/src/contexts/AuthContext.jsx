@@ -214,7 +214,8 @@ export function AuthProvider({ children }) {
     }
     
     // Force full page reload to clear all state and navigate to landing
-    window.location.href = '/'
+    // Use replace to prevent back button from going back to dashboard
+    window.location.replace('/')
   }
 
   const getCsrfToken = async () => {
