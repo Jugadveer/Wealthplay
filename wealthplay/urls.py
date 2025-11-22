@@ -16,14 +16,11 @@ urlpatterns = [
     path('api/users/', include('users.urls')),
     path('api/uploads/', include('uploads.urls')),
     path('api/cursor/', include('cursor.urls')),
-    # Django-specific routes that should be served by Django templates
-    path('goals/', goals_page, name='goals'),  # Goals page (Django template)
-    path('onboarding/', TemplateView.as_view(template_name='onboarding.html'), name='onboarding'),  # Old Django onboarding (deprecated)
+    path('api/scenario/', include('simulator.urls')),  # Scenario API endpoints
     # Landing page route - serve React app
     path('', home, name='home'),
     # Catch-all route: serve React app for all other routes (dashboard, course, scenario, etc.)
     # This must be last so all other routes are matched first
-    # Using re_path with .* pattern to match all remaining paths
     path('<path:path>', TemplateView.as_view(template_name='react_app.html'), name='react_app'),
 ]
 

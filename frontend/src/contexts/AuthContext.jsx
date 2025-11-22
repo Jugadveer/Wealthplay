@@ -72,11 +72,14 @@ export function AuthProvider({ children }) {
       console.log('Login response:', response.data)
 
       if (response.data && response.data.success) {
+        // Update auth state
         await checkAuth()
         // Login users always go to dashboard - onboarding is only for signups
+        // Return success - the AuthModal will handle navigation
         return { 
           success: true,
-          needsOnboarding: false
+          needsOnboarding: false,
+          redirect: '/dashboard'
         }
       } else {
         return {
@@ -179,6 +182,9 @@ export function AuthProvider({ children }) {
   }
 
   const logout = async () => {
+    // Clear user state immediately to prevent redirects
+    setUser(null)
+    
     try {
       const { axios } = await import('../utils/api')
       const csrfToken = await getCsrfToken()
@@ -198,12 +204,17 @@ export function AuthProvider({ children }) {
       // Continue with logout even if request fails
     }
     
-    // Clear user state after API call
-    setUser(null)
+    // Clear any cached data
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.clear()
+      } catch (e) {
+        // Ignore errors
+      }
+    }
     
-    // Force a full page reload to clear all React state and session
-    // Use replace with timestamp to prevent redirect loops
-    window.location.replace('/?' + Date.now())
+    // Force full page reload to clear all state and navigate to landing
+    window.location.href = '/'
   }
 
   const getCsrfToken = async () => {

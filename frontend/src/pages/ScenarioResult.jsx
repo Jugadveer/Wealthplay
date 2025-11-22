@@ -15,20 +15,20 @@ const ScenarioResult = () => {
 
   const loadResult = async () => {
     try {
-      const response = await axios.get(`/scenario/quiz/${runId}/result/`, {
+      const response = await axios.get(`/api/scenario/api/quiz/${runId}/result/`, {
         headers: { Accept: 'application/json' },
+        withCredentials: true,
       })
       
-      // Handle both JSON and HTML responses
-      if (response.data.total_score !== undefined) {
-        setResult(response.data)
-      } else {
-        // Extract from HTML or use defaults
+      if (response.data) {
         setResult({
-          total_score: 0,
-          total_possible_score: 100,
-          percentage: 0,
-          badge: 'Financial Novice',
+          total_score: response.data.total_score || 0,
+          max_score: response.data.max_score || 100,
+          total_possible_score: response.data.max_score || 100,
+          percentage: response.data.percentage || 0,
+          badge: response.data.badge || 'Financial Novice',
+          badge_color: response.data.badge_color || 'gray',
+          total_questions: response.data.total_questions || 0,
         })
       }
     } catch (error) {
@@ -67,9 +67,22 @@ const ScenarioResult = () => {
   }
 
   const score = result.total_score || 0
-  const total = result.total_possible_score || 100
-  const percentage = total > 0 ? ((score / total) * 100).toFixed(0) : 0
-  const badge = getBadge(score, total)
+  const total = result.max_score || result.total_possible_score || 100
+  const percentage = result.percentage !== undefined ? result.percentage : (total > 0 ? ((score / total) * 100).toFixed(0) : 0)
+  
+  // Use badge from API response or calculate from score
+  let badgeInfo
+  if (result.badge) {
+    badgeInfo = {
+      name: result.badge,
+      icon: result.badge_color === 'gold' ? Trophy : result.badge_color === 'silver' ? Target : Target,
+      color: result.badge_color === 'gold' ? 'from-yellow-400 to-yellow-600' : 
+             result.badge_color === 'silver' ? 'from-blue-400 to-blue-600' : 'from-gray-400 to-gray-600'
+    }
+  } else {
+    badgeInfo = getBadge(score, total)
+  }
+  const badge = badgeInfo
   const BadgeIcon = badge.icon
 
   return (

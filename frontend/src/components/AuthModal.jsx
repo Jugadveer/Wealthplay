@@ -82,18 +82,14 @@ const AuthModal = ({ mode, onClose, onSwitch }) => {
       if (result.success) {
         onClose()
         
-        // Redirect based on onboarding status
-        if (result.needsOnboarding) {
-          // Navigate to onboarding
-          setTimeout(() => {
+        // Wait a moment for auth state to update, then navigate
+        setTimeout(() => {
+          if (result.needsOnboarding) {
             window.location.href = '/onboarding'
-          }, 300)
-        } else {
-          // Navigate to dashboard
-          setTimeout(() => {
-            window.location.href = '/dashboard'
-          }, 300)
-        }
+          } else {
+            window.location.href = result.redirect || '/dashboard'
+          }
+        }, 300)
       } else {
         setError(result.error || 'An error occurred')
       }

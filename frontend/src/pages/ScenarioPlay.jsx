@@ -27,23 +27,36 @@ const ScenarioPlay = () => {
 
   const loadQuiz = async () => {
     try {
-      // Load quiz data from Django view (which renders template, we need API endpoint)
-      // For now, let's try the direct API approach
-      const response = await axios.get(`/scenario/quiz/${runId}/`, {
+      const response = await axios.get(`/api/scenario/api/quiz/${runId}/`, {
         headers: { Accept: 'application/json' },
+        withCredentials: true,
       })
       
-      // If response is HTML, we need a JSON endpoint
-      // For now, let's create a structure from the scenario
-      if (response.data.game_config) {
+      if (response.data.completed) {
+        // Quiz is completed, redirect to result
+        if (response.data.redirect) {
+          navigate(response.data.redirect.replace('/scenario', ''))
+        } else {
+          navigate(`/scenario/quiz/${runId}/result`)
+        }
+        return
+      }
+      
+      // Set quiz data from API response
+      if (response.data.scenario) {
         setQuiz({
-          scenarios: [{ ...response.data.scenario, options: response.data.game_config.choices }],
-          current_question_index: response.data.game_config.question_number - 1,
+          scenarios: [{
+            id: response.data.scenario.id,
+            title: response.data.scenario.title,
+            description: response.data.scenario.description,
+            starting_balance: response.data.scenario.starting_balance,
+            options: response.data.choices || [],
+          }],
+          current_question_index: (response.data.question_number || 1) - 1,
+          total_questions: response.data.total_questions || 1,
+          total_score: response.data.total_score || 0,
         })
-        setCurrentQuestion(response.data.game_config.question_number - 1)
-      } else {
-        setQuiz(response.data)
-        setCurrentQuestion(response.data.current_question_index || 0)
+        setCurrentQuestion((response.data.question_number || 1) - 1)
       }
     } catch (error) {
       console.error('Error loading quiz:', error)
@@ -65,54 +78,63 @@ const ScenarioPlay = () => {
 
   const submitAnswer = async (option) => {
     try {
+      const { getCsrfToken } = await import('../utils/api')
+      const csrfToken = await getCsrfToken()
       const score = option.score || 0
-      const response = await axios.post('/scenario/api/submit-answer/', {
+      const option_id = option.id
+      
+      const response = await axios.post('/api/scenario/api/submit-answer/', {
         run_id: parseInt(runId),
         score: score,
+        option_id: option_id,
       }, {
         headers: {
-          'X-CSRFToken': getCsrfToken(),
+          'X-CSRFToken': csrfToken || '',
           'Content-Type': 'application/json',
         },
+        withCredentials: true,
       })
 
-      if (response.data.status === 'success') {
-        // Score submitted successfully
+      if (response.data && response.data.success) {
+        // Score submitted successfully, update total score
+        if (quiz) {
+          setQuiz({
+            ...quiz,
+            total_score: response.data.total_score || quiz.total_score,
+          })
+        }
       }
     } catch (error) {
       console.error('Error submitting answer:', error)
     }
   }
 
-  const getCsrfToken = () => {
-    const cookies = document.cookie.split(';')
-    for (let cookie of cookies) {
-      const [name, value] = cookie.trim().split('=')
-      if (name === 'csrftoken') {
-        return value
-      }
-    }
-    return ''
-  }
-
   const nextQuestion = async () => {
-    if (currentQuestion < (quiz?.scenarios?.length || 5) - 1) {
-      // Navigate to next question via Django route
-      try {
-        await axios.post(`/scenario/quiz/${runId}/next/`, {}, {
-          headers: {
-            'X-CSRFToken': getCsrfToken(),
-          },
-        })
-        // Reload the page to get next question
-        window.location.href = `/scenario/quiz/${runId}/`
-      } catch (error) {
-        console.error('Error moving to next question:', error)
-        // Fallback: just navigate
-        navigate(`/scenario/quiz/${runId}/`)
+    try {
+      const { getCsrfToken } = await import('../utils/api')
+      const csrfToken = await getCsrfToken()
+      
+      const response = await axios.post(`/api/scenario/api/quiz/${runId}/next/`, {}, {
+        headers: {
+          'X-CSRFToken': csrfToken || '',
+        },
+        withCredentials: true,
+      })
+      
+      if (response.data && response.data.completed) {
+        // Quiz completed, navigate to result
+        navigate(`/scenario/quiz/${runId}/result`)
+      } else if (response.data && response.data.success) {
+        // Reload quiz data for next question
+        await loadQuiz()
+      } else {
+        // Reload quiz anyway
+        await loadQuiz()
       }
-    } else {
-      navigate(`/scenario/quiz/${runId}/result`)
+    } catch (error) {
+      console.error('Error moving to next question:', error)
+      // Fallback: try to load next question
+      await loadQuiz()
     }
   }
 

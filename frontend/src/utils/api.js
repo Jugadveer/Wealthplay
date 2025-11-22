@@ -131,10 +131,11 @@ export const api = {
   sendMessage: (data) => regularAxios.post('/api/chat/mentor/respond/', data),
 
   // Scenarios
-  startQuiz: () => regularAxios.post('/scenario/quiz/start/'),
-  getQuiz: (runId) => regularAxios.get(`/scenario/quiz/${runId}/`),
-  submitAnswer: (runId, data) => regularAxios.post(`/scenario/quiz/${runId}/answer/`, data),
-  getQuizResult: (runId) => regularAxios.get(`/scenario/quiz/${runId}/result/`),
+  startQuiz: () => apiAxios.post('/scenario/api/start/'),
+  getQuiz: (runId) => apiAxios.get(`/scenario/api/quiz/${runId}/`),
+  submitAnswer: (data) => apiAxios.post('/scenario/api/submit-answer/', data),
+  nextQuestion: (runId) => apiAxios.post(`/scenario/api/quiz/${runId}/next/`),
+  getQuizResult: (runId) => apiAxios.get(`/scenario/api/quiz/${runId}/result/`),
 
   // Onboarding
   saveOnboarding: (data) => apiAxios.post('/users/onboarding/', data),

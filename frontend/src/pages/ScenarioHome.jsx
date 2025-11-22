@@ -19,40 +19,26 @@ const ScenarioHome = () => {
   const startNewQuiz = async () => {
     setLoading(true)
     try {
+      const { axios } = await import('../utils/api')
       const { getCsrfToken } = await import('../utils/api')
       const csrfToken = await getCsrfToken()
       
-      const response = await axios.post('/scenario/start/', {}, {
+      const response = await axios.post('/api/scenario/api/start/', {}, {
         headers: {
           'X-CSRFToken': csrfToken || '',
         },
         withCredentials: true,
-        maxRedirects: 0,
-        validateStatus: (status) => status >= 200 && status < 400,
       })
       
-      // Check if response has redirect or runId
-      if (response.data && response.data.runId) {
+      if (response.data && response.data.success && response.data.runId) {
+        // Navigate to quiz page using React Router
         navigate(`/scenario/quiz/${response.data.runId}`)
-      } else if (response.data && response.data.redirect) {
-        window.location.href = response.data.redirect
       } else {
-        // Try to follow redirect manually
-        window.location.href = '/scenario/start/'
+        console.error('Failed to start quiz:', response.data)
+        setLoading(false)
       }
     } catch (error) {
       console.error('Error starting quiz:', error)
-      if (error.response && error.response.status === 302) {
-        // Handle redirect
-        const location = error.response.headers.location
-        if (location) {
-          window.location.href = location
-          return
-        }
-      }
-      // Fallback: navigate to start
-      window.location.href = '/scenario/start/'
-    } finally {
       setLoading(false)
     }
   }
