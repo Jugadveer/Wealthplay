@@ -1,0 +1,32 @@
+{
+  "training_date": "2025-11-25 19:50:58.783268",
+  "dataset_size": 17920,
+  "train_size": 14336,
+  "test_size": 3584,
+  "num_features": 23,
+  "models": {
+    "direction": {
+      "file": "dir_model.txt",
+      "accuracy": 0.37806919642857145,
+      "classes": {
+        "0": "Down",
+        "1": "Neutral",
+        "2": "Up"
+      }
+    },
+    "volatility": {
+      "file": "vol_model.txt",
+      "mae": 0.033166073857133126,
+      "rmse": 0.04985258447157068
+    },
+    "regime": {
+      "file": "regime_model.txt",
+      "accuracy": 0.8108258928571429,
+      "classes": {
+        "0": "Calm",
+        "1": "Volatile",
+        "2": "Crash"
+      }
+    }
+  }
+}

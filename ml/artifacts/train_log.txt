@@ -1,0 +1,39 @@
+ML Model Training Log
+=====================
+Date: 2025-11-25 19:50:58.779850
+
+Dataset:
+  Total samples: 17920
+  Train samples: 14336
+  Test samples:  3584
+  Features: 23
+
+Model 1: Direction Classifier
+  Objective: Multiclass (Up/Neutral/Down)
+  Test Accuracy: 0.3781
+  Classes: Down=0, Neutral=1, Up=2
+
+Model 2: Volatility Regressor
+  Objective: Regression (5-day volatility)
+  Test MAE: 0.033166
+  Test RMSE: 0.049853
+
+Model 3: Regime Classifier
+  Objective: Multiclass (Calm/Volatile/Crash)
+  Test Accuracy: 0.8108
+  Classes: Calm=0, Volatile=1, Crash=2
+
+Top 10 Features (by importance):
+  15. vol_63              : 3512
+  14. vol_21              : 3472
+  7. ret_lag7            : 991
+  9. ret_lag9            : 942
+  1. ret_lag1            : 940
+  21. price_vs_sma50      : 901
+  11. mom_7               : 887
+  13. vol_7               : 886
+  10. ret_lag10           : 880
+  4. ret_lag4            : 852
+
+Models saved to: ml/models/
+Artifacts saved to: ml/artifacts/

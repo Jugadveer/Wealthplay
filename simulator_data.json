@@ -1,0 +1,1232 @@
+[
+  {
+    "id": 1,
+    "title": "The Emergency Fund Dilemma",
+    "description": "You just received an unexpected ₹50,000 bonus. You have basic savings, but not a full 6-month emergency fund. Your immediate goal is security.",
+    "starting_balance": 50000.0,
+    "options": [
+      {
+        "text": "Deposit the entire ₹50,000 into a liquid High-Yield Savings Account (HSA) to complete your emergency fund.",
+        "decision_type": "SAVE",
+        "balance_impact": 50000.0,
+        "confidence_delta": 5,
+        "risk_score_delta": -2,
+        "future_growth_rate": 0.0005,
+        "score": 20,
+        "why_it_matters": "A fully funded emergency fund is the bedrock of financial stability. It prevents future emergencies from forcing you to sell investments at a loss or take on high-interest debt.",
+        "mentor_feedback": "Perfect! Safety first—a financially mature decision."
+      },
+      {
+        "text": "Invest the whole ₹50,000 into a high-growth stock, aiming for a quick return.",
+        "decision_type": "INVEST",
+        "balance_impact": 0.0,
+        "confidence_delta": 0,
+        "risk_score_delta": 5,
+        "future_growth_rate": 0.005,
+        "score": 5,
+        "why_it_matters": "This is too risky. Emergency funds should be held in safe, liquid assets. Exposing your safety net to stock market volatility defeats its purpose.",
+        "mentor_feedback": "High risk, low reward for an emergency fund. Rethink liquidity!"
+      },
+      {
+        "text": "Spend ₹25,000 on a new gadget you've wanted and save the remaining ₹25,000.",
+        "decision_type": "SPEND",
+        "balance_impact": -25000.0,
+        "confidence_delta": -5,
+        "risk_score_delta": 0,
+        "future_growth_rate": 0.0,
+        "score": 10,
+        "why_it_matters": "While some spending is fine, delaying your emergency fund completion leaves you vulnerable. You've essentially prioritized a depreciating asset over security.",
+        "mentor_feedback": "Impulsive spending on non-essentials can hurt future goals."
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "title": "The Student Loan Payment Strategy",
+    "description": "You have ₹1,00,000 remaining on a student loan with a 7.5% interest rate. You have an extra ₹10,000 this month. Your stocks are returning about 10%.",
+    "starting_balance": 10000.0,
+    "options": [
+      {
+        "text": "Put the entire ₹10,000 into the stock market to chase a higher return.",
+        "decision_type": "INVEST",
+        "balance_impact": 0.0,
+        "confidence_delta": -2,
+        "risk_score_delta": 3,
+        "future_growth_rate": 0.0025,
+        "score": 10,
+        "why_it_matters": "While the 10% return is higher, loan interest is a guaranteed expense. The difference (2.5%) may not be worth the guaranteed, risk-free 'return' of eliminating 7.5% debt interest.",
+        "mentor_feedback": "Watch out for the 'guaranteed return' of paying off high-interest debt!"
+      },
+      {
+        "text": "Pay the entire ₹10,000 toward the principal of your student loan.",
+        "decision_type": "SAVE",
+        "balance_impact": -10000.0,
+        "confidence_delta": 5,
+        "risk_score_delta": -1,
+        "future_growth_rate": 0.0,
+        "score": 20,
+        "why_it_matters": "Paying off high-interest debt is a risk-free return equal to the interest rate (7.5%). This is often a smarter, safer financial move than hoping for a higher market return.",
+        "mentor_feedback": "Smart. Eliminating high-cost debt is a powerful financial move."
+      },
+      {
+        "text": "Split the ₹10,000: ₹5,000 to the loan, ₹5,000 to the stock market.",
+        "decision_type": "SAVE",
+        "balance_impact": -5000.0,
+        "confidence_delta": 2,
+        "risk_score_delta": 1,
+        "future_growth_rate": 0.001,
+        "score": 15,
+        "why_it_matters": "A balanced approach. This gives you the psychological benefit of reducing debt while still participating in potential market growth.",
+        "mentor_feedback": "A pragmatic, balanced choice to address both debt and growth."
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "title": "The Retirement vs. Down Payment Trade-off",
+    "description": "You are 30 and want to buy a house in 5 years. You have ₹5,0,000 saved for the down payment and maxed out your company's retirement match. You have ₹25,000 extra to allocate.",
+    "starting_balance": 25000.0,
+    "options": [
+      {
+        "text": "Direct the entire ₹25,000 to a long-term retirement fund (like a Roth IRA).",
+        "decision_type": "INVEST",
+        "balance_impact": 0.0,
+        "confidence_delta": 3,
+        "risk_score_delta": 4,
+        "future_growth_rate": 0.0035,
+        "score": 10,
+        "why_it_matters": "While retirement is crucial, investing for a 5-year goal in high-risk retirement accounts can be dangerous. You need that money soon, so capital preservation is key.",
+        "mentor_feedback": "Good intention, wrong time horizon. Retirement money has time to recover, down payment money doesn't!"
+      },
+      {
+        "text": "Place the ₹25,000 into a conservative, short-term bond ETF for the down payment fund.",
+        "decision_type": "SAVE",
+        "balance_impact": 25000.0,
+        "confidence_delta": 4,
+        "risk_score_delta": -3,
+        "future_growth_rate": 0.0008,
+        "score": 20,
+        "why_it_matters": "This is the optimal choice. Short-term goals (under 5 years) require assets with low volatility to protect the capital you need for the purchase. Bonds fit this need well.",
+        "mentor_feedback": "Excellent decision. Time horizon dictates risk level. Short-term funds need safety."
+      },
+      {
+        "text": "Spend the money on investment books and a financial planning course to 'invest in yourself'.",
+        "decision_type": "SPEND",
+        "balance_impact": -25000.0,
+        "confidence_delta": 0,
+        "risk_score_delta": 0,
+        "future_growth_rate": 0.0,
+        "score": 5,
+        "why_it_matters": "Knowledge is valuable, but your goal requires a direct increase in capital. Allocate 25K to the down payment fund, and buy the books out of your monthly budget.",
+        "mentor_feedback": "Prioritize saving capital for a hard deadline goal."
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "title": "The Impulse Purchase vs. Tax Benefit",
+    "description": "You have a spare ₹5,000 at the end of the month. You see an ad for a new pair of shoes you really want (₹5,000). You also know you haven't fully contributed to a tax-advantaged account yet.",
+    "starting_balance": 5000.0,
+    "options": [
+      {
+        "text": "Buy the new pair of shoes immediately. You deserve them.",
+        "decision_type": "SPEND",
+        "balance_impact": -5000.0,
+        "confidence_delta": -5,
+        "risk_score_delta": 0,
+        "future_growth_rate": 0.0,
+        "score": 5,
+        "why_it_matters": "This is purely consumption. You lose the money and the chance for future growth. Discipline is key in wealth creation.",
+        "mentor_feedback": "A classic behavioral finance trap. Instant gratification costs long-term growth."
+      },
+      {
+        "text": "Contribute the ₹5,000 to a tax-saving investment fund (e.g., ELSS/PPF/401k).",
+        "decision_type": "INVEST",
+        "balance_impact": 0.0,
+        "confidence_delta": 5,
+        "risk_score_delta": 2,
+        "future_growth_rate": 0.0015,
+        "score": 20,
+        "why_it_matters": "This choice provides a double benefit: potential tax savings now and compounding growth over the long term. It's financially superior to immediate consumption.",
+        "mentor_feedback": "The best kind of return is tax-free and compounding. Great choice!"
+      },
+      {
+        "text": "Keep the money in your checking account until you decide what to do.",
+        "decision_type": "SAVE",
+        "balance_impact": 5000.0,
+        "confidence_delta": 0,
+        "risk_score_delta": 0,
+        "future_growth_rate": 0.0,
+        "score": 10,
+        "why_it_matters": "While you avoid the impulsive spend, keeping money idle in a checking account means it loses value to inflation. It's a missed opportunity for growth.",
+        "mentor_feedback": "Better than spending, but inflation is slowly eroding this cash."
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "title": "The High-Risk vs. Diversified Investment",
+    "description": "You are ready to invest ₹15,000, and you are 25 years old with a high-risk tolerance. You see a single 'hot' cryptocurrency offering a 500% potential return, or a well-diversified, global ETF portfolio.",
+    "starting_balance": 15000.0,
+    "options": [
+      {
+        "text": "Put the entire ₹15,000 into the single 'hot' cryptocurrency.",
+        "decision_type": "INVEST",
+        "balance_impact": 0.0,
+        "confidence_delta": -5,
+        "risk_score_delta": 10,
+        "future_growth_rate": 0.01,
+        "score": 5,
+        "why_it_matters": "This is speculative trading, not investing. While the reward is high, the risk of losing 100% of your capital is also extremely high. It violates the core principle of diversification.",
+        "mentor_feedback": "Speculation! Never put all your eggs in one high-risk basket, even with high tolerance."
+      },
+      {
+        "text": "Invest the ₹15,000 into a broad, low-cost global equity ETF portfolio.",
+        "decision_type": "INVEST",
+        "balance_impact": 0.0,
+        "confidence_delta": 5,
+        "risk_score_delta": -2,
+        "future_growth_rate": 0.002,
+        "score": 20,
+        "why_it_matters": "This is the optimal investment strategy. It maximizes long-term, risk-adjusted returns through broad diversification and minimizes costs, leveraging the power of global markets.",
+        "mentor_feedback": "The classic winning move. Broad diversification and low costs beat speculation over the long run."
+      },
+      {
+        "text": "Split the amount: ₹1,500 into the crypto (10%) and ₹13,500 into the diversified ETF (90%).",
+        "decision_type": "INVEST",
+        "balance_impact": 0.0,
+        "confidence_delta": 3,
+        "risk_score_delta": 2,
+        "future_growth_rate": 0.0025,
+        "score": 15,
+        "why_it_matters": "A smart compromise. You allocate a small, acceptable amount to speculation while dedicating the majority of your capital to a proven, diversified long-term strategy.",
+        "mentor_feedback": "Responsible risk-taking. Satisfy the craving for speculation without compromising your future."
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "title": "The Inflation Trap",
+    "description": "You have ₹2,00,000 sitting in your regular savings account earning 3% interest. The current inflation rate is 6%. What do you do with the cash?",
+    "starting_balance": 200000.0,
+    "options": [
+      {
+        "text": "Keep the money in the savings account, prioritizing liquidity and safety.",
+        "decision_type": "SAVE",
+        "balance_impact": 0.0,
+        "confidence_delta": -5,
+        "risk_score_delta": 0,
+        "future_growth_rate": 0.0003,
+        "score": 5,
+        "why_it_matters": "You are losing 3% of your purchasing power every year (6% inflation - 3% interest). This is a guaranteed loss in real terms.",
+        "mentor_feedback": "Safety is important, but inflation is an invisible tax. Seek higher returns for non-emergency cash."
+      },
+      {
+        "text": "Move the money to a diversified portfolio (Mutual Funds/ETFs) with an expected 8% long-term return.",
+        "decision_type": "INVEST",
+        "balance_impact": 0.0,
+        "confidence_delta": 5,
+        "risk_score_delta": 3,
+        "future_growth_rate": 0.0067,
+        "score": 20,
+        "why_it_matters": "Investing allows your money to grow faster than inflation, preserving and increasing your real wealth over time. This is the best way to combat inflation.",
+        "mentor_feedback": "Excellent! Using growth assets to outpace inflation is foundational for building real wealth."
+      },
+      {
+        "text": "Move the funds to a Fixed Deposit (FD) earning 7%, locking it in for 5 years.",
+        "decision_type": "SAVE",
+        "balance_impact": 0.0,
+        "confidence_delta": 2,
+        "risk_score_delta": -1,
+        "future_growth_rate": 0.0007,
+        "score": 15,
+        "why_it_matters": "A Fixed Deposit slightly beats inflation and is safe, but it limits liquidity and sacrifices higher potential returns from growth assets over the long term.",
+        "mentor_feedback": "Better than savings, but be mindful of the trade-off between liquidity and locking in returns."
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "title": "Credit Card vs. Mutual Fund",
+    "description": "You have ₹50,000 invested in a Mutual Fund earning 12% per annum, and a ₹20,000 credit card balance with an 18% annual interest rate. You have ₹10,000 extra cash.",
+    "starting_balance": 10000.0,
+    "options": [
+      {
+        "text": "Pay the entire ₹10,000 toward the credit card debt.",
+        "decision_type": "SAVE",
+        "balance_impact": -10000.0,
+        "confidence_delta": 5,
+        "risk_score_delta": -3,
+        "future_growth_rate": 0.0,
+        "score": 20,
+        "why_it_matters": "An 18% interest rate is a guaranteed loss. Paying it off yields a risk-free return of 18%, which is greater than your 12% investment return.",
+        "mentor_feedback": "Always kill high-interest debt first. It's the highest, risk-free return available."
+      },
+      {
+        "text": "Invest the ₹10,000 into the Mutual Fund, hoping for a return higher than 18%.",
+        "decision_type": "INVEST",
+        "balance_impact": 0.0,
+        "confidence_delta": -5,
+        "risk_score_delta": 5,
+        "future_growth_rate": 0.0012,
+        "score": 5,
+        "why_it_matters": "This is gambling. The 18% loss is certain, while a return over 18% is speculative. The expected net outcome is negative.",
+        "mentor_feedback": "Don't chase returns when you have guaranteed high-cost debt. The math doesn't lie."
+      },
+      {
+        "text": "Pay ₹5,000 to the card and invest the remaining ₹5,000.",
+        "decision_type": "SAVE",
+        "balance_impact": -5000.0,
+        "confidence_delta": 0,
+        "risk_score_delta": 1,
+        "future_growth_rate": 0.0006,
+        "score": 10,
+        "why_it_matters": "This reduces the guaranteed loss, but you are still losing 6% (18%-12%) on the portion you chose to invest. Full repayment is financially superior.",
+        "mentor_feedback": "While balanced, you should prioritize eliminating the high-cost debt completely."
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "title": "The Single Stock Temptation",
+    "description": "You have ₹30,000 to invest for long-term growth (20+ years). A friend recommends a high-flying tech stock that is up 80% this year. You also have the option of a Nifty 50 Index Fund.",
+    "starting_balance": 30000.0,
+    "options": [
+      {
+        "text": "Put all ₹30,000 into the single, high-flying tech stock.",
+        "decision_type": "INVEST",
+        "balance_impact": 0.0,
+        "confidence_delta": -5,
+        "risk_score_delta": 8,
+        "future_growth_rate": 0.007,
+        "score": 5,
+        "why_it_matters": "This exposes you to *idiosyncratic risk* (risk specific to one company). The stock could crash, wiping out your entire investment. This is highly risky.",
+        "mentor_feedback": "Diversification is the only free lunch in finance. Don't bet the farm on one stock!"
+      },
+      {
+        "text": "Invest all ₹30,000 into the Nifty 50 Index Fund.",
+        "decision_type": "INVEST",
+        "balance_impact": 0.0,
+        "confidence_delta": 5,
+        "risk_score_delta": -2,
+        "future_growth_rate": 0.0012,
+        "score": 20,
+        "why_it_matters": "This offers broad market exposure, mitigating single-stock risk while providing expected market returns (beta). It's the foundational long-term strategy.",
+        "mentor_feedback": "Smart and disciplined. Index funds offer great returns by capturing market growth at low cost."
+      },
+      {
+        "text": "Split the amount: ₹5,000 into the tech stock and ₹25,000 into the Index Fund.",
+        "decision_type": "INVEST",
+        "balance_impact": 0.0,
+        "confidence_delta": 3,
+        "risk_score_delta": 2,
+        "future_growth_rate": 0.0018,
+        "score": 15,
+        "why_it_matters": "This balances risk. The 83% majority is allocated responsibly to diversification, while 17% satisfies the desire for high-risk, high-reward speculation.",
+        "mentor_feedback": "A pragmatic choice. Keep your speculation small, but your foundation strong."
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "title": "The Timing Dilemma (SIP vs. Lump Sum)",
+    "description": "You unexpectedly received ₹1,20,000 and want to invest it into the stock market. You feel the market is currently a little high. What do you do?",
+    "starting_balance": 120000.0,
+    "options": [
+      {
+        "text": "Wait for a market correction (a drop) and invest the entire lump sum at once.",
+        "decision_type": "INVEST",
+        "balance_impact": 0.0,
+        "confidence_delta": -3,
+        "risk_score_delta": 0,
+        "future_growth_rate": 0.001,
+        "score": 5,
+        "why_it_matters": "This is **market timing**, which is historically proven to be ineffective. You risk missing out on potential gains while waiting for a dip that may never come.",
+        "mentor_feedback": "Time in the market beats timing the market. Waiting is a risky strategy."
+      },
+      {
+        "text": "Invest the entire ₹1,20,000 lump sum immediately.",
+        "decision_type": "INVEST",
+        "balance_impact": 0.0,
+        "confidence_delta": 4,
+        "risk_score_delta": 2,
+        "future_growth_rate": 0.002,
+        "score": 15,
+        "why_it_matters": "Statistically, investing a lump sum immediately outperforms staggering investments two-thirds of the time. While risky, this is often the optimal choice.",
+        "mentor_feedback": "Based on history, getting your money to work immediately is usually the winner."
+      },
+      {
+        "text": "Set up a Systematic Investment Plan (SIP) of ₹20,000 per month for the next six months.",
+        "decision_type": "INVEST",
+        "balance_impact": 0.0,
+        "confidence_delta": 5,
+        "risk_score_delta": -1,
+        "future_growth_rate": 0.0015,
+        "score": 20,
+        "why_it_matters": "This is **Rupee Cost Averaging (RCA)**. It mitigates the risk of investing at a peak and is the most common and psychologically comfortable method for large sums.",
+        "mentor_feedback": "The safest, most disciplined approach. RCA removes emotion and spreads risk."
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "title": "Term Life vs. ULIP",
+    "description": "You are 35 and have a spouse and child dependent on your income. You need ₹1 Crore in life insurance coverage. You have to choose between a Term Plan or a Unit Linked Insurance Plan (ULIP).",
+    "starting_balance": 0.0,
+    "options": [
+      {
+        "text": "Buy a Term Insurance plan, and invest the difference in premium separately into a low-cost Mutual Fund.",
+        "decision_type": "INVEST",
+        "balance_impact": 0.0,
+        "confidence_delta": 5,
+        "risk_score_delta": -2,
+        "future_growth_rate": 0.0015,
+        "score": 20,
+        "why_it_matters": "This is the **'Buy Term, Invest the Difference'** principle. It provides maximum protection at the lowest cost, while separating insurance (protection) from investing (growth).",
+        "mentor_feedback": "The financially savvy choice. Never mix insurance and investment; they serve different goals."
+      },
+      {
+        "text": "Buy a ULIP, paying a higher premium that bundles insurance and investment in one policy.",
+        "decision_type": "SAVE",
+        "balance_impact": 0.0,
+        "confidence_delta": -5,
+        "risk_score_delta": 2,
+        "future_growth_rate": 0.0005,
+        "score": 5,
+        "why_it_matters": "ULIPs often have high hidden fees, leading to lower net returns on the investment portion and insufficient insurance coverage for the cost. This confuses goals.",
+        "mentor_feedback": "Avoid bundled products. High commissions and low transparency often eat into your returns."
+      },
+      {
+        "text": "Skip life insurance entirely and put all the money into a high-growth stock portfolio.",
+        "decision_type": "INVEST",
+        "balance_impact": 0.0,
+        "confidence_delta": -10,
+        "risk_score_delta": 5,
+        "future_growth_rate": 0.003,
+        "score": 0,
+        "why_it_matters": "Leaving dependents unprotected is the biggest financial risk. Insurance provides a crucial safety net that investments cannot replicate.",
+        "mentor_feedback": "Irresponsible risk. Insurance is non-negotiable when you have dependents."
+      }
+    ]
+  },
+  {
+    "id": 11,
+    "title": "Lifestyle Creep",
+    "description": "You just got a 20% salary increase, boosting your monthly take-home income by ₹20,000. You are tempted to upgrade your car and rent a bigger apartment.",
+    "starting_balance": 20000.0,
+    "options": [
+      {
+        "text": "Allocate the full ₹20,000 to increase your monthly SIPs (Systematic Investment Plans) for retirement and future goals.",
+        "decision_type": "INVEST",
+        "balance_impact": 0.0,
+        "confidence_delta": 5,
+        "risk_score_delta": -1,
+        "future_growth_rate": 0.002,
+        "score": 20,
+        "why_it_matters": "This avoids 'lifestyle creep'. By automating the savings, you maintain your old lifestyle while massively accelerating your wealth building through compounding.",
+        "mentor_feedback": "The golden rule of raises! Pay yourself first and automate your wealth growth."
+      },
+      {
+        "text": "Spend ₹15,000 on car/rent upgrades and allocate only ₹5,000 to savings.",
+        "decision_type": "SPEND",
+        "balance_impact": -15000.0,
+        "confidence_delta": -5,
+        "risk_score_delta": 3,
+        "future_growth_rate": 0.0005,
+        "score": 5,
+        "why_it_matters": "This is the definition of lifestyle creep. Your expenses rise with your income, leaving you with little financial margin despite the raise.",
+        "mentor_feedback": "Be careful! Lifestyle creep is a stealth killer of wealth."
+      },
+      {
+        "text": "Split the amount: ₹10,000 for lifestyle upgrade and ₹10,000 for savings/investment.",
+        "decision_type": "SAVE",
+        "balance_impact": -10000.0,
+        "confidence_delta": 2,
+        "risk_score_delta": 0,
+        "future_growth_rate": 0.001,
+        "score": 15,
+        "why_it_matters": "This is acceptable balance, allowing for modest lifestyle improvements while still prioritizing future security. It is good, but not optimal.",
+        "mentor_feedback": "A fair compromise, but remember that the earlier you invest, the greater the compounding effect."
+      }
+    ]
+  },
+  {
+    "id": 12,
+    "title": "Real Estate vs. Stocks (Long-term)",
+    "description": "You have ₹10,00,000 saved for a long-term goal (20+ years). You can either buy a fractional share of real estate (e.g., REIT) or invest in a broad equity index fund.",
+    "starting_balance": 1000000.0,
+    "options": [
+      {
+        "text": "Invest the entire ₹10,00,000 in the broad equity index fund.",
+        "decision_type": "INVEST",
+        "balance_impact": 0.0,
+        "confidence_delta": 5,
+        "risk_score_delta": 1,
+        "future_growth_rate": 0.0015,
+        "score": 20,
+        "why_it_matters": "Equity funds offer higher liquidity, lower transaction costs, and historically superior returns over 20+ year periods compared to typical real estate without debt leverage.",
+        "mentor_feedback": "For pure long-term accumulation, diversified equity remains king due to liquidity and low costs."
+      },
+      {
+        "text": "Buy the fractional share of commercial real estate (REIT).",
+        "decision_type": "INVEST",
+        "balance_impact": 0.0,
+        "confidence_delta": 2,
+        "risk_score_delta": 2,
+        "future_growth_rate": 0.0008,
+        "score": 10,
+        "why_it_matters": "Real estate provides diversification and potential rental income, but returns can be lower and are subject to market cycles and higher costs.",
+        "mentor_feedback": "Good for diversification, but beware of lower liquidity and potential overheads."
+      },
+      {
+        "text": "Split 50/50 between the real estate and the index fund.",
+        "decision_type": "INVEST",
+        "balance_impact": 0.0,
+        "confidence_delta": 3,
+        "risk_score_delta": 0,
+        "future_growth_rate": 0.0012,
+        "score": 15,
+        "why_it_matters": "This is a sensible **Asset Allocation** strategy. It balances the growth potential of stocks with the lower volatility and income potential of real estate.",
+        "mentor_feedback": "A well-balanced, diversified approach. Always respect asset allocation."
+      }
+    ]
+  },
+  {
+    "id": 13,
+    "title": "The Raise Negotiation",
+    "description": "You are offered a new job with a ₹10,00,000 salary. You believe you can negotiate an extra ₹1,00,000. The company states there is no room to negotiate on base salary.",
+    "starting_balance": 0.0,
+    "options": [
+      {
+        "text": "Accept the ₹10,00,000 base salary immediately without further negotiation.",
+        "decision_type": "SAVE",
+        "balance_impact": 0.0,
+        "confidence_delta": -5,
+        "risk_score_delta": 0,
+        "future_growth_rate": 0.0,
+        "score": 5,
+        "why_it_matters": "You potentially leave money on the table. Financial negotiation skills are key to increasing lifetime wealth.",
+        "mentor_feedback": "Never accept the first offer, especially when you have leverage."
+      },
+      {
+        "text": "Ask for the extra ₹1,00,000 as a non-salary bonus, stock options, or increased retirement contributions.",
+        "decision_type": "INVEST",
+        "balance_impact": 100000.0,
+        "confidence_delta": 5,
+        "risk_score_delta": 0,
+        "future_growth_rate": 0.001,
+        "score": 20,
+        "why_it_matters": "This demonstrates negotiation savvy by pivoting. You secure the value you asked for in a different form, often with tax advantages or future growth potential.",
+        "mentor_feedback": "Brilliant pivot! Negotiating total compensation, not just salary, is the sign of a financial pro."
+      },
+      {
+        "text": "Ask them to increase your annual vacation days instead of the salary.",
+        "decision_type": "SPEND",
+        "balance_impact": 0.0,
+        "confidence_delta": 0,
+        "risk_score_delta": 0,
+        "future_growth_rate": 0.0,
+        "score": 10,
+        "why_it_matters": "While important for work-life balance, you missed an opportunity to increase your financial worth. Time is not a fungible replacement for compounding income.",
+        "mentor_feedback": "A lifestyle choice, but not the optimal financial one. Keep money and time separate in negotiations."
+      }
+    ]
+  },
+  {
+    "id": 14,
+    "title": "The Gold Investment",
+    "description": "You are worried about geopolitical instability and have ₹50,000 to allocate to diversify away from stocks and bonds. Your friend suggests physical gold.",
+    "starting_balance": 50000.0,
+    "options": [
+      {
+        "text": "Buy physical gold coins and store them in a safe at home.",
+        "decision_type": "SAVE",
+        "balance_impact": 0.0,
+        "confidence_delta": -3,
+        "risk_score_delta": 1,
+        "future_growth_rate": 0.0005,
+        "score": 10,
+        "why_it_matters": "Physical gold involves security risks, potential storage costs, and high making charges when bought, which reduces your return. It's inefficient.",
+        "mentor_feedback": "Avoid physical gold for investment purposes. The security risks and costs are too high."
+      },
+      {
+        "text": "Invest in a Sovereign Gold Bond (SGB) or a Gold ETF.",
+        "decision_type": "INVEST",
+        "balance_impact": 0.0,
+        "confidence_delta": 5,
+        "risk_score_delta": -1,
+        "future_growth_rate": 0.0008,
+        "score": 20,
+        "why_it_matters": "SGBs/ETFs track gold prices without the costs of purity and storage, and SGBs even offer a small interest payment. This is the efficient way to hold gold exposure.",
+        "mentor_feedback": "The best way to invest in gold. You avoid physical risk and costs, and SGBs offer extra interest."
+      },
+      {
+        "text": "Keep the money in the bank until the geopolitical situation stabilizes.",
+        "decision_type": "SAVE",
+        "balance_impact": 50000.0,
+        "confidence_delta": -5,
+        "risk_score_delta": 0,
+        "future_growth_rate": 0.0,
+        "score": 5,
+        "why_it_matters": "Gold is a safe haven against uncertainty. Delaying this allocation defeats the purpose of buying it now. Inflation will erode the cash.",
+        "mentor_feedback": "Delayed decisions are often bad decisions. Use diversification when you need it."
+      }
+    ]
+  },
+  {
+    "id": 15,
+    "title": "Gifting vs. Investing for Your Child",
+    "description": "Your daughter turned one. You have ₹1,00,000. You can either buy her a fancy toy collection or open a long-term investment account for her higher education (17 years away).",
+    "starting_balance": 100000.0,
+    "options": [
+      {
+        "text": "Buy the toy collection (₹50,000) and save the rest in a Fixed Deposit for her future.",
+        "decision_type": "SPEND",
+        "balance_impact": -50000.0,
+        "confidence_delta": -2,
+        "risk_score_delta": 0,
+        "future_growth_rate": 0.0,
+        "score": 10,
+        "why_it_matters": "Toys are quickly depreciated/forgotten. The money saved in a Fixed Deposit will not grow enough to cover future education costs due to inflation.",
+        "mentor_feedback": "A mix of emotion and low-return thinking. Prioritize the future need."
+      },
+      {
+        "text": "Invest the entire ₹1,00,000 into an equity Mutual Fund and buy a small, token gift.",
+        "decision_type": "INVEST",
+        "balance_impact": 0.0,
+        "confidence_delta": 5,
+        "risk_score_delta": 2,
+        "future_growth_rate": 0.0017,
+        "score": 20,
+        "why_it_matters": "With a 17-year time horizon, equity is the appropriate asset class to achieve the 10-12x returns needed for higher education, leveraging compounding interest fully.",
+        "mentor_feedback": "The power of compounding over 17 years is immense. This is an excellent decision."
+      },
+      {
+        "text": "Put the entire ₹1,00,000 into a safe government bond scheme (e.g., PPF).",
+        "decision_type": "SAVE",
+        "balance_impact": 0.0,
+        "confidence_delta": 3,
+        "risk_score_delta": -1,
+        "future_growth_rate": 0.0007,
+        "score": 15,
+        "why_it_matters": "While government schemes are safe and tax-free, they often deliver lower returns than equity over 15+ years, potentially underfunding the goal.",
+        "mentor_feedback": "A safe but conservative choice for such a long horizon. You are giving up significant growth potential."
+      }
+    ]
+  },
+  {
+    "id": 16,
+    "title": "Debt Consolidation",
+    "description": "You have three small loans totaling ₹3,00,000 with interest rates of 15%, 12%, and 10%. You qualify for a new personal loan of ₹3,00,000 at a flat 11%.",
+    "starting_balance": 300000.0,
+    "options": [
+      {
+        "text": "Consolidate the debt: take the new 11% loan and use it to pay off all three existing loans.",
+        "decision_type": "SAVE",
+        "balance_impact": 0.0,
+        "confidence_delta": 5,
+        "risk_score_delta": -3,
+        "future_growth_rate": 0.0,
+        "score": 20,
+        "why_it_matters": "This is **Debt Consolidation**. It simplifies management and reduces your weighted average interest cost, saving you money instantly.",
+        "mentor_feedback": "Smart. Simplify your finances and reduce interest outflow simultaneously."
+      },
+      {
+        "text": "Pay off only the 15% loan and keep the other two loans separate.",
+        "decision_type": "SAVE",
+        "balance_impact": 0.0,
+        "confidence_delta": 2,
+        "risk_score_delta": 0,
+        "future_growth_rate": 0.0,
+        "score": 15,
+        "why_it_matters": "This follows the **Debt Avalanche** method (highest interest first), but you miss the opportunity to lower the 12% and 10% rates to 11% using the new loan.",
+        "mentor_feedback": "Good intent, but you missed a better, consolidated option to lower all rates."
+      },
+      {
+        "text": "Don't consolidate, just keep paying the minimum on all three.",
+        "decision_type": "SPEND",
+        "balance_impact": 0.0,
+        "confidence_delta": -5,
+        "risk_score_delta": 3,
+        "future_growth_rate": 0.0,
+        "score": 5,
+        "why_it_matters": "You continue to pay maximum interest and deal with unnecessary complexity. This is the least efficient decision.",
+        "mentor_feedback": "Never overpay interest. Use consolidation to your advantage."
+      }
+    ]
+  },
+  {
+    "id": 17,
+    "title": "The Power of Compounding (Delaying Investment)",
+    "description": "You are 25. You want to save ₹5,000 per month for retirement, but decide to delay starting until age 35. You invest until age 65 (30 years vs. 20 years of investing).",
+    "starting_balance": 5000.0,
+    "options": [
+      {
+        "text": "Start investing the ₹5,000/month immediately at age 25.",
+        "decision_type": "INVEST",
+        "balance_impact": 0.0,
+        "confidence_delta": 5,
+        "risk_score_delta": 0,
+        "future_growth_rate": 0.0025,
+        "score": 20,
+        "why_it_matters": "The first 10 years of compounding are the most valuable. Due to the exponential nature of compounding, the 10 years you invest early can double or triple the final corpus compared to starting later.",
+        "mentor_feedback": "Time is your greatest asset. Maximizing compounding returns is always the top priority."
+      },
+      {
+        "text": "Delay starting until age 35, assuming you'll catch up later.",
+        "decision_type": "SPEND",
+        "balance_impact": -5000.0,
+        "confidence_delta": -5,
+        "risk_score_delta": 0,
+        "future_growth_rate": 0.001,
+        "score": 5,
+        "why_it_matters": "You lose a massive portion of potential final wealth. To reach the same goal at 65, you would need to invest 2-3 times more per month after age 35.",
+        "mentor_feedback": "Delaying retirement saving is the most expensive mistake young investors make."
+      },
+      {
+        "text": "Spend the ₹5,000/month now and save it all up in cash to invest as a lump sum at age 35.",
+        "decision_type": "SAVE",
+        "balance_impact": 0.0,
+        "confidence_delta": 0,
+        "risk_score_delta": 0,
+        "future_growth_rate": 0.0,
+        "score": 10,
+        "why_it_matters": "You lose the entire compounding effect of those 10 years. The return on the invested money (compounding) greatly exceeds the cash you saved.",
+        "mentor_feedback": "It's not about the money saved; it's about the returns those early investments generate."
+      }
+    ]
+  },
+  {
+    "id": 18,
+    "title": "Behavioral Bias: Loss Aversion",
+    "description": "You invested ₹50,000 in Stock X. It is now worth ₹30,000 (a ₹20,000 loss). You also have Stock Y which is worth ₹70,000 (a ₹20,000 gain). You need to sell ₹30,000 worth of shares for a sudden expense.",
+    "starting_balance": 0.0,
+    "options": [
+      {
+        "text": "Sell Stock X (the loser) to 'get it off the books' and free up your money.",
+        "decision_type": "SAVE",
+        "balance_impact": 0.0,
+        "confidence_delta": -5,
+        "risk_score_delta": 0,
+        "future_growth_rate": 0.0,
+        "score": 10,
+        "why_it_matters": "You sell the loser, which means you realize the loss and miss the opportunity for it to recover. You are also not considering the future potential of the stock, only its past performance.",
+        "mentor_feedback": "Don't let **Loss Aversion** drive your decisions. The past is sunk cost; focus on future potential."
+      },
+      {
+        "text": "Sell Stock Y (the winner) because you don't want to realize the loss on Stock X.",
+        "decision_type": "INVEST",
+        "balance_impact": 0.0,
+        "confidence_delta": -5,
+        "risk_score_delta": 0,
+        "future_growth_rate": 0.0,
+        "score": 10,
+        "why_it_matters": "This is another manifestation of **Loss Aversion**. You sell your performing asset to hold onto a non-performing one, simply to avoid the feeling of realizing a loss.",
+        "mentor_feedback": "Selling a winner to hold a loser is a common, but financially damaging, behavioral bias."
+      },
+      {
+        "text": "Evaluate the future growth potential of both stocks, and sell whichever has the worse outlook (regardless of past gains/losses).",
+        "decision_type": "INVEST",
+        "balance_impact": 0.0,
+        "confidence_delta": 5,
+        "risk_score_delta": 0,
+        "future_growth_rate": 0.0,
+        "score": 20,
+        "why_it_matters": "This is a rational decision. Past performance (gain/loss) is irrelevant. The decision should only be based on which stock is a better investment for the future.",
+        "mentor_feedback": "Purely rational. You must detach emotion and focus on the fundamental future value."
+      }
+    ]
+  },
+  {
+    "id": 19,
+    "title": "The Annuity Decision",
+    "description": "You are 65 and retiring with a corpus of ₹1 Crore. You need a stable monthly income. You can purchase an immediate annuity or keep the entire corpus invested in low-risk Mutual Funds.",
+    "starting_balance": 10000000.0,
+    "options": [
+      {
+        "text": "Purchase an immediate annuity with a guaranteed fixed income for life.",
+        "decision_type": "SAVE",
+        "balance_impact": 0.0,
+        "confidence_delta": 4,
+        "risk_score_delta": -3,
+        "future_growth_rate": 0.0,
+        "score": 20,
+        "why_it_matters": "Annuities eliminate **longevity risk** (the risk of outliving your money) by providing a paycheck guaranteed for life. This is essential for peace of mind in old age.",
+        "mentor_feedback": "Security in retirement is paramount. Annuities guarantee income, eliminating the biggest retirement risk."
+      },
+      {
+        "text": "Keep the corpus invested in low-risk mutual funds and withdraw 4% annually.",
+        "decision_type": "INVEST",
+        "balance_impact": 0.0,
+        "confidence_delta": 2,
+        "risk_score_delta": 2,
+        "future_growth_rate": 0.0005,
+        "score": 10,
+        "why_it_matters": "This strategy (the 4% rule) has market risk. While it offers inflation protection, a severe market downturn early in retirement could deplete your savings (sequence of returns risk).",
+        "mentor_feedback": "The 4% rule is good, but doesn't eliminate market risk, which can be devastating in retirement."
+      },
+      {
+        "text": "Spend ₹20 Lakh on a world tour immediately and then invest the rest.",
+        "decision_type": "SPEND",
+        "balance_impact": -2000000.0,
+        "confidence_delta": -5,
+        "risk_score_delta": 0,
+        "future_growth_rate": 0.0,
+        "score": 5,
+        "why_it_matters": "Spending a large chunk of capital early dramatically reduces the principal from which all future income is drawn, making your money much more likely to run out.",
+        "mentor_feedback": "Avoid front-loading your retirement spending. Conserve capital to ensure long-term stability."
+      }
+    ]
+  },
+  {
+    "id": 20,
+    "title": "Insurance Coverage Review (Health)",
+    "description": "You have a basic health insurance policy of ₹5 Lakh coverage. Your hospital costs have historically been low, but you worry about catastrophic illness.",
+    "starting_balance": 0.0,
+    "options": [
+      {
+        "text": "Increase your existing policy coverage to ₹10 Lakh immediately.",
+        "decision_type": "SAVE",
+        "balance_impact": 0.0,
+        "confidence_delta": 3,
+        "risk_score_delta": -1,
+        "future_growth_rate": 0.0,
+        "score": 15,
+        "why_it_matters": "Increasing the base sum insured is good but expensive. There is a more cost-effective option to cover huge costs.",
+        "mentor_feedback": "Good, but not the most efficient way to achieve high-sum coverage."
+      },
+      {
+        "text": "Buy a **Super Top-Up Health Insurance Policy** for ₹50 Lakh with a ₹5 Lakh deductible.",
+        "decision_type": "SAVE",
+        "balance_impact": 0.0,
+        "confidence_delta": 5,
+        "risk_score_delta": -2,
+        "future_growth_rate": 0.0,
+        "score": 20,
+        "why_it_matters": "A Super Top-Up is highly cost-effective for covering catastrophic costs, as it only activates once your base policy (the ₹5 Lakh deductible) is exhausted. This is the optimal strategy.",
+        "mentor_feedback": "The pro move! Super Top-Ups provide massive coverage for a low premium, perfect for catastrophic risk."
+      },
+      {
+        "text": "Drop your health insurance and rely on your investments to cover any major medical costs.",
+        "decision_type": "INVEST",
+        "balance_impact": 0.0,
+        "confidence_delta": -10,
+        "risk_score_delta": 5,
+        "future_growth_rate": 0.0,
+        "score": 0,
+        "why_it_matters": "A single major illness can wipe out decades of savings, forcing you to liquidate investments at the wrong time. Insurance transfers this risk away from your wealth.",
+        "mentor_feedback": "Never use investments as a substitute for insurance. Medical costs are highly unpredictable."
+      }
+    ]
+  },
+  {
+    "id": 21,
+    "title": "The Side Hustle Investment",
+    "description": "You've been running a successful side business that generates ₹30,000 per month. You want to scale it but need ₹2,00,000 for equipment and marketing. You can take a business loan at 12% or use your savings.",
+    "starting_balance": 200000.0,
+    "options": [
+      {
+        "text": "Take a business loan at 12% to preserve your savings for emergencies.",
+        "decision_type": "INVEST",
+        "balance_impact": 0.0,
+        "confidence_delta": 3,
+        "risk_score_delta": 2,
+        "future_growth_rate": 0.002,
+        "score": 15,
+        "why_it_matters": "Using debt to grow a proven business can be smart, but 12% is high. If your business ROI exceeds 12%, it makes sense. However, you're adding financial risk.",
+        "mentor_feedback": "Debt for growth can work, but ensure your returns exceed the cost."
+      },
+      {
+        "text": "Use ₹2,00,000 from savings to fund the expansion directly.",
+        "decision_type": "INVEST",
+        "balance_impact": -200000.0,
+        "confidence_delta": 5,
+        "risk_score_delta": -1,
+        "future_growth_rate": 0.003,
+        "score": 20,
+        "why_it_matters": "Using your own capital avoids interest costs and gives you full control. If the business is proven and profitable, this is often the best approach.",
+        "mentor_feedback": "Smart move! Using your own capital eliminates debt costs and maximizes returns."
+      },
+      {
+        "text": "Split: Use ₹1,00,000 savings and take ₹1,00,000 loan.",
+        "decision_type": "INVEST",
+        "balance_impact": -100000.0,
+        "confidence_delta": 4,
+        "risk_score_delta": 1,
+        "future_growth_rate": 0.0025,
+        "score": 18,
+        "why_it_matters": "A balanced approach that reduces debt burden while preserving some savings. Good for managing risk while still leveraging debt benefits.",
+        "mentor_feedback": "A pragmatic middle ground that balances risk and opportunity."
+      }
+    ]
+  },
+  {
+    "id": 22,
+    "title": "The Windfall Tax Strategy",
+    "description": "You received a ₹5,00,000 inheritance. You're in the 30% tax bracket. You can invest it immediately or wait until next financial year to optimize taxes.",
+    "starting_balance": 500000.0,
+    "options": [
+      {
+        "text": "Invest immediately in tax-saving instruments (ELSS, PPF) to reduce this year's tax liability.",
+        "decision_type": "INVEST",
+        "balance_impact": 0.0,
+        "confidence_delta": 5,
+        "risk_score_delta": 1,
+        "future_growth_rate": 0.0015,
+        "score": 20,
+        "why_it_matters": "Time in the market beats timing the market. By investing immediately in tax-saving instruments, you get both tax benefits and start compounding early.",
+        "mentor_feedback": "Excellent! Maximize tax savings while getting your money to work immediately."
+      },
+      {
+        "text": "Wait until next financial year to invest, keeping it in a savings account for now.",
+        "decision_type": "SAVE",
+        "balance_impact": 500000.0,
+        "confidence_delta": -3,
+        "risk_score_delta": 0,
+        "future_growth_rate": 0.0003,
+        "score": 5,
+        "why_it_matters": "Delaying investment means losing potential returns and tax benefits. The opportunity cost of waiting often exceeds any tax optimization benefits.",
+        "mentor_feedback": "Don't let tax planning delay wealth building. Invest now, optimize taxes later."
+      },
+      {
+        "text": "Spend ₹1,00,000 on immediate needs and invest the remaining ₹4,00,000.",
+        "decision_type": "SPEND",
+        "balance_impact": -100000.0,
+        "confidence_delta": 2,
+        "risk_score_delta": 0,
+        "future_growth_rate": 0.0012,
+        "score": 15,
+        "why_it_matters": "While some spending is reasonable, maximizing investment of windfalls accelerates wealth building. Every rupee invested compounds over time.",
+        "mentor_feedback": "Good balance, but consider maximizing investment for long-term wealth."
+      }
+    ]
+  },
+  {
+    "id": 23,
+    "title": "The Crypto FOMO Decision",
+    "description": "Bitcoin has surged 50% in the last month. Friends are making significant gains. You have ₹1,00,000 saved and are tempted to invest heavily in cryptocurrency.",
+    "starting_balance": 100000.0,
+    "options": [
+      {
+        "text": "Invest ₹80,000 in Bitcoin and keep ₹20,000 as emergency fund.",
+        "decision_type": "INVEST",
+        "balance_impact": 0.0,
+        "confidence_delta": -5,
+        "risk_score_delta": 10,
+        "future_growth_rate": 0.015,
+        "score": 5,
+        "why_it_matters": "This is FOMO-driven investing. Cryptocurrency is highly volatile and speculative. Allocating 80% of savings to a single volatile asset is extremely risky.",
+        "mentor_feedback": "FOMO is dangerous! Never invest based on others' gains or fear of missing out."
+      },
+      {
+        "text": "Invest ₹10,000 (10%) in crypto and ₹90,000 in diversified index funds.",
+        "decision_type": "INVEST",
+        "balance_impact": 0.0,
+        "confidence_delta": 4,
+        "risk_score_delta": 2,
+        "future_growth_rate": 0.0025,
+        "score": 20,
+        "why_it_matters": "This follows the 'core-satellite' strategy. The majority (90%) is in proven, diversified investments, while a small allocation (10%) satisfies speculative interest without risking your financial foundation.",
+        "mentor_feedback": "Perfect allocation! Core-satellite strategy balances growth with safety."
+      },
+      {
+        "text": "Avoid crypto entirely and invest all ₹1,00,000 in traditional index funds.",
+        "decision_type": "INVEST",
+        "balance_impact": 0.0,
+        "confidence_delta": 5,
+        "risk_score_delta": -2,
+        "future_growth_rate": 0.0012,
+        "score": 18,
+        "why_it_matters": "A conservative, proven approach. While you might miss crypto gains, you also avoid the risk of significant losses. Index funds provide steady, long-term growth.",
+        "mentor_feedback": "Prudent choice. Sticking to proven strategies is never wrong."
+      }
+    ]
+  },
+  {
+    "id": 24,
+    "title": "The Home Loan Prepayment",
+    "description": "You have a home loan of ₹50,00,000 at 8% interest. You have ₹5,00,000 extra. Your investments are earning 10%. Should you prepay the loan or invest?",
+    "starting_balance": 500000.0,
+    "options": [
+      {
+        "text": "Prepay ₹5,00,000 towards the home loan principal.",
+        "decision_type": "SAVE",
+        "balance_impact": -500000.0,
+        "confidence_delta": 4,
+        "risk_score_delta": -2,
+        "future_growth_rate": 0.0,
+        "score": 18,
+        "why_it_matters": "Prepaying debt provides a guaranteed 8% return (the interest you save). While 10% investments sound better, the guaranteed 8% is risk-free and reduces financial stress.",
+        "mentor_feedback": "Smart! Guaranteed 8% return is excellent, especially when it reduces debt burden."
+      },
+      {
+        "text": "Invest the ₹5,00,000 in the market expecting 10% returns.",
+        "decision_type": "INVEST",
+        "balance_impact": 0.0,
+        "confidence_delta": 2,
+        "risk_score_delta": 3,
+        "future_growth_rate": 0.0067,
+        "score": 15,
+        "why_it_matters": "While 10% > 8%, the 2% difference may not be worth the risk. Market returns are uncertain, while loan interest is guaranteed. The risk-adjusted return favors prepayment.",
+        "mentor_feedback": "The math seems right, but guaranteed returns often beat uncertain ones."
+      },
+      {
+        "text": "Split: Prepay ₹2,50,000 and invest ₹2,50,000.",
+        "decision_type": "SAVE",
+        "balance_impact": -250000.0,
+        "confidence_delta": 3,
+        "risk_score_delta": 0,
+        "future_growth_rate": 0.0033,
+        "score": 17,
+        "why_it_matters": "A balanced approach that reduces debt while maintaining investment exposure. Good for those who want both debt reduction and growth potential.",
+        "mentor_feedback": "Balanced strategy that addresses both debt and growth goals."
+      }
+    ]
+  },
+  {
+    "id": 25,
+    "title": "The Emergency vs. Opportunity Fund",
+    "description": "You have ₹3,00,000 saved. A once-in-a-lifetime investment opportunity requires ₹2,00,000. Your emergency fund is only ₹1,00,000 (should be ₹2,00,000).",
+    "starting_balance": 300000.0,
+    "options": [
+      {
+        "text": "Invest ₹2,00,000 in the opportunity and keep ₹1,00,000 as emergency fund.",
+        "decision_type": "INVEST",
+        "balance_impact": 0.0,
+        "confidence_delta": -3,
+        "risk_score_delta": 5,
+        "future_growth_rate": 0.005,
+        "score": 10,
+        "why_it_matters": "This violates the emergency fund rule. If an emergency occurs, you'll be forced to liquidate investments at potentially bad times or take on debt.",
+        "mentor_feedback": "Never compromise your emergency fund for any opportunity, no matter how good."
+      },
+      {
+        "text": "Build emergency fund to ₹2,00,000 first, then invest remaining ₹1,00,000.",
+        "decision_type": "SAVE",
+        "balance_impact": 100000.0,
+        "confidence_delta": 5,
+        "risk_score_delta": -2,
+        "future_growth_rate": 0.0005,
+        "score": 20,
+        "why_it_matters": "Emergency funds are non-negotiable. They protect you from being forced to sell investments during emergencies or take high-interest debt. Security first, opportunity second.",
+        "mentor_feedback": "Perfect! Emergency fund is your financial safety net. Never skip it."
+      },
+      {
+        "text": "Invest ₹1,50,000 and add ₹50,000 to emergency fund (total ₹1,50,000).",
+        "decision_type": "INVEST",
+        "balance_impact": 0.0,
+        "confidence_delta": 1,
+        "risk_score_delta": 2,
+        "future_growth_rate": 0.0025,
+        "score": 12,
+        "why_it_matters": "Still underfunded on emergency fund. While better than option 1, you're still taking unnecessary risk by not having a full emergency fund.",
+        "mentor_feedback": "Better, but your emergency fund should be complete before investing."
+      }
+    ]
+  },
+  {
+    "id": 26,
+    "title": "The Dividend vs. Growth Stock",
+    "description": "You have ₹2,00,000 to invest. You can choose between a high-dividend stock (5% yield) or a growth stock (no dividend, but 15% annual growth expected).",
+    "starting_balance": 200000.0,
+    "options": [
+      {
+        "text": "Invest in the high-dividend stock for regular income.",
+        "decision_type": "INVEST",
+        "balance_impact": 0.0,
+        "confidence_delta": 3,
+        "risk_score_delta": 1,
+        "future_growth_rate": 0.0005,
+        "score": 15,
+        "why_it_matters": "Dividend stocks provide income but often grow slower. For long-term wealth building, growth stocks typically outperform. However, dividends can be good for income needs.",
+        "mentor_feedback": "Good for income, but growth stocks usually build more wealth long-term."
+      },
+      {
+        "text": "Invest in the growth stock for maximum long-term returns.",
+        "decision_type": "INVEST",
+        "balance_impact": 0.0,
+        "confidence_delta": 5,
+        "risk_score_delta": 2,
+        "future_growth_rate": 0.001,
+        "score": 20,
+        "why_it_matters": "For long-term wealth building, growth stocks typically outperform dividend stocks due to compounding. The 15% growth rate will significantly outpace the 5% dividend yield over time.",
+        "mentor_feedback": "Excellent choice! Growth stocks maximize long-term wealth through compounding."
+      },
+      {
+        "text": "Split 50/50 between dividend and growth stocks.",
+        "decision_type": "INVEST",
+        "balance_impact": 0.0,
+        "confidence_delta": 4,
+        "risk_score_delta": 1,
+        "future_growth_rate": 0.0008,
+        "score": 18,
+        "why_it_matters": "A balanced approach that provides both income and growth. Good for those who want regular income while still participating in growth.",
+        "mentor_feedback": "Balanced strategy that combines income and growth benefits."
+      }
+    ]
+  },
+  {
+    "id": 27,
+    "title": "The Job Loss Preparation",
+    "description": "You suspect your company might downsize. You have ₹4,00,000 saved. Should you build a larger emergency fund or continue investing?",
+    "starting_balance": 400000.0,
+    "options": [
+      {
+        "text": "Move ₹2,00,000 to emergency fund (total ₹3,00,000) and continue investing ₹2,00,000.",
+        "decision_type": "SAVE",
+        "balance_impact": 200000.0,
+        "confidence_delta": 4,
+        "risk_score_delta": -1,
+        "future_growth_rate": 0.0005,
+        "score": 18,
+        "why_it_matters": "When job security is uncertain, increasing your emergency fund is prudent. A 6-month emergency fund provides security during job search.",
+        "mentor_feedback": "Smart preparation! A larger emergency fund reduces stress during uncertainty."
+      },
+      {
+        "text": "Invest all ₹4,00,000 aggressively to maximize returns before potential job loss.",
+        "decision_type": "INVEST",
+        "balance_impact": 0.0,
+        "confidence_delta": -5,
+        "risk_score_delta": 5,
+        "future_growth_rate": 0.005,
+        "score": 5,
+        "why_it_matters": "This is risky. If you lose your job, you may need to liquidate investments at bad times. Security should come before aggressive investing during uncertainty.",
+        "mentor_feedback": "Too risky! Prioritize security when job loss is possible."
+      },
+      {
+        "text": "Keep current allocation and wait to see what happens.",
+        "decision_type": "SAVE",
+        "balance_impact": 0.0,
+        "confidence_delta": 0,
+        "risk_score_delta": 0,
+        "future_growth_rate": 0.0003,
+        "score": 10,
+        "why_it_matters": "Waiting is often the worst strategy. If job loss occurs, you'll wish you had prepared. It's better to be proactive and increase emergency fund now.",
+        "mentor_feedback": "Don't wait! Prepare for uncertainty proactively."
+      }
+    ]
+  },
+  {
+    "id": 28,
+    "title": "The Tax-Loss Harvesting Opportunity",
+    "description": "You have a stock that's down ₹50,000. You can sell it to realize the loss for tax benefits, then reinvest in a similar stock. Or hold and wait for recovery.",
+    "starting_balance": 0.0,
+    "options": [
+      {
+        "text": "Sell the losing stock, realize the tax loss, and reinvest in a similar stock.",
+        "decision_type": "INVEST",
+        "balance_impact": 0.0,
+        "confidence_delta": 5,
+        "risk_score_delta": 0,
+        "future_growth_rate": 0.0,
+        "score": 20,
+        "why_it_matters": "Tax-loss harvesting allows you to offset capital gains with losses, reducing your tax bill. Reinvesting in a similar stock maintains your market exposure while capturing the tax benefit.",
+        "mentor_feedback": "Excellent tax strategy! Tax-loss harvesting is a smart way to reduce taxes."
+      },
+      {
+        "text": "Hold the stock and wait for it to recover.",
+        "decision_type": "INVEST",
+        "balance_impact": 0.0,
+        "confidence_delta": -2,
+        "risk_score_delta": 0,
+        "future_growth_rate": 0.0,
+        "score": 10,
+        "why_it_matters": "Holding a losing position hoping for recovery (the 'sunk cost fallacy') can prevent you from taking advantage of tax benefits. The stock may never recover, and you miss the tax savings.",
+        "mentor_feedback": "Don't let emotions prevent tax optimization. Harvest losses when possible."
+      },
+      {
+        "text": "Sell and keep the cash, avoiding similar stocks.",
+        "decision_type": "SAVE",
+        "balance_impact": 0.0,
+        "confidence_delta": -3,
+        "risk_score_delta": -1,
+        "future_growth_rate": 0.0,
+        "score": 5,
+        "why_it_matters": "While you get the tax benefit, keeping cash out of the market means missing potential recovery and growth. Reinvesting maintains market exposure.",
+        "mentor_feedback": "Get the tax benefit, but reinvest to maintain market exposure."
+      }
+    ]
+  },
+  {
+    "id": 29,
+    "title": "The Education Investment",
+    "description": "You want to switch careers and need a ₹3,00,000 certification course. You can take a loan at 10% or use your investments that are earning 12%.",
+    "starting_balance": 300000.0,
+    "options": [
+      {
+        "text": "Take a loan at 10% and keep investments earning 12%.",
+        "decision_type": "INVEST",
+        "balance_impact": 0.0,
+        "confidence_delta": 4,
+        "risk_score_delta": 2,
+        "future_growth_rate": 0.0067,
+        "score": 18,
+        "why_it_matters": "If your investments earn 12% and the loan costs 10%, you're net positive 2%. However, education loans often have tax benefits and lower rates, making this a good strategy.",
+        "mentor_feedback": "Smart! Leveraging low-cost debt for education while keeping investments working."
+      },
+      {
+        "text": "Use ₹3,00,000 from investments to pay for the course directly.",
+        "decision_type": "INVEST",
+        "balance_impact": -300000.0,
+        "confidence_delta": 5,
+        "risk_score_delta": -1,
+        "future_growth_rate": 0.0,
+        "score": 15,
+        "why_it_matters": "While this avoids debt, you lose the 12% returns on your investments. If the loan rate (10%) is lower than your investment returns (12%), taking the loan is financially better.",
+        "mentor_feedback": "Avoiding debt is good, but the math favors taking the loan in this case."
+      },
+      {
+        "text": "Split: Use ₹1,50,000 savings and take ₹1,50,000 loan.",
+        "decision_type": "INVEST",
+        "balance_impact": -150000.0,
+        "confidence_delta": 4,
+        "risk_score_delta": 0,
+        "future_growth_rate": 0.0033,
+        "score": 17,
+        "why_it_matters": "A balanced approach that reduces debt burden while maintaining some investment exposure. Good for managing risk while still leveraging debt benefits.",
+        "mentor_feedback": "Balanced strategy that reduces debt while keeping investments working."
+      }
+    ]
+  },
+  {
+    "id": 30,
+    "title": "The Market Crash Opportunity",
+    "description": "The market just crashed 20%. You have ₹5,00,000 in cash. Your emergency fund is complete. Should you invest now or wait for further drops?",
+    "starting_balance": 500000.0,
+    "options": [
+      {
+        "text": "Invest all ₹5,00,000 immediately while prices are low.",
+        "decision_type": "INVEST",
+        "balance_impact": 0.0,
+        "confidence_delta": 5,
+        "risk_score_delta": 2,
+        "future_growth_rate": 0.002,
+        "score": 20,
+        "why_it_matters": "Market crashes are buying opportunities. Trying to time the exact bottom is nearly impossible. Investing immediately captures the low prices and starts the recovery process.",
+        "mentor_feedback": "Perfect! Market crashes are opportunities. Don't try to time the exact bottom."
+      },
+      {
+        "text": "Wait for the market to drop another 10% before investing.",
+        "decision_type": "INVEST",
+        "balance_impact": 0.0,
+        "confidence_delta": -3,
+        "risk_score_delta": 0,
+        "future_growth_rate": 0.001,
+        "score": 5,
+        "why_it_matters": "This is market timing, which rarely works. The market might recover before dropping further, and you'll miss the opportunity. Time in the market beats timing the market.",
+        "mentor_feedback": "Don't try to time the market! You might miss the recovery."
+      },
+      {
+        "text": "Invest ₹2,50,000 now and keep ₹2,50,000 for potential further drops.",
+        "decision_type": "INVEST",
+        "balance_impact": 0.0,
+        "confidence_delta": 4,
+        "risk_score_delta": 1,
+        "future_growth_rate": 0.0015,
+        "score": 15,
+        "why_it_matters": "A balanced approach that captures some of the opportunity while keeping cash for potential further drops. However, you might miss the full recovery if the market bounces back quickly.",
+        "mentor_feedback": "Good balance, but consider investing more to capture the full opportunity."
+      }
+    ]
+  }
+]
