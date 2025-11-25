@@ -1,6 +1,19 @@
 import { useState, useEffect } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
+import { 
+  LineChart, 
+  Line, 
+  AreaChart,
+  Area,
+  BarChart,
+  Bar,
+  XAxis, 
+  YAxis, 
+  CartesianGrid, 
+  Tooltip, 
+  ResponsiveContainer,
+  Legend 
+} from 'recharts'
 import {
   TrendingUp,
   TrendingDown,
@@ -11,10 +24,14 @@ import {
   TrendingDown as SellIcon,
   Sparkles,
   AlertCircle,
+  Eye,
+  EyeOff,
 } from 'lucide-react'
 import api from '../../utils/api'
+import { useAchievements } from '../../contexts/AchievementContext'
 
 const PortfolioTrade = ({ portfolio, onRefresh }) => {
+  const { checkAchievements } = useAchievements()
   const [searchParams] = useSearchParams()
   const [stocks, setStocks] = useState([])
   const [selectedStock, setSelectedStock] = useState(null)
@@ -26,6 +43,7 @@ const PortfolioTrade = ({ portfolio, onRefresh }) => {
   const [loading, setLoading] = useState(false)
   const [trading, setTrading] = useState(false)
   const [message, setMessage] = useState(null)
+  const [showMA, setShowMA] = useState(true)
 
   useEffect(() => {
     fetchStocks()
@@ -38,7 +56,9 @@ const PortfolioTrade = ({ portfolio, onRefresh }) => {
   const fetchStocks = async () => {
     try {
       const response = await api.getStocks()
-      setStocks(response.data.stocks || [])
+      const stocksData = response.data.stocks || []
+      setStocks(stocksData)
+      console.log('Fetched stocks:', stocksData.length, stocksData)
     } catch (error) {
       console.error('Error fetching stocks:', error)
     }
@@ -47,15 +67,34 @@ const PortfolioTrade = ({ portfolio, onRefresh }) => {
   const handleStockSelect = async (symbol) => {
     setLoading(true)
     try {
+      console.log('Selecting stock:', symbol)
       const response = await api.getStockDetail(symbol)
-      setSelectedStock(response.data)
-      setPriceHistory(response.data.price_history || [])
-      
-      // Fetch AI recommendation
-      const aiResponse = await api.getAIRecommendation({ symbol, action: 'analyze' })
-      setAiRecommendation(aiResponse.data)
+      console.log('Stock detail response:', response.data)
+      if (response.data) {
+        setSelectedStock(response.data)
+        setPriceHistory(response.data.price_history || [])
+        
+        // Fetch AI recommendation only if not a custom stock (or handle custom stocks differently)
+        if (!response.data.is_custom) {
+          try {
+            const aiResponse = await api.getAIRecommendation({ symbol, action: 'analyze' })
+            setAiRecommendation(aiResponse.data)
+          } catch (aiError) {
+            console.error('Error fetching AI recommendation:', aiError)
+            setAiRecommendation(null)
+          }
+        } else {
+          // For custom stocks, set a basic recommendation
+          setAiRecommendation({
+            recommendation: 'Hold',
+            confidence: 0.5,
+            message: 'This is a custom stock for practice trading.',
+          })
+        }
+      }
     } catch (error) {
       console.error('Error fetching stock detail:', error)
+      alert(`Error loading stock: ${error.message || 'Unknown error'}`)
     } finally {
       setLoading(false)
     }
@@ -78,6 +117,8 @@ const PortfolioTrade = ({ portfolio, onRefresh }) => {
       if (response.data.success) {
         setMessage({ type: 'success', text: response.data.message || 'Trade successful!' })
         setQuantity('')
+        // Check for achievements after successful trade
+        await checkAchievements()
         // Refresh portfolio immediately after successful trade
         if (onRefresh) {
           setTimeout(() => onRefresh(), 100) // Small delay to ensure backend update is complete
@@ -93,7 +134,10 @@ const PortfolioTrade = ({ portfolio, onRefresh }) => {
     }
   }
 
-  const formatCurrency = (value) => {
+  const formatCurrency = (value, currency = 'INR') => {
+    if (currency === 'USD') {
+      return `$${value?.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+    }
     return `₹${value?.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
   }
 
@@ -120,7 +164,7 @@ const PortfolioTrade = ({ portfolio, onRefresh }) => {
     <div className="space-y-6">
       {/* Stock Search */}
       <div className="bg-white rounded-xl shadow-card p-6">
-        <div className="mb-4">
+        <div className="mb-4 relative">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-text-muted" />
           <input
             type="text"
@@ -151,7 +195,7 @@ const PortfolioTrade = ({ portfolio, onRefresh }) => {
                   {formatPercent(stock.change_percent)}
                 </span>
               </div>
-              <p className="text-lg font-bold text-text-main">{formatCurrency(stock.current_price)}</p>
+              <p className="text-lg font-bold text-text-main">{formatCurrency(stock.current_price, stock.currency || 'INR')}</p>
             </button>
           ))}
         </div>
@@ -175,7 +219,7 @@ const PortfolioTrade = ({ portfolio, onRefresh }) => {
                 </div>
                 <div className="text-right">
                   <p className="text-3xl font-bold text-text-main mb-1">
-                    {formatCurrency(selectedStock.current_price)}
+                    {formatCurrency(selectedStock.current_price, selectedStock.currency || 'INR')}
                   </p>
                   <p className={`text-sm font-semibold ${selectedStock.change_percent >= 0 ? 'text-green-600' : 'text-red-600'}`}>
                     {formatPercent(selectedStock.change_percent)}
@@ -183,20 +227,68 @@ const PortfolioTrade = ({ portfolio, onRefresh }) => {
                 </div>
               </div>
 
+              {/* Chart Controls */}
               {priceHistory.length > 0 && (
-                <ResponsiveContainer width="100%" height={250}>
-                  <LineChart data={priceHistory}>
+                <div className="mb-4 flex items-center justify-between">
+                  <h3 className="text-lg font-bold text-text-main">Historical Price Chart</h3>
+                  <div className="flex items-center gap-4">
+                    {showMA && (
+                      <>
+                        <div className="flex items-center gap-2 text-sm">
+                          <div className="w-4 h-0.5 bg-blue-500 border-dashed border-blue-500"></div>
+                          <span className="text-text-muted">MA20</span>
+                        </div>
+                        <div className="flex items-center gap-2 text-sm">
+                          <div className="w-4 h-0.5 bg-purple-500 border-dashed border-purple-500"></div>
+                          <span className="text-text-muted">MA50</span>
+                        </div>
+                      </>
+                    )}
+                    <button
+                      onClick={() => setShowMA(!showMA)}
+                      className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-muted-1 hover:bg-muted-2 text-sm text-text-muted transition-colors"
+                    >
+                      {showMA ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                      {showMA ? 'HIDE MA' : 'SHOW MA'}
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* Price Chart */}
+              {priceHistory.length > 0 && (
+                <ResponsiveContainer width="100%" height={300}>
+                  <AreaChart data={priceHistory}>
+                    <defs>
+                      <linearGradient id="colorPrice" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#0ea5e9" stopOpacity={0.3}/>
+                        <stop offset="95%" stopColor="#0ea5e9" stopOpacity={0}/>
+                      </linearGradient>
+                    </defs>
                     <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
                     <XAxis
                       dataKey="date"
                       stroke="#6b7280"
                       style={{ fontSize: '12px' }}
-                      tickFormatter={(value) => new Date(value).toLocaleDateString('en-IN', { month: 'short', day: 'numeric' })}
+                      tickFormatter={(value) => {
+                        const date = new Date(value)
+                        return date.toLocaleDateString('en-IN', { month: 'short', day: 'numeric' })
+                      }}
                     />
                     <YAxis
                       stroke="#6b7280"
                       style={{ fontSize: '12px' }}
-                      tickFormatter={(value) => `₹${(value / 1000).toFixed(0)}k`}
+                      tickFormatter={(value) => {
+                        const currency = selectedStock?.currency || 'INR'
+                        if (currency === 'USD') {
+                          if (value >= 1000) return `$${(value / 1000).toFixed(0)}k`
+                          return `$${value.toFixed(0)}`
+                        } else {
+                          if (value >= 1000) return `₹${(value / 1000).toFixed(0)}k`
+                          return `₹${value.toFixed(0)}`
+                        }
+                      }}
+                      domain={['auto', 'auto']}
                     />
                     <Tooltip
                       contentStyle={{
@@ -204,17 +296,115 @@ const PortfolioTrade = ({ portfolio, onRefresh }) => {
                         border: '1px solid #e5e7eb',
                         borderRadius: '8px',
                       }}
-                      formatter={(value) => formatCurrency(value)}
+                      formatter={(value, name) => {
+                        if (name === 'volume') return `${(value / 1000000).toFixed(2)}M`
+                        const currency = selectedStock?.currency || 'INR'
+                        return formatCurrency(value, currency)
+                      }}
+                      labelFormatter={(value) => new Date(value).toLocaleDateString('en-IN', { 
+                        month: 'short', 
+                        day: 'numeric', 
+                        year: 'numeric' 
+                      })}
                     />
-                    <Line
+                    <Area
                       type="monotone"
                       dataKey="price"
-                      stroke="#0ea5e9"
+                      stroke="#10b981"
                       strokeWidth={2}
+                      fill="url(#colorPrice)"
                       dot={false}
                     />
-                  </LineChart>
+                    {showMA && (
+                      <>
+                        <Line
+                          type="monotone"
+                          dataKey="ma20"
+                          stroke="#3b82f6"
+                          strokeWidth={1.5}
+                          strokeDasharray="5 5"
+                          dot={false}
+                          strokeOpacity={0.8}
+                        />
+                        <Line
+                          type="monotone"
+                          dataKey="ma50"
+                          stroke="#a855f7"
+                          strokeWidth={1.5}
+                          strokeDasharray="5 5"
+                          dot={false}
+                          strokeOpacity={0.8}
+                        />
+                      </>
+                    )}
+                  </AreaChart>
                 </ResponsiveContainer>
+              )}
+
+              {/* Volume Chart */}
+              {priceHistory.length > 0 && (
+                <div className="mt-6">
+                  <h4 className="text-sm font-semibold text-text-muted mb-2">Volume</h4>
+                  <ResponsiveContainer width="100%" height={150}>
+                    <BarChart data={priceHistory}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" vertical={false} />
+                      <XAxis
+                        dataKey="date"
+                        stroke="#6b7280"
+                        style={{ fontSize: '11px' }}
+                        tickFormatter={(value) => {
+                          const date = new Date(value)
+                          return date.toLocaleDateString('en-IN', { month: 'short', day: 'numeric' })
+                        }}
+                      />
+                      <YAxis
+                        stroke="#6b7280"
+                        style={{ fontSize: '11px' }}
+                        tickFormatter={(value) => `${(value / 1000000).toFixed(0)}M`}
+                        width={50}
+                      />
+                      <Tooltip
+                        contentStyle={{
+                          backgroundColor: '#fff',
+                          border: '1px solid #e5e7eb',
+                          borderRadius: '8px',
+                        }}
+                        formatter={(value) => `${(value / 1000000).toFixed(2)}M`}
+                        labelFormatter={(value) => new Date(value).toLocaleDateString('en-IN')}
+                      />
+                      <Bar 
+                        dataKey="volume" 
+                        fill="#10b981" 
+                        opacity={0.7}
+                        radius={[2, 2, 0, 0]}
+                      />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              )}
+
+              {/* Summary Statistics */}
+              {selectedStock.summary && (
+                <div className="mt-6 pt-6 border-t border-muted-2 grid grid-cols-3 gap-4 text-center">
+                  <div>
+                    <p className="text-xs text-text-muted mb-1">High</p>
+                      <p className="text-sm font-bold text-text-main">
+                      {formatCurrency(selectedStock.summary.high, selectedStock.currency || 'INR')}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-text-muted mb-1">Average</p>
+                    <p className="text-sm font-bold text-text-main">
+                      {formatCurrency(selectedStock.summary.average, selectedStock.currency || 'INR')}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-text-muted mb-1">Low</p>
+                    <p className="text-sm font-bold text-text-main">
+                      {formatCurrency(selectedStock.summary.low, selectedStock.currency || 'INR')}
+                    </p>
+                  </div>
+                </div>
               )}
 
               <div className="grid grid-cols-3 gap-4 mt-6 pt-6 border-t border-muted-2">
@@ -231,6 +421,28 @@ const PortfolioTrade = ({ portfolio, onRefresh }) => {
                   <p className="font-semibold text-text-main">{selectedStock.market_cap}</p>
                 </div>
               </div>
+
+              {/* Moving Averages Info */}
+              {selectedStock.summary && showMA && (
+                <div className="mt-4 pt-4 border-t border-muted-2 grid grid-cols-2 gap-4">
+                  {selectedStock.summary.ma20 && (
+                    <div>
+                      <p className="text-xs text-text-muted mb-1">MA20</p>
+                      <p className="text-sm font-semibold text-blue-600">
+                        {formatCurrency(selectedStock.summary.ma20, selectedStock.currency || 'INR')}
+                      </p>
+                    </div>
+                  )}
+                  {selectedStock.summary.ma50 && (
+                    <div>
+                      <p className="text-xs text-text-muted mb-1">MA50</p>
+                      <p className="text-sm font-semibold text-purple-600">
+                        {formatCurrency(selectedStock.summary.ma50, selectedStock.currency || 'INR')}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
 
             {/* AI Recommendation */}
@@ -330,7 +542,7 @@ const PortfolioTrade = ({ portfolio, onRefresh }) => {
                   <div className="flex justify-between text-sm">
                     <span className="text-text-muted">Price per share</span>
                     <span className="font-semibold text-text-main">
-                      {formatCurrency(selectedStock.current_price)}
+                      {formatCurrency(selectedStock.current_price, selectedStock.currency || 'INR')}
                     </span>
                   </div>
                   <div className="flex justify-between text-sm">
@@ -339,7 +551,7 @@ const PortfolioTrade = ({ portfolio, onRefresh }) => {
                   </div>
                   <div className="flex justify-between text-sm font-bold pt-2 border-t border-muted-2">
                     <span>Total</span>
-                    <span className="text-lg">{formatCurrency(calculateTotal())}</span>
+                    <span className="text-lg">{formatCurrency(calculateTotal(), selectedStock.currency || 'INR')}</span>
                   </div>
                 </div>
 
@@ -347,7 +559,7 @@ const PortfolioTrade = ({ portfolio, onRefresh }) => {
                   <div className="bg-muted-1 rounded-lg p-4">
                     <p className="text-xs text-text-muted mb-2">Your Holding</p>
                     <p className="text-sm font-semibold text-text-main">
-                      {selectedStock.holding.quantity} shares @ {formatCurrency(selectedStock.holding.avg_price)}
+                      {selectedStock.holding.quantity} shares @ {formatCurrency(selectedStock.holding.avg_price, selectedStock.currency || 'INR')}
                     </p>
                   </div>
                 )}
@@ -376,7 +588,7 @@ const PortfolioTrade = ({ portfolio, onRefresh }) => {
                 <div className="bg-muted-1 rounded-lg p-4">
                   <p className="text-xs text-text-muted mb-2">Available Balance</p>
                   <p className="text-lg font-bold text-text-main">
-                    {formatCurrency(portfolio.balance)}
+                    ₹{portfolio.balance?.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </p>
                 </div>
               </div>

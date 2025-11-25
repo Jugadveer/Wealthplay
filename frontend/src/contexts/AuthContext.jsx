@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react'
+import { createContext, useContext, useState, useEffect, useCallback } from 'react'
 import api from '../utils/api'
 
 const AuthContext = createContext(null)
@@ -11,15 +11,40 @@ export const useAuth = () => {
   return context
 }
 
-export function AuthProvider({ children }) {
+function AuthProvider({ children }) {
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    checkAuth()
+  // Define getCsrfToken before it's used
+  const getCsrfToken = useCallback(async () => {
+    // First try to get from cookies
+    const cookies = document.cookie.split(';')
+    for (let cookie of cookies) {
+      const [name, value] = cookie.trim().split('=')
+      if (name === 'csrftoken') {
+        return value
+      }
+    }
+    
+    // If not in cookies, fetch from API
+    try {
+      const { axios } = await import('../utils/api')
+      const response = await axios.get('/api/csrf-token/', {
+        withCredentials: true,
+      })
+      if (response.data?.csrfToken) {
+        // Set cookie manually
+        document.cookie = `csrftoken=${response.data.csrfToken}; path=/; SameSite=Lax`
+        return response.data.csrfToken
+      }
+    } catch (error) {
+      console.warn('Could not fetch CSRF token:', error)
+    }
+    
+    return ''
   }, [])
 
-  const checkAuth = async () => {
+  const checkAuth = useCallback(async () => {
     try {
       const response = await api.getProfile()
       if (response.status === 200 && response.data) {
@@ -36,7 +61,11 @@ export function AuthProvider({ children }) {
     } finally {
       setLoading(false)
     }
-  }
+  }, [])
+
+  useEffect(() => {
+    checkAuth()
+  }, [checkAuth])
 
   const login = async (username, password) => {
     try {
@@ -218,34 +247,6 @@ export function AuthProvider({ children }) {
     window.location.replace('/')
   }
 
-  const getCsrfToken = async () => {
-    // First try to get from cookies
-    const cookies = document.cookie.split(';')
-    for (let cookie of cookies) {
-      const [name, value] = cookie.trim().split('=')
-      if (name === 'csrftoken') {
-        return value
-      }
-    }
-    
-    // If not in cookies, fetch from API
-    try {
-      const { axios } = await import('../utils/api')
-      const response = await axios.get('/api/csrf-token/', {
-        withCredentials: true,
-      })
-      if (response.data?.csrfToken) {
-        // Set cookie manually
-        document.cookie = `csrftoken=${response.data.csrfToken}; path=/; SameSite=Lax`
-        return response.data.csrfToken
-      }
-    } catch (error) {
-      console.warn('Could not fetch CSRF token:', error)
-    }
-    
-    return ''
-  }
-
   const value = {
     user,
     loading,
@@ -255,6 +256,12 @@ export function AuthProvider({ children }) {
     checkAuth,
   }
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
+  return (
+    <AuthContext.Provider value={value}>
+      {children}
+    </AuthContext.Provider>
+  )
 }
 
+// Named export for better Vite compatibility
+export { AuthProvider }

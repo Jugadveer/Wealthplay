@@ -1,6 +1,7 @@
 import React from 'react'
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import { AuthProvider } from './contexts/AuthContext'
+import { AchievementProvider } from './contexts/AchievementContext'
 import PrivateRoute from './components/PrivateRoute'
 import Layout from './components/Layout'
 import ErrorBoundary from './components/ErrorBoundary'
@@ -16,12 +17,16 @@ import LessonDetail from './pages/LessonDetail'
 import ScenarioHome from './pages/ScenarioHome'
 import ScenarioPlay from './pages/ScenarioPlay'
 import ScenarioResult from './pages/ScenarioResult'
+import Achievements from './pages/Achievements'
+import StockChallenge from './pages/StockChallenge'
+import WealthPlaySimulator from './pages/WealthPlaySimulator'
 
 function App() {
   return (
     <ErrorBoundary>
       <AuthProvider>
-        <Router
+        <AchievementProvider>
+          <Router
           future={{
             v7_startTransition: true,
             v7_relativeSplatPath: true,
@@ -53,6 +58,14 @@ function App() {
             element={
               <PrivateRoute>
                 <Layout><Goals /></Layout>
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/achievements"
+            element={
+              <PrivateRoute>
+                <Layout><Achievements /></Layout>
               </PrivateRoute>
             }
           />
@@ -92,7 +105,7 @@ function App() {
             path="/scenario/quiz/:runId"
             element={
               <PrivateRoute>
-                <Layout showNav={false}><ScenarioPlay /></Layout>
+                <Layout showNav={false}><WealthPlaySimulator /></Layout>
               </PrivateRoute>
             }
           />
@@ -100,7 +113,23 @@ function App() {
             path="/scenario/quiz/:runId/result"
             element={
               <PrivateRoute>
-                <Layout showNav={false}><ScenarioResult /></Layout>
+                <Layout showNav={false}><WealthPlaySimulator /></Layout>
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/scenario/stock-challenge"
+            element={
+              <PrivateRoute>
+                <Layout showNav={false}><StockChallenge /></Layout>
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/wealthplay"
+            element={
+              <PrivateRoute>
+                <Layout showNav={false}><WealthPlaySimulator /></Layout>
               </PrivateRoute>
             }
           />
@@ -109,6 +138,7 @@ function App() {
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Router>
+        </AchievementProvider>
       </AuthProvider>
     </ErrorBoundary>
   )

@@ -7,9 +7,6 @@ export default defineConfig({
   plugins: [
     react({
       jsxRuntime: 'automatic',
-      babel: {
-        plugins: [],
-      },
     }),
   ],
   resolve: {

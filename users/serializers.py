@@ -18,7 +18,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
         fields = ['id', 'user', 'level', 'xp', 'confidence_score', 'financial_goal', 'investment_experience', 
-                  'risk_comfort', 'initial_investment', 'investment_timeline', 'onboarding_completed', 'demo_balance']
+                  'risk_tolerance', 'timeline', 'initial_investment', 'streak', 'last_activity_date', 'created_at', 'updated_at']
 
 
 class DemoPortfolioSerializer(serializers.ModelSerializer):

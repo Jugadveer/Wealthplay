@@ -15,18 +15,22 @@ const PortfolioAnalysis = ({ portfolio, onRefresh }) => {
   const [analysis, setAnalysis] = useState(null)
   const [aiRecommendations, setAiRecommendations] = useState([])
   const [loading, setLoading] = useState(true)
+  const [hasLoaded, setHasLoaded] = useState(false)
 
   useEffect(() => {
+    // Fetch analysis whenever portfolio holdings change
     fetchAnalysis()
-  }, [portfolio])
+  }, [portfolio.holdings_count, portfolio.holdings]) // Re-fetch when holdings change
 
   const fetchAnalysis = async () => {
     setLoading(true)
     try {
       // Fetch AI recommendations for all holdings
       const recommendations = []
-      if (portfolio.holdings && portfolio.holdings.length > 0) {
-        for (const holding of portfolio.holdings.slice(0, 5)) {
+      // Check if holdings is an array and has items
+      const holdingsArray = Array.isArray(portfolio.holdings) ? portfolio.holdings : []
+      if (holdingsArray.length > 0) {
+        for (const holding of holdingsArray.slice(0, 5)) {
           try {
             const response = await api.getAIRecommendation({ symbol: holding.symbol, action: 'analyze' })
             recommendations.push({
@@ -46,12 +50,12 @@ const PortfolioAnalysis = ({ portfolio, onRefresh }) => {
       const totalPnL = portfolio.total_pnl || 0
       const totalPnLPercent = portfolio.total_pnl_percent || 0
 
-      // Sector distribution
+      // Sector distribution - get actual sectors from stock data
       const sectorData = {}
-      portfolio.holdings?.forEach((holding) => {
-        // Mock sector from symbol - in production, fetch from stock detail
-        const sector = 'Technology' // Would come from API
-        sectorData[sector] = (sectorData[sector] || 0) + holding.current_value
+      holdingsArray.forEach((holding) => {
+        // Get sector from stock detail or use default
+        const sector = holding.sector || 'Other'
+        sectorData[sector] = (sectorData[sector] || 0) + (holding.current_value || 0)
       })
 
       const sectorDistribution = Object.entries(sectorData).map(([name, value]) => ({
@@ -151,7 +155,7 @@ const PortfolioAnalysis = ({ portfolio, onRefresh }) => {
                   cx="50%"
                   cy="50%"
                   labelLine={false}
-                  label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                  label={false}
                   outerRadius={100}
                   fill="#8884d8"
                   dataKey="value"
@@ -160,7 +164,16 @@ const PortfolioAnalysis = ({ portfolio, onRefresh }) => {
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
-                <Tooltip formatter={(value) => formatCurrency(value)} />
+                <Tooltip 
+                  formatter={(value, name, props) => [
+                    formatCurrency(value),
+                    `${props.payload.name} (${props.payload.percent}%)`
+                  ]}
+                />
+                <Legend 
+                  formatter={(value, entry) => `${entry.payload.name} (${entry.payload.percent}%)`}
+                  wrapperStyle={{ paddingTop: '20px' }}
+                />
               </PieChart>
             </ResponsiveContainer>
 

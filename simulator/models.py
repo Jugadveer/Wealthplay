@@ -11,7 +11,7 @@ class Scenario(models.Model):
 
 class DecisionOption(models.Model):
     scenario = models.ForeignKey(Scenario, related_name='options', on_delete=models.CASCADE)
-    text = models.CharField(max_length=100)
+    text = models.TextField()  # Changed to TextField to support longer option text
     
     TYPE_CHOICES = [
         ('INVEST', 'Invest'),
@@ -55,9 +55,34 @@ class QuizRun(models.Model):
     current_question_index = models.IntegerField(default=0)
     total_score = models.IntegerField(default=0)
     is_completed = models.BooleanField(default=False)
+    xp_awarded = models.BooleanField(default=False)  # Track if XP was already awarded
     created_at = models.DateTimeField(auto_now_add=True)
 
     def get_scenario_list(self):
         if not self.scenario_ids or self.scenario_ids.strip() == '':
             return []
         return [int(id) for id in self.scenario_ids.split(',') if id.strip()]
+
+
+class UserScenarioAttempt(models.Model):
+    """Track user-specific scenario attempts with scores"""
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='scenario_attempts')
+    scenario = models.ForeignKey(Scenario, on_delete=models.CASCADE)
+    quiz_run = models.ForeignKey(QuizRun, on_delete=models.CASCADE, null=True, blank=True, related_name='attempts')
+    chosen_option = models.ForeignKey(DecisionOption, on_delete=models.SET_NULL, null=True, blank=True)
+    score_earned = models.IntegerField(default=0)  # Score for this specific attempt
+    is_correct = models.BooleanField(default=False)  # Whether they chose the highest scoring option
+    xp_awarded = models.IntegerField(default=0)  # XP awarded for this attempt
+    attempted_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        ordering = ['-attempted_at']
+        # Ensure one attempt per user per scenario per quiz run
+        unique_together = ['user', 'scenario', 'quiz_run']
+        indexes = [
+            models.Index(fields=['user', 'scenario']),
+            models.Index(fields=['user', 'attempted_at']),
+        ]
+    
+    def __str__(self):
+        return f"{self.user.username} - {self.scenario.title} - {self.score_earned}pts"

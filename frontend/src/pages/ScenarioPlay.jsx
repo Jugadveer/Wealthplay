@@ -20,12 +20,17 @@ const ScenarioPlay = () => {
   const [showResult, setShowResult] = useState(false)
   const [exploreMode, setExploreMode] = useState(false)
   const [loading, setLoading] = useState(true)
+  const [currentBalance, setCurrentBalance] = useState(0)
+  const [isCorrect, setIsCorrect] = useState(false)
 
   useEffect(() => {
-    loadQuiz()
+    loadQuiz(true) // Only show loading on initial load
   }, [runId])
 
-  const loadQuiz = async () => {
+  const loadQuiz = async (showLoading = true) => {
+    if (showLoading) {
+      setLoading(true)
+    }
     try {
       const response = await axios.get(`/api/scenario/api/quiz/${runId}/`, {
         headers: { Accept: 'application/json' },
@@ -44,12 +49,13 @@ const ScenarioPlay = () => {
       
       // Set quiz data from API response
       if (response.data.scenario) {
+        const startingBalance = parseFloat(response.data.scenario.starting_balance) || 0
         setQuiz({
           scenarios: [{
             id: response.data.scenario.id,
             title: response.data.scenario.title,
             description: response.data.scenario.description,
-            starting_balance: response.data.scenario.starting_balance,
+            starting_balance: startingBalance,
             options: response.data.choices || [],
           }],
           current_question_index: (response.data.question_number || 1) - 1,
@@ -57,11 +63,26 @@ const ScenarioPlay = () => {
           total_score: response.data.total_score || 0,
         })
         setCurrentQuestion((response.data.question_number || 1) - 1)
+        setCurrentBalance(startingBalance)
+        // Reset selection state for new question
+        setSelectedOption(null)
+        setShowResult(false)
+        setIsCorrect(false)
+      } else {
+        console.error('No scenario data in API response:', response.data)
+        // If no scenario but not completed, try to reload
+        if (!response.data.completed) {
+          console.warn('Quiz not completed but no scenario data, reloading...')
+          setTimeout(() => loadQuiz(showLoading), 1000)
+        }
       }
     } catch (error) {
       console.error('Error loading quiz:', error)
+      console.error('Error details:', error.response?.data || error.message)
       // Fallback: create empty structure
       setQuiz({ scenarios: [], current_question_index: 0 })
+      // Don't leave it in loading state if there's an error
+      setLoading(false)
     } finally {
       setLoading(false)
     }
@@ -70,6 +91,12 @@ const ScenarioPlay = () => {
   const handleOptionSelect = (option) => {
     setSelectedOption(option)
     setShowResult(true)
+    
+    // Calculate new balance based on option
+    if (option.impact?.balance !== undefined) {
+      const balanceImpact = parseFloat(option.impact.balance) || 0
+      setCurrentBalance(prev => Math.max(0, prev + balanceImpact))
+    }
     
     if (!exploreMode) {
       submitAnswer(option)
@@ -97,12 +124,20 @@ const ScenarioPlay = () => {
 
       if (response.data && response.data.success) {
         // Score submitted successfully, update total score
+        const isAnswerCorrect = response.data.is_correct || false
+        setIsCorrect(isAnswerCorrect)
+        
         if (quiz) {
           setQuiz({
             ...quiz,
             total_score: response.data.total_score || quiz.total_score,
           })
         }
+        
+        // Don't auto-advance - let user click "Next Question" button
+        // The backend has already advanced the question index
+      } else {
+        console.error('Failed to submit answer:', response.data)
       }
     } catch (error) {
       console.error('Error submitting answer:', error)
@@ -110,35 +145,76 @@ const ScenarioPlay = () => {
   }
 
   const nextQuestion = async () => {
+    // Ensure loading is false before starting
+    setLoading(false)
+    
     try {
       const { getCsrfToken } = await import('../utils/api')
       const csrfToken = await getCsrfToken()
       
-      const response = await axios.post(`/api/scenario/api/quiz/${runId}/next/`, {}, {
+      // Advance the question index on backend
+      const nextResponse = await axios.post(`/api/scenario/api/quiz/${runId}/next/`, {}, {
         headers: {
           'X-CSRFToken': csrfToken || '',
         },
         withCredentials: true,
       })
       
-      if (response.data && response.data.completed) {
+      if (nextResponse.data && nextResponse.data.completed) {
         // Quiz completed, navigate to result
         navigate(`/scenario/quiz/${runId}/result`)
-      } else if (response.data && response.data.success) {
-        // Reload quiz data for next question
-        await loadQuiz()
-      } else {
-        // Reload quiz anyway
-        await loadQuiz()
+        return
+      }
+      
+      // Fetch next question data without showing loading
+      const questionResponse = await axios.get(`/api/scenario/api/quiz/${runId}/`, {
+        headers: { Accept: 'application/json' },
+        withCredentials: true,
+      })
+      
+      if (questionResponse.data.completed) {
+        navigate(`/scenario/quiz/${runId}/result`)
+        return
+      }
+      
+      // Update state directly without loading indicator
+      if (questionResponse.data.scenario) {
+        const startingBalance = parseFloat(questionResponse.data.scenario.starting_balance) || 0
+        setQuiz({
+          scenarios: [{
+            id: questionResponse.data.scenario.id,
+            title: questionResponse.data.scenario.title,
+            description: questionResponse.data.scenario.description,
+            starting_balance: startingBalance,
+            options: questionResponse.data.choices || [],
+          }],
+          current_question_index: (questionResponse.data.question_number || 1) - 1,
+          total_questions: questionResponse.data.total_questions || 1,
+          total_score: questionResponse.data.total_score || 0,
+        })
+        setCurrentQuestion((questionResponse.data.question_number || 1) - 1)
+        setCurrentBalance(startingBalance)
+        // Reset selection state for new question
+        setSelectedOption(null)
+        setShowResult(false)
+        setIsCorrect(false)
+        // Explicitly ensure loading is false
+        setLoading(false)
       }
     } catch (error) {
       console.error('Error moving to next question:', error)
-      // Fallback: try to load next question
-      await loadQuiz()
+      // On error, try to reload but still don't show loading
+      setSelectedOption(null)
+      setShowResult(false)
+      setIsCorrect(false)
+      setLoading(false) // Ensure loading is false
+      // Try to reload without showing loading
+      loadQuiz(false) // Don't show loading indicator
     }
   }
 
-  if (loading) {
+  // Only show loading on initial load, not when transitioning between questions
+  if (loading && !quiz) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-1"></div>
@@ -147,7 +223,7 @@ const ScenarioPlay = () => {
   }
 
   const scenario = quiz?.scenarios?.[currentQuestion] || quiz?.scenario
-  const totalQuestions = quiz?.scenarios?.length || quiz?.game_config?.total_questions || 5
+  const totalQuestions = quiz?.total_questions || quiz?.scenarios?.length || quiz?.game_config?.total_questions || 5
   const questionNumber = currentQuestion + 1
   const progress = (questionNumber / totalQuestions) * 100
 
@@ -202,7 +278,26 @@ const ScenarioPlay = () => {
             {/* Current Balance */}
             <div className="bg-gradient-to-br from-brand-1 to-brand-2 rounded-xl p-6 text-white shadow-lg">
               <div className="text-sm opacity-90 mb-2">CURRENT BALANCE</div>
-              <div className="text-3xl font-bold">₹30,000</div>
+              <div className="text-3xl font-bold">
+                ₹{currentBalance.toLocaleString('en-IN', { maximumFractionDigits: 0 })}
+              </div>
+              {selectedOption && selectedOption.impact?.balance !== undefined && (
+                <div className={`text-sm mt-2 ${selectedOption.impact.balance < 0 ? 'text-red-200' : 'text-green-200'}`}>
+                  {selectedOption.impact.balance > 0 ? '+' : ''}
+                  ₹{Math.abs(selectedOption.impact.balance).toLocaleString('en-IN', { maximumFractionDigits: 0 })}
+                </div>
+              )}
+            </div>
+
+            {/* Total Score */}
+            <div className="bg-white rounded-xl p-6 shadow-card">
+              <div className="text-sm text-text-muted mb-2">TOTAL SCORE</div>
+              <div className="text-3xl font-bold text-brand-1">{quiz?.total_score || 0}</div>
+              {selectedOption && showResult && (
+                <div className={`text-sm mt-2 ${isCorrect ? 'text-accent-green' : 'text-gray-400'}`}>
+                  {isCorrect ? `+${selectedOption.score || 0} points earned` : 'No points (incorrect answer)'}
+                </div>
+              )}
             </div>
 
             {/* Risk Analysis */}
@@ -293,10 +388,16 @@ const ScenarioPlay = () => {
                               <Icon className="w-5 h-5 text-brand-1" />
                               <span className="font-semibold text-text-main">{option.text}</span>
                             </div>
-                            {showResult && (
-                              <p className="text-sm text-text-muted mt-2">
-                                {option.content?.why_matters || option.content?.mentor || option.explanation}
-                              </p>
+                                    {showResult && isSelected && (
+                              <div className="mt-2 space-y-1">
+                                <p className="text-sm text-text-muted">
+                                  <span className="font-semibold">Score: </span>
+                                  {option.score || 0}/20
+                                </p>
+                                <p className="text-sm text-text-muted">
+                                  {option.content?.why_matters || option.content?.mentor || option.explanation}
+                                </p>
+                              </div>
                             )}
                           </div>
                           {isSelected && showResult && (
@@ -316,38 +417,6 @@ const ScenarioPlay = () => {
                   <Eye className="w-4 h-4" />
                   Explore Mode: Click other options to see "What If"
                 </button>
-
-                {/* Result Card */}
-                {showResult && (
-                  <div className="bg-gradient-to-br from-brand-1/10 to-brand-2/10 rounded-xl p-6 border-2 border-brand-1/20 mb-6 animate-[modalEnter_360ms_ease-out_forwards]">
-                    <div className="flex items-center gap-2 mb-4">
-                      <Zap className="w-5 h-5 text-brand-1" />
-                      <h3 className="font-bold text-text-main">WHY THIS MATTERS</h3>
-                    </div>
-                    <p className="text-text-muted leading-relaxed mb-4">
-                      {selectedOption?.content?.why_matters || selectedOption?.content?.mentor || selectedOption?.explanation || 'Learn from your decision and understand the financial implications.'}
-                    </p>
-                    <div className="text-sm text-text-muted">
-                      You earned +{selectedOption?.score || 0} Points
-                    </div>
-                    {selectedOption?.impact && (
-                      <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
-                        <div>
-                          <span className="text-text-muted">1 YR Value:</span>
-                          <span className="font-semibold text-text-main ml-2">
-                            ₹{Math.round(30000 * (1 + (selectedOption.impact.growth_rate || 0) / 100)).toLocaleString()}
-                          </span>
-                        </div>
-                        <div>
-                          <span className="text-text-muted">Stability:</span>
-                          <span className="font-semibold text-accent-green ml-2">
-                            {selectedOption.impact.risk < 30 ? 'High' : selectedOption.impact.risk < 60 ? 'Medium' : 'Low'}
-                          </span>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                )}
 
                 {/* Next Button */}
                 {showResult && (
@@ -375,21 +444,30 @@ const ScenarioPlay = () => {
           {/* Right Sidebar - Results & Context */}
           <div className="lg:col-span-1 space-y-6">
             {/* Value Cards */}
-            <div className="grid grid-cols-2 gap-4">
-              <div className="bg-white rounded-xl p-6 shadow-card text-center">
-                <div className="text-xs text-text-muted mb-2">1 YR VALUE</div>
-                <div className="text-2xl font-bold text-text-main">₹33,600</div>
+            {selectedOption && selectedOption.impact && (
+              <div className="grid grid-cols-2 gap-4">
+                <div className="bg-white rounded-xl p-6 shadow-card text-center">
+                  <div className="text-xs text-text-muted mb-2">1 YR VALUE</div>
+                  <div className="text-2xl font-bold text-text-main">
+                    ₹{Math.round(currentBalance * (1 + (selectedOption.impact.growth_rate || 0))).toLocaleString('en-IN')}
+                  </div>
+                </div>
+                <div className="bg-white rounded-xl p-6 shadow-card text-center">
+                  <div className="text-xs text-text-muted mb-2">STABILITY</div>
+                  <div className={`text-2xl font-bold ${
+                    (selectedOption.impact.risk || 0) < 30 ? 'text-accent-green' : 
+                    (selectedOption.impact.risk || 0) < 60 ? 'text-yellow-500' : 'text-red-500'
+                  }`}>
+                    {(selectedOption.impact.risk || 0) < 30 ? 'High' : (selectedOption.impact.risk || 0) < 60 ? 'Medium' : 'Low'}
+                  </div>
+                </div>
               </div>
-              <div className="bg-white rounded-xl p-6 shadow-card text-center">
-                <div className="text-xs text-text-muted mb-2">STABILITY</div>
-                <div className="text-2xl font-bold text-accent-green">High</div>
-              </div>
-            </div>
+            )}
 
             {/* Decision History */}
             <div className="bg-white rounded-xl p-6 shadow-card">
               <h3 className="font-bold text-text-main mb-4">DECISION HISTORY</h3>
-              <ul className="space-y-2 text-sm text-text-muted">
+              <ul className="space-y-2 text-sm text-text-muted mb-4">
                 {selectedOption ? (
                   <li className="flex items-start gap-2">
                     <CheckCircle2 className="w-4 h-4 text-brand-1 mt-0.5 flex-shrink-0" />
@@ -400,6 +478,52 @@ const ScenarioPlay = () => {
                 )}
               </ul>
             </div>
+
+            {/* Result Card - WHY THIS MATTERS */}
+            {showResult && selectedOption && (
+              <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl p-6 border-2 border-orange-200 shadow-card animate-[modalEnter_360ms_ease-out_forwards]">
+                <div className="flex items-center gap-2 mb-4">
+                  <Zap className="w-5 h-5 text-orange-600" />
+                  <h3 className="font-bold text-text-main">WHY THIS MATTERS</h3>
+                </div>
+                <p className="text-text-muted leading-relaxed mb-4">
+                  {selectedOption?.content?.why_matters || selectedOption?.content?.mentor || selectedOption?.explanation || 'Learn from your decision and understand the financial implications.'}
+                </p>
+                <div className={`text-sm font-semibold mb-4 ${
+                  isCorrect ? 'text-green-600' : 'text-gray-500'
+                }`}>
+                  You earned +{isCorrect ? (selectedOption?.score || 0) : 0} Points
+                  {!isCorrect && (
+                    <span className="block text-xs text-gray-400 mt-1">No points for incorrect answer</span>
+                  )}
+                </div>
+                {selectedOption?.impact && (
+                  <div className="mt-4 grid grid-cols-2 gap-3 text-sm mb-4">
+                    <div>
+                      <span className="text-text-muted">1 YR Value:</span>
+                      <span className="font-semibold text-text-main ml-2">
+                        ₹{Math.round(currentBalance * (1 + (selectedOption.impact.growth_rate || 0))).toLocaleString('en-IN')}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="text-text-muted">Risk Score:</span>
+                      <span className={`font-semibold ml-2 ${
+                        (selectedOption.impact.risk || 0) < 30 ? 'text-accent-green' : 
+                        (selectedOption.impact.risk || 0) < 60 ? 'text-yellow-500' : 'text-red-500'
+                      }`}>
+                        {(selectedOption.impact.risk || 0) < 30 ? 'Low' : (selectedOption.impact.risk || 0) < 60 ? 'Medium' : 'High'}
+                      </span>
+                    </div>
+                  </div>
+                )}
+                {selectedOption?.content?.mentor && (
+                  <div className="mt-4 p-3 bg-orange-50 rounded-lg border-l-4 border-orange-500">
+                    <p className="text-sm font-semibold text-orange-700 mb-1">Mentor Feedback:</p>
+                    <p className="text-sm text-text-muted">{selectedOption.content.mentor}</p>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </div>

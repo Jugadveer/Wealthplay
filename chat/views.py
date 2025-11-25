@@ -157,24 +157,42 @@ def mentor_respond(request):
                 time_display=timezone.now().strftime('%H:%M')
             )
         
-        # Get response from course mentor - use the imported function with different name
-        result = course_mentor_respond_func(course_id, module_id, question)
-        
-        # Handle case where result might be a string (error case)
-        if isinstance(result, str):
-            return JsonResponse({
-                "reply": result,
-                "type": "error"
-            })
-        
-        # Ensure result is a dict
-        if not isinstance(result, dict):
-            return JsonResponse({
-                "reply": str(result) if result else "No response generated.",
-                "type": "llm"
-            })
-        
-        answer = result.get("answer", "")
+        # Hardcoded simple response for now
+        question_lower = question.lower().strip()
+        if question_lower in ['hey', 'hi', 'hello', 'hi there', 'hey there']:
+            # Get course/topic name
+            from courses.models import Course, Topic
+            course_name = "this course"
+            try:
+                course = Course.objects.get(id=course_id)
+                course_name = course.title
+            except:
+                pass
+            
+            answer = f"Hey, I am here to take your doubts about {course_name}. How can I help you?"
+            reply = answer
+            reply_type = "fixed"
+        else:
+            # For other questions, use the course mentor function
+            result = course_mentor_respond_func(course_id, module_id, question)
+            
+            # Handle case where result might be a string (error case)
+            if isinstance(result, str):
+                return JsonResponse({
+                    "reply": result,
+                    "type": "error"
+                })
+            
+            # Ensure result is a dict
+            if not isinstance(result, dict):
+                return JsonResponse({
+                    "reply": str(result) if result else "No response generated.",
+                    "type": "llm"
+                })
+            
+            answer = result.get("answer", "")
+            reply = result.get("answer", "") or result.get("reply", "")
+            reply_type = result.get("type", "llm")
         
         # Save mentor response to topic chat if user is authenticated
         if user and answer:
@@ -187,16 +205,13 @@ def mentor_respond(request):
                 time_display=timezone.now().strftime('%H:%M')
             )
         
-        # Map "answer" to "reply" for frontend compatibility
-        reply = result.get("answer", "") or result.get("reply", "")
-        
         return JsonResponse({
             "reply": reply,
             "answer": reply,  # Also include "answer" key
-            "type": result.get("type", "llm"),
-            "source": result.get("source", ""),
-            "confidence": result.get("confidence", 0),
-            "matched_question": result.get("matched_question", None)
+            "type": reply_type,
+            "source": result.get("source", "") if 'result' in locals() else "",
+            "confidence": result.get("confidence", 0) if 'result' in locals() else 0,
+            "matched_question": result.get("matched_question", None) if 'result' in locals() else None
         })
     except Exception as e:
         import traceback

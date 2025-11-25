@@ -117,9 +117,9 @@ def save_onboarding(request):
         # Try request.POST first (FormData), then request.data (JSON)
         financial_goal = request.POST.get('financial_goal', '') or (hasattr(request, 'data') and request.data.get('financial_goal', '') or '')
         investment_experience = request.POST.get('investment_experience', '') or (hasattr(request, 'data') and request.data.get('investment_experience', '') or '')
-        risk_comfort = request.POST.get('risk_comfort', '') or (hasattr(request, 'data') and request.data.get('risk_comfort', '') or '')
+        risk_tolerance = request.POST.get('risk_tolerance', '') or (hasattr(request, 'data') and request.data.get('risk_tolerance', '') or '')
         initial_investment = request.POST.get('initial_investment', '') or (hasattr(request, 'data') and request.data.get('initial_investment', '') or '')
-        investment_timeline = request.POST.get('investment_timeline', '') or (hasattr(request, 'data') and request.data.get('investment_timeline', '') or '')
+        timeline = request.POST.get('timeline', '') or (hasattr(request, 'data') and request.data.get('timeline', '') or '')
         
         profile, created = UserProfile.objects.get_or_create(
             user=request.user,
@@ -127,23 +127,21 @@ def save_onboarding(request):
                 'xp': 0,
                 'level': 'beginner',  # Will be recalculated below
                 'confidence_score': 0.0,
-                'onboarding_completed': False
             }
         )
         
         # Update onboarding answers
         profile.financial_goal = financial_goal
         profile.investment_experience = investment_experience
-        profile.risk_comfort = risk_comfort
+        profile.risk_tolerance = risk_tolerance
         profile.initial_investment = initial_investment
-        profile.investment_timeline = investment_timeline
-        profile.onboarding_completed = True
+        profile.timeline = timeline
         
         # Calculate initial level based on comprehensive assessment
         # Scoring system that considers multiple factors
         level_score = 0
         experience = profile.investment_experience
-        risk_comfort = profile.risk_comfort
+        risk_tolerance = profile.risk_tolerance
         initial_investment = profile.initial_investment
         financial_goal = profile.financial_goal
         
@@ -158,9 +156,9 @@ def save_onboarding(request):
             level_score += 0
         
         # Risk comfort scoring (0-2 points)
-        if risk_comfort == 'aggressive':
+        if risk_tolerance == 'aggressive':
             level_score += 2
-        elif risk_comfort == 'balanced':
+        elif risk_tolerance == 'balanced':
             level_score += 1
         else:  # safe
             level_score += 0
@@ -237,25 +235,29 @@ def get_user_profile(request):
     
     try:
         profile = UserProfile.objects.get(user=request.user)
+        # Ensure level is up-to-date based on current XP
+        profile.calculate_level_from_xp()
+        profile.refresh_from_db()
+        
         return JsonResponse({
             'level': profile.level,
             'xp': profile.xp,
             'confidence_score': profile.confidence_score,
             'financial_goal': profile.financial_goal,
             'investment_experience': profile.investment_experience,
-            'risk_comfort': profile.risk_comfort,
+            'risk_tolerance': profile.risk_tolerance,
             'initial_investment': profile.initial_investment,
-            'investment_timeline': profile.investment_timeline,
-            'onboarding_completed': profile.onboarding_completed,
-            'demo_balance': float(profile.demo_balance)
+            'timeline': profile.timeline,
+            'streak': profile.streak,
+            'last_activity_date': profile.last_activity_date.isoformat() if profile.last_activity_date else None
         })
     except UserProfile.DoesNotExist:
         return JsonResponse({
             'level': 'beginner',
             'xp': 0,
             'confidence_score': 0.0,
-            'onboarding_completed': False,
-            'demo_balance': 50000.00
+            'streak': 0,
+            'last_activity_date': None
         })
 
 
@@ -270,18 +272,20 @@ def award_xp(request):
         source = request.data.get('source', 'unknown')
         
         if amount > 0:
-            profile.xp += amount
-            profile.save()
-            
-            # Check if level up
             old_level = profile.level
-            new_level = profile.calculate_level_from_xp()
+            old_xp = profile.xp
+            profile.xp += amount
+            profile.save()  # This will auto-update level via the save() method
+            
+            # Refresh from DB to get updated level
+            profile.refresh_from_db()
+            new_level = profile.level
             
             return JsonResponse({
                 'success': True,
                 'amount_awarded': amount,
                 'new_total': profile.xp,
-                'old_total': profile.xp - amount,
+                'old_total': old_xp,
                 'leveled_up': old_level != new_level,
                 'new_level': new_level
             })

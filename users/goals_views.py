@@ -45,14 +45,22 @@ def create_goal(request):
         if not data.get('time_to_goal'):
             return JsonResponse({'success': False, 'error': 'Time to goal is required'}, status=400)
         
+        # Calculate target_date from time_to_goal if provided
+        target_date = None
+        if data.get('time_to_goal'):
+            from datetime import timedelta
+            target_date = timezone.now().date() + timedelta(days=int(data.get('time_to_goal')) * 30)
+        
         goal = FinancialGoal.objects.create(
             user=request.user,
-            name=data.get('name'),
+            title=data.get('name', 'Financial Goal'),
+            name=data.get('name', 'Financial Goal'),
             icon=data.get('icon', 'wallet'),
             target_amount=float(data.get('target_amount')),
             current_amount=float(data.get('current_amount', 0)),
             monthly_sip=float(data.get('monthly_sip')),
-            time_to_goal_months=int(data.get('time_to_goal')),
+            time_to_goal_months=int(data.get('time_to_goal')) if data.get('time_to_goal') else None,
+            target_date=target_date,
             color=data.get('color', 'from-brand-primary to-orange-500'),
             icon_bg=data.get('icon_bg', 'bg-brand-50 text-brand-600'),
         )
@@ -91,6 +99,7 @@ def update_goal(request, goal_id):
         
         if 'name' in data:
             goal.name = data['name']
+            goal.title = data['name']  # Sync title with name
         if 'icon' in data:
             goal.icon = data['icon']
         if 'target_amount' in data:
@@ -99,8 +108,16 @@ def update_goal(request, goal_id):
             goal.current_amount = data['current_amount']
         if 'monthly_sip' in data:
             goal.monthly_sip = data['monthly_sip']
-        if 'time_to_goal_months' in data:
-            goal.time_to_goal_months = data['time_to_goal']
+        if 'time_to_goal' in data or 'time_to_goal_months' in data:
+            time_months = data.get('time_to_goal') or data.get('time_to_goal_months')
+            if time_months:
+                goal.time_to_goal_months = int(time_months)
+                from datetime import timedelta
+                goal.target_date = timezone.now().date() + timedelta(days=int(time_months) * 30)
+        if 'color' in data:
+            goal.color = data['color']
+        if 'icon_bg' in data:
+            goal.icon_bg = data['icon_bg']
         
         goal.save()
         

@@ -8,6 +8,8 @@ from .portfolio_views import (
     get_portfolio, get_stocks, get_stock_detail, buy_stock, sell_stock,
     get_portfolio_history, get_ai_recommendation
 )
+from .challenge_views import get_leaderboard, get_user_challenge_stats, submit_stock_prediction, get_random_stock_question
+from .achievement_views import get_achievements, check_achievements, mark_achievement_notified
 
 router = DefaultRouter()
 # Note: progress endpoints are handled manually below, not via router
@@ -38,6 +40,15 @@ urlpatterns = [
     path('portfolio/buy/', buy_stock, name='buy_stock'),
     path('portfolio/sell/', sell_stock, name='sell_stock'),
     path('portfolio/ai-recommendation/', get_ai_recommendation, name='get_ai_recommendation'),
+    # Challenge endpoints
+    path('challenges/leaderboard/', get_leaderboard, name='get_leaderboard'),
+    path('challenges/stats/', get_user_challenge_stats, name='get_user_challenge_stats'),
+    path('challenges/question/', get_random_stock_question, name='get_random_stock_question'),
+    path('challenges/predict/', submit_stock_prediction, name='submit_stock_prediction'),
+    # Achievement endpoints
+    path('achievements/', get_achievements, name='get_achievements'),
+    path('achievements/check/', check_achievements, name='check_achievements'),
+    path('achievements/notify/', mark_achievement_notified, name='mark_achievement_notified'),
     # Router URLs (must come last)
     path('', include(router.urls)),
 ]

@@ -11,137 +11,231 @@ from decimal import Decimal
 import json
 import random
 
-from .models import UserProfile, DemoPortfolio
+# --- UPDATED IMPORTS ---
+import yfinance as yf
+import pandas as pd
+from .ml_predictor import ML_PREDICTOR, TICKERS
+# -----------------------
+
+from .models import UserProfile, DemoPortfolio, PredictedStockData
 
 
-# Sample stock data - in production, this would come from an external API
-SAMPLE_STOCKS = [
-    {
-        'symbol': 'RELIANCE',
-        'name': 'Reliance Industries Ltd',
-        'current_price': 2456.50,
-        'change_percent': 1.25,
-        'category': 'Large Cap',
-        'sector': 'Energy',
-        'market_cap': '₹16.5L Cr',
-    },
-    {
-        'symbol': 'TCS',
-        'name': 'Tata Consultancy Services',
-        'current_price': 3521.00,
-        'change_percent': -0.75,
-        'category': 'Large Cap',
-        'sector': 'IT',
-        'market_cap': '₹12.8L Cr',
-    },
-    {
-        'symbol': 'HDFCBANK',
-        'name': 'HDFC Bank Ltd',
-        'current_price': 1658.75,
-        'change_percent': 0.50,
-        'category': 'Large Cap',
-        'sector': 'Banking',
-        'market_cap': '₹12.1L Cr',
-    },
-    {
-        'symbol': 'INFY',
-        'name': 'Infosys Ltd',
-        'current_price': 1523.25,
-        'change_percent': 1.10,
-        'category': 'Large Cap',
-        'sector': 'IT',
-        'market_cap': '₹6.3L Cr',
-    },
-    {
-        'symbol': 'HINDUNILVR',
-        'name': 'Hindustan Unilever Ltd',
-        'current_price': 2489.00,
-        'change_percent': -0.25,
-        'category': 'Large Cap',
-        'sector': 'FMCG',
-        'market_cap': '₹5.8L Cr',
-    },
-    {
-        'symbol': 'ICICIBANK',
-        'name': 'ICICI Bank Ltd',
-        'current_price': 1098.50,
-        'change_percent': 0.80,
-        'category': 'Large Cap',
-        'sector': 'Banking',
-        'market_cap': '₹7.7L Cr',
-    },
-    {
-        'symbol': 'SBIN',
-        'name': 'State Bank of India',
-        'current_price': 724.75,
-        'change_percent': 0.60,
-        'category': 'Large Cap',
-        'sector': 'Banking',
-        'market_cap': '₹6.5L Cr',
-    },
-    {
-        'symbol': 'BHARTIARTL',
-        'name': 'Bharti Airtel Ltd',
-        'current_price': 1245.00,
-        'change_percent': 1.50,
-        'category': 'Large Cap',
-        'sector': 'Telecom',
-        'market_cap': '₹6.9L Cr',
-    },
-    {
-        'symbol': 'ITC',
-        'name': 'ITC Ltd',
-        'current_price': 456.25,
-        'change_percent': -0.40,
-        'category': 'Large Cap',
-        'sector': 'FMCG',
-        'market_cap': '₹5.7L Cr',
-    },
-    {
-        'symbol': 'LTIM',
-        'name': 'LTI Mindtree Ltd',
-        'current_price': 5234.00,
-        'change_percent': 2.10,
-        'category': 'Mid Cap',
-        'sector': 'IT',
-        'market_cap': '₹1.2L Cr',
-    },
-]
+# --- REMOVAL: SAMPLE_STOCKS removed, replaced by live data ---
+
+
+def get_stock_info(symbol, use_cache=True):
+    """
+    Fetch basic stock info - uses cached data for instant response.
+    Falls back to live API if cache is missing or stale.
+    Returns prices in appropriate currency (INR for Indian stocks, USD for US stocks).
+    """
+    # First check if it's a custom stock
+    from .models import CustomStock
+    try:
+        custom_stock = CustomStock.objects.get(symbol=symbol)
+        return {
+            'symbol': custom_stock.symbol,
+            'name': custom_stock.name,
+            'current_price': float(custom_stock.current_price),
+            'change_percent': float(custom_stock.change_percent),
+            'category': custom_stock.category,
+            'sector': custom_stock.sector,
+            'market_cap': custom_stock.market_cap,
+            'full_ticker': symbol,  # Custom stocks don't have full ticker
+            'currency': custom_stock.currency or 'INR',
+        }
+    except CustomStock.DoesNotExist:
+        pass  # Fall through to real stock lookup
+    
+    # Determine if it's an Indian stock
+    from users.ml_predictor import NSE_TICKERS
+    is_indian_stock = symbol.upper() in NSE_TICKERS
+    
+    # Try cache first for instant response
+    if use_cache:
+        try:
+            cached = PredictedStockData.objects.get(symbol=symbol)
+            # Check if cache is fresh (updated within last 10 minutes)
+            cache_age = timezone.now() - cached.last_updated
+            if cache_age.total_seconds() < 600:  # 10 minutes
+                return {
+                    'symbol': symbol,
+                    'name': cached.name,
+                    'current_price': float(cached.current_price),
+                    'change_percent': float(cached.change_percent),
+                    'category': cached.category,
+                    'sector': cached.sector,
+                    'market_cap': cached.market_cap,
+                    'full_ticker': ML_PREDICTOR._get_full_ticker(symbol),
+                    'currency': 'INR' if is_indian_stock else 'USD',
+                }
+        except PredictedStockData.DoesNotExist:
+            pass  # Fall through to live fetch
+    
+    # Fallback to live API if cache miss or stale
+    full_ticker = ML_PREDICTOR._get_full_ticker(symbol)
+    try:
+        ticker = yf.Ticker(full_ticker)
+        info = ticker.info
+        
+        name = info.get('longName') or info.get('shortName') or symbol
+        sector = info.get('sector') or 'Other'
+        market_cap_usd = info.get('marketCap')
+        
+        category = 'Large Cap' 
+        if market_cap_usd and market_cap_usd < 5000000000: 
+            category = 'Small Cap'
+        
+        current_price = info.get('regularMarketPrice') or info.get('currentPrice')
+        
+        # Get 1-day change percent
+        history = ticker.history(period="1d", interval="1d")
+        change_percent = 0
+        if not history.empty and len(history) > 0 and 'Close' in history.columns:
+             close = history['Close'].iloc[-1]
+             open_price = history['Open'].iloc[-1]
+             change_percent = ((close - open_price) / open_price) * 100 if open_price else 0
+        
+        # Format market cap based on currency
+        if is_indian_stock:
+            # For Indian stocks, market cap is in USD from yfinance, but we display in INR
+            # Approximate conversion (you might want to use a live rate)
+            market_cap_inr = market_cap_usd * 83 if market_cap_usd else None  # Approximate 1 USD = 83 INR
+            market_cap_display = f"₹{market_cap_inr:,.0f} Cr" if market_cap_inr else 'N/A'
+        else:
+            market_cap_display = f"${market_cap_usd:,}" if market_cap_usd else 'N/A'
+        
+        return {
+            'symbol': symbol,
+            'name': name,
+            'current_price': round(current_price, 2) if current_price else 0.0,
+            'change_percent': round(change_percent, 2),
+            'category': category,
+            'sector': sector,
+            'market_cap': market_cap_display,
+            'full_ticker': full_ticker,
+            'currency': 'INR' if is_indian_stock else 'USD',
+        }
+    except Exception as e:
+        return {
+            'symbol': symbol,
+            'name': f"{symbol} (Data Unavailable)",
+            'current_price': 0.0,
+            'change_percent': 0.0,
+            'category': 'Unknown',
+            'sector': 'Unknown',
+            'market_cap': 'N/A',
+            'currency': 'INR' if is_indian_stock else 'USD',
+        }
 
 
 def get_stock_price(symbol):
-    """Get current price for a stock - in production, this would fetch from API"""
-    stock = next((s for s in SAMPLE_STOCKS if s['symbol'] == symbol), None)
-    if stock:
-        # Add some random variation to simulate price movement
-        base_price = stock['current_price']
-        variation = base_price * 0.02 * random.uniform(-1, 1) / 100  # ±1% variation
-        return round(base_price + variation, 2)
-    return 0
+    """Get current price for a stock - handles both custom and real stocks"""
+    from .models import CustomStock
+    try:
+        custom_stock = CustomStock.objects.get(symbol=symbol)
+        return float(custom_stock.current_price)
+    except CustomStock.DoesNotExist:
+        pass
+    info = get_stock_info(symbol)
+    return info.get('current_price', 0.0)
 
 
-def generate_price_history(symbol, days=30):
-    """Generate price history for a stock - in production, fetch from API"""
-    stock = next((s for s in SAMPLE_STOCKS if s['symbol'] == symbol), None)
-    if not stock:
-        return []
+def generate_price_history(symbol, days=60, use_cache=True):
+    """
+    Generate price history for a stock - uses cached data for instant response.
+    Falls back to live API if cache is missing.
+    """
+    # First check if it's a custom stock
+    from .models import CustomStock
+    try:
+        custom_stock = CustomStock.objects.get(symbol=symbol)
+        history = custom_stock.price_history or []
+        return history[-days:] if len(history) > days else history
+    except CustomStock.DoesNotExist:
+        pass  # Fall through to real stock lookup
     
-    base_price = stock['current_price']
-    history = []
-    current_price = base_price
+    # Try cache first for instant response
+    if use_cache:
+        try:
+            cached = PredictedStockData.objects.get(symbol=symbol)
+            cache_age = timezone.now() - cached.last_updated
+            if cache_age.total_seconds() < 600:  # 10 minutes
+                # Return cached history, limiting to requested days
+                history = cached.price_history or []
+                return history[-days:] if len(history) > days else history
+        except PredictedStockData.DoesNotExist:
+            pass  # Fall through to live fetch
     
-    for i in range(days - 1, -1, -1):
-        # Simulate price movement with random walk
-        change = current_price * random.uniform(-0.03, 0.03)
-        current_price = max(current_price + change, base_price * 0.7)  # Don't drop too low
+    # Fallback to live API if cache miss
+    full_ticker = ML_PREDICTOR._get_full_ticker(symbol)
+    
+    try:
+        # Fetch 90 calendar days to ensure MA50 can be calculated
+        df = yf.download(full_ticker, period="90d", interval="1d", progress=False, auto_adjust=True)
+        if df.empty:
+            return []
         
-        date = (timezone.now() - timedelta(days=i)).strftime('%Y-%m-%d')
-        history.append({
-            'date': date,
-            'price': round(current_price, 2),
-            'volume': random.randint(1000000, 10000000)
-        })
+        # Handle multi-index columns from yfinance
+        if isinstance(df.columns, pd.MultiIndex):
+            df.columns = df.columns.get_level_values(0)
+        
+        # Reset index to get date as a column
+        df = df.reset_index()
+        
+        # Handle column names - convert to lowercase strings
+        new_columns = []
+        for col in df.columns:
+            if isinstance(col, tuple):
+                # MultiIndex: take first level
+                col_name = str(col[0]).lower()
+            elif isinstance(col, str):
+                col_name = col.lower()
+            else:
+                col_name = str(col).lower()
+            new_columns.append(col_name)
+        df.columns = new_columns
+        
+        # Ensure we have required columns
+        required_cols = ['open', 'high', 'low', 'close', 'volume']
+        missing_cols = [c for c in required_cols if c not in df.columns]
+        if missing_cols:
+            print(f"Warning: Missing columns for {symbol}: {missing_cols}")
+            return []
+        
+        # Rename date column if needed
+        if 'date' not in df.columns:
+            # Look for date-like column names
+            for col in df.columns:
+                if 'date' in col.lower() or col.lower() == 'index':
+                    df = df.rename(columns={col: 'date'})
+                    break
+    except Exception as e:
+        print(f"Error fetching price history for {symbol}: {e}")
+        import traceback
+        traceback.print_exc()
+        return []
+
+    # Calculate Moving Averages (MA20 and MA50) locally
+    df['ma20'] = df['close'].rolling(window=20).mean()
+    df['ma50'] = df['close'].rolling(window=50).mean()
     
+    # Return the latest 'days' trading days
+    df = df.tail(days)
+    
+    history = []
+    for index, row in df.iterrows():
+        history.append({
+            'date': row['date'].strftime('%Y-%m-%d'),
+            'price': round(row['close'], 2),
+            'volume': int(row['volume']),
+            'open': round(row['open'], 2),
+            'high': round(row['high'], 2),
+            'low': round(row['low'], 2),
+            'close': round(row['close'], 2),
+            'ma20': round(row['ma20'], 2) if pd.notna(row['ma20']) else None,
+            'ma50': round(row['ma50'], 2) if pd.notna(row['ma50']) else None,
+        })
     return history
 
 
@@ -181,11 +275,11 @@ def calculate_portfolio_data(portfolio):
             total_invested += invested
             total_current_value += current_value
             
-            stock_info = next((s for s in SAMPLE_STOCKS if s['symbol'] == symbol), None)
+            stock_info = get_stock_info(symbol)
             
             holdings_list.append({
                 'symbol': symbol,
-                'name': stock_info['name'] if stock_info else symbol,
+                'name': stock_info.get('name', symbol),
                 'quantity': float(quantity),
                 'avg_price': float(avg_price),
                 'current_price': float(current_price),
@@ -193,7 +287,9 @@ def calculate_portfolio_data(portfolio):
                 'current_value': float(current_value),
                 'pnl': float(pnl),
                 'pnl_percent': float(pnl_percent),
-                'change_percent': stock_info['change_percent'] if stock_info else 0,
+                'change_percent': stock_info.get('change_percent', 0),
+                'sector': stock_info.get('sector', 'Other'),
+                'category': stock_info.get('category', 'Unknown'),
             })
         except Exception as e:
             # Skip holdings with errors, log for debugging
@@ -272,31 +368,224 @@ def get_portfolio(request):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_stocks(request):
-    """Get available stocks for trading"""
+    """Get available stocks for trading - includes both real and custom stocks"""
     try:
-        # In production, fetch from external API
+        from .models import CustomStock
+        
         stocks = []
-        for stock in SAMPLE_STOCKS:
+        
+        # First, add custom stocks (always available)
+        custom_stocks = CustomStock.objects.filter(current_price__gt=0).order_by('symbol')
+        for custom in custom_stocks:
             stocks.append({
-                **stock,
-                'current_price': get_stock_price(stock['symbol']),
+                'symbol': custom.symbol,
+                'name': custom.name,
+                'current_price': float(custom.current_price),
+                'change_percent': float(custom.change_percent),
+                'category': custom.category,
+                'sector': custom.sector,
+                'market_cap': custom.market_cap,
+                'currency': custom.currency or 'INR',
+                'is_custom': True,  # Flag to identify custom stocks
             })
+        
+        # Then, add cached real stocks
+        cached_stocks = PredictedStockData.objects.filter(
+            current_price__gt=0
+        ).order_by('symbol')
+        
+        for cached in cached_stocks:
+            cache_age = timezone.now() - cached.last_updated
+            if cache_age.total_seconds() < 600:  # 10 minutes
+                stocks.append({
+                    'symbol': cached.symbol,
+                    'name': cached.name,
+                    'current_price': float(cached.current_price),
+                    'change_percent': float(cached.change_percent),
+                    'category': cached.category,
+                    'sector': cached.sector,
+                    'market_cap': cached.market_cap,
+                    'currency': cached.currency or 'USD',
+                    'is_custom': False,
+                })
+        
+        # Always include real stocks from TICKERS list (even if not in cache)
+        # This ensures users can see and trade real stocks like AAPL, GOOGL, etc.
+        for symbol in TICKERS:
+            # Skip if already added (either as custom or cached)
+            if any(s['symbol'] == symbol for s in stocks):
+                continue
+            try:
+                info = get_stock_info(symbol, use_cache=False)
+                if info.get('current_price', 0.0) > 0.0:
+                    info['is_custom'] = False
+                    stocks.append(info)
+            except Exception as e:
+                # Skip stocks that fail to fetch
+                print(f"Warning: Could not fetch {symbol}: {e}")
+                continue
+        
         return Response({'stocks': stocks})
     except Exception as e:
+        import traceback
+        print(f"Error in get_stocks: {e}")
+        print(traceback.format_exc())
         return Response({'error': str(e)}, status=500)
 
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_stock_detail(request, symbol):
-    """Get detailed information about a stock"""
+    """Get detailed information about a stock - uses cached data for instant response"""
     try:
-        stock = next((s for s in SAMPLE_STOCKS if s['symbol'] == symbol), None)
-        if not stock:
+        from .models import CustomStock
+        
+        # First check if it's a custom stock
+        try:
+            custom_stock = CustomStock.objects.get(symbol=symbol)
+            price_history = custom_stock.price_history or []
+            current_price = float(custom_stock.current_price)
+            
+            # Calculate summary statistics
+            if price_history:
+                prices = [h.get('price', h.get('close', 0)) for h in price_history]
+                volumes = [h.get('volume', 0) for h in price_history]
+                high_price = max(prices) if prices else current_price
+                low_price = min(prices) if prices else current_price
+                avg_price = sum(prices) / len(prices) if prices else current_price
+                avg_volume = sum(volumes) / len(volumes) if volumes else 0
+                
+                latest_entry = price_history[-1] if price_history else {}
+                ma20 = latest_entry.get('ma20')
+                ma50 = latest_entry.get('ma50')
+            else:
+                high_price = low_price = avg_price = current_price
+                avg_volume = 0
+                ma20 = ma50 = None
+            
+            # Check if user owns this stock
+            portfolio, _ = DemoPortfolio.objects.get_or_create(
+                user=request.user,
+                defaults={'balance': 50000.00, 'holdings': {}, 'total_value': 50000.00}
+            )
+            holdings = portfolio.holdings or {}
+            holding = holdings.get(symbol, {})
+            
+            return Response({
+                'symbol': custom_stock.symbol,
+                'name': custom_stock.name,
+                'current_price': current_price,
+                'change_percent': float(custom_stock.change_percent),
+                'category': custom_stock.category,
+                'sector': custom_stock.sector,
+                'market_cap': custom_stock.market_cap,
+                'currency': custom_stock.currency or 'INR',
+                'price_history': price_history,
+                'summary': {
+                    'high': round(high_price, 2),
+                    'low': round(low_price, 2),
+                    'average': round(avg_price, 2),
+                    'avg_volume': round(avg_volume, 0),
+                    'ma20': round(ma20, 2) if ma20 else None,
+                    'ma50': round(ma50, 2) if ma50 else None,
+                },
+                'holding': {
+                    'quantity': holding.get('quantity', 0),
+                    'avg_price': holding.get('avg_price', 0),
+                    'invested': holding.get('quantity', 0) * holding.get('avg_price', 0),
+                } if holding else None,
+                'is_custom': True,
+            })
+        except CustomStock.DoesNotExist:
+            pass  # Fall through to real stock lookup
+        
+        # Try to get from cache first for instant response
+        try:
+            cached = PredictedStockData.objects.get(symbol=symbol)
+            cache_age = timezone.now() - cached.last_updated
+            
+            if cache_age.total_seconds() < 600:  # 10 minutes - use cache
+                price_history = cached.price_history or []
+                current_price = float(cached.current_price)
+                
+                # Calculate summary statistics from cached history
+                if price_history:
+                    prices = [h.get('price', h.get('close', 0)) for h in price_history]
+                    volumes = [h.get('volume', 0) for h in price_history]
+                    high_price = max(prices) if prices else current_price
+                    low_price = min(prices) if prices else current_price
+                    avg_price = sum(prices) / len(prices) if prices else current_price
+                    avg_volume = sum(volumes) / len(volumes) if volumes else 0
+                    
+                    latest_entry = price_history[-1] if price_history else {}
+                    ma20 = latest_entry.get('ma20')
+                    ma50 = latest_entry.get('ma50')
+                else:
+                    high_price = low_price = avg_price = current_price
+                    avg_volume = 0
+                    ma20 = ma50 = None
+                
+                # Check if user owns this stock
+                portfolio, _ = DemoPortfolio.objects.get_or_create(
+                    user=request.user,
+                    defaults={'balance': 50000.00, 'holdings': {}, 'total_value': 50000.00}
+                )
+                holdings = portfolio.holdings or {}
+                holding = holdings.get(symbol, {})
+                
+                return Response({
+                    'symbol': cached.symbol,
+                    'name': cached.name,
+                    'current_price': current_price,
+                    'change_percent': float(cached.change_percent),
+                    'category': cached.category,
+                    'sector': cached.sector,
+                    'market_cap': cached.market_cap,
+                    'currency': cached.currency or 'USD',
+                    'price_history': price_history,
+                    'summary': {
+                        'high': round(high_price, 2),
+                        'low': round(low_price, 2),
+                        'average': round(avg_price, 2),
+                        'avg_volume': round(avg_volume, 0),
+                        'ma20': round(ma20, 2) if ma20 else None,
+                        'ma50': round(ma50, 2) if ma50 else None,
+                    },
+                    'holding': {
+                        'quantity': holding.get('quantity', 0),
+                        'avg_price': holding.get('avg_price', 0),
+                        'invested': holding.get('quantity', 0) * holding.get('avg_price', 0),
+                    } if holding else None,
+                    'is_custom': False,
+                })
+        except PredictedStockData.DoesNotExist:
+            pass  # Fall through to live fetch
+        
+        # Fallback to live data if cache miss
+        stock_info = get_stock_info(symbol, use_cache=False)
+        if stock_info.get('current_price', 0.0) <= 0.0:
             return Response({'error': 'Stock not found'}, status=404)
         
         current_price = get_stock_price(symbol)
-        price_history = generate_price_history(symbol, 30)
+        price_history = generate_price_history(symbol, 60, use_cache=False)  # Generate 60 days for better MA calculations
+        
+        # Calculate summary statistics
+        if price_history:
+            prices = [h['price'] for h in price_history]
+            volumes = [h['volume'] for h in price_history]
+            high_price = max(prices) if prices else current_price
+            low_price = min(prices) if prices else current_price
+            avg_price = sum(prices) / len(prices) if prices else current_price
+            avg_volume = sum(volumes) / len(volumes) if volumes else 0
+            
+            # Get latest MA values
+            latest_entry = price_history[-1] if price_history else {}
+            ma20 = latest_entry.get('ma20')
+            ma50 = latest_entry.get('ma50')
+        else:
+            high_price = low_price = avg_price = current_price
+            avg_volume = 0
+            ma20 = ma50 = None
         
         # Check if user owns this stock
         portfolio, _ = DemoPortfolio.objects.get_or_create(
@@ -307,9 +596,17 @@ def get_stock_detail(request, symbol):
         holding = holdings.get(symbol, {})
         
         return Response({
-            **stock,
+            **stock_info,
             'current_price': current_price,
             'price_history': price_history,
+            'summary': {
+                'high': round(high_price, 2),
+                'low': round(low_price, 2),
+                'average': round(avg_price, 2),
+                'avg_volume': round(avg_volume, 0),
+                'ma20': round(ma20, 2) if ma20 else None,
+                'ma50': round(ma50, 2) if ma50 else None,
+            },
             'holding': {
                 'quantity': holding.get('quantity', 0),
                 'avg_price': holding.get('avg_price', 0),
@@ -323,6 +620,8 @@ def get_stock_detail(request, symbol):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def buy_stock(request):
+    """Buy stock and check for achievements"""
+    from .achievement_views import check_and_unlock_achievements
     """Buy stock in demo portfolio"""
     try:
         symbol = request.data.get('symbol')
@@ -428,6 +727,9 @@ def sell_stock(request):
         portfolio.balance = Decimal(str(portfolio.balance)) + sale_amount
         portfolio.save()
         
+        # Check for achievements after successful trade
+        check_and_unlock_achievements(request.user)
+        
         # Calculate and return updated portfolio data
         portfolio_data = calculate_portfolio_data(portfolio)
         portfolio_data['success'] = True
@@ -473,52 +775,97 @@ def get_portfolio_history(request):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def get_ai_recommendation(request):
-    """Get AI recommendation for stocks - integrates with external model"""
+    """Get AI recommendation for stocks - uses cached ML predictions for instant response"""
     try:
         symbol = request.data.get('symbol')
-        action = request.data.get('action', 'analyze')  # 'analyze', 'buy', 'sell'
         
         if not symbol:
             return Response({'error': 'Symbol required'}, status=400)
         
-        stock = next((s for s in SAMPLE_STOCKS if s['symbol'] == symbol), None)
-        if not stock:
-            return Response({'error': 'Stock not found'}, status=404)
+        # Try to get from cache first for instant response
+        try:
+            cached = PredictedStockData.objects.get(symbol=symbol)
+            cache_age = timezone.now() - cached.last_updated
+            
+            if cache_age.total_seconds() < 600:  # 10 minutes - use cache
+                recommendation = cached.ml_direction
+                confidence = cached.ml_confidence
+                regime = cached.ml_regime
+                vol = cached.ml_volatility
+                
+                # Convert prediction to recommendation message
+                if recommendation == 'bullish':
+                    message = f"ML Analysis: The model suggests an **Up** move with {round(confidence * 100)}% confidence."
+                    action_text = "BUY"
+                elif recommendation == 'bearish':
+                    message = f"ML Analysis: The model suggests a **Down** move with {round(confidence * 100)}% confidence."
+                    action_text = "SELL"
+                else:
+                    message = f"ML Analysis: The model is **Neutral** with {round(confidence * 100)}% confidence."
+                    action_text = "HOLD"
+                
+                reasons = [
+                    f'Market Regime: Currently **{regime}** (Volatility: {round(vol * 100, 2)}%)',
+                    f'Confidence Level: {round(confidence * 100)}%',
+                    f'Predicted Action: {action_text}.'
+                ]
+                
+                return Response({
+                    'symbol': symbol,
+                    'recommendation': recommendation,
+                    'confidence': round(confidence, 2),
+                    'message': message,
+                    'reasons': reasons,
+                    'metadata': {
+                        'regime': regime,
+                        'volatility': round(vol, 4)
+                    }
+                })
+        except PredictedStockData.DoesNotExist:
+            pass  # Fall through to live prediction
         
-        # In production, call the AI model from the GitHub repo
-        # For now, generate a sample recommendation
-        recommendation_score = random.uniform(0.5, 1.0)
+        # Fallback to live prediction if cache miss
+        stock_info = get_stock_info(symbol, use_cache=False)
+        if stock_info.get('current_price', 0.0) <= 0.0:
+            return Response({'error': 'Stock data not available for AI analysis'}, status=404)
         
-        recommendations = {
-            'buy': 'Strong buy recommendation',
-            'hold': 'Hold position',
-            'sell': 'Consider selling'
-        }
+        # Run the actual ML prediction
+        prediction_results = ML_PREDICTOR.predict(symbol)
         
-        if recommendation_score >= 0.7:
-            recommendation = 'buy'
-            confidence = recommendation_score
-        elif recommendation_score >= 0.5:
-            recommendation = 'hold'
-            confidence = recommendation_score
+        recommendation = prediction_results['direction']
+        confidence = prediction_results['confidence']
+        regime = prediction_results['regime']
+        vol = prediction_results['vol']
+        
+        # Convert prediction to recommendation message
+        if recommendation == 'bullish':
+            message = f"ML Analysis: The model suggests an **Up** move with {round(confidence * 100)}% confidence."
+            action_text = "BUY"
+        elif recommendation == 'bearish':
+            message = f"ML Analysis: The model suggests a **Down** move with {round(confidence * 100)}% confidence."
+            action_text = "SELL"
         else:
-            recommendation = 'sell'
-            confidence = 1 - recommendation_score
+            message = f"ML Analysis: The model is **Neutral** with {round(confidence * 100)}% confidence."
+            action_text = "HOLD"
+        
+        reasons = [
+            f'Market Regime: Currently **{regime}** (Volatility: {round(vol * 100, 2)}%)',
+            f'Confidence Level: {round(confidence * 100)}%',
+            f'Predicted Action: {action_text}.'
+        ]
         
         return Response({
             'symbol': symbol,
             'recommendation': recommendation,
             'confidence': round(confidence, 2),
-            'message': f"AI Analysis: {recommendations[recommendation]} for {stock['name']}. Confidence: {round(confidence * 100)}%",
-            'reasons': [
-                'Strong financial performance',
-                'Positive market sentiment',
-                'Good growth prospects',
-            ] if recommendation == 'buy' else [
-                'Moderate performance',
-                'Wait for better entry point',
-            ],
+            'message': message,
+            'reasons': reasons,
+            'metadata': {
+                'regime': regime,
+                'volatility': round(vol, 4)
+            }
         })
     except Exception as e:
-        return Response({'error': str(e)}, status=500)
+        # Fallback if prediction or model loading failed
+        return Response({'error': f'AI Prediction Engine Error: {str(e)}'}, status=500)
 

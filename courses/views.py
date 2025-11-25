@@ -314,8 +314,7 @@ def signup_view(request):
         UserProfile.objects.create(
             user=user,
             level='beginner',
-            xp=0,
-            onboarding_completed=False
+            xp=0
         )
         
         login(request, user)

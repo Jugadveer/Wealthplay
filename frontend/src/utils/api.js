@@ -151,6 +151,17 @@ export const api = {
   sellStock: (data) => apiAxios.post('/users/portfolio/sell/', data),
   getPortfolioHistory: (config) => apiAxios.get('/users/portfolio/history/', config),
   getAIRecommendation: (data) => apiAxios.post('/users/portfolio/ai-recommendation/', data),
+
+  // Challenges
+  getLeaderboard: (type = 'scores') => apiAxios.get(`/users/challenges/leaderboard/?type=${type}`),
+  getUserChallengeStats: () => apiAxios.get('/users/challenges/stats/'),
+  getRandomStockQuestion: () => apiAxios.get('/users/challenges/question/'),
+  submitStockPrediction: (data) => apiAxios.post('/users/challenges/predict/', data),
+  
+  // Achievements
+  getAchievements: () => apiAxios.get('/users/achievements/'),
+  checkAchievements: () => apiAxios.post('/users/achievements/check/'),
+  markAchievementNotified: (achievementId) => apiAxios.post('/users/achievements/notify/', { achievement_id: achievementId }),
 }
 
 // Export axios instance for direct use if needed

@@ -17,8 +17,9 @@ const PrivateRoute = ({ children }) => {
     return <Navigate to="/" replace />
   }
 
-  // If user completed onboarding but is on onboarding page, redirect to dashboard
-  if (location.pathname === '/onboarding' && user.onboarding_completed === true) {
+  // If user has completed onboarding fields but is on onboarding page, redirect to dashboard
+  // Check if user has filled in onboarding fields (financial_goal, risk_tolerance, etc.)
+  if (location.pathname === '/onboarding' && user.financial_goal && user.risk_tolerance) {
     return <Navigate to="/dashboard" replace />
   }
 

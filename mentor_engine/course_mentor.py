@@ -2,12 +2,21 @@
 Course Mentor with Two-Layer Response System
 1. Fixed Q&A (immediate authoritative answers)
 2. Ollama LLM with course context (for additional queries)
+3. Groq API as fallback when Ollama is unavailable
 """
 import json
 import os
 import difflib
 from django.conf import settings
 from ollama import Client
+
+# Try importing Groq
+try:
+    from groq import Groq
+    GROQ_AVAILABLE = True
+except ImportError:
+    GROQ_AVAILABLE = False
+    print("Warning: Groq library not installed. Install with: pip install groq")
 
 # Load courses JSON
 COURSES_JSON_PATH = os.path.join(settings.BASE_DIR, 'financial_course.json')
@@ -172,10 +181,112 @@ def fuzzy_match_q(fixed_qna, user_q, cutoff=0.7):
     return best if best_score >= cutoff else None
 
 
+def generate_groq_response(course, module, user_question):
+    """
+    Generate response using Groq API with course context and branded personality
+    """
+    if not GROQ_AVAILABLE:
+        raise Exception("Groq library not available")
+    
+    groq_api_key = os.environ.get('GROQ_API_KEY')
+    if not groq_api_key:
+        raise Exception("GROQ_API_KEY not found in environment variables")
+    
+    try:
+        client = Groq(api_key=groq_api_key)
+        
+        # Get course-specific branding and context
+        course_title = course.get('title', 'Financial Education')
+        course_id = course.get('id', '')
+        module_title = module.get('title', '')
+        module_summary = module.get('summary', '')
+        
+        # Build immersive, branded system prompt customized for each course
+        system_prompt = f"""You are Nex, an empathetic and practical financial mentor from WealthPlay, a trusted financial education platform. You're specifically trained to help learners understand {course_title}.
+
+Your personality:
+- Warm, encouraging, and patient (like a trusted friend who's been there)
+- Practical and actionable (always provide clear next steps)
+- Brand voice: "WealthPlay" - empowering first-time earners to build wealth confidently
+- Keep responses concise (2-4 short paragraphs)
+- Avoid jargon unless the user asks for definitions
+- Include one simple actionable next-step
+- When unsure, acknowledge it and suggest where to learn more
+
+Current Course Context:
+- Course: {course_title}
+- Module: {module_title}
+- Module Summary: {module_summary}
+
+Remember: You're not just answering questions - you're building financial confidence. Make learners feel supported and capable."""
+        
+        # Build context message with course-specific information
+        context_msg = f"""Course: {course_title}
+Module: {module_title}
+Module Summary: {module_summary}
+Source: {course.get('source', 'WealthPlay Financial Education')}"""
+        
+        # Build few-shot examples from fixed Q&A
+        messages = [
+            {"role": "system", "content": system_prompt},
+            {"role": "system", "content": context_msg}
+        ]
+        
+        # Try to get enriched content from database first
+        fixed_qna = module.get("fixed_qna", [])
+        if not fixed_qna:
+            try:
+                from courses.models import ModuleContent
+                full_module_id = f"{course.get('id', '')}_{module.get('id', '')}"
+                try:
+                    module_content = ModuleContent.objects.get(module_id=full_module_id)
+                    qna_pairs = module_content.qna_pairs.all()[:3]
+                    fixed_qna = [{"q": qa.question, "a": qa.answer} for qa in qna_pairs]
+                    if module_content.theory_text:
+                        theory_context = f"Theory: {module_content.theory_text[:300]}"
+                        messages.append({"role": "system", "content": theory_context})
+                except ModuleContent.DoesNotExist:
+                    pass
+            except Exception as e:
+                print(f"Could not load from database: {e}")
+        
+        # Add up to 3 fixed Q&A as few-shot examples
+        for qa in fixed_qna[:3]:
+            if isinstance(qa, dict):
+                messages.append({"role": "user", "content": qa.get("q", "")})
+                messages.append({"role": "assistant", "content": qa.get("a", "")})
+        
+        # Add user's question
+        messages.append({"role": "user", "content": user_question})
+        
+        # Call Groq API with course-specific model (use llama-3.1-70b-versatile for best results)
+        response = client.chat.completions.create(
+            model="llama-3.1-70b-versatile",  # Groq's fast and capable model
+            messages=messages,
+            temperature=0.7,
+            max_tokens=500,
+            top_p=0.9
+        )
+        
+        answer = response.choices[0].message.content
+        if not answer:
+            raise Exception("Empty response from Groq")
+        
+        # Add WealthPlay branding to response
+        branded_answer = f"{answer}\n\n💡 *WealthPlay Tip*: Keep practicing with {course_title} to build your financial confidence!"
+        
+        return branded_answer
+        
+    except Exception as e:
+        raise Exception(f"Groq API error: {str(e)}")
+
+
 def generate_ollama_response(course, module, user_question, ollama_model="phi3"):
     """
     Generate response using Ollama with course context and few-shot examples
+    Falls back to Groq if Ollama is unavailable
     """
+    # Try Ollama first
     try:
         ollama_host = os.environ.get('OLLAMA_HOST', 'http://localhost:11434')
         ollama = Client(host=ollama_host)
@@ -203,7 +314,12 @@ def generate_ollama_response(course, module, user_question, ollama_model="phi3")
         except Exception as e:
             raise Exception(f"Could not connect to Ollama at {ollama_host}: {str(e)}. Please ensure Ollama is running.")
     except Exception as e:
-        raise Exception(f"Could not connect to Ollama: {str(e)}. Please ensure Ollama is running.")
+        # Ollama failed, try Groq fallback
+        print(f"Ollama connection failed: {e}. Attempting Groq fallback...")
+        try:
+            return generate_groq_response(course, module, user_question)
+        except Exception as groq_error:
+            raise Exception(f"Both Ollama and Groq failed. Ollama: {str(e)[:100]}, Groq: {str(groq_error)[:100]}")
     
     # Build system prompt
     system_prompt = """You are an empathetic, practical financial mentor speaking to first-time earners. Keep answers short (2-4 short paragraphs), avoid jargon unless user asks for definitions, include one simple actionable next-step and note sources. When unsure, say you are unsure and suggest where to learn (cite module source)."""
@@ -333,7 +449,7 @@ def mentor_respond(course_id, module_id=None, question=""):
             "matched_question": match.get("q", "")
         }
     
-    # Layer 2: Use Ollama with course context
+    # Layer 2: Use Ollama with course context (falls back to Groq if Ollama unavailable)
     try:
         # Get Ollama model from environment or use default
         ollama_model = os.environ.get("OLLAMA_MODEL", "phi3")
@@ -343,8 +459,11 @@ def mentor_respond(course_id, module_id=None, question=""):
         
         answer = generate_ollama_response(course, module, question, ollama_model)
         
+        # Determine if answer came from Groq (has branding) or Ollama
+        answer_type = "groq" if "WealthPlay Tip" in answer else "llm"
+        
         return {
-            "type": "llm",
+            "type": answer_type,
             "answer": answer,
             "source": course.get("source", ""),
             "confidence": 0.85
