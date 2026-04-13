@@ -477,48 +477,6 @@ GEMINI_MODEL=gemini-2.0-flash
 
 ---
 
-## 🐛 Troubleshooting
-
-### ModuleNotFoundError: No module named 'chromadb'
-- Vector database is optional; the system works without it
-- If needed: `pip install chromadb`
-
-### Port 3000 or 8000 already in use
-```bash
-# Change frontend port
-cd frontend
-npm run dev -- --port 3001
-
-# Change backend port
-python manage.py runserver 8001
-```
-
-### Database migrations failed
-```bash
-# Reset database
-rm db.sqlite3
-python manage.py migrate
-```
-
-### Frontend not loading
-- Ensure backend is running on http://localhost:8000
-- Check CORS settings in `.env`
-- Clear browser cache and hard reload
-
----
-
-## 📄 License
-
-This project is proprietary software. All rights reserved.
-
----
-
-## 🤝 Support
-
-For issues, questions, or suggestions, please open an issue in the repository.
-
----
-
 <div align="center">
 
 **Built with ❤️ for financial education**
