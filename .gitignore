@@ -70,6 +70,7 @@ ref.html
 *.md
 !PROJECT_DOCUMENTATION.md
 !RUN.md
+!README.md
 
 # Ollama setup files
 setup_ollama.sh
