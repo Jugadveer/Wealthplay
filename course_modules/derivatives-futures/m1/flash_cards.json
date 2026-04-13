@@ -1,0 +1,20 @@
+[
+  {
+    "id": 3101,
+    "topic": "Futures Contracts",
+    "theory_title": "Locked-In Price Exposure",
+    "theory_content": "A futures contract is an agreement to buy or sell an asset at a set price on a future date. Futures are standardized and exchange-traded, which makes them highly liquid but also leveraged."
+  },
+  {
+    "id": 3102,
+    "topic": "Margin And Leverage",
+    "theory_title": "Small Capital, Large Exposure",
+    "theory_content": "Futures positions require margin rather than full notional value. That leverage can magnify gains and losses, so risk controls are essential."
+  },
+  {
+    "id": 3103,
+    "topic": "Hedging",
+    "theory_title": "Reduce Unwanted Price Risk",
+    "theory_content": "Businesses and investors use futures to hedge price exposure. The goal is not always profit; sometimes the goal is to make cash flows more predictable."
+  }
+]

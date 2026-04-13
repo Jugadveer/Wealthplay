@@ -1,0 +1,20 @@
+[
+  {
+    "id": 2201,
+    "topic": "Moving Average Crossover",
+    "theory_title": "Trend Shift Signal",
+    "theory_content": "A fast moving average crossing above a slow moving average can indicate rising momentum. A cross below can indicate weakening momentum. Traders combine crossovers with trend direction and volume to avoid late entries."
+  },
+  {
+    "id": 2202,
+    "topic": "RSI Divergence",
+    "theory_title": "Momentum Vs Price Mismatch",
+    "theory_content": "Bullish divergence appears when price makes a lower low but RSI makes a higher low. Bearish divergence appears when price makes a higher high but RSI makes a lower high. Divergence can warn of trend exhaustion."
+  },
+  {
+    "id": 2203,
+    "topic": "Volatility Compression",
+    "theory_title": "Range Contraction Before Expansion",
+    "theory_content": "When price range and average true range compress, markets can be preparing for expansion. Breakouts after compression often produce stronger directional moves, especially with volume confirmation."
+  }
+]

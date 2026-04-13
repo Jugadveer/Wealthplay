@@ -1,0 +1,1126 @@
+[
+  {
+    "id": "investing-basics",
+    "title": "Investing Basics",
+    "source": "https://www.investopedia.com/articles/basics/06/invest1000.asp",
+    "overview": "Learn the fundamentals of investing, risk vs reward, and how to start your investment journey.",
+    "duration_mins": 25,
+    "level": "beginner",
+    "xp_to_unlock": 0,
+    "order": 1,
+    "modules": [
+      {
+        "id": "m1",
+        "title": "What is Investing?",
+        "summary": "Learn why investing beats saving in the long run",
+        "order": 1,
+        "duration_min": 3,
+        "xp_reward": 50,
+        "lock_rule": "sequential",
+        "required_prev": false,
+        "fixed_qna": [
+          {
+            "q": "What is investing?",
+            "a": "Investing means putting your money into assets like stocks, bonds, or mutual funds that have the potential to grow over time, helping you build wealth beyond what savings accounts offer."
+          },
+          {
+            "q": "Why should I invest instead of just saving?",
+            "a": "While saving keeps your money safe, investing helps it grow. Over time, even small investments can grow significantly due to compound interest, helping you beat inflation and build wealth."
+          }
+        ]
+      },
+      {
+        "id": "m2",
+        "title": "Risk vs Reward",
+        "summary": "Understanding the relationship between risk and returns",
+        "order": 2,
+        "duration_min": 4,
+        "xp_reward": 50,
+        "lock_rule": "sequential",
+        "required_prev": true,
+        "fixed_qna": [
+          {
+            "q": "What is the relationship between risk and reward?",
+            "a": "Generally, higher potential returns come with higher risk. Safe investments like FDs offer low returns but guaranteed safety. Stocks can offer higher returns but with more volatility."
+          },
+          {
+            "q": "How do I know my risk tolerance?",
+            "a": "Consider your age, financial goals, timeline, and comfort with market fluctuations. Younger investors can typically take more risk, while those nearing retirement may prefer safer options."
+          }
+        ]
+      },
+      {
+        "id": "m3",
+        "title": "Power of Compounding",
+        "summary": "How your money grows exponentially over time",
+        "order": 3,
+        "duration_min": 5,
+        "xp_reward": 75,
+        "lock_rule": "sequential",
+        "required_prev": true,
+        "fixed_qna": [
+          {
+            "q": "What is compound interest?",
+            "a": "Compound interest is when you earn returns on both your original investment and the returns you've already earned. Over time, this creates exponential growth."
+          },
+          {
+            "q": "How does starting early help?",
+            "a": "Starting early gives your investments more time to compound. Even small amounts invested regularly in your 20s can grow to substantial wealth by retirement due to the power of compounding."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "stock-market-101",
+    "title": "Stock Market 101",
+    "source": "https://www.nseindia.com/learn/what-are-stocks",
+    "overview": "Understand how stocks work, market dynamics, and how to read stock prices.",
+    "duration_mins": 20,
+    "level": "beginner",
+    "xp_to_unlock": 150,
+    "order": 2,
+    "modules": [
+      {
+        "id": "m1",
+        "title": "What are Stocks?",
+        "summary": "Learn about owning a piece of a company",
+        "order": 1,
+        "duration_min": 4,
+        "xp_reward": 50,
+        "lock_rule": "sequential",
+        "required_prev": false,
+        "fixed_qna": [
+          {
+            "q": "What is a stock?",
+            "a": "A stock represents ownership in a company. When you buy a stock, you own a small piece of that company and can benefit from its growth and profits."
+          },
+          {
+            "q": "How do I make money from stocks?",
+            "a": "You can make money from stocks in two ways: through dividends (company profits shared with shareholders) and through capital appreciation (selling the stock for more than you paid)."
+          }
+        ]
+      },
+      {
+        "id": "m2",
+        "title": "How Stock Prices Move",
+        "summary": "Understanding supply, demand, and market sentiment",
+        "order": 2,
+        "duration_min": 5,
+        "xp_reward": 75,
+        "lock_rule": "sequential",
+        "required_prev": true,
+        "fixed_qna": [
+          {
+            "q": "What makes stock prices go up and down?",
+            "a": "Stock prices move based on supply and demand, company performance, economic factors, and market sentiment. Good news typically drives prices up, while bad news can cause declines."
+          },
+          {
+            "q": "Should I worry about daily price movements?",
+            "a": "For long-term investors, daily fluctuations are normal. Focus on the company's fundamentals and your investment goals rather than short-term price movements."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "mutual-funds-sips",
+    "title": "Mutual Funds & SIPs",
+    "source": "https://www.moneycontrol.com/mutual-funds/",
+    "overview": "Learn about mutual funds, SIPs, and how to invest systematically.",
+    "duration_mins": 18,
+    "level": "beginner",
+    "xp_to_unlock": 225,
+    "order": 3,
+    "modules": [
+      {
+        "id": "m1",
+        "title": "What are Mutual Funds?",
+        "summary": "Pooled investments explained simply",
+        "order": 1,
+        "duration_min": 4,
+        "xp_reward": 50,
+        "lock_rule": "sequential",
+        "required_prev": false,
+        "fixed_qna": [
+          {
+            "q": "What is a mutual fund?",
+            "a": "A mutual fund pools money from many investors to buy a diversified portfolio of stocks, bonds, or other assets. It's managed by professional fund managers."
+          },
+          {
+            "q": "Why invest in mutual funds instead of individual stocks?",
+            "a": "Mutual funds provide instant diversification, professional management, and lower risk than picking individual stocks. They're ideal for beginners who want exposure to markets without stock-picking expertise."
+          }
+        ]
+      },
+      {
+        "id": "m2",
+        "title": "SIP: The Smart Way",
+        "summary": "Invest regularly and build wealth systematically",
+        "order": 2,
+        "duration_min": 5,
+        "xp_reward": 75,
+        "lock_rule": "sequential",
+        "required_prev": true,
+        "fixed_qna": [
+          {
+            "q": "What is a SIP?",
+            "a": "A Systematic Investment Plan (SIP) lets you invest a fixed amount regularly (monthly/weekly) into a mutual fund. It's like a recurring deposit but for investments."
+          },
+          {
+            "q": "How does rupee-cost averaging help?",
+            "a": "Rupee-cost averaging means you buy more units when prices are low and fewer when prices are high, automatically averaging your purchase price over time and reducing the impact of market timing."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "money-basics",
+    "title": "Money Basics",
+    "source": "https://www.investopedia.com/terms/m/money.asp",
+    "overview": "Understand what money is, how it stores value, the difference between income and wealth, and why inflation matters.",
+    "duration_mins": 10,
+    "level": "beginner",
+    "xp_to_unlock": 0,
+    "order": 0,
+    "modules": [
+      {
+        "id": "m1",
+        "title": "What is Money?",
+        "summary": "Definitions, functions of money (medium of exchange, unit of account, store of value).",
+        "order": 1,
+        "duration_min": 3,
+        "xp_reward": 25,
+        "lock_rule": "sequential",
+        "required_prev": false,
+        "fixed_qna": [
+          {
+            "q": "What is the simplest definition of money?",
+            "a": "Money is anything widely accepted in exchange for goods and services; it serves as a medium of exchange, a unit of account, and a store of value."
+          },
+          {
+            "q": "Why is inflation important for first-time earners?",
+            "a": "Inflation reduces purchasing power over time — saving without returns can erode value. That's why understanding simple investing or high-yield savings matters."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "budgeting",
+    "title": "Budgeting & Saving",
+    "source": "https://www.consumer.gov/articles/managing-your-money",
+    "overview": "Practical methods for budgeting (50/30/20), goals, emergency funds, and automatic saving habits.",
+    "duration_mins": 15,
+    "level": "beginner",
+    "xp_to_unlock": 25,
+    "order": 0,
+    "modules": [
+      {
+        "id": "m1",
+        "title": "50/30/20 and Goal-setting",
+        "summary": "How to split income, set short/medium/long-term goals, and automate savings.",
+        "order": 1,
+        "duration_min": 4,
+        "xp_reward": 50,
+        "lock_rule": "sequential",
+        "required_prev": false,
+        "fixed_qna": [
+          {
+            "q": "What is 50/30/20?",
+            "a": "A simple rule: 50% needs, 30% wants, 20% savings/debt repayment. Use it as a starting point and tweak by personal goals."
+          },
+          {
+            "q": "How big should an emergency fund be?",
+            "a": "Aim for 3–6 months of essential expenses. Start with a small target (₹5,000–₹10,000) and grow it steadily."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "debt-credit",
+    "title": "Debt & Credit",
+    "source": "https://www.consumerfinance.gov/consumer-tools/credit-reports-and-scores/",
+    "overview": "Understand good vs bad debt, interest calculation, credit score basics and how to manage loans and credit cards.",
+    "duration_mins": 20,
+    "level": "intermediate",
+    "xp_to_unlock": 75,
+    "order": 4,
+    "modules": [
+      {
+        "id": "m1",
+        "title": "Interest & Credit Score",
+        "summary": "How interest compounds, how credit scores are built, and actions that improve scores.",
+        "order": 1,
+        "duration_min": 5,
+        "xp_reward": 50,
+        "lock_rule": "sequential",
+        "required_prev": false,
+        "fixed_qna": [
+          {
+            "q": "What is compound interest?",
+            "a": "Compound interest is interest on interest — your debt or investment grows faster when interest accumulates on previously earned interest."
+          },
+          {
+            "q": "How does credit card use affect score?",
+            "a": "Timely payments and low utilization help. Maxing out a card or missing payments hurts your credit score."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "investing-101",
+    "title": "Investing Basics",
+    "source": "https://www.investopedia.com/articles/basics/06/invest1000.asp",
+    "overview": "Basic investing concepts: risk vs reward, diversification, time horizon, and the idea of compounding returns.",
+    "duration_mins": 25,
+    "level": "beginner",
+    "xp_to_unlock": 100,
+    "order": 5,
+    "modules": [
+      {
+        "id": "m1",
+        "title": "Risk & Diversification",
+        "summary": "Risk types, why diversification reduces risk, and simple portfolio examples for beginners.",
+        "order": 1,
+        "duration_min": 4,
+        "xp_reward": 50,
+        "lock_rule": "sequential",
+        "required_prev": false,
+        "fixed_qna": [
+          {
+            "q": "Why diversify?",
+            "a": "Diversification spreads risk across assets so a single loss doesn't wipe out your portfolio."
+          },
+          {
+            "q": "What is an index fund?",
+            "a": "An index fund is a fund that tracks a market index (e.g., NIFTY/S&P 500) offering broad market exposure and low fees."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "stocks-etfs",
+    "title": "Stocks & ETFs",
+    "source": "https://www.nseindia.com/learn/what-are-stocks",
+    "overview": "How stocks represent ownership, ETFs as baskets, basic order types, and reading simple stock charts.",
+    "duration_mins": 20,
+    "level": "intermediate",
+    "xp_to_unlock": 150,
+    "order": 6,
+    "modules": [
+      {
+        "id": "m1",
+        "title": "Stocks vs ETFs",
+        "summary": "Pros/cons of single stocks vs ETFs, fees, and volatility considerations.",
+        "order": 1,
+        "duration_min": 4,
+        "xp_reward": 50,
+        "lock_rule": "sequential",
+        "required_prev": false,
+        "fixed_qna": [
+          {
+            "q": "Is it safer to buy ETFs than one stock?",
+            "a": "Generally yes — ETFs provide immediate diversification, which lowers idiosyncratic risk compared to a single stock."
+          },
+          {
+            "q": "Do ETFs have fees?",
+            "a": "Yes — ETFs have an expense ratio. Choose low-cost ETFs for long-term investing."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "emergency-insurance",
+    "title": "Emergency Fund & Insurance",
+    "source": "https://www.investopedia.com/terms/e/emergency_fund.asp",
+    "overview": "Design emergency savings and choose basic insurance (health, term, asset protection).",
+    "duration_mins": 15,
+    "level": "beginner",
+    "xp_to_unlock": 50,
+    "order": 7,
+    "modules": [
+      {
+        "id": "m1",
+        "title": "Emergency Fund Strategy",
+        "summary": "How to build and maintain an emergency fund, when to use it, and insurance basics.",
+        "order": 1,
+        "duration_min": 3,
+        "xp_reward": 50,
+        "lock_rule": "sequential",
+        "required_prev": false,
+        "fixed_qna": [
+          {
+            "q": "How much should I keep in emergency fund?",
+            "a": "Aim for 3-6 months of essential expenses. Start small and build gradually."
+          },
+          {
+            "q": "What insurance do I need first?",
+            "a": "Start with health insurance, then term life insurance. Asset insurance (home, vehicle) comes next based on your assets."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "tax-planning",
+    "title": "Tax Planning",
+    "source": "https://www.incometaxindia.gov.in/",
+    "overview": "Overview of common tax concepts, tax-saving investments, and retirement accounts to start early.",
+    "duration_mins": 20,
+    "level": "intermediate",
+    "xp_to_unlock": 200,
+    "order": 8,
+    "modules": [
+      {
+        "id": "m1",
+        "title": "Tax-efficient Investing",
+        "summary": "Use tax-advantaged schemes and understand capital gains basics.",
+        "order": 1,
+        "duration_min": 4,
+        "xp_reward": 75,
+        "lock_rule": "sequential",
+        "required_prev": false,
+        "fixed_qna": [
+          {
+            "q": "What is long-term capital gains?",
+            "a": "Profit from selling investments after a defined period; tax rates often differ from short-term gains."
+          },
+          {
+            "q": "What are tax-saving investments?",
+            "a": "ELSS mutual funds, PPF, NPS, and tax-saving FDs can help reduce your taxable income under Section 80C."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "retirement",
+    "title": "Retirement Planning",
+    "source": "https://www.investopedia.com/retirement/",
+    "overview": "Start planning for retirement early, understand retirement accounts, and calculate how much you need.",
+    "duration_mins": 20,
+    "level": "intermediate",
+    "xp_to_unlock": 275,
+    "order": 9,
+    "modules": [
+      {
+        "id": "m1",
+        "title": "Retirement Basics",
+        "summary": "Why start early, how much to save, and retirement account options (EPF, PPF, NPS).",
+        "order": 1,
+        "duration_min": 5,
+        "xp_reward": 75,
+        "lock_rule": "sequential",
+        "required_prev": false,
+        "fixed_qna": [
+          {
+            "q": "When should I start saving for retirement?",
+            "a": "Start as early as possible — even small amounts in your 20s can grow significantly due to compound interest."
+          },
+          {
+            "q": "How much do I need for retirement?",
+            "a": "A common rule is 25-30x your annual expenses. Use retirement calculators to estimate based on your lifestyle and inflation."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "portfolio-building",
+    "title": "Portfolio Building",
+    "source": "https://www.investopedia.com/articles/basics/06/assetallocation.asp",
+    "overview": "Build model portfolios, asset allocation, and portfolio optimization basics for beginners.",
+    "duration_mins": 18,
+    "level": "intermediate",
+    "xp_to_unlock": 350,
+    "order": 10,
+    "modules": [
+      {
+        "id": "m1",
+        "title": "Asset Allocation",
+        "summary": "How to allocate assets based on age, risk tolerance, and goals. Simple portfolio frameworks.",
+        "order": 1,
+        "duration_min": 4,
+        "xp_reward": 75,
+        "lock_rule": "sequential",
+        "required_prev": false,
+        "fixed_qna": [
+          {
+            "q": "How should I allocate my investments?",
+            "a": "A common rule: 100 minus your age = % in equities. The rest in bonds and fixed income. Adjust based on risk tolerance."
+          },
+          {
+            "q": "What is a balanced portfolio?",
+            "a": "A mix of stocks, bonds, and other assets that matches your risk tolerance and time horizon."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "real-estate",
+    "title": "Real Estate Basics",
+    "source": "https://www.investopedia.com/real-estate/",
+    "overview": "Understanding real estate investment, home buying basics, REITs, and property as an asset class.",
+    "duration_mins": 22,
+    "level": "advanced",
+    "xp_to_unlock": 425,
+    "order": 11,
+    "modules": [
+      {
+        "id": "m1",
+        "title": "Real Estate Investment",
+        "summary": "Buying vs renting, REITs as an alternative, and real estate as part of your portfolio.",
+        "order": 1,
+        "duration_min": 5,
+        "xp_reward": 100,
+        "lock_rule": "sequential",
+        "required_prev": false,
+        "fixed_qna": [
+          {
+            "q": "Should I buy or rent?",
+            "a": "Depends on your financial situation, location stability, and local market. Buying requires large down payment and ongoing costs."
+          },
+          {
+            "q": "What are REITs?",
+            "a": "Real Estate Investment Trusts let you invest in real estate without buying property directly. They're liquid and diversified."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "financial-goals",
+    "title": "Financial Goals",
+    "source": "https://www.consumer.gov/articles/managing-your-money",
+    "overview": "Setting SMART financial goals, prioritizing goals, and creating action plans to achieve them.",
+    "duration_mins": 15,
+    "level": "beginner",
+    "xp_to_unlock": 50,
+    "order": 12,
+    "modules": [
+      {
+        "id": "m1",
+        "title": "Goal Setting",
+        "summary": "How to set specific, measurable, achievable, relevant, and time-bound financial goals.",
+        "order": 1,
+        "duration_min": 3,
+        "xp_reward": 50,
+        "lock_rule": "sequential",
+        "required_prev": false,
+        "fixed_qna": [
+          {
+            "q": "How do I set financial goals?",
+            "a": "Use SMART framework: Specific, Measurable, Achievable, Relevant, Time-bound. Start with short-term goals and build to long-term."
+          },
+          {
+            "q": "What goals should I prioritize?",
+            "a": "Emergency fund first, then high-interest debt payoff, followed by retirement savings, then other goals like buying a home."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "behavioral-finance",
+    "title": "Money Psychology",
+    "source": "https://www.behavioralfinance.com/",
+    "overview": "How biases (loss aversion, anchoring, herd behavior) affect decisions and techniques to avoid common traps.",
+    "duration_mins": 15,
+    "level": "intermediate",
+    "xp_to_unlock": 200,
+    "order": 13,
+    "modules": [
+      {
+        "id": "m1",
+        "title": "Common Biases",
+        "summary": "Recognize and mitigate biases when investing and budgeting.",
+        "order": 1,
+        "duration_min": 4,
+        "xp_reward": 75,
+        "lock_rule": "sequential",
+        "required_prev": false,
+        "fixed_qna": [
+          {
+            "q": "What is loss aversion?",
+            "a": "People feel losses more strongly than equivalent gains, causing overly conservative or reactive decisions."
+          },
+          {
+            "q": "How to fight herd behavior?",
+            "a": "Use rules (regular investing, checklists) and re-check decisions against goals instead of following the crowd."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "crypto-alternatives",
+    "title": "Crypto & Alternatives",
+    "source": "https://www.investopedia.com/cryptocurrency-4427699",
+    "overview": "Understanding cryptocurrencies, digital assets, risks, and when/if they fit in a portfolio.",
+    "duration_mins": 20,
+    "level": "advanced",
+    "xp_to_unlock": 500,
+    "order": 14,
+    "modules": [
+      {
+        "id": "m1",
+        "title": "Crypto Basics",
+        "summary": "What is cryptocurrency, blockchain basics, risks, and how to approach crypto investing safely.",
+        "order": 1,
+        "duration_min": 5,
+        "xp_reward": 100,
+        "lock_rule": "sequential",
+        "required_prev": false,
+        "fixed_qna": [
+          {
+            "q": "Should I invest in cryptocurrency?",
+            "a": "Crypto is highly speculative and volatile. Only invest what you can afford to lose, and keep it to a small portion (5-10%) of portfolio if at all."
+          },
+          {
+            "q": "What are the risks?",
+            "a": "High volatility, regulatory uncertainty, security risks, and potential for total loss. Treat as high-risk speculative investment."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "banking-products",
+    "title": "Banking Products",
+    "source": "https://www.consumerfinance.gov/",
+    "overview": "Understanding different banking products, savings accounts, FDs, RDs, and choosing the right bank.",
+    "duration_mins": 12,
+    "level": "beginner",
+    "xp_to_unlock": 0,
+    "order": 15,
+    "modules": [
+      {
+        "id": "m1",
+        "title": "Bank Accounts & FDs",
+        "summary": "Types of accounts, fixed deposits, recurring deposits, and how to choose banking products.",
+        "order": 1,
+        "duration_min": 3,
+        "xp_reward": 25,
+        "lock_rule": "sequential",
+        "required_prev": false,
+        "fixed_qna": [
+          {
+            "q": "What's the difference between savings and current account?",
+            "a": "Savings accounts earn interest and have transaction limits. Current accounts are for businesses with higher transaction volumes."
+          },
+          {
+            "q": "Are FDs safe?",
+            "a": "Yes, FDs are considered very safe as they're insured up to ₹5 lakhs per bank by DICGC. Returns are guaranteed but lower than other investments."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "market-fundamentals",
+    "title": "Market Fundamentals",
+    "source": "https://www.nseindia.com/learn",
+    "overview": "Understanding how stock markets work, market cycles, bull and bear markets, and reading market indicators.",
+    "duration_mins": 25,
+    "level": "intermediate",
+    "xp_to_unlock": 250,
+    "order": 16,
+    "modules": [
+      {
+        "id": "m1",
+        "title": "Market Basics",
+        "summary": "How markets function, supply and demand, market cycles, and basic market terminology.",
+        "order": 1,
+        "duration_min": 5,
+        "xp_reward": 75,
+        "lock_rule": "sequential",
+        "required_prev": false,
+        "fixed_qna": [
+          {
+            "q": "What is a bull market?",
+            "a": "A period when stock prices are rising generally, typically 20% or more from recent lows. Investor confidence is high."
+          },
+          {
+            "q": "What is a bear market?",
+            "a": "A period when stock prices are falling generally, typically 20% or more from recent highs. Investor confidence is low."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "risk-management",
+    "title": "Risk Management",
+    "source": "https://www.investopedia.com/terms/r/riskmanagement.asp",
+    "overview": "Understanding different types of risk, how to manage risk, and protecting your investments.",
+    "duration_mins": 18,
+    "level": "intermediate",
+    "xp_to_unlock": 325,
+    "order": 17,
+    "modules": [
+      {
+        "id": "m1",
+        "title": "Types of Risk",
+        "summary": "Market risk, credit risk, inflation risk, and how to mitigate each through diversification and strategies.",
+        "order": 1,
+        "duration_min": 4,
+        "xp_reward": 75,
+        "lock_rule": "sequential",
+        "required_prev": false,
+        "fixed_qna": [
+          {
+            "q": "What are the main types of investment risk?",
+            "a": "Market risk (prices go down), credit risk (borrower defaults), inflation risk (purchasing power erodes), and liquidity risk (can't sell quickly)."
+          },
+          {
+            "q": "How do I reduce risk?",
+            "a": "Diversify across asset classes, invest for long-term, avoid putting all money in one investment, and maintain emergency fund."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "scams-safety",
+    "title": "Scams & Safety",
+    "source": "https://investor.sebi.gov.in/",
+    "overview": "Recognizing investment scams, Ponzi schemes, and how to invest safely through regulated channels.",
+    "duration_mins": 15,
+    "level": "beginner",
+    "xp_to_unlock": 100,
+    "order": 18,
+    "modules": [
+      {
+        "id": "m1",
+        "title": "Avoiding Scams",
+        "summary": "Red flags of investment scams, how to verify legitimacy, and safe investing practices.",
+        "order": 1,
+        "duration_min": 3,
+        "xp_reward": 50,
+        "lock_rule": "sequential",
+        "required_prev": false,
+        "fixed_qna": [
+          {
+            "q": "How do I spot investment scams?",
+            "a": "Warning signs: guaranteed high returns, pressure to invest quickly, unregistered entities, too-good-to-be-true promises."
+          },
+          {
+            "q": "How do I verify if an investment is legitimate?",
+            "a": "Check if registered with SEBI, verify credentials, read fine print, never invest based solely on social media ads or unsolicited calls."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "technical-analysis",
+    "title": "Technical Analysis",
+    "source": "https://www.investopedia.com/technical-analysis-4689657",
+    "overview": "Learn to read stock charts, understand candlestick patterns, support/resistance levels, and key indicators like RSI, MACD, and moving averages.",
+    "duration_mins": 30,
+    "level": "intermediate",
+    "xp_to_unlock": 300,
+    "order": 19,
+    "modules": [
+      {
+        "id": "m1",
+        "title": "Reading Candlestick Charts",
+        "summary": "What candlesticks tell you about price action — open, high, low, close (OHLC), and common patterns like doji, hammer, and engulfing.",
+        "order": 1,
+        "duration_min": 5,
+        "xp_reward": 75,
+        "lock_rule": "sequential",
+        "required_prev": false,
+        "fixed_qna": [
+          {
+            "q": "What is a candlestick chart?",
+            "a": "A candlestick shows 4 data points for a time period: Open, High, Low, Close. Green/white candle = price went up. Red/black = price went down. The body shows open-close range, wicks show high-low range."
+          },
+          {
+            "q": "What is a doji candle?",
+            "a": "A doji has nearly equal open and close prices, creating a cross shape. It signals market indecision and potential trend reversal. Look for confirmation in the next candle before acting."
+          }
+        ]
+      },
+      {
+        "id": "m2",
+        "title": "Support & Resistance",
+        "summary": "Identify price levels where stocks tend to bounce (support) or reverse (resistance) and use them in trading decisions.",
+        "order": 2,
+        "duration_min": 5,
+        "xp_reward": 75,
+        "lock_rule": "sequential",
+        "required_prev": true,
+        "fixed_qna": [
+          {
+            "q": "What is support and resistance?",
+            "a": "Support is a price level where buying pressure prevents further decline. Resistance is where selling pressure prevents further rise. These levels form because traders remember past price actions at those levels."
+          },
+          {
+            "q": "How do I draw support and resistance lines?",
+            "a": "Connect at least 2-3 price points where the stock bounced or reversed. The more times a level is tested, the stronger it is. When broken, support becomes resistance and vice versa."
+          }
+        ]
+      },
+      {
+        "id": "m3",
+        "title": "Moving Averages & RSI",
+        "summary": "Use moving averages (SMA, EMA) for trend direction and RSI for overbought/oversold signals.",
+        "order": 3,
+        "duration_min": 6,
+        "xp_reward": 100,
+        "lock_rule": "sequential",
+        "required_prev": true,
+        "fixed_qna": [
+          {
+            "q": "What are moving averages?",
+            "a": "Moving averages smooth out price data to show trends. The 50-day and 200-day are most common. When the 50-day crosses above the 200-day (golden cross), it's bullish. Below (death cross) is bearish."
+          },
+          {
+            "q": "What is RSI?",
+            "a": "Relative Strength Index (RSI) ranges 0-100. Above 70 = overbought (may fall). Below 30 = oversold (may rise). It helps identify when a stock has moved too far too fast."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "options-trading",
+    "title": "Options Trading Basics",
+    "source": "https://www.investopedia.com/options-basics-tutorial-4583012",
+    "overview": "Understand calls, puts, strike prices, premiums, and basic options strategies like covered calls and protective puts.",
+    "duration_mins": 35,
+    "level": "advanced",
+    "xp_to_unlock": 450,
+    "order": 20,
+    "modules": [
+      {
+        "id": "m1",
+        "title": "What are Options?",
+        "summary": "Options give you the right (not obligation) to buy or sell at a specific price. Learn calls, puts, strike prices, and expiry dates.",
+        "order": 1,
+        "duration_min": 6,
+        "xp_reward": 100,
+        "lock_rule": "sequential",
+        "required_prev": false,
+        "fixed_qna": [
+          {
+            "q": "What is a call option?",
+            "a": "A call option gives you the right to BUY a stock at a specific price (strike price) before a specific date (expiry). You pay a premium for this right. You profit if the stock rises above strike + premium."
+          },
+          {
+            "q": "What is a put option?",
+            "a": "A put option gives you the right to SELL a stock at a specific price before expiry. You profit if the stock falls below strike - premium. It's like insurance for your stock holdings."
+          }
+        ]
+      },
+      {
+        "id": "m2",
+        "title": "Options Strategies",
+        "summary": "Learn covered calls for income, protective puts for downside protection, and why most beginners should start with these simple strategies.",
+        "order": 2,
+        "duration_min": 7,
+        "xp_reward": 100,
+        "lock_rule": "sequential",
+        "required_prev": true,
+        "fixed_qna": [
+          {
+            "q": "What is a covered call?",
+            "a": "You own the stock and sell a call option at a higher price. You earn the premium as income. If the stock rises above strike, you sell at that price. Good for generating income from stocks you already own."
+          },
+          {
+            "q": "Why are options risky?",
+            "a": "Options can expire worthless, losing 100% of your investment. They have time decay working against buyers. Leverage means small price moves create large gains or losses. Start with small positions."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "ipo-unlisted",
+    "title": "IPOs & New Listings",
+    "source": "https://www.nseindia.com/learn/ipo",
+    "overview": "Understanding Initial Public Offerings, how to apply, grey market premiums, and evaluating new listings for investment.",
+    "duration_mins": 20,
+    "level": "intermediate",
+    "xp_to_unlock": 250,
+    "order": 21,
+    "modules": [
+      {
+        "id": "m1",
+        "title": "How IPOs Work",
+        "summary": "From company filing to listing day — the IPO process, DRHP, lot sizes, and how retail investors can participate.",
+        "order": 1,
+        "duration_min": 5,
+        "xp_reward": 75,
+        "lock_rule": "sequential",
+        "required_prev": false,
+        "fixed_qna": [
+          {
+            "q": "What is an IPO?",
+            "a": "Initial Public Offering — when a private company first sells shares to the public. It's how companies raise capital. As an investor, you get to buy shares before they start trading on stock exchanges."
+          },
+          {
+            "q": "How do I apply for an IPO?",
+            "a": "Apply through your demat account using ASBA (Application Supported by Blocked Amount). Your money is blocked, not debited, until allotment. Apply for 1 lot for better allotment chances in oversubscribed IPOs."
+          }
+        ]
+      },
+      {
+        "id": "m2",
+        "title": "Evaluating IPOs",
+        "summary": "Red flags, valuation metrics (P/E, revenue growth), and when to skip an IPO.",
+        "order": 2,
+        "duration_min": 5,
+        "xp_reward": 75,
+        "lock_rule": "sequential",
+        "required_prev": true,
+        "fixed_qna": [
+          {
+            "q": "How do I evaluate if an IPO is worth investing?",
+            "a": "Check: company profitability, revenue growth trend, P/E ratio vs peers, promoter holding, use of funds from DRHP. Avoid IPOs with mostly OFS (Offer for Sale) as existing investors are exiting."
+          },
+          {
+            "q": "What is grey market premium?",
+            "a": "GMP is the premium at which IPO shares trade in unofficial markets before listing. High GMP suggests strong demand, but it's unreliable and unregulated. Don't base decisions solely on GMP."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "personal-finance-automation",
+    "title": "Automate Your Finances",
+    "source": "https://www.consumerfinance.gov/",
+    "overview": "Set up automated investing, bill payments, and savings systems so your money works without daily attention.",
+    "duration_mins": 15,
+    "level": "beginner",
+    "xp_to_unlock": 75,
+    "order": 22,
+    "modules": [
+      {
+        "id": "m1",
+        "title": "Salary Day Strategy",
+        "summary": "How to automate your finances from day 1 — auto SIPs, auto bill payments, and separate accounts for goals.",
+        "order": 1,
+        "duration_min": 4,
+        "xp_reward": 50,
+        "lock_rule": "sequential",
+        "required_prev": false,
+        "fixed_qna": [
+          {
+            "q": "How do I automate my investments?",
+            "a": "Set up SIPs to auto-debit 2 days after salary day. Use separate bank accounts for expenses, savings, and investments. Automate bill payments to avoid late fees and credit score damage."
+          },
+          {
+            "q": "What is the pay yourself first method?",
+            "a": "Before spending on anything, automatically transfer a fixed amount to savings/investments the moment your salary arrives. Treat it as a non-negotiable expense. Even ₹2,000/month matters."
+          }
+        ]
+      },
+      {
+        "id": "m2",
+        "title": "Tools & Apps for Tracking",
+        "summary": "Best free tools for expense tracking, net worth monitoring, and investment dashboards.",
+        "order": 2,
+        "duration_min": 3,
+        "xp_reward": 50,
+        "lock_rule": "sequential",
+        "required_prev": true,
+        "fixed_qna": [
+          {
+            "q": "What apps should I use to track expenses?",
+            "a": "Popular options: Walnut, Money Manager, or simple spreadsheets. For investments: Groww, Zerodha Coin, or ET Money. The best tool is the one you'll actually use consistently."
+          },
+          {
+            "q": "How often should I review my finances?",
+            "a": "Check spending weekly (5 min), review investments monthly (15 min), and do a full financial review quarterly. Don't check stock prices daily — it leads to emotional decisions."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "forex-currency",
+    "title": "Forex & Currency Markets",
+    "source": "https://www.investopedia.com/terms/forex/f/forex-market.asp",
+    "overview": "Understand how currency markets work, what affects exchange rates, and how forex impacts your international investments.",
+    "duration_mins": 25,
+    "level": "advanced",
+    "xp_to_unlock": 400,
+    "order": 23,
+    "modules": [
+      {
+        "id": "m1",
+        "title": "How Currency Markets Work",
+        "summary": "Currency pairs, exchange rates, what moves forex markets, and how RBI policy affects the Indian Rupee.",
+        "order": 1,
+        "duration_min": 5,
+        "xp_reward": 75,
+        "lock_rule": "sequential",
+        "required_prev": false,
+        "fixed_qna": [
+          {
+            "q": "What is forex trading?",
+            "a": "Forex (Foreign Exchange) is trading one currency for another. Currency pairs like USD/INR show how much of one currency you need to buy another. The forex market is the largest financial market globally."
+          },
+          {
+            "q": "Why does the INR weaken against USD?",
+            "a": "The Rupee weakens due to trade deficits, capital outflows, inflation differences, RBI policy, and global risk sentiment. A weaker Rupee makes imports expensive but helps IT exporters."
+          }
+        ]
+      },
+      {
+        "id": "m2",
+        "title": "Forex Impact on Investments",
+        "summary": "How currency fluctuations affect your US stock investments, international mutual funds, and global portfolio returns.",
+        "order": 2,
+        "duration_min": 5,
+        "xp_reward": 75,
+        "lock_rule": "sequential",
+        "required_prev": true,
+        "fixed_qna": [
+          {
+            "q": "How does forex affect my US stock investments?",
+            "a": "If you invest in US stocks and the Rupee weakens, your returns are amplified when converted to INR. Conversely, Rupee strengthening reduces your INR returns. This adds currency risk/reward to international investing."
+          },
+          {
+            "q": "Should I hedge currency risk?",
+            "a": "For long-term investors, currency tends to even out. For short-term, currency hedged funds remove forex risk but add costs. Most retail investors don't need to actively hedge."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "fundamental-analysis",
+    "title": "Fundamental Analysis",
+    "source": "https://www.investopedia.com/fundamental-analysis-4689757",
+    "overview": "Learn to analyze company financials — revenue, profit margins, P/E ratio, debt-to-equity, and read annual reports to make informed stock picks.",
+    "duration_mins": 35,
+    "level": "advanced",
+    "xp_to_unlock": 400,
+    "order": 24,
+    "modules": [
+      {
+        "id": "m1",
+        "title": "Reading Financial Statements",
+        "summary": "Income statement, balance sheet, and cash flow — the three pillars of company analysis and what to look for.",
+        "order": 1,
+        "duration_min": 7,
+        "xp_reward": 100,
+        "lock_rule": "sequential",
+        "required_prev": false,
+        "fixed_qna": [
+          {
+            "q": "What are the three financial statements?",
+            "a": "Income Statement (revenue - expenses = profit), Balance Sheet (assets = liabilities + equity), and Cash Flow Statement (actual cash in/out). Together they give a complete picture of a company's health."
+          },
+          {
+            "q": "What is the P/E ratio?",
+            "a": "Price-to-Earnings ratio = Stock Price / Earnings Per Share. A P/E of 20 means you're paying ₹20 for every ₹1 of earnings. Compare with industry peers — low P/E may be value, high P/E may be growth expectations."
+          }
+        ]
+      },
+      {
+        "id": "m2",
+        "title": "Key Ratios & Metrics",
+        "summary": "ROE, debt-to-equity, profit margins, and how to use them to compare companies in the same sector.",
+        "order": 2,
+        "duration_min": 6,
+        "xp_reward": 100,
+        "lock_rule": "sequential",
+        "required_prev": true,
+        "fixed_qna": [
+          {
+            "q": "What is ROE?",
+            "a": "Return on Equity = Net Profit / Shareholder Equity. It shows how efficiently a company uses shareholder money. ROE > 15% is generally good. Compare within the same industry."
+          },
+          {
+            "q": "What debt-to-equity ratio is safe?",
+            "a": "Below 1.0 is generally safe (more equity than debt). Above 2.0 is risky as the company is heavily leveraged. But capital-intensive industries like banking naturally have higher ratios."
+          }
+        ]
+      },
+      {
+        "id": "m3",
+        "title": "Valuation Methods",
+        "summary": "Discounted Cash Flow (DCF), P/E comparison, and quick valuation techniques for retail investors.",
+        "order": 3,
+        "duration_min": 7,
+        "xp_reward": 100,
+        "lock_rule": "sequential",
+        "required_prev": true,
+        "fixed_qna": [
+          {
+            "q": "What is DCF analysis?",
+            "a": "Discounted Cash Flow estimates a company's value by projecting future cash flows and discounting them to present value. If the DCF value > current price, the stock may be undervalued."
+          },
+          {
+            "q": "How do I know if a stock is cheap or expensive?",
+            "a": "Compare P/E, P/B, and EV/EBITDA with industry peers. Check if growth justifies the premium. A 'cheap' stock with declining business isn't a bargain — always check fundamentals alongside price."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "trading-psychology",
+    "title": "Trading Psychology",
+    "source": "https://www.investopedia.com/articles/trading/02/110502.asp",
+    "overview": "Master your emotions while trading — fear, greed, FOMO, revenge trading, and building discipline through trading journals and rules.",
+    "duration_mins": 20,
+    "level": "intermediate",
+    "xp_to_unlock": 275,
+    "order": 25,
+    "modules": [
+      {
+        "id": "m1",
+        "title": "Emotions in Trading",
+        "summary": "How fear and greed drive bad decisions, recognizing emotional triggers, and why most traders lose money.",
+        "order": 1,
+        "duration_min": 5,
+        "xp_reward": 75,
+        "lock_rule": "sequential",
+        "required_prev": false,
+        "fixed_qna": [
+          {
+            "q": "Why do most traders lose money?",
+            "a": "80-90% of traders lose because of emotional decisions — buying high from FOMO, selling low from panic, revenge trading after losses, and overtrading. Discipline and risk management matter more than stock picking."
+          },
+          {
+            "q": "What is FOMO in trading?",
+            "a": "Fear Of Missing Out — buying a stock because it's already risen sharply, hoping to catch more gains. This often leads to buying at the top. Stick to your strategy and entry criteria, not market hype."
+          }
+        ]
+      },
+      {
+        "id": "m2",
+        "title": "Building Trading Discipline",
+        "summary": "Trading journals, pre-trade checklists, position sizing rules, and why the best traders have boring routines.",
+        "order": 2,
+        "duration_min": 5,
+        "xp_reward": 75,
+        "lock_rule": "sequential",
+        "required_prev": true,
+        "fixed_qna": [
+          {
+            "q": "What is a trading journal?",
+            "a": "A log of every trade: entry/exit price, reason for trade, emotions felt, outcome, and lessons. Review weekly to identify patterns in your decision-making. It's the most underrated tool in trading."
+          },
+          {
+            "q": "How do I set position sizing rules?",
+            "a": "Never risk more than 1-2% of your total capital on a single trade. If you have ₹1,00,000, maximum loss per trade should be ₹1,000-2,000. Use stop-loss orders to enforce this automatically."
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,47 @@
+[
+  {
+    "id": 3104,
+    "question": "What is the main reason futures are considered leveraged?",
+    "options": [
+      "They require full payment of notional value upfront",
+      "They require only margin relative to the contract size",
+      "They can only go up in price",
+      "They are not traded on exchanges"
+    ],
+    "correct_answer": "They require only margin relative to the contract size",
+    "ai_feedback": {
+      "correct": "Correct. Margin creates leverage by controlling a large contract with less capital.",
+      "incorrect": "Futures use margin, which means a small amount of capital controls a larger notional exposure."
+    }
+  },
+  {
+    "id": 3105,
+    "question": "What is a common purpose of hedging with futures?",
+    "options": [
+      "Eliminating all market movements",
+      "Reducing price uncertainty for a future purchase or sale",
+      "Increasing transaction fees",
+      "Guaranteeing profits"
+    ],
+    "correct_answer": "Reducing price uncertainty for a future purchase or sale",
+    "ai_feedback": {
+      "correct": "Yes. Hedging is about reducing uncertainty, not guaranteeing return.",
+      "incorrect": "Hedging helps manage risk by stabilizing exposure to future price changes."
+    }
+  },
+  {
+    "id": 3106,
+    "question": "Why can leverage be dangerous in futures?",
+    "options": [
+      "Because it removes volatility",
+      "Because small price moves can create large losses",
+      "Because it prevents liquidation",
+      "Because it always lowers margin requirements"
+    ],
+    "correct_answer": "Because small price moves can create large losses",
+    "ai_feedback": {
+      "correct": "Correct. Leverage amplifies both directions.",
+      "incorrect": "Leverage magnifies gains and losses, so risk management matters more than ever."
+    }
+  }
+]

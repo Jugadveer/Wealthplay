@@ -1,0 +1,1142 @@
+[
+  {
+      "model": "simulator.scenario",
+      "pk": 1,
+      "fields": {
+          "title": "The First Salary",
+          "description": "You just received your first paycheck of ₹50,000! The temptation to spend is high. How do you allocate this first milestone?",
+          "starting_balance": "50000.00"
+      }
+  },
+  {
+      "model": "simulator.scenario",
+      "pk": 2,
+      "fields": {
+          "title": "The Emergency",
+          "description": "Your laptop crashed and you need it for work. Repairs cost ₹20,000. You don't have an emergency fund set up yet.",
+          "starting_balance": "20000.00"
+      }
+  },
+  {
+      "model": "simulator.scenario",
+      "pk": 3,
+      "fields": {
+          "title": "Market Crash!",
+          "description": "The stock market dropped 20% due to global news. Your portfolio is bleeding red. Panic is everywhere.",
+          "starting_balance": "100000.00"
+      }
+  },
+  {
+      "model": "simulator.scenario",
+      "pk": 4,
+      "fields": {
+          "title": "The Credit Card Trap",
+          "description": "You have a credit card bill of ₹25,000. You have the cash, but the 'Minimum Due' is only ₹1,200.",
+          "starting_balance": "25000.00"
+      }
+  },
+  {
+      "model": "simulator.scenario",
+      "pk": 5,
+      "fields": {
+          "title": "Tax Season Rush",
+          "description": "It is March 25th. You need to invest ₹30,000 to save taxes under Section 80C or pay it to the government.",
+          "starting_balance": "30000.00"
+      }
+  },
+  {
+      "model": "simulator.scenario",
+      "pk": 6,
+      "fields": {
+          "title": "The Crypto Tip",
+          "description": "Your friend swears that 'MoonCoin' will double by next week. He suggests putting your savings into it.",
+          "starting_balance": "50000.00"
+      }
+  },
+  {
+      "model": "simulator.scenario",
+      "pk": 7,
+      "fields": {
+          "title": "Buying a Car",
+          "description": "You want to buy a car. You can afford the EMI for a luxury sedan, or buy a used hatchback with cash.",
+          "starting_balance": "400000.00"
+      }
+  },
+  {
+      "model": "simulator.scenario",
+      "pk": 8,
+      "fields": {
+          "title": "Insurance Sales Pitch",
+          "description": "An agent offers an Endowment Plan: 'Pay ₹50k/year, get life cover + money back'. Returns are around 5%.",
+          "starting_balance": "50000.00"
+      }
+  },
+  {
+      "model": "simulator.scenario",
+      "pk": 9,
+      "fields": {
+          "title": "The Goa Trip",
+          "description": "Friends are planning a luxury trip costing ₹35,000. You are saving for a house down payment.",
+          "starting_balance": "35000.00"
+      }
+  },
+  {
+      "model": "simulator.scenario",
+      "pk": 10,
+      "fields": {
+          "title": "Job Switch",
+          "description": "You got a new job offer with a 30% hike but no job security. Your current job is stable but low growth.",
+          "starting_balance": "60000.00"
+      }
+  },
+  {
+      "model": "simulator.scenario",
+      "pk": 11,
+      "fields": {
+          "title": "Diwali Bonus",
+          "description": "You received an unexpected bonus of ₹1,00,000. It feels like 'free money'.",
+          "starting_balance": "100000.00"
+      }
+  },
+  {
+      "model": "simulator.scenario",
+      "pk": 12,
+      "fields": {
+          "title": "Gold Rush",
+          "description": "Gold prices are soaring. Everyone is buying physical gold jewelry as an investment.",
+          "starting_balance": "50000.00"
+      }
+  },
+  {
+      "model": "simulator.scenario",
+      "pk": 13,
+      "fields": {
+          "title": "Subscription Overload",
+          "description": "You realize you are spending ₹5,000/month on OTT and apps you rarely use.",
+          "starting_balance": "5000.00"
+      }
+  },
+  {
+      "model": "simulator.scenario",
+      "pk": 14,
+      "fields": {
+          "title": "Loan for Wedding",
+          "description": "You are getting married. Relatives suggest taking a personal loan of ₹5 Lakhs for a grander venue.",
+          "starting_balance": "500000.00"
+      }
+  },
+  {
+      "model": "simulator.scenario",
+      "pk": 15,
+      "fields": {
+          "title": "Higher Education",
+          "description": "You want to do an MBA. It costs ₹15 Lakhs. You can self-fund partially or take a full loan.",
+          "starting_balance": "500000.00"
+      }
+  },
+  {
+      "model": "simulator.scenario",
+      "pk": 16,
+      "fields": {
+          "title": "Rent vs Buy",
+          "description": "You have enough for a down payment on a house, but the EMI will be 40% of your income. Renting is cheaper.",
+          "starting_balance": "1000000.00"
+      }
+  },
+  {
+      "model": "simulator.scenario",
+      "pk": 17,
+      "fields": {
+          "title": "Inflation Hit",
+          "description": "Prices of groceries and fuel have gone up. Your monthly budget is in deficit by ₹5,000.",
+          "starting_balance": "5000.00"
+      }
+  },
+  {
+      "model": "simulator.scenario",
+      "pk": 18,
+      "fields": {
+          "title": "Lending to Friend",
+          "description": "A close friend asks to borrow ₹20,000 for a 'business idea'. No contract, just trust.",
+          "starting_balance": "20000.00"
+      }
+  },
+  {
+      "model": "simulator.scenario",
+      "pk": 19,
+      "fields": {
+          "title": "The IPO Hype",
+          "description": "A trendy tech company is launching an IPO. Everyone is applying for listing gains.",
+          "starting_balance": "15000.00"
+      }
+  },
+  {
+      "model": "simulator.scenario",
+      "pk": 20,
+      "fields": {
+          "title": "Early Retirement",
+          "description": "You want to retire by 45 (FIRE). You have ₹20,000 surplus this month.",
+          "starting_balance": "20000.00"
+      }
+  },
+  {
+      "model": "simulator.decisionoption",
+      "pk": 1,
+      "fields": {
+          "scenario": 1,
+          "text": "Start a SIP",
+          "decision_type": "INVEST",
+          "balance_impact": "-10000.00",
+          "confidence_delta": 10,
+          "risk_score_delta": 10,
+          "future_growth_rate": "0.1200",
+          "score": 20,
+          "why_it_matters": "Starting early allows compound interest to work magic.",
+          "mentor_feedback": "Excellent start!"
+      }
+  },
+  {
+      "model": "simulator.decisionoption",
+      "pk": 2,
+      "fields": {
+          "scenario": 1,
+          "text": "Keep in Savings Acct",
+          "decision_type": "SAVE",
+          "balance_impact": "-10000.00",
+          "confidence_delta": 5,
+          "risk_score_delta": -5,
+          "future_growth_rate": "0.0300",
+          "score": 10,
+          "why_it_matters": "Savings accounts lose value to inflation over time.",
+          "mentor_feedback": "Safe, but low growth."
+      }
+  },
+  {
+      "model": "simulator.decisionoption",
+      "pk": 3,
+      "fields": {
+          "scenario": 1,
+          "text": "Party Hard",
+          "decision_type": "SPEND",
+          "balance_impact": "-20000.00",
+          "confidence_delta": -10,
+          "risk_score_delta": 20,
+          "future_growth_rate": "0.0000",
+          "score": 0,
+          "why_it_matters": "Spending 40% of income on entertainment hurts long-term goals.",
+          "mentor_feedback": "Enjoyment is good, but budget it."
+      }
+  },
+  {
+      "model": "simulator.decisionoption",
+      "pk": 4,
+      "fields": {
+          "scenario": 2,
+          "text": "Use Credit Card EMI",
+          "decision_type": "SPEND",
+          "balance_impact": "0.00",
+          "confidence_delta": -5,
+          "risk_score_delta": 30,
+          "future_growth_rate": "-0.1500",
+          "score": 5,
+          "why_it_matters": "EMIs add interest cost, making the laptop more expensive.",
+          "mentor_feedback": "Avoid debt for electronics if possible."
+      }
+  },
+  {
+      "model": "simulator.decisionoption",
+      "pk": 5,
+      "fields": {
+          "scenario": 2,
+          "text": "Buy Refurbished",
+          "decision_type": "SAVE",
+          "balance_impact": "-12000.00",
+          "confidence_delta": 10,
+          "risk_score_delta": 0,
+          "future_growth_rate": "-0.1000",
+          "score": 20,
+          "why_it_matters": "Buying used saves cash and depreciates slower.",
+          "mentor_feedback": "Smart, frugal choice."
+      }
+  },
+  {
+      "model": "simulator.decisionoption",
+      "pk": 6,
+      "fields": {
+          "scenario": 2,
+          "text": "Borrow from Friend",
+          "decision_type": "SAVE",
+          "balance_impact": "-20000.00",
+          "confidence_delta": -5,
+          "risk_score_delta": 10,
+          "future_growth_rate": "0.0000",
+          "score": 10,
+          "why_it_matters": "Borrowing damages relationships if repayment is delayed.",
+          "mentor_feedback": "Risky for relationships."
+      }
+  },
+  {
+      "model": "simulator.decisionoption",
+      "pk": 7,
+      "fields": {
+          "scenario": 3,
+          "text": "Sell Everything",
+          "decision_type": "SPEND",
+          "balance_impact": "80000.00",
+          "confidence_delta": -20,
+          "risk_score_delta": 0,
+          "future_growth_rate": "0.0000",
+          "score": 0,
+          "why_it_matters": "Panic selling locks in losses permanently.",
+          "mentor_feedback": "Never sell in panic!"
+      }
+  },
+  {
+      "model": "simulator.decisionoption",
+      "pk": 8,
+      "fields": {
+          "scenario": 3,
+          "text": "Buy the Dip",
+          "decision_type": "INVEST",
+          "balance_impact": "-20000.00",
+          "confidence_delta": 20,
+          "risk_score_delta": 15,
+          "future_growth_rate": "0.1500",
+          "score": 20,
+          "why_it_matters": "Buying low lowers average cost and boosts future returns.",
+          "mentor_feedback": "Be greedy when others are fearful."
+      }
+  },
+  {
+      "model": "simulator.decisionoption",
+      "pk": 9,
+      "fields": {
+          "scenario": 3,
+          "text": "Do Nothing",
+          "decision_type": "SAVE",
+          "balance_impact": "0.00",
+          "confidence_delta": 5,
+          "risk_score_delta": 0,
+          "future_growth_rate": "0.1000",
+          "score": 15,
+          "why_it_matters": "Inactivity is better than panic. Markets usually recover.",
+          "mentor_feedback": "Patience is a virtue."
+      }
+  },
+  {
+      "model": "simulator.decisionoption",
+      "pk": 10,
+      "fields": {
+          "scenario": 4,
+          "text": "Pay Full Amount",
+          "decision_type": "SAVE",
+          "balance_impact": "-25000.00",
+          "confidence_delta": 20,
+          "risk_score_delta": -20,
+          "future_growth_rate": "0.0000",
+          "score": 20,
+          "why_it_matters": "Paying in full avoids 30-40% interest charges.",
+          "mentor_feedback": "Excellent debt management."
+      }
+  },
+  {
+      "model": "simulator.decisionoption",
+      "pk": 11,
+      "fields": {
+          "scenario": 4,
+          "text": "Pay Minimum Due",
+          "decision_type": "SPEND",
+          "balance_impact": "-1200.00",
+          "confidence_delta": -10,
+          "risk_score_delta": 50,
+          "future_growth_rate": "-0.3600",
+          "score": 0,
+          "why_it_matters": "Minimum due is a debt trap. Interest piles up fast.",
+          "mentor_feedback": "You walked into a trap."
+      }
+  },
+  {
+      "model": "simulator.decisionoption",
+      "pk": 12,
+      "fields": {
+          "scenario": 4,
+          "text": "Invest the Cash",
+          "decision_type": "INVEST",
+          "balance_impact": "-25000.00",
+          "confidence_delta": -5,
+          "risk_score_delta": 60,
+          "future_growth_rate": "0.1200",
+          "score": 5,
+          "why_it_matters": "Investment returns (12%) cannot beat credit card interest (36%).",
+          "mentor_feedback": "Math doesn't work here."
+      }
+  },
+  {
+      "model": "simulator.decisionoption",
+      "pk": 13,
+      "fields": {
+          "scenario": 5,
+          "text": "ELSS Mutual Fund",
+          "decision_type": "INVEST",
+          "balance_impact": "-30000.00",
+          "confidence_delta": 15,
+          "risk_score_delta": 10,
+          "future_growth_rate": "0.1400",
+          "score": 20,
+          "why_it_matters": "ELSS saves tax and grows wealth with lowest lock-in.",
+          "mentor_feedback": "Best tax-saving option."
+      }
+  },
+  {
+      "model": "simulator.decisionoption",
+      "pk": 14,
+      "fields": {
+          "scenario": 5,
+          "text": "Fixed Deposit (Tax Saver)",
+          "decision_type": "SAVE",
+          "balance_impact": "-30000.00",
+          "confidence_delta": 10,
+          "risk_score_delta": -10,
+          "future_growth_rate": "0.0600",
+          "score": 15,
+          "why_it_matters": "Safe, but 5-year lock-in with low returns.",
+          "mentor_feedback": "Safe but slow."
+      }
+  },
+  {
+      "model": "simulator.decisionoption",
+      "pk": 15,
+      "fields": {
+          "scenario": 5,
+          "text": "Pay the Tax",
+          "decision_type": "SPEND",
+          "balance_impact": "-10000.00",
+          "confidence_delta": -10,
+          "risk_score_delta": 0,
+          "future_growth_rate": "0.0000",
+          "score": 0,
+          "why_it_matters": "Not planning taxes is losing free money.",
+          "mentor_feedback": "You lost money unnecessarily."
+      }
+  },
+  {
+      "model": "simulator.decisionoption",
+      "pk": 16,
+      "fields": {
+          "scenario": 6,
+          "text": "All In!",
+          "decision_type": "INVEST",
+          "balance_impact": "-50000.00",
+          "confidence_delta": -20,
+          "risk_score_delta": 90,
+          "future_growth_rate": "-0.5000",
+          "score": 0,
+          "why_it_matters": "Never put 100% capital in high-risk speculative assets.",
+          "mentor_feedback": "This is gambling, not investing."
+      }
+  },
+  {
+      "model": "simulator.decisionoption",
+      "pk": 17,
+      "fields": {
+          "scenario": 6,
+          "text": "5% Allocation",
+          "decision_type": "INVEST",
+          "balance_impact": "-2500.00",
+          "confidence_delta": 5,
+          "risk_score_delta": 20,
+          "future_growth_rate": "0.2000",
+          "score": 15,
+          "why_it_matters": "Small exposure to high risk is acceptable.",
+          "mentor_feedback": "Balanced risk taking."
+      }
+  },
+  {
+      "model": "simulator.decisionoption",
+      "pk": 18,
+      "fields": {
+          "scenario": 6,
+          "text": "Ignore Hype",
+          "decision_type": "SAVE",
+          "balance_impact": "0.00",
+          "confidence_delta": 10,
+          "risk_score_delta": 0,
+          "future_growth_rate": "0.0000",
+          "score": 20,
+          "why_it_matters": "Capital preservation is the first rule of investing.",
+          "mentor_feedback": "Good discipline."
+      }
+  },
+  {
+      "model": "simulator.decisionoption",
+      "pk": 19,
+      "fields": {
+          "scenario": 7,
+          "text": "Buy Used Car (Cash)",
+          "decision_type": "SAVE",
+          "balance_impact": "-250000.00",
+          "confidence_delta": 10,
+          "risk_score_delta": 0,
+          "future_growth_rate": "-0.1000",
+          "score": 20,
+          "why_it_matters": "Avoids debt and depreciation hits hardest on new cars.",
+          "mentor_feedback": "Financially savvy move."
+      }
+  },
+  {
+      "model": "simulator.decisionoption",
+      "pk": 20,
+      "fields": {
+          "scenario": 7,
+          "text": "Buy New (Loan)",
+          "decision_type": "SPEND",
+          "balance_impact": "-50000.00",
+          "confidence_delta": -5,
+          "risk_score_delta": 40,
+          "future_growth_rate": "-0.1500",
+          "score": 5,
+          "why_it_matters": "Car loans depreciate your wealth twice (Interest + Value drop).",
+          "mentor_feedback": "Costly luxury."
+      }
+  },
+  {
+      "model": "simulator.decisionoption",
+      "pk": 21,
+      "fields": {
+          "scenario": 7,
+          "text": "Invest & Use Uber",
+          "decision_type": "INVEST",
+          "balance_impact": "-400000.00",
+          "confidence_delta": 5,
+          "risk_score_delta": 10,
+          "future_growth_rate": "0.1200",
+          "score": 15,
+          "why_it_matters": "Assets put money in pocket; cars take money out.",
+          "mentor_feedback": "Great if convenience isn't an issue."
+      }
+  },
+  {
+      "model": "simulator.decisionoption",
+      "pk": 22,
+      "fields": {
+          "scenario": 8,
+          "text": "Buy Endowment Plan",
+          "decision_type": "SAVE",
+          "balance_impact": "-50000.00",
+          "confidence_delta": 5,
+          "risk_score_delta": -5,
+          "future_growth_rate": "0.0500",
+          "score": 5,
+          "why_it_matters": "Returns barely beat inflation. High cost, low cover.",
+          "mentor_feedback": "Avoid mixing insurance and investment."
+      }
+  },
+  {
+      "model": "simulator.decisionoption",
+      "pk": 23,
+      "fields": {
+          "scenario": 8,
+          "text": "Term Plan + SIP",
+          "decision_type": "INVEST",
+          "balance_impact": "-50000.00",
+          "confidence_delta": 20,
+          "risk_score_delta": 10,
+          "future_growth_rate": "0.1200",
+          "score": 20,
+          "why_it_matters": "Term plan gives high cover cheap; SIP grows wealth.",
+          "mentor_feedback": "The pro strategy."
+      }
+  },
+  {
+      "model": "simulator.decisionoption",
+      "pk": 24,
+      "fields": {
+          "scenario": 8,
+          "text": "No Insurance",
+          "decision_type": "SPEND",
+          "balance_impact": "0.00",
+          "confidence_delta": -20,
+          "risk_score_delta": 90,
+          "future_growth_rate": "0.0000",
+          "score": 0,
+          "why_it_matters": "One accident can wipe out life savings.",
+          "mentor_feedback": "Extremely risky."
+      }
+  },
+  {
+      "model": "simulator.decisionoption",
+      "pk": 25,
+      "fields": {
+          "scenario": 9,
+          "text": "Go Luxury",
+          "decision_type": "SPEND",
+          "balance_impact": "-35000.00",
+          "confidence_delta": -10,
+          "risk_score_delta": 20,
+          "future_growth_rate": "0.0000",
+          "score": 0,
+          "why_it_matters": "Peer pressure spending delays important life goals.",
+          "mentor_feedback": "Fun now, pain later."
+      }
+  },
+  {
+      "model": "simulator.decisionoption",
+      "pk": 26,
+      "fields": {
+          "scenario": 9,
+          "text": "Budget Trip",
+          "decision_type": "SAVE",
+          "balance_impact": "-15000.00",
+          "confidence_delta": 10,
+          "risk_score_delta": 0,
+          "future_growth_rate": "0.0000",
+          "score": 15,
+          "why_it_matters": "Balance fun with responsibility.",
+          "mentor_feedback": "Good compromise."
+      }
+  },
+  {
+      "model": "simulator.decisionoption",
+      "pk": 27,
+      "fields": {
+          "scenario": 9,
+          "text": "Invest for House",
+          "decision_type": "INVEST",
+          "balance_impact": "-35000.00",
+          "confidence_delta": 15,
+          "risk_score_delta": 0,
+          "future_growth_rate": "0.1000",
+          "score": 20,
+          "why_it_matters": "Delayed gratification builds massive wealth.",
+          "mentor_feedback": "Focus on the big picture."
+      }
+  },
+  {
+      "model": "simulator.decisionoption",
+      "pk": 28,
+      "fields": {
+          "scenario": 10,
+          "text": "Take New Job",
+          "decision_type": "INVEST",
+          "balance_impact": "0.00",
+          "confidence_delta": 10,
+          "risk_score_delta": 20,
+          "future_growth_rate": "0.3000",
+          "score": 20,
+          "why_it_matters": "Calculated career risks increase lifetime earnings.",
+          "mentor_feedback": "Growth happens outside comfort zone."
+      }
+  },
+  {
+      "model": "simulator.decisionoption",
+      "pk": 29,
+      "fields": {
+          "scenario": 10,
+          "text": "Stay Safe",
+          "decision_type": "SAVE",
+          "balance_impact": "0.00",
+          "confidence_delta": 5,
+          "risk_score_delta": -10,
+          "future_growth_rate": "0.0500",
+          "score": 10,
+          "why_it_matters": "Stability is good, but stagnation kills growth.",
+          "mentor_feedback": "Safe but slow."
+      }
+  },
+  {
+      "model": "simulator.decisionoption",
+      "pk": 30,
+      "fields": {
+          "scenario": 10,
+          "text": "Quit & Travel",
+          "decision_type": "SPEND",
+          "balance_impact": "-60000.00",
+          "confidence_delta": -10,
+          "risk_score_delta": 50,
+          "future_growth_rate": "-0.5000",
+          "score": 0,
+          "why_it_matters": "Gap years without funding plan are dangerous.",
+          "mentor_feedback": "High risk move."
+      }
+  },
+  {
+      "model": "simulator.decisionoption",
+      "pk": 31,
+      "fields": {
+          "scenario": 11,
+          "text": "Lump Sum Invest",
+          "decision_type": "INVEST",
+          "balance_impact": "-100000.00",
+          "confidence_delta": 20,
+          "risk_score_delta": 10,
+          "future_growth_rate": "0.1200",
+          "score": 20,
+          "why_it_matters": "Windfalls are best used to accelerate goals.",
+          "mentor_feedback": "Perfect use of bonus."
+      }
+  },
+  {
+      "model": "simulator.decisionoption",
+      "pk": 32,
+      "fields": {
+          "scenario": 11,
+          "text": "Shopping Spree",
+          "decision_type": "SPEND",
+          "balance_impact": "-100000.00",
+          "confidence_delta": -10,
+          "risk_score_delta": 20,
+          "future_growth_rate": "-0.2000",
+          "score": 0,
+          "why_it_matters": "Lifestyle inflation eats up wealth gains.",
+          "mentor_feedback": "Easy come, easy go."
+      }
+  },
+  {
+      "model": "simulator.decisionoption",
+      "pk": 33,
+      "fields": {
+          "scenario": 11,
+          "text": "Pre-pay Loans",
+          "decision_type": "SAVE",
+          "balance_impact": "-100000.00",
+          "confidence_delta": 15,
+          "risk_score_delta": -10,
+          "future_growth_rate": "0.1000",
+          "score": 20,
+          "why_it_matters": "Becoming debt-free is a guaranteed return.",
+          "mentor_feedback": "Smart, safe move."
+      }
+  },
+  {
+      "model": "simulator.decisionoption",
+      "pk": 34,
+      "fields": {
+          "scenario": 12,
+          "text": "Buy Sovereign Gold Bond",
+          "decision_type": "INVEST",
+          "balance_impact": "-50000.00",
+          "confidence_delta": 10,
+          "risk_score_delta": 5,
+          "future_growth_rate": "0.0800",
+          "score": 20,
+          "why_it_matters": "SGB gives gold returns + interest + tax benefits.",
+          "mentor_feedback": "Best way to own gold."
+      }
+  },
+  {
+      "model": "simulator.decisionoption",
+      "pk": 35,
+      "fields": {
+          "scenario": 12,
+          "text": "Buy Jewelry",
+          "decision_type": "SPEND",
+          "balance_impact": "-50000.00",
+          "confidence_delta": 5,
+          "risk_score_delta": 10,
+          "future_growth_rate": "0.0200",
+          "score": 10,
+          "why_it_matters": "Making charges (20%) eat up investment value.",
+          "mentor_feedback": "Emotional asset, poor return."
+      }
+  },
+  {
+      "model": "simulator.decisionoption",
+      "pk": 36,
+      "fields": {
+          "scenario": 12,
+          "text": "Ignore Gold",
+          "decision_type": "SAVE",
+          "balance_impact": "0.00",
+          "confidence_delta": 0,
+          "risk_score_delta": 0,
+          "future_growth_rate": "0.0000",
+          "score": 10,
+          "why_it_matters": "Gold is a hedge, having 0% is okay but diversification helps.",
+          "mentor_feedback": "Neutral choice."
+      }
+  },
+  {
+      "model": "simulator.decisionoption",
+      "pk": 37,
+      "fields": {
+          "scenario": 13,
+          "text": "Cancel & Invest",
+          "decision_type": "INVEST",
+          "balance_impact": "0.00",
+          "confidence_delta": 10,
+          "risk_score_delta": 0,
+          "future_growth_rate": "0.1200",
+          "score": 20,
+          "why_it_matters": "Small leaks sink great ships. Recurring saves add up.",
+          "mentor_feedback": "Plug the leaks!"
+      }
+  },
+  {
+      "model": "simulator.decisionoption",
+      "pk": 38,
+      "fields": {
+          "scenario": 13,
+          "text": "Keep them",
+          "decision_type": "SPEND",
+          "balance_impact": "-5000.00",
+          "confidence_delta": 0,
+          "risk_score_delta": 5,
+          "future_growth_rate": "0.0000",
+          "score": 0,
+          "why_it_matters": "Paying for unused service is pure waste.",
+          "mentor_feedback": "Waste of money."
+      }
+  },
+  {
+      "model": "simulator.decisionoption",
+      "pk": 39,
+      "fields": {
+          "scenario": 13,
+          "text": "Share with Friends",
+          "decision_type": "SAVE",
+          "balance_impact": "-1500.00",
+          "confidence_delta": 5,
+          "risk_score_delta": 0,
+          "future_growth_rate": "0.0000",
+          "score": 15,
+          "why_it_matters": "Sharing costs reduces burden significantly.",
+          "mentor_feedback": "Smart hack."
+      }
+  },
+  {
+      "model": "simulator.decisionoption",
+      "pk": 40,
+      "fields": {
+          "scenario": 14,
+          "text": "Take Loan",
+          "decision_type": "SPEND",
+          "balance_impact": "0.00",
+          "confidence_delta": -10,
+          "risk_score_delta": 50,
+          "future_growth_rate": "-0.1500",
+          "score": 0,
+          "why_it_matters": "Starting marriage with debt causes stress.",
+          "mentor_feedback": "Bad start."
+      }
+  },
+  {
+      "model": "simulator.decisionoption",
+      "pk": 41,
+      "fields": {
+          "scenario": 14,
+          "text": "Budget Wedding",
+          "decision_type": "SAVE",
+          "balance_impact": "-100000.00",
+          "confidence_delta": 10,
+          "risk_score_delta": -10,
+          "future_growth_rate": "0.0000",
+          "score": 20,
+          "why_it_matters": "Spending within means is a sign of maturity.",
+          "mentor_feedback": "Sensible choice."
+      }
+  },
+  {
+      "model": "simulator.decisionoption",
+      "pk": 42,
+      "fields": {
+          "scenario": 14,
+          "text": "Use Investments",
+          "decision_type": "SPEND",
+          "balance_impact": "500000.00",
+          "confidence_delta": -5,
+          "risk_score_delta": 20,
+          "future_growth_rate": "0.0000",
+          "score": 10,
+          "why_it_matters": "Liquidating assets is better than high interest debt.",
+          "mentor_feedback": "Better than loan, but hurts net worth."
+      }
+  },
+  {
+      "model": "simulator.decisionoption",
+      "pk": 43,
+      "fields": {
+          "scenario": 15,
+          "text": "Education Loan",
+          "decision_type": "INVEST",
+          "balance_impact": "0.00",
+          "confidence_delta": 10,
+          "risk_score_delta": 20,
+          "future_growth_rate": "0.2000",
+          "score": 20,
+          "why_it_matters": "Good debt! Increases earning potential and gives tax benefits.",
+          "mentor_feedback": "Invest in yourself."
+      }
+  },
+  {
+      "model": "simulator.decisionoption",
+      "pk": 44,
+      "fields": {
+          "scenario": 15,
+          "text": "Self Fund (Deplete Savings)",
+          "decision_type": "SPEND",
+          "balance_impact": "-500000.00",
+          "confidence_delta": -10,
+          "risk_score_delta": 40,
+          "future_growth_rate": "0.2000",
+          "score": 10,
+          "why_it_matters": "Wiping out emergency savings is risky.",
+          "mentor_feedback": "Risky to empty accounts."
+      }
+  },
+  {
+      "model": "simulator.decisionoption",
+      "pk": 45,
+      "fields": {
+          "scenario": 15,
+          "text": "Don't Do It",
+          "decision_type": "SAVE",
+          "balance_impact": "0.00",
+          "confidence_delta": 0,
+          "risk_score_delta": 0,
+          "future_growth_rate": "0.0500",
+          "score": 5,
+          "why_it_matters": "Stagnation in skills can hurt long term.",
+          "mentor_feedback": "Missed opportunity?"
+      }
+  },
+  {
+      "model": "simulator.decisionoption",
+      "pk": 46,
+      "fields": {
+          "scenario": 16,
+          "text": "Invest Difference",
+          "decision_type": "INVEST",
+          "balance_impact": "-20000.00",
+          "confidence_delta": 10,
+          "risk_score_delta": 10,
+          "future_growth_rate": "0.1200",
+          "score": 20,
+          "why_it_matters": "Renting + Investing surplus beats buying in high-cost markets.",
+          "mentor_feedback": "Smart financial math."
+      }
+  },
+  {
+      "model": "simulator.decisionoption",
+      "pk": 47,
+      "fields": {
+          "scenario": 16,
+          "text": "Buy House",
+          "decision_type": "SAVE",
+          "balance_impact": "-1000000.00",
+          "confidence_delta": 20,
+          "risk_score_delta": 30,
+          "future_growth_rate": "0.0400",
+          "score": 10,
+          "why_it_matters": "Real estate is illiquid and concentrates risk.",
+          "mentor_feedback": "Emotional security, financial burden."
+      }
+  },
+  {
+      "model": "simulator.decisionoption",
+      "pk": 48,
+      "fields": {
+          "scenario": 16,
+          "text": "Rent & Spend",
+          "decision_type": "SPEND",
+          "balance_impact": "-20000.00",
+          "confidence_delta": -10,
+          "risk_score_delta": 10,
+          "future_growth_rate": "0.0000",
+          "score": 0,
+          "why_it_matters": "Renting is only good if you invest the savings.",
+          "mentor_feedback": "Worst of both worlds."
+      }
+  },
+  {
+      "model": "simulator.decisionoption",
+      "pk": 49,
+      "fields": {
+          "scenario": 17,
+          "text": "Cut Discretionary",
+          "decision_type": "SAVE",
+          "balance_impact": "0.00",
+          "confidence_delta": 5,
+          "risk_score_delta": 0,
+          "future_growth_rate": "0.0000",
+          "score": 20,
+          "why_it_matters": "Adjusting lifestyle to income is key survival skill.",
+          "mentor_feedback": "Disciplined."
+      }
+  },
+  {
+      "model": "simulator.decisionoption",
+      "pk": 50,
+      "fields": {
+          "scenario": 17,
+          "text": "Use Savings",
+          "decision_type": "SPEND",
+          "balance_impact": "-5000.00",
+          "confidence_delta": -5,
+          "risk_score_delta": 10,
+          "future_growth_rate": "0.0000",
+          "score": 5,
+          "why_it_matters": "Eating into savings is not sustainable.",
+          "mentor_feedback": "Temporary fix only."
+      }
+  },
+  {
+      "model": "simulator.decisionoption",
+      "pk": 51,
+      "fields": {
+          "scenario": 17,
+          "text": "Stop SIPs",
+          "decision_type": "SPEND",
+          "balance_impact": "5000.00",
+          "confidence_delta": -10,
+          "risk_score_delta": 20,
+          "future_growth_rate": "0.0000",
+          "score": 0,
+          "why_it_matters": "Stopping investments harms long term goals.",
+          "mentor_feedback": "Don't eat your seed corn."
+      }
+  },
+  {
+      "model": "simulator.decisionoption",
+      "pk": 52,
+      "fields": {
+          "scenario": 18,
+          "text": "Lend Money",
+          "decision_type": "SPEND",
+          "balance_impact": "-20000.00",
+          "confidence_delta": 5,
+          "risk_score_delta": 50,
+          "future_growth_rate": "-0.5000",
+          "score": 0,
+          "why_it_matters": "Unsecured lending often leads to loss of money and friend.",
+          "mentor_feedback": "Prepare to lose it."
+      }
+  },
+  {
+      "model": "simulator.decisionoption",
+      "pk": 53,
+      "fields": {
+          "scenario": 18,
+          "text": "Gift Small Amount",
+          "decision_type": "SPEND",
+          "balance_impact": "-2000.00",
+          "confidence_delta": 10,
+          "risk_score_delta": 0,
+          "future_growth_rate": "0.0000",
+          "score": 20,
+          "why_it_matters": "Help without expecting return preserves relationship.",
+          "mentor_feedback": "Kind and smart."
+      }
+  },
+  {
+      "model": "simulator.decisionoption",
+      "pk": 54,
+      "fields": {
+          "scenario": 18,
+          "text": "Say No",
+          "decision_type": "SAVE",
+          "balance_impact": "0.00",
+          "confidence_delta": 5,
+          "risk_score_delta": 0,
+          "future_growth_rate": "0.0000",
+          "score": 10,
+          "why_it_matters": "Boundaries are important in finance.",
+          "mentor_feedback": "Tough but fair."
+      }
+  },
+  {
+      "model": "simulator.decisionoption",
+      "pk": 55,
+      "fields": {
+          "scenario": 19,
+          "text": "Apply for IPO",
+          "decision_type": "INVEST",
+          "balance_impact": "-15000.00",
+          "confidence_delta": 5,
+          "risk_score_delta": 30,
+          "future_growth_rate": "0.2000",
+          "score": 10,
+          "why_it_matters": "IPOs are volatile. Good for quick gains, bad for stability.",
+          "mentor_feedback": "High risk, high reward."
+      }
+  },
+  {
+      "model": "simulator.decisionoption",
+      "pk": 56,
+      "fields": {
+          "scenario": 19,
+          "text": "Wait & Watch",
+          "decision_type": "SAVE",
+          "balance_impact": "0.00",
+          "confidence_delta": 10,
+          "risk_score_delta": 0,
+          "future_growth_rate": "0.0000",
+          "score": 20,
+          "why_it_matters": "Let price discovery happen before entering.",
+          "mentor_feedback": "Prudent."
+      }
+  },
+  {
+      "model": "simulator.decisionoption",
+      "pk": 57,
+      "fields": {
+          "scenario": 19,
+          "text": "Borrow to Apply",
+          "decision_type": "SPEND",
+          "balance_impact": "0.00",
+          "confidence_delta": -10,
+          "risk_score_delta": 80,
+          "future_growth_rate": "-0.1000",
+          "score": 0,
+          "why_it_matters": "Leverage for speculation is a recipe for disaster.",
+          "mentor_feedback": "Never borrow to gamble."
+      }
+  },
+  {
+      "model": "simulator.decisionoption",
+      "pk": 58,
+      "fields": {
+          "scenario": 20,
+          "text": "Aggressive Equity",
+          "decision_type": "INVEST",
+          "balance_impact": "-20000.00",
+          "confidence_delta": 10,
+          "risk_score_delta": 20,
+          "future_growth_rate": "0.1500",
+          "score": 20,
+          "why_it_matters": "To retire early, you need high growth to build corpus fast.",
+          "mentor_feedback": "FIRE path requires growth."
+      }
+  },
+  {
+      "model": "simulator.decisionoption",
+      "pk": 59,
+      "fields": {
+          "scenario": 20,
+          "text": "Safe FD",
+          "decision_type": "SAVE",
+          "balance_impact": "-20000.00",
+          "confidence_delta": 5,
+          "risk_score_delta": -10,
+          "future_growth_rate": "0.0600",
+          "score": 5,
+          "why_it_matters": "Inflation will eat your corpus before you retire.",
+          "mentor_feedback": "Too slow for FIRE."
+      }
+  },
+  {
+      "model": "simulator.decisionoption",
+      "pk": 60,
+      "fields": {
+          "scenario": 20,
+          "text": "Spend it Now",
+          "decision_type": "SPEND",
+          "balance_impact": "-20000.00",
+          "confidence_delta": 10,
+          "risk_score_delta": 10,
+          "future_growth_rate": "0.0000",
+          "score": 0,
+          "why_it_matters": "YOLO attitude ensures you work until 70.",
+          "mentor_feedback": "Enjoy work forever."
+      }
+  }
+]

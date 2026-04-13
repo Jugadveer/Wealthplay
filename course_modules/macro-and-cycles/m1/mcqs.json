@@ -1,0 +1,47 @@
+[
+  {
+    "id": 3404,
+    "question": "How do higher interest rates often affect growth stocks?",
+    "options": [
+      "They usually become less sensitive to discounting",
+      "Their valuation multiples can come under pressure",
+      "They always rise faster",
+      "They stop trading"
+    ],
+    "correct_answer": "Their valuation multiples can come under pressure",
+    "ai_feedback": {
+      "correct": "Correct. Higher rates raise the discount rate used in valuation.",
+      "incorrect": "Growth valuations are often more sensitive to higher discount rates."
+    }
+  },
+  {
+    "id": 3405,
+    "question": "What is one common effect of high inflation?",
+    "options": [
+      "Higher real purchasing power",
+      "Pressure on consumers and policymakers",
+      "Lower prices across all goods",
+      "Guaranteed stock market gains"
+    ],
+    "correct_answer": "Pressure on consumers and policymakers",
+    "ai_feedback": {
+      "correct": "Yes. Inflation changes spending behavior and often forces policy responses.",
+      "incorrect": "High inflation can hurt purchasing power and influence central bank decisions."
+    }
+  },
+  {
+    "id": 3406,
+    "question": "Why do investors study the business cycle?",
+    "options": [
+      "To avoid all risk forever",
+      "To position sectors and risk based on macro conditions",
+      "To predict exact daily prices",
+      "To eliminate the need for diversification"
+    ],
+    "correct_answer": "To position sectors and risk based on macro conditions",
+    "ai_feedback": {
+      "correct": "Good. The cycle can help with sector rotation and risk management.",
+      "incorrect": "Macro conditions can help guide sector positioning, but they do not remove risk."
+    }
+  }
+]

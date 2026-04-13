@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1507,
+    "question": "How do you define a 'Core' vs. 'Satellite' investment strategy?",
+    "answer": "The Core (e.g., $80%$ of the portfolio) is typically diversified, low-cost index funds/ETFs for stable growth. The Satellite (e.g., $20%$) is individual stocks or sector bets used to try and beat the market, accepting higher risk for higher reward potential.",
+    "explanation": "The core provides stability and market return; the satellite provides the potential for alpha (outperformance)."
+  },
+  {
+    "id": 1508,
+    "question": "Why is 'staying the course' the most important rule in asset allocation?",
+    "answer": "It means avoiding the urge to panic-sell during market crashes or chase gains during bubbles. Your allocation is based on long-term goals and should only change when your time horizon or risk tolerance changes, not because of market noise.",
+    "explanation": "Emotional trading destroys wealth. Sticking to your plan prevents you from locking in losses or buying at the peak."
+  },
+  {
+    "id": 1509,
+    "question": "What are 'international equities' and why are they important for diversification?",
+    "answer": "International equities are stocks from companies outside your home country. They are important because they reduce geographical risk—a bad economy in your home country might not affect a foreign economy, providing a diversification hedge.",
+    "explanation": "You should diversify not just across asset types but also across countries to maximize risk reduction."
+  }
+]

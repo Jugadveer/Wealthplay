@@ -1,0 +1,38 @@
+[
+  {
+    "id": 107,
+    "question": "What is the difference between money and wealth?",
+    "answer": "Money is generally defined as any asset that serves the three core functions (medium of exchange, unit of account, store of value). Wealth is a broader term that refers to the total stock of valuable assets owned by an individual or entity, which includes money but also investments, real estate, and other durable goods.",
+    "explanation": "Wealth is the total picture of your assets; money is just the most liquid part of it."
+  },
+  {
+    "id": 108,
+    "question": "Why is 'portability' an important property for money?",
+    "answer": "Portability is essential because money must be easily carried and transported to facilitate transactions across different locations. If money were not portable, its effectiveness as a medium of exchange would be severely limited.",
+    "explanation": "Money needs to be easy to move around! Imagine trying to pay for coffee with a heavy gold bar—that's why portability is key."
+  },
+  {
+    "id": 109,
+    "question": "In a hypothetical scenario, if gold is used for trading, is it fulfilling the function of a Unit of Account?",
+    "answer": "Yes, it is. If everyone agrees to quote the price of goods in terms of the weight or unit of gold (e.g., 'that cow costs 5 ounces of gold'), then gold is successfully acting as a Unit of Account, providing a common standard for measuring value.",
+    "explanation": "The Unit of Account function is about the agreement on a standard measure, regardless of the physical form of the money (gold, shell, or fiat currency)."
+  },
+  {
+    "id": 110,
+    "question": "What is 'Fiat Money' and why does it have value?",
+    "answer": "Fiat money is a government-issued currency that is not backed by a physical commodity like gold or silver. It has value simply because the government maintains its value, or because parties engaging in exchange agree on its value. In short, it has value because of 'trust'.",
+    "explanation": "Most modern currencies like the US Dollar and Indian Rupee are fiat money. The 'fiat' part means 'by decree' - the government says it's money, so it is!"
+  },
+  {
+    "id": 111,
+    "question": "How does inflation affect the 'Store of Value' property of money?",
+    "answer": "Inflation decreases the purchasing power of money over time, meaning that storing wealth simply as cash causes it to lose real value. A high inflation rate severely damages money's ability to act as a reliable long-term store of value.",
+    "explanation": "That's why investing is crucial! You want your wealth to grow faster than inflation is eating it away."
+  },
+  {
+    "id": 112,
+    "question": "Explain the concept of 'Liquidity' in finance.",
+    "answer": "Liquidity refers to how quickly and easily an asset can be converted into ready cash without significantly affecting its market price. Cash itself is the most liquid asset, while real estate or art are considered highly illiquid.",
+    "explanation": "Think of it like ice vs water. Cash is water (flows anywhere easily). A house is a block of ice (takes time and effort to melt down into usable value)."
+  }
+]

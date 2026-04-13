@@ -1,0 +1,47 @@
+[
+  {
+    "id": 704,
+    "question": "Which type of risk can be effectively eliminated through proper diversification?",
+    "options": [
+      "Systematic Risk (Market Risk)",
+      "Inflation Risk",
+      "Unsystematic Risk (Company-Specific Risk)",
+      "Liquidity Risk"
+    ],
+    "correct_answer": "Unsystematic Risk (Company-Specific Risk)",
+    "ai_feedback": {
+      "correct": "You got it! Unsystematic risk—like a single stock performing poorly—is exactly what diversification is designed to offset.",
+      "incorrect": "Incorrect. Diversification protects against unsystematic risk. You cannot diversify away systematic risk because it affects the entire market."
+    }
+  },
+  {
+    "id": 705,
+    "question": "Asset Allocation is considered the most important determinant of long-term investment returns because it determines the:",
+    "options": [
+      "Number of shares bought.",
+      "Tax efficiency of the portfolio.",
+      "Overall risk and potential return profile.",
+      "Selection of the fund manager."
+    ],
+    "correct_answer": "Overall risk and potential return profile.",
+    "ai_feedback": {
+      "correct": "Exactly! The split between high-risk (stocks) and low-risk (bonds) assets dictates the portfolio's final risk and return trajectory.",
+      "incorrect": "Asset allocation is about the mix of assets. This mix determines the *total* risk taken and, therefore, the long-term return potential."
+    }
+  },
+  {
+    "id": 706,
+    "question": "An investor whose portfolio is $100%$ invested in one country's technology sector is primarily exposed to:",
+    "options": [
+      "High diversification.",
+      "Low systematic risk.",
+      "Concentration risk.",
+      "Low volatility."
+    ],
+    "correct_answer": "Concentration risk.",
+    "ai_feedback": {
+      "correct": "Nice job! Investing heavily in one area creates concentration risk, which is the opposite of diversification.",
+      "incorrect": "That portfolio is exposed to concentration risk, meaning if that one sector or country performs poorly, the entire portfolio suffers large losses."
+    }
+  }
+]

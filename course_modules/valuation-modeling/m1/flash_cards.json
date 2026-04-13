@@ -1,0 +1,20 @@
+[
+  {
+    "id": 3301,
+    "topic": "Discounted Cash Flow",
+    "theory_title": "Value Is Based On Future Cash",
+    "theory_content": "DCF estimates the present value of expected future cash flows using a discount rate. It is sensitive to growth assumptions and the terminal value used."
+  },
+  {
+    "id": 3302,
+    "topic": "Comparable Multiples",
+    "theory_title": "Compare With Peers",
+    "theory_content": "Comparable valuation uses ratios like P/E, EV/EBITDA, and price-to-sales relative to similar companies. It is quick, but only useful when peer selection is appropriate."
+  },
+  {
+    "id": 3303,
+    "topic": "Scenario Analysis",
+    "theory_title": "Valuation Under Different Futures",
+    "theory_content": "Scenario analysis tests how valuation changes under bullish, base, and bearish assumptions. It helps investors avoid false certainty from a single forecast."
+  }
+]

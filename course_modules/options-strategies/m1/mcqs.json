@@ -1,0 +1,47 @@
+[
+  {
+    "id": 3004,
+    "question": "What is a key tradeoff in a covered call?",
+    "options": [
+      "Unlimited downside and unlimited upside",
+      "Income generation with capped upside",
+      "No premium received",
+      "Guaranteed loss protection"
+    ],
+    "correct_answer": "Income generation with capped upside",
+    "ai_feedback": {
+      "correct": "Correct. A covered call can generate income, but gains above the strike are surrendered.",
+      "incorrect": "Covered calls generate income from the premium, but they cap upside beyond the strike price."
+    }
+  },
+  {
+    "id": 3005,
+    "question": "Why might an investor buy a protective put?",
+    "options": [
+      "To increase leverage with no cost",
+      "To reduce downside risk on shares already owned",
+      "To eliminate all option risk permanently",
+      "To force a stock split"
+    ],
+    "correct_answer": "To reduce downside risk on shares already owned",
+    "ai_feedback": {
+      "correct": "Exactly. It acts like insurance on an existing stock position.",
+      "incorrect": "Protective puts are used to hedge downside risk, not to eliminate all risk."
+    }
+  },
+  {
+    "id": 3006,
+    "question": "What is a major advantage of spread trades?",
+    "options": [
+      "They always produce profits",
+      "They define risk and reduce premium outlay",
+      "They remove the need for analysis",
+      "They guarantee unlimited gains"
+    ],
+    "correct_answer": "They define risk and reduce premium outlay",
+    "ai_feedback": {
+      "correct": "Good. Spreads are popular because the risk profile is clearly bounded.",
+      "incorrect": "Spreads define risk and often reduce the upfront cost compared with a single-leg option."
+    }
+  }
+]

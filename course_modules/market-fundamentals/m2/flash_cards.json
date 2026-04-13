@@ -1,0 +1,26 @@
+[
+  {
+    "id": 2101,
+    "topic": "Support And Resistance",
+    "theory_title": "Price Floors And Ceilings",
+    "theory_content": "Support is a zone where demand often steps in and price tends to stop falling. Resistance is a zone where supply often appears and price tends to stop rising. Traders use repeated reactions at these zones to plan entries, exits, and stop-loss levels."
+  },
+  {
+    "id": 2102,
+    "topic": "Trendline Breakout",
+    "theory_title": "When Structure Changes",
+    "theory_content": "A trendline breakout happens when price closes beyond a well-tested trendline with strong participation. A valid breakout is usually confirmed by volume expansion and follow-through, not by a single intraday spike."
+  },
+  {
+    "id": 2103,
+    "topic": "Head And Shoulders",
+    "theory_title": "Classic Reversal Pattern",
+    "theory_content": "Head and Shoulders is a potential trend reversal pattern with three peaks: left shoulder, higher head, and right shoulder. The neckline break is the trigger. Inverse Head and Shoulders is the bullish version."
+  },
+  {
+    "id": 2104,
+    "topic": "Double Top And Double Bottom",
+    "theory_title": "Repeated Failure Or Rebound",
+    "theory_content": "A Double Top forms when price fails twice near the same high and then breaks down. A Double Bottom forms when price rebounds twice near the same low and then breaks up. Confirmation comes after the middle swing level breaks."
+  }
+]

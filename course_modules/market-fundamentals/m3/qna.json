@@ -1,0 +1,20 @@
+[
+  {
+    "id": 2207,
+    "question": "How can students combine pattern and indicator signals responsibly?",
+    "answer": "Use a layered approach: pattern first, indicator confirmation second, and risk rules always. Never enter because of one signal alone.",
+    "explanation": "Confluence can improve decision quality, but risk controls remain the most important."
+  },
+  {
+    "id": 2208,
+    "question": "What is a simple risk rule for pattern trading?",
+    "answer": "Risk a fixed small percentage per trade and place stop-loss beyond invalidation, not at random distances.",
+    "explanation": "Consistent position sizing protects capital through losing streaks."
+  },
+  {
+    "id": 2209,
+    "question": "Why should pattern learners track a trade journal?",
+    "answer": "A journal reveals which setups work in real conditions and which mistakes repeat under pressure.",
+    "explanation": "Tracking outcomes builds discipline and improves strategy quality over time."
+  }
+]

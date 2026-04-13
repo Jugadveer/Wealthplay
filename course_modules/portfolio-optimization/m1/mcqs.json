@@ -1,0 +1,47 @@
+[
+  {
+    "id": 3204,
+    "question": "Why does diversification help a portfolio?",
+    "options": [
+      "It guarantees higher returns",
+      "It reduces exposure to single-asset shocks",
+      "It removes the need for planning",
+      "It makes all assets move identically"
+    ],
+    "correct_answer": "It reduces exposure to single-asset shocks",
+    "ai_feedback": {
+      "correct": "Correct. Diversification reduces the impact of any one holding doing poorly.",
+      "incorrect": "Diversification is about reducing concentration risk, not guaranteeing returns."
+    }
+  },
+  {
+    "id": 3205,
+    "question": "What does low correlation between assets usually help with?",
+    "options": [
+      "Increasing portfolio concentration",
+      "Improving diversification benefits",
+      "Removing volatility completely",
+      "Ensuring fixed returns"
+    ],
+    "correct_answer": "Improving diversification benefits",
+    "ai_feedback": {
+      "correct": "Yes. Low correlation means one asset can offset another more effectively.",
+      "incorrect": "Low correlation often improves diversification, which can make returns smoother over time."
+    }
+  },
+  {
+    "id": 3206,
+    "question": "Which metric is often used to evaluate return relative to risk?",
+    "options": [
+      "Sharpe ratio",
+      "Dividend yield only",
+      "Price-to-sales ratio",
+      "Payout ratio"
+    ],
+    "correct_answer": "Sharpe ratio",
+    "ai_feedback": {
+      "correct": "Good. Sharpe ratio compares excess return to volatility.",
+      "incorrect": "Sharpe ratio is a common risk-adjusted return measure."
+    }
+  }
+]

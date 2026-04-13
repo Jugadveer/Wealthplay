@@ -1,0 +1,20 @@
+[
+  {
+    "id": 3401,
+    "topic": "Interest Rates",
+    "theory_title": "The Cost Of Money",
+    "theory_content": "Central bank rate changes influence borrowing costs, valuations, and investor appetite for risk. Higher rates often pressure growth valuations and slow credit-sensitive sectors."
+  },
+  {
+    "id": 3402,
+    "topic": "Inflation",
+    "theory_title": "Purchasing Power Pressure",
+    "theory_content": "Inflation measures how quickly prices rise across the economy. Moderate inflation can support growth, but high inflation can reduce real returns and force tighter monetary policy."
+  },
+  {
+    "id": 3403,
+    "topic": "Business Cycle",
+    "theory_title": "Expansion And Slowdown",
+    "theory_content": "Economies move through expansion, peak, contraction, and recovery phases. Different sectors often outperform at different points in the cycle."
+  }
+]

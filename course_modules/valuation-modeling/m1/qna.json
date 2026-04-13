@@ -1,0 +1,14 @@
+[
+  {
+    "id": 3307,
+    "question": "Why should valuation models include a margin of safety?",
+    "answer": "Because forecasts are uncertain and paying a discount to estimated value helps protect against errors.",
+    "explanation": "A margin of safety gives room for model mistakes and market volatility."
+  },
+  {
+    "id": 3308,
+    "question": "Which is more important: a precise model or sensible assumptions?",
+    "answer": "Sensible assumptions are more important. A precise model with unrealistic inputs can still be wrong.",
+    "explanation": "The quality of assumptions drives the usefulness of the result."
+  }
+]

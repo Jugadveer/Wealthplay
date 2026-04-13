@@ -1,0 +1,14 @@
+[
+  {
+    "id": 3007,
+    "question": "When should beginners avoid complex option structures?",
+    "answer": "When they cannot explain the payoff, max loss, breakeven, and assignment risk clearly.",
+    "explanation": "If the payoff is not fully understood, the position is too complex to size responsibly."
+  },
+  {
+    "id": 3008,
+    "question": "What makes an option strategy 'defined risk'?",
+    "answer": "The maximum possible loss is known before entry.",
+    "explanation": "Defined-risk trades make position sizing and planning easier."
+  }
+]

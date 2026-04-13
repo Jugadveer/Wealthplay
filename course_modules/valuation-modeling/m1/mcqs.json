@@ -1,0 +1,47 @@
+[
+  {
+    "id": 3304,
+    "question": "What is a key sensitivity in DCF models?",
+    "options": [
+      "The company logo color",
+      "Growth and discount rate assumptions",
+      "The stock exchange listing font",
+      "The company's ticker length"
+    ],
+    "correct_answer": "Growth and discount rate assumptions",
+    "ai_feedback": {
+      "correct": "Correct. Small changes in these inputs can materially change the result.",
+      "incorrect": "DCF valuations are highly sensitive to growth and discount rate assumptions."
+    }
+  },
+  {
+    "id": 3305,
+    "question": "Why are comparable multiples useful?",
+    "options": [
+      "They eliminate the need for research",
+      "They provide a quick market-based benchmark",
+      "They always produce the exact intrinsic value",
+      "They work without peer companies"
+    ],
+    "correct_answer": "They provide a quick market-based benchmark",
+    "ai_feedback": {
+      "correct": "Yes. Multiples are a fast way to compare valuation relative to peers.",
+      "incorrect": "Comparable multiples are benchmarks, not precise intrinsic value engines."
+    }
+  },
+  {
+    "id": 3306,
+    "question": "What is the purpose of scenario analysis?",
+    "options": [
+      "To predict the exact future",
+      "To test valuation under multiple outcomes",
+      "To remove uncertainty entirely",
+      "To avoid using assumptions"
+    ],
+    "correct_answer": "To test valuation under multiple outcomes",
+    "ai_feedback": {
+      "correct": "Good. Scenario analysis prepares you for different possible futures.",
+      "incorrect": "Scenario analysis is a planning tool for multiple outcomes, not a certainty machine."
+    }
+  }
+]

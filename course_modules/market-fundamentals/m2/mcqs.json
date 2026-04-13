@@ -1,0 +1,47 @@
+[
+  {
+    "id": 2105,
+    "question": "What improves the reliability of a breakout pattern?",
+    "options": [
+      "Low trading volume on breakout",
+      "Price closes beyond level with higher volume",
+      "Single candle wick touching resistance",
+      "Ignoring market context"
+    ],
+    "correct_answer": "Price closes beyond level with higher volume",
+    "ai_feedback": {
+      "correct": "Correct. Close plus volume is a stronger confirmation than a brief intraday move.",
+      "incorrect": "Breakouts are more reliable when price closes beyond the level and volume expands."
+    }
+  },
+  {
+    "id": 2106,
+    "question": "In a Head and Shoulders pattern, what usually confirms the reversal?",
+    "options": [
+      "The formation of the left shoulder",
+      "A random gap up",
+      "A neckline break",
+      "A long upper wick"
+    ],
+    "correct_answer": "A neckline break",
+    "ai_feedback": {
+      "correct": "Exactly. The neckline break is typically used as the confirmation trigger.",
+      "incorrect": "The neckline break is commonly used to confirm Head and Shoulders reversals."
+    }
+  },
+  {
+    "id": 2107,
+    "question": "Which statement about support and resistance is most accurate?",
+    "options": [
+      "They are exact price points with no range",
+      "They are zones that can shift over time",
+      "They only work in bullish markets",
+      "They remove all need for risk management"
+    ],
+    "correct_answer": "They are zones that can shift over time",
+    "ai_feedback": {
+      "correct": "Great. These are zones, not exact numbers, and they evolve as market structure changes.",
+      "incorrect": "Support and resistance are dynamic zones. They are not exact fixed lines forever."
+    }
+  }
+]

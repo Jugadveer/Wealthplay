@@ -1,0 +1,20 @@
+[
+  {
+    "id": 2108,
+    "question": "How should a beginner use chart patterns without overtrading?",
+    "answer": "Use a checklist: trend context, pattern quality, confirmation candle, and risk-reward. If one key item is missing, skip the trade.",
+    "explanation": "Pattern discipline is more important than frequency. Good filters reduce false signals."
+  },
+  {
+    "id": 2109,
+    "question": "Why is volume important in pattern analysis?",
+    "answer": "Volume shows participation. Patterns that break out with strong volume are often more reliable than low-volume moves.",
+    "explanation": "Volume helps confirm whether a move is broadly supported or weak."
+  },
+  {
+    "id": 2110,
+    "question": "What is a common mistake with support and resistance?",
+    "answer": "Treating them as exact lines and entering too early before confirmation.",
+    "explanation": "Support and resistance are zones. Confirmation and stop placement matter."
+  }
+]

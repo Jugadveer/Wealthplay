@@ -1,0 +1,232 @@
+
+
+from django .conf import settings 
+from django .db import migrations ,models 
+import django .db .models .deletion 
+
+
+class Migration (migrations .Migration ):
+
+    initial =True 
+
+    dependencies =[
+    migrations .swappable_dependency (settings .AUTH_USER_MODEL ),
+    ]
+
+    operations =[
+    migrations .CreateModel (
+    name ='Course',
+    fields =[
+    ('id',models .BigAutoField (auto_created =True ,primary_key =True ,serialize =False ,verbose_name ='ID')),
+    ('title',models .CharField (max_length =200 )),
+    ('description',models .TextField (blank =True )),
+    ('created_at',models .DateTimeField (auto_now_add =True )),
+    ('updated_at',models .DateTimeField (auto_now =True )),
+    ],
+    ),
+    migrations .CreateModel (
+    name ='Lesson',
+    fields =[
+    ('id',models .BigAutoField (auto_created =True ,primary_key =True ,serialize =False ,verbose_name ='ID')),
+    ('title',models .CharField (max_length =200 )),
+    ('content',models .TextField (blank =True )),
+    ('order',models .IntegerField (default =0 )),
+    ],
+    ),
+    migrations .CreateModel (
+    name ='MentorPersona',
+    fields =[
+    ('id',models .BigAutoField (auto_created =True ,primary_key =True ,serialize =False ,verbose_name ='ID')),
+    ('name',models .CharField (max_length =100 )),
+    ('description',models .TextField (blank =True )),
+    ('avatar_url',models .URLField (blank =True )),
+    ],
+    ),
+    migrations .CreateModel (
+    name ='ModuleContent',
+    fields =[
+    ('module_id',models .CharField (db_index =True ,max_length =200 ,primary_key =True ,serialize =False )),
+    ('course_id',models .CharField (db_index =True ,max_length =100 )),
+    ('title',models .CharField (max_length =300 )),
+    ('summary',models .TextField (blank =True )),
+    ('theory_text',models .TextField (blank =True )),
+    ('duration_min',models .IntegerField (default =0 )),
+    ('xp_reward',models .IntegerField (default =0 )),
+    ('plaque_card',models .JSONField (blank =True ,default =dict )),
+    ('metadata',models .JSONField (blank =True ,default =dict )),
+    ('created_at',models .DateTimeField (auto_now_add =True )),
+    ('updated_at',models .DateTimeField (auto_now =True )),
+    ],
+    ),
+    migrations .CreateModel (
+    name ='ModuleMCQ',
+    fields =[
+    ('id',models .BigAutoField (auto_created =True ,primary_key =True ,serialize =False ,verbose_name ='ID')),
+    ('mcq_id',models .CharField (max_length =100 )),
+    ('question',models .TextField ()),
+    ('choices',models .JSONField (default =list )),
+    ('correct_choice',models .CharField (max_length =1 )),
+    ('explanation',models .TextField (blank =True )),
+    ('order',models .IntegerField (default =0 )),
+    ('module_content',models .ForeignKey (on_delete =django .db .models .deletion .CASCADE ,related_name ='mcqs',to ='courses.modulecontent')),
+    ],
+    options ={
+    'ordering':['order'],
+    },
+    ),
+    migrations .CreateModel (
+    name ='UserPlaqueCardCompletion',
+    fields =[
+    ('id',models .BigAutoField (auto_created =True ,primary_key =True ,serialize =False ,verbose_name ='ID')),
+    ('card_type',models .CharField (max_length =50 )),
+    ('xp_awarded',models .IntegerField (default =0 )),
+    ('badge_earned',models .CharField (blank =True ,max_length =100 ,null =True )),
+    ('completed_at',models .DateTimeField (auto_now_add =True )),
+    ('module_content',models .ForeignKey (on_delete =django .db .models .deletion .CASCADE ,related_name ='completions',to ='courses.modulecontent')),
+    ('user',models .ForeignKey (on_delete =django .db .models .deletion .CASCADE ,related_name ='plaque_completions',to =settings .AUTH_USER_MODEL )),
+    ],
+    ),
+    migrations .CreateModel (
+    name ='UserMCQAttempt',
+    fields =[
+    ('id',models .BigAutoField (auto_created =True ,primary_key =True ,serialize =False ,verbose_name ='ID')),
+    ('selected_choice',models .CharField (max_length =1 )),
+    ('is_correct',models .BooleanField (default =False )),
+    ('xp_awarded',models .IntegerField (default =0 )),
+    ('attempted_at',models .DateTimeField (auto_now_add =True )),
+    ('mcq',models .ForeignKey (on_delete =django .db .models .deletion .CASCADE ,related_name ='attempts',to ='courses.modulemcq')),
+    ('user',models .ForeignKey (on_delete =django .db .models .deletion .CASCADE ,related_name ='mcq_attempts',to =settings .AUTH_USER_MODEL )),
+    ],
+    ),
+    migrations .CreateModel (
+    name ='UserCourseProgress',
+    fields =[
+    ('id',models .BigAutoField (auto_created =True ,primary_key =True ,serialize =False ,verbose_name ='ID')),
+    ('course_id',models .CharField (max_length =100 )),
+    ('module_id',models .CharField (blank =True ,max_length =100 )),
+    ('status',models .CharField (choices =[('not_started','Not Started'),('in_progress','In Progress'),('completed','Completed')],default ='not_started',max_length =20 )),
+    ('progress_percent',models .FloatField (default =0.0 )),
+    ('started_at',models .DateTimeField (blank =True ,null =True )),
+    ('completed_at',models .DateTimeField (blank =True ,null =True )),
+    ('last_accessed',models .DateTimeField (auto_now =True )),
+    ('created_at',models .DateTimeField (auto_now_add =True )),
+    ('user',models .ForeignKey (on_delete =django .db .models .deletion .CASCADE ,related_name ='json_course_progress',to =settings .AUTH_USER_MODEL )),
+    ],
+    ),
+    migrations .CreateModel (
+    name ='UserCourseCustomization',
+    fields =[
+    ('id',models .BigAutoField (auto_created =True ,primary_key =True ,serialize =False ,verbose_name ='ID')),
+    ('course_id',models .CharField (max_length =100 )),
+    ('custom_content',models .JSONField (blank =True ,default =dict )),
+    ('is_active',models .BooleanField (default =True )),
+    ('created_at',models .DateTimeField (auto_now_add =True )),
+    ('updated_at',models .DateTimeField (auto_now =True )),
+    ('user',models .ForeignKey (on_delete =django .db .models .deletion .CASCADE ,related_name ='course_customizations',to =settings .AUTH_USER_MODEL )),
+    ],
+    ),
+    migrations .CreateModel (
+    name ='Topic',
+    fields =[
+    ('id',models .BigAutoField (auto_created =True ,primary_key =True ,serialize =False ,verbose_name ='ID')),
+    ('title',models .CharField (max_length =200 )),
+    ('order',models .IntegerField (default =0 )),
+    ('course',models .ForeignKey (on_delete =django .db .models .deletion .CASCADE ,related_name ='topics',to ='courses.course')),
+    ],
+    ),
+    migrations .CreateModel (
+    name ='ModuleQNA',
+    fields =[
+    ('id',models .BigAutoField (auto_created =True ,primary_key =True ,serialize =False ,verbose_name ='ID')),
+    ('question',models .TextField ()),
+    ('answer',models .TextField ()),
+    ('order',models .IntegerField (default =0 )),
+    ('module_content',models .ForeignKey (on_delete =django .db .models .deletion .CASCADE ,related_name ='qna_pairs',to ='courses.modulecontent')),
+    ],
+    options ={
+    'ordering':['order'],
+    },
+    ),
+    migrations .CreateModel (
+    name ='ModuleMentorPrompt',
+    fields =[
+    ('id',models .BigAutoField (auto_created =True ,primary_key =True ,serialize =False ,verbose_name ='ID')),
+    ('user_question',models .TextField ()),
+    ('mentor_answer_seed',models .TextField ()),
+    ('order',models .IntegerField (default =0 )),
+    ('module_content',models .ForeignKey (on_delete =django .db .models .deletion .CASCADE ,related_name ='mentor_prompts',to ='courses.modulecontent')),
+    ],
+    options ={
+    'ordering':['order'],
+    },
+    ),
+    migrations .AddIndex (
+    model_name ='modulecontent',
+    index =models .Index (fields =['course_id'],name ='courses_mod_course__8edb08_idx'),
+    ),
+    migrations .AddIndex (
+    model_name ='modulecontent',
+    index =models .Index (fields =['course_id','module_id'],name ='courses_mod_course__70b3ef_idx'),
+    ),
+    migrations .AddField (
+    model_name ='lesson',
+    name ='topic',
+    field =models .ForeignKey (on_delete =django .db .models .deletion .CASCADE ,related_name ='lessons',to ='courses.topic'),
+    ),
+    migrations .AddIndex (
+    model_name ='userplaquecardcompletion',
+    index =models .Index (fields =['user','completed_at'],name ='courses_use_user_id_8628df_idx'),
+    ),
+    migrations .AlterUniqueTogether (
+    name ='userplaquecardcompletion',
+    unique_together ={('user','module_content','card_type')},
+    ),
+    migrations .AddIndex (
+    model_name ='usermcqattempt',
+    index =models .Index (fields =['user','attempted_at'],name ='courses_use_user_id_f61bac_idx'),
+    ),
+    migrations .AddIndex (
+    model_name ='usermcqattempt',
+    index =models .Index (fields =['mcq','is_correct'],name ='courses_use_mcq_id_98e2ff_idx'),
+    ),
+    migrations .AlterUniqueTogether (
+    name ='usermcqattempt',
+    unique_together ={('user','mcq')},
+    ),
+    migrations .AddIndex (
+    model_name ='usercourseprogress',
+    index =models .Index (fields =['user','course_id'],name ='courses_use_user_id_35c5b3_idx'),
+    ),
+    migrations .AddIndex (
+    model_name ='usercourseprogress',
+    index =models .Index (fields =['user','course_id','module_id'],name ='courses_use_user_id_ca503c_idx'),
+    ),
+    migrations .AlterUniqueTogether (
+    name ='usercourseprogress',
+    unique_together ={('user','course_id','module_id')},
+    ),
+    migrations .AddIndex (
+    model_name ='usercoursecustomization',
+    index =models .Index (fields =['user','course_id'],name ='courses_use_user_id_536393_idx'),
+    ),
+    migrations .AlterUniqueTogether (
+    name ='usercoursecustomization',
+    unique_together ={('user','course_id')},
+    ),
+    migrations .AddIndex (
+    model_name ='moduleqna',
+    index =models .Index (fields =['module_content','order'],name ='courses_mod_module__53f695_idx'),
+    ),
+    migrations .AddIndex (
+    model_name ='modulementorprompt',
+    index =models .Index (fields =['module_content','order'],name ='courses_mod_module__35d57d_idx'),
+    ),
+    migrations .AddIndex (
+    model_name ='modulemcq',
+    index =models .Index (fields =['module_content','order'],name ='courses_mod_module__cf0842_idx'),
+    ),
+    migrations .AlterUniqueTogether (
+    name ='modulemcq',
+    unique_together ={('module_content','mcq_id')},
+    ),
+    ]

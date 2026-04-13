@@ -1,0 +1,20 @@
+[
+  {
+    "id": 3001,
+    "topic": "Covered Calls",
+    "theory_title": "Earn Income On Holdings",
+    "theory_content": "A covered call combines stock ownership with selling a call option against the same shares. It can generate premium income, but it also caps upside beyond the strike price."
+  },
+  {
+    "id": 3002,
+    "topic": "Protective Puts",
+    "theory_title": "Insurance For A Long Position",
+    "theory_content": "A protective put pairs a long stock position with a put option. It reduces downside risk, but the option premium lowers net returns if the stock rises slowly."
+  },
+  {
+    "id": 3003,
+    "topic": "Spread Trades",
+    "theory_title": "Define Risk And Reward",
+    "theory_content": "Option spreads use two or more option legs to shape payoff. Vertical spreads are common because they reduce cost and define maximum risk and maximum profit."
+  }
+]

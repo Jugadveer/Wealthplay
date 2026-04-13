@@ -1,0 +1,47 @@
+[
+  {
+    "id": 2204,
+    "question": "What is a practical use of RSI divergence?",
+    "options": [
+      "Guaranteed reversal timing",
+      "Warning of potential momentum weakening",
+      "Replacement for stop-loss",
+      "Signal to always buy"
+    ],
+    "correct_answer": "Warning of potential momentum weakening",
+    "ai_feedback": {
+      "correct": "Correct. Divergence is a warning signal, not a guarantee.",
+      "incorrect": "Divergence warns about possible trend weakness. It should be combined with price confirmation."
+    }
+  },
+  {
+    "id": 2205,
+    "question": "Why are moving average crossovers often combined with market structure?",
+    "options": [
+      "To increase false signals",
+      "Because crossovers alone can lag",
+      "Because structure is irrelevant",
+      "To avoid using risk management"
+    ],
+    "correct_answer": "Because crossovers alone can lag",
+    "ai_feedback": {
+      "correct": "Yes. Crossovers are lagging by nature, so structure improves decision quality.",
+      "incorrect": "Moving averages are lagging indicators, so combining with structure reduces weak entries."
+    }
+  },
+  {
+    "id": 2206,
+    "question": "What does volatility compression often indicate?",
+    "options": [
+      "Trend is guaranteed to continue forever",
+      "Potential setup for volatility expansion",
+      "No trade opportunities",
+      "Fundamentals no longer matter"
+    ],
+    "correct_answer": "Potential setup for volatility expansion",
+    "ai_feedback": {
+      "correct": "Good job. Compression often precedes expansion, but direction still needs confirmation.",
+      "incorrect": "Compression can lead to expansion, but traders should confirm breakout direction and volume."
+    }
+  }
+]

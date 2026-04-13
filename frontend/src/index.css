@@ -1,0 +1,205 @@
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --brand-1: #ff6b35;
+  --brand-2: #f59e0b;
+  --accent-green: #10b981;
+  --accent-red: #f43f5e;
+  --accent-blue: #6366f1;
+  --muted-1: #e2e8f0;
+  --muted-2: #cbd5e1;
+  --muted-3: #94a3b8;
+  --text-main: #1e293b;
+  --text-muted: #475569;
+  --text-light: #94a3b8;
+  --retro-bg: #f8fafc;
+  --retro-surface: #ffffff;
+  --white: #ffffff;
+  --black: #0f172a;
+  --card-shadow: 0 10px 26px rgba(15, 23, 42, 0.08);
+  --card-shadow-hover: 0 16px 38px rgba(15, 23, 42, 0.12);
+  --modal-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  --radius-1: 14px;
+  --radius-2: 8px;
+  --radius-3: 16px;
+  --radius-full: 9999px;
+  --transition-fast: 180ms;
+  --transition-medium: 360ms;
+  --transition-slow: 500ms;
+  --easing: cubic-bezier(0.2, 0.9, 0.3, 1);
+  --easing-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --max-width: 1180px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Geist', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--text-main);
+  background-color: var(--retro-bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+  background-color: var(--retro-bg);
+}
+
+[class~='tabular-nums'],
+[class~='number-tabular'] {
+  font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+@keyframes progress-shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+@keyframes xp-bounce {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+}
+
+@keyframes modalEnter {
+  from {
+    transform: translateY(8px) scale(0.98);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+
+[role="dialog"] {
+  z-index: 9999 !important;
+}
+
+.fade-slide-up {
+  animation: fadeSlideUp 0.5s ease-out forwards;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+@keyframes fadeSlideUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes xp-float {
+  0% {
+    opacity: 0;
+    transform: translateY(8px) scale(0.9);
+  }
+  20% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-32px) scale(1.05);
+  }
+}
+
+@keyframes card-pop {
+  0% {
+    transform: scale(0.96);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes confetti-fall {
+  0% {
+    opacity: 0;
+    transform: translateY(-18px) rotate(0deg);
+  }
+  25% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(24px) rotate(180deg);
+  }
+}
+
+.number-tabular {
+  font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+.xp-float {
+  animation: xp-float 1.2s ease-out forwards;
+}
+
+.card-pop {
+  animation: card-pop 260ms var(--easing) both;
+}
+
+.confetti-piece {
+  animation: confetti-fall 900ms ease-out forwards;
+}
+
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--brand-1);
+  outline-offset: 2px;
+}
+
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--muted-1);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--muted-3);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+

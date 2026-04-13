@@ -1,0 +1,8 @@
+[phases.setup]
+nixPkgs = ["python313", "gcc"]
+
+[phases.install]
+cmds = ["python -m pip install --upgrade pip", "pip install -r requirements.txt"]
+
+[start]
+cmd = "python manage.py migrate --noinput ; python manage.py collectstatic --noinput ; daphne -b 0.0.0.0 -p $PORT wealthplay.asgi:application"

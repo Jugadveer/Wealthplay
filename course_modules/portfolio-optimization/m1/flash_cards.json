@@ -1,0 +1,20 @@
+[
+  {
+    "id": 3201,
+    "topic": "Diversification",
+    "theory_title": "Don't Depend On One Outcome",
+    "theory_content": "Diversification spreads capital across assets with different behavior. A diversified portfolio can reduce unsystematic risk, though it cannot eliminate market-wide risk."
+  },
+  {
+    "id": 3202,
+    "topic": "Correlation",
+    "theory_title": "How Assets Move Together",
+    "theory_content": "Correlation measures whether assets tend to move in the same direction. Combining assets with lower correlation can improve portfolio resilience."
+  },
+  {
+    "id": 3203,
+    "topic": "Risk Adjusted Return",
+    "theory_title": "Return Per Unit Of Risk",
+    "theory_content": "Optimization is not just about the highest return. It is about the best return for the risk taken, often measured using metrics like Sharpe ratio or drawdown."
+  }
+]

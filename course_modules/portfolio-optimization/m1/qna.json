@@ -1,0 +1,14 @@
+[
+  {
+    "id": 3207,
+    "question": "What is the first rule of portfolio construction?",
+    "answer": "Match the portfolio to the investor's time horizon, goals, and risk tolerance.",
+    "explanation": "Optimization should start with the investor profile, not with random asset selection."
+  },
+  {
+    "id": 3208,
+    "question": "Why can overdiversification be a problem?",
+    "answer": "It can dilute strong ideas, increase complexity, and make the portfolio harder to manage.",
+    "explanation": "More holdings are not always better if they add little real diversification."
+  }
+]

@@ -1,0 +1,14 @@
+[
+  {
+    "id": 3107,
+    "question": "What should a trader calculate before entering a futures position?",
+    "answer": "Contract size, margin required, stop-loss level, and the worst-case loss under their risk plan.",
+    "explanation": "A futures trade is only practical if the risk and capital requirements are known first."
+  },
+  {
+    "id": 3108,
+    "question": "How do futures differ from owning stock directly?",
+    "answer": "Futures provide price exposure through a contract, while stocks represent ownership in a company.",
+    "explanation": "The instruments have different rights, risk profiles, and settlement mechanics."
+  }
+]
