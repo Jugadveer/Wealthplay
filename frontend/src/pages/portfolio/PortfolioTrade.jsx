@@ -5,29 +5,24 @@ import {
   Line, 
   AreaChart,
   Area,
-  BarChart,
-  Bar,
   XAxis, 
   YAxis, 
-  CartesianGrid, 
   Tooltip, 
   ResponsiveContainer,
-  Legend 
 } from 'recharts'
 import {
   TrendingUp,
   TrendingDown,
-  ArrowUpRight,
-  ArrowDownRight,
   Search,
   Sparkles,
   AlertCircle,
-  Eye,
-  EyeOff,
   Loader2,
 } from 'lucide-react'
 import api from '../../utils/api'
 import { useAchievements } from '../../contexts/AchievementContext'
+import TradingViewChart from '../../components/TradingViewChart'
+
+// Using external TradingViewChart component for pro-grade candlesticks
 
 const PortfolioTrade = ({ portfolio, onRefresh, stocksCache = [], refreshStocksCache }) => {
   const { checkAchievements } = useAchievements()
@@ -47,6 +42,15 @@ const PortfolioTrade = ({ portfolio, onRefresh, stocksCache = [], refreshStocksC
   const [showAiHint, setShowAiHint] = useState(false)
   const [showTradeCelebration, setShowTradeCelebration] = useState(false)
   const [tradeXpText, setTradeXpText] = useState('')
+  const [chartMode, setChartMode] = useState('line')
+  const [convictionAnalysis, setConvictionAnalysis] = useState(null)
+  
+  // Elite Features State
+  const [unlockedFeatures, setUnlockedFeatures] = useState({ short_selling: false, stop_loss: false })
+  const [postMortemReady, setPostMortemReady] = useState(false)
+  const [showPostMortem, setShowPostMortem] = useState(false)
+  const [postMortemReport, setPostMortemReport] = useState('')
+  const [stressTestActive, setStressTestActive] = useState(false)
 
   useEffect(() => {
     if (stocksCache.length > 0) {
@@ -115,6 +119,12 @@ const PortfolioTrade = ({ portfolio, onRefresh, stocksCache = [], refreshStocksC
           })
         }
       }
+
+      // Check features lock
+      const portfolioResp = await api.getPortfolio()
+      if (portfolioResp.data.unlocked_features) {
+        setUnlockedFeatures(portfolioResp.data.unlocked_features)
+      }
     } catch (error) {
       console.error('Error fetching stock detail:', error)
       alert(`Error loading stock: ${error.message || 'Unknown error'}`)
@@ -131,48 +141,81 @@ const PortfolioTrade = ({ portfolio, onRefresh, stocksCache = [], refreshStocksC
 
     setTrading(true)
     setMessage(null)
+    setConvictionAnalysis(null)
 
     try {
       const response = await api.tradeAsset({ 
         symbol: selectedStock.symbol, 
-        action: tradeType === 'buy' ? 'BUY' : 'SELL',
+        action: tradeType.toUpperCase(),
         quantity: parseInt(quantity) 
       })
 
-      
       setMessage({ type: 'success', text: response.data?.msg || response.data?.message || 'Trade successful!' })
+      if (response.data?.post_mortem_ready) {
+        setPostMortemReady(true)
+      }
+      
       setQuantity('')
-      await checkAchievements()
+      window.dispatchEvent(new CustomEvent('portfolio-updated', { detail: response.data || null }))
+      window.dispatchEvent(new CustomEvent('achievement-updated'))
 
-      
       if (typeof onRefresh === 'function') {
-        await onRefresh()
+        onRefresh()?.catch?.(() => {})
       }
 
-      
-      window.dispatchEvent(new CustomEvent('portfolio-updated'))
-
-      
       if (typeof refreshStocksCache === 'function') {
-        await refreshStocksCache(true)
+        refreshStocksCache(true)?.catch?.(() => {})
       }
 
-      
-      await handleStockSelect(selectedStock.symbol)
+      checkAchievements().catch(() => {})
+      handleStockSelect(selectedStock.symbol)
 
-      if (tradeType === 'buy') {
+      if (tradeType === 'buy' || tradeType === 'cover') {
         setShowTradeCelebration(true)
         setTradeXpText('+10 XP')
         setTimeout(() => setShowTradeCelebration(false), 900)
         setTimeout(() => setTradeXpText(''), 1200)
       }
     } catch (error) {
-      setMessage({
-        type: 'error',
-        text: error.response?.data?.error || 'Trade failed. Please try again.',
-      })
+      const data = error.response?.data
+      if (data?.error === 'Psychological Pause' || data?.error === 'Short Selling Locked' || data?.error === 'Stop Loss Locked') {
+        setMessage({
+          type: 'error',
+          text: (
+            <div className="flex flex-col gap-2">
+              <span className="font-bold underline">{data.error}</span>
+              <p>{data.msg}</p>
+              <button 
+                onClick={() => {
+                  const redirectId = data.lock_redirect || data.pause_redirect
+                  window.location.href = `/lessons?module=${redirectId}`
+                }}
+                className="mt-1 text-xs bg-accent-red/20 hover:bg-accent-red/30 py-1 rounded border border-accent-red/30 transition-all font-bold"
+              >
+                Go to Module ->
+              </button>
+            </div>
+          )
+        })
+      } else {
+        setMessage({
+          type: 'error',
+          text: error.response?.data?.error || 'Trade failed. Please try again.',
+        })
+      }
     } finally {
       setTrading(false)
+    }
+  }
+
+  const fetchPostMortem = async () => {
+    try {
+      const response = await api.get('/simulator/post-mortem/')
+      setPostMortemReport(response.data.report)
+      setShowPostMortem(true)
+      setPostMortemReady(false)
+    } catch (err) {
+      console.error('Error fetching post mortem:', err)
     }
   }
 
@@ -196,19 +239,13 @@ const PortfolioTrade = ({ portfolio, onRefresh, stocksCache = [], refreshStocksC
     return parseFloat(selectedStock.current_price) * parseInt(quantity)
   }
 
-  const calculateTotalINR = () => {
-    const total = calculateTotal()
-    const currency = selectedStock?.currency || 'INR'
-    return currency === 'USD' ? total * USD_TO_INR : total
-  }
-
   const unitPriceINR = selectedStock
     ? ((selectedStock.currency || 'INR') === 'USD'
       ? (selectedStock.current_price || 0) * USD_TO_INR
       : (selectedStock.current_price || 0))
     : 1
 
-  const maxQuantity = tradeType === 'buy'
+  const maxQuantity = tradeType === 'buy' || tradeType === 'short'
     ? Math.floor((portfolio?.balance || 50000) / (unitPriceINR || 1))
     : (selectedStock?.holding?.quantity || 0)
 
@@ -218,7 +255,6 @@ const PortfolioTrade = ({ portfolio, onRefresh, stocksCache = [], refreshStocksC
       stock.name.toLowerCase().includes(searchQuery.toLowerCase())
   )
 
-  
   const StockSkeleton = () => (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
       {[...Array(6)].map((_, i) => (
@@ -240,10 +276,46 @@ const PortfolioTrade = ({ portfolio, onRefresh, stocksCache = [], refreshStocksC
   )
 
   return (
-    <div className="space-y-6">
+    <div className={`space-y-6 transition-colors duration-1000 ${stressTestActive ? 'bg-red-500/10 border-2 border-red-600 animate-pulse-subtle p-4 rounded-3xl' : ''}`}>
+      {stressTestActive && (
+        <div className="bg-red-600 text-white py-2 px-4 rounded-xl flex items-center justify-between animate-bounce border-4 border-white shadow-2xl">
+          <div className="flex items-center gap-4">
+            <AlertCircle className="w-6 h-6 animate-spin" />
+            <span className="font-black text-xl italic tracking-tighter uppercase">⚠️ PANIC MODE: MASSIVE VOLATILITY DETECTED ⚠️</span>
+          </div>
+          <span className="font-bold">HODL OR DIE</span>
+        </div>
+      )}
+      {showPostMortem && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-retro-bg/90 backdrop-blur-md animate-fade-in">
+          <div className="w-full max-w-lg bg-retro-surface border-2 border-brand-2 rounded-2xl p-8 shadow-2xl relative overflow-hidden">
+            <div className="absolute top-0 left-0 w-full h-2 bg-brand-2"></div>
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-2xl font-black text-brand-2 flex items-center gap-2 italic uppercase tracking-tighter">
+                <TrendingUp className="w-6 h-6" /> Elite Post-Mortem Report
+              </h3>
+              <button 
+                onClick={() => setShowPostMortem(false)}
+                className="text-text-muted hover:text-text-main text-2xl font-bold"
+              >
+                ×
+              </button>
+            </div>
+            <div className="bg-retro-bg/60 rounded-xl p-6 border border-brand-1/10 mb-8 font-medium leading-relaxed italic text-text-main">
+              "{postMortemReport}"
+            </div>
+            <button 
+              onClick={() => setShowPostMortem(false)}
+              className="w-full py-4 bg-brand-2 text-white font-black rounded-xl hover:bg-brand-600 transition-all uppercase tracking-widest shadow-lg shadow-brand-2/20"
+            >
+              Acknowledged
+            </button>
+          </div>
+        </div>
+      )}
+
       {!selectedStock ? (
         <>
-          {}
           <div className="bg-retro-surface/80 rounded-xl shadow-card border border-brand-1/20 p-6">
             <h2 className="text-xl font-bold text-text-main mb-6">Explore Assets</h2>
             <div className="mb-8 relative">
@@ -292,35 +364,35 @@ const PortfolioTrade = ({ portfolio, onRefresh, stocksCache = [], refreshStocksC
                 ))}
               </div>
             )}
-
-            {!stocksLoading && filteredStocks.length === 0 && (
-              <div className="py-12 text-center">
-                <div className="w-16 h-16 rounded-full bg-retro-board/80 flex items-center justify-center mx-auto mb-4">
-                  <Search className="w-8 h-8 text-text-muted opacity-50" />
-                </div>
-                <h3 className="text-lg font-bold text-text-main mb-1">No assets found</h3>
-                <p className="text-text-muted">Try a different search term or browse categories</p>
-              </div>
-            )}
           </div>
         </>
       ) : (
         <>
-          <button 
-             onClick={() => {
-                setSelectedStock(null);
-                setTrading(false);
-                setMessage(null);
-                setQuantity('');
-             }}
-             className="flex items-center gap-2 text-text-muted hover:text-text-main font-medium transition-colors mb-2"
-          >
-             <span className="text-lg leading-none">←</span> Back to Explore
-          </button>
+          <div className="flex items-center justify-between mb-2">
+            <button 
+               onClick={() => {
+                  setSelectedStock(null);
+                  setTrading(false);
+                  setMessage(null);
+                  setQuantity('');
+               }}
+               className="flex items-center gap-2 text-text-muted hover:text-text-main font-medium transition-colors"
+            >
+               <span className="text-lg leading-none">←</span> Back to Explore
+            </button>
+
+            {postMortemReady && (
+              <button 
+                onClick={fetchPostMortem}
+                className="flex items-center gap-2 px-4 py-2 bg-brand-2/10 text-brand-2 rounded-lg font-bold border border-brand-2/20 animate-pulse hover:bg-brand-2 hover:text-white transition-all"
+              >
+                <Sparkles className="w-4 h-4" /> Analyze 10 Recent Trades
+              </button>
+            )}
+          </div>
+
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {}
             <div className="lg:col-span-2 space-y-6">
-              {}
               <div className="bg-retro-surface/80 rounded-xl shadow-card border border-brand-1/20 p-6">
                 <div className="flex items-center justify-between mb-8">
                   <div className="flex items-center gap-4">
@@ -343,162 +415,110 @@ const PortfolioTrade = ({ portfolio, onRefresh, stocksCache = [], refreshStocksC
                   </div>
                 </div>
 
-                {}
                 {priceHistory.length > 0 ? (
-                  <ResponsiveContainer width="100%" height={300}>
-                    <AreaChart data={priceHistory}>
-                      <defs>
-                        <linearGradient id="colorPricePT" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="5%" stopColor={selectedStock.change_percent >= 0 ? "#ff6b35" : "#d94c4c"} stopOpacity={0.3}/>
-                          <stop offset="95%" stopColor={selectedStock.change_percent >= 0 ? "#ff6b35" : "#d94c4c"} stopOpacity={0}/>
-                        </linearGradient>
-                      </defs>
-                      <XAxis dataKey="date" hide={true} />
-                      <YAxis hide={true} domain={['auto', 'auto']} />
-                      <Tooltip
-                        contentStyle={{
-                          backgroundColor: '#fafbf9',
-                          border: '1px solid rgba(255,107,53,0.3)',
-                          borderRadius: '8px',
-                          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.3)',
-                          color: '#9a3412',
-                        }}
-                        labelStyle={{ color: '#ff6b35' }}
-                        formatter={(value, name) => {
-                          if (name === 'volume') return `${(value / 1000000).toFixed(2)}M`
-                          const currency = selectedStock?.currency || 'INR'
-                          return formatCurrency(value, currency)
-                        }}
-                        labelFormatter={(value) => new Date(value).toLocaleDateString('en-IN', { 
-                          month: 'short', 
-                          day: 'numeric', 
-                          year: 'numeric' 
-                        })}
-                      />
-                      <Area
-                        type="monotone"
-                        dataKey="price"
-                        stroke={selectedStock.change_percent >= 0 ? "#ff6b35" : "#d94c4c"}
-                        strokeWidth={2}
-                        fill="url(#colorPricePT)"
-                        dot={false}
-                      />
-                    </AreaChart>
-                  </ResponsiveContainer>
+                  <>
+                    <div className="mb-3 flex justify-end">
+                      <div className="inline-flex rounded-lg border border-brand-1/20 bg-retro-board/60 p-1">
+                        <button
+                          onClick={() => setChartMode('line')}
+                          className={`px-3 py-1 text-xs font-bold rounded-md transition-colors ${chartMode === 'line' ? 'bg-brand-1/20 text-text-main' : 'text-text-muted hover:text-text-main'}`}
+                        >
+                          Line
+                        </button>
+                        <button
+                          onClick={() => setChartMode('candlestick')}
+                          className={`px-3 py-1 text-xs font-bold rounded-md transition-colors ${chartMode === 'candlestick' ? 'bg-brand-1/20 text-text-main' : 'text-text-muted hover:text-text-main'}`}
+                        >
+                          Candlestick
+                        </button>
+                      </div>
+                    </div>
+                    {chartMode === 'line' ? (
+                      <ResponsiveContainer width="100%" height={300}>
+                        <AreaChart data={priceHistory}>
+                          <defs>
+                            <linearGradient id="colorPricePT" x1="0" y1="0" x2="0" y2="1">
+                              <stop offset="5%" stopColor={selectedStock.change_percent >= 0 ? '#ff6b35' : '#d94c4c'} stopOpacity={0.3} />
+                              <stop offset="95%" stopColor={selectedStock.change_percent >= 0 ? '#ff6b35' : '#d94c4c'} stopOpacity={0} />
+                            </linearGradient>
+                          </defs>
+                          <XAxis dataKey="date" hide={true} />
+                          <YAxis hide={true} domain={['auto', 'auto']} />
+                          <Tooltip
+                            contentStyle={{ backgroundColor: '#fafbf9', border: '1px solid rgba(255,107,53,0.3)', borderRadius: '8px' }}
+                            labelStyle={{ color: '#ff6b35' }}
+                            formatter={(value, name) => formatCurrency(value, selectedStock?.currency || 'INR')}
+                          />
+                          <Area type="monotone" dataKey="price" stroke={selectedStock.change_percent >= 0 ? '#ff6b35' : '#d94c4c'} strokeWidth={2} fill="url(#colorPricePT)" dot={false} />
+                        </AreaChart>
+                      </ResponsiveContainer>
+                    ) : (
+                        <div className="h-[350px] mb-8 bg-retro-bg/30 rounded-2xl overflow-hidden border border-brand-1/10">
+                          {selectedStock.price_history && (
+                            <TradingViewChart 
+                              data={selectedStock.price_history} 
+                              colors={{
+                                  background: 'transparent',
+                                  textColor: '#94a3b8'
+                              }}
+                            />
+                          )}
+                        </div>
+                      )}
+                  </>
                 ) : (
                   <div className="flex flex-col items-center justify-center py-12">
                     <Loader2 className="w-8 h-8 text-brand-1 animate-spin mb-3" />
                     <p className="text-text-muted">Loading chart data...</p>
                   </div>
                 )}
-
-                {}
-                {selectedStock.summary && (
-                  <div className="mt-8 pt-6 border-t border-brand-1/10 flex items-center justify-between">
-                    <div>
-                      <p className="text-xs font-medium text-text-muted mb-1">52W High</p>
-                      <p className="text-sm font-bold text-text-main">
-                        {formatCurrency(selectedStock.summary.high, selectedStock.currency || 'INR')}
-                      </p>
-                    </div>
-                    <div>
-                      <p className="text-xs font-medium text-text-muted mb-1">Average</p>
-                      <p className="text-sm font-bold text-text-main">
-                        {formatCurrency(selectedStock.summary.average, selectedStock.currency || 'INR')}
-                      </p>
-                    </div>
-                    <div>
-                      <p className="text-xs font-medium text-text-muted mb-1">52W Low</p>
-                      <p className="text-sm font-bold text-text-main">
-                        {formatCurrency(selectedStock.summary.low, selectedStock.currency || 'INR')}
-                      </p>
-                    </div>
-                  </div>
-                )}
               </div>
 
-              {}
               {aiRecommendation && (
-                <div className="mt-6">
-                  {!showAiHint ? (
-                    <button 
-                      onClick={() => setShowAiHint(true)}
-                      className="w-full py-4 bg-brand-2/10 hover:bg-brand-2/15 text-brand-2 rounded-xl font-bold flex items-center justify-center gap-2 transition-all border border-brand-2/20 shadow-sm"
-                    >
-                      <Sparkles className="w-5 h-5 text-brand-2" />
-                      Show AI Analysis Hint
-                    </button>
-                  ) : (
-                    <div className="bg-retro-surface/80 rounded-xl shadow-card border border-brand-2/20 p-6 relative overflow-hidden animate-fade-in">
-                      <div className="absolute top-0 left-0 w-1 h-full bg-brand-2"></div>
-                      <div className="flex justify-between items-start mb-4">
-                         <h3 className="font-bold text-text-main flex items-center gap-2 text-lg">
-                            <Sparkles className="w-5 h-5 text-brand-2" /> AI Insights
-                         </h3>
-                         <div className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${
-                            aiRecommendation.recommendation === 'buy' ? 'bg-accent-green/15 text-accent-green' :
-                            aiRecommendation.recommendation === 'sell' ? 'bg-accent-red/15 text-accent-red' :
-                             'bg-brand-2/15 text-brand-2'
-                         }`}>
-                            {aiRecommendation.recommendation} • {Math.round(aiRecommendation.confidence * 100)}%
-                         </div>
-                      </div>
-                      <p className="text-sm text-text-muted mb-3 font-medium leading-relaxed">{aiRecommendation.message}</p>
-                      {aiRecommendation.reasons && (
-                        <ul className="space-y-2 mt-4 pt-4 border-t border-brand-1/10">
-                          {aiRecommendation.reasons.map((reason, idx) => (
-                            <li key={idx} className="text-sm text-text-muted flex items-start gap-2">
-                              <span className="text-brand-2 font-bold mt-0.5">•</span>
-                              <span>{reason}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      )}
-                    </div>
-                  )}
+                <div className="bg-retro-surface/80 rounded-xl shadow-card border border-brand-2/20 p-6 relative overflow-hidden">
+                  <div className="absolute top-0 left-0 w-1 h-full bg-brand-2"></div>
+                  <h3 className="font-bold text-text-main flex items-center gap-2 text-lg mb-4">
+                     <Sparkles className="w-5 h-5 text-brand-2" /> Quantitative Analysis
+                  </h3>
+                  <p className="text-sm text-text-muted mb-3 font-medium leading-relaxed italic">{aiRecommendation.message}</p>
                 </div>
               )}
             </div>
 
-            {}
             <div className="lg:col-span-1">
               <div className="relative bg-retro-surface/80 rounded-xl shadow-card border border-brand-1/20 p-6 sticky top-24 overflow-hidden">
-                <div className="flex bg-retro-board/70 rounded-lg p-1 mb-6">
+                <div className="grid grid-cols-2 gap-2 mb-6">
                   <button
-                    onClick={() => {
-                      setTradeType('buy')
-                      setQuantity('')
-                      setMessage(null)
-                    }}
-                    className={`flex-1 py-3 text-sm rounded-md font-bold transition-all ${
-                      tradeType === 'buy'
-                        ? 'bg-accent-green/20 text-accent-green shadow-sm'
-                        : 'text-text-muted hover:text-text-main'
-                    }`}
+                    onClick={() => setTradeType('buy')}
+                    className={`py-3 text-xs rounded-md font-bold border transition-all ${tradeType === 'buy' ? 'bg-accent-green/20 text-accent-green border-accent-green/30' : 'text-text-muted border-transparent hover:bg-retro-board/50'}`}
                   >
                     Buy
                   </button>
                   <button
-                    onClick={() => {
-                      setTradeType('sell')
-                      setQuantity('')
-                      setMessage(null)
-                    }}
-                    className={`flex-1 py-3 text-sm rounded-md font-bold transition-all ${
-                      tradeType === 'sell'
-                        ? 'bg-accent-red/20 text-accent-red shadow-sm'
-                        : 'text-text-muted hover:text-text-main'
-                    }`}
+                    onClick={() => setTradeType('sell')}
+                    className={`py-3 text-xs rounded-md font-bold border transition-all ${tradeType === 'sell' ? 'bg-accent-red/20 text-accent-red border-accent-red/30' : 'text-text-muted border-transparent hover:bg-retro-board/50'}`}
                   >
                     Sell
                   </button>
+                  <button
+                    onClick={() => setTradeType('short')}
+                    className={`py-3 text-xs rounded-md font-bold border transition-all relative ${tradeType === 'short' ? 'bg-brand-2/20 text-brand-2 border-brand-2/30' : 'text-text-muted border-transparent hover:bg-retro-board/50'} ${!unlockedFeatures.short_selling ? 'opacity-50 grayscale' : ''}`}
+                  >
+                    Short
+                    {!unlockedFeatures.short_selling && <span className="absolute -top-1 -right-1">🔒</span>}
+                  </button>
+                  <button
+                    onClick={() => setTradeType('stop_loss')}
+                    className={`py-3 text-xs rounded-md font-bold border transition-all relative ${tradeType === 'stop_loss' ? 'bg-brand-1/20 text-brand-1 border-brand-1/30' : 'text-text-muted border-transparent hover:bg-retro-board/50'} ${!unlockedFeatures.stop_loss ? 'opacity-50 grayscale' : ''}`}
+                  >
+                    Stop-Loss
+                    {!unlockedFeatures.stop_loss && <span className="absolute -top-1 -right-1">🔒</span>}
+                  </button>
                 </div>
 
-                <div className="space-y-5">
+                <div className="space-y-4">
                   <div>
-                    <div className="flex justify-between items-center mb-2">
-                       <label className="text-sm font-semibold text-text-muted">Qty (Shares)</label>
-                    </div>
+                    <label className="text-[10px] uppercase tracking-widest font-black text-text-muted mb-2 block">Quantity (Lot Size)</label>
                     <input
                       type="number"
                       min="1"
@@ -506,82 +526,41 @@ const PortfolioTrade = ({ portfolio, onRefresh, stocksCache = [], refreshStocksC
                       value={quantity}
                       onChange={(e) => setQuantity(e.target.value)}
                       placeholder="0"
-                      className="w-full px-4 py-4 rounded-xl border border-brand-1/20 bg-retro-surface focus:border-brand-1 focus:ring-2 focus:ring-brand-1/20 outline-none text-xl font-bold text-text-main transition-all placeholder-text-muted/50"
+                      className="w-full px-4 py-4 rounded-xl border-2 border-brand-1/20 bg-retro-bg focus:border-brand-1 outline-none text-2xl font-black text-text-main transition-all"
                     />
                   </div>
 
-                  <div className="pt-4 space-y-3">
-                    <div className="flex justify-between text-sm">
-                      <span className="text-text-muted">Market Price</span>
-                      <span className="font-semibold text-text-main">
-                        {formatCurrency(selectedStock.current_price, selectedStock.currency || 'INR')}
-                      </span>
+                  <div className="pt-2 space-y-2">
+                    <div className="flex justify-between text-xs">
+                      <span className="text-text-muted">Available Liquidity</span>
+                      <span className="font-bold text-text-main">₹{portfolio.balance?.toLocaleString()}</span>
                     </div>
-                    <div className="flex justify-between border-t border-brand-1/10 pt-3 mt-3">
-                      <span className="text-text-main font-bold">Estimated Cost</span>
-                      <span className="text-lg font-bold text-brand-1">{formatCurrency(calculateTotal(), selectedStock.currency || 'INR')}</span>
+                    <div className="flex justify-between border-t border-brand-1/10 pt-3">
+                      <span className="text-text-main font-black uppercase text-xs">Order Value</span>
+                      <span className="text-lg font-black text-brand-1">{formatCurrency(calculateTotal())}</span>
                     </div>
                   </div>
 
-                  {selectedStock.holding && tradeType === 'sell' && (
-                    <div className="bg-brand-2/10 rounded-lg p-4 border border-brand-2/20">
-                      <p className="text-xs text-brand-2 mb-1 font-bold">Your Investment</p>
-                      <p className="text-sm font-semibold text-text-main">
-                        {selectedStock.holding.quantity} shares available
-                      </p>
-                    </div>
-                  )}
-
                   {message && (
-                    <div className={`rounded-xl p-4 flex items-center gap-2 ${
-                      message.type === 'success' ? 'bg-accent-green/10 text-accent-green border border-accent-green/20' : 'bg-accent-red/10 text-accent-red border border-accent-red/20'
-                    }`}>
-                      <AlertCircle className="w-5 h-5 flex-shrink-0" />
-                      <span className="text-sm font-medium">{message.text}</span>
+                    <div className={`rounded-xl p-4 flex items-start gap-2 border ${message.type === 'success' ? 'bg-accent-green/10 text-accent-green border-accent-green/20' : 'bg-accent-red/10 text-accent-red border-accent-red/30'}`}>
+                      <AlertCircle className="w-5 h-5 flex-shrink-0 mt-0.5" />
+                      <div className="text-sm font-bold leading-tight">{message.text}</div>
                     </div>
                   )}
 
                   <button
                     onClick={handleTrade}
                     disabled={trading || !quantity || parseInt(quantity) <= 0}
-                    className={`w-full py-4 rounded-xl font-bold text-white transition-all transform active:scale-[0.98] ${
-                      tradeType === 'buy'
-                        ? 'bg-brand-1 hover:bg-brand-600 shadow-md hover:shadow-lg shadow-brand-1/20'
-                        : 'bg-accent-red hover:bg-red-500 shadow-md hover:shadow-lg shadow-accent-red/20'
-                    } disabled:opacity-50 disabled:cursor-not-allowed`}
+                    className={`w-full py-5 rounded-xl font-black text-white transition-all transform active:scale-95 shadow-lg uppercase tracking-tighter ${
+                      tradeType === 'buy' ? 'bg-accent-green hover:bg-green-600 shadow-accent-green/20' : 
+                      tradeType === 'sell' ? 'bg-accent-red hover:bg-red-600 shadow-accent-red/20' :
+                      tradeType === 'short' ? 'bg-brand-2 hover:bg-brand-2 shadow-brand-2/20' :
+                      'bg-brand-1 hover:bg-brand-1 shadow-brand-1/20'
+                    } disabled:opacity-30 disabled:cursor-not-allowed`}
                   >
-                    {trading ? 'Processing...' : `${tradeType === 'buy' ? 'BUY' : 'SELL'} ${selectedStock.symbol}`}
+                    {trading ? 'TRANSMITTING...' : `EXECUTE ${tradeType.replace('_', ' ')}: ${selectedStock.symbol}`}
                   </button>
-
-                  <div className="text-center">
-                    <p className="text-xs font-medium text-text-muted">
-                      Balance: ₹{portfolio.balance?.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                    </p>
-                  </div>
                 </div>
-
-                {tradeXpText && (
-                  <div className="pointer-events-none absolute right-6 top-4 xp-float text-brand-2 text-lg font-extrabold number-tabular">
-                    {tradeXpText}
-                  </div>
-                )}
-
-                {showTradeCelebration && (
-                  <div className="pointer-events-none absolute inset-0 overflow-hidden">
-                    {[...Array(10)].map((_, idx) => (
-                      <span
-                        key={`trade-conf-${idx}`}
-                        className="confetti-piece absolute w-2 h-3 rounded-sm"
-                        style={{
-                          left: `${10 + idx * 8}%`,
-                          top: '10%',
-                          backgroundColor: idx % 2 === 0 ? '#00f5a0' : '#00d1ff',
-                          animationDelay: `${idx * 30}ms`,
-                        }}
-                      />
-                    ))}
-                  </div>
-                )}
               </div>
             </div>
           </div>

@@ -107,15 +107,22 @@ class PortfolioAsset(models.Model):
     symbol = models.CharField(max_length=20)
     quantity = models.DecimalField(max_digits=10, decimal_places=4, default=0)
     average_buy_price = models.DecimalField(max_digits=15, decimal_places=2)
+    position_type = models.CharField(max_length=10, choices=[('LONG', 'Long'), ('SHORT', 'Short')], default='LONG')
     last_updated = models.DateTimeField(auto_now=True)
     
     class Meta:
-        unique_together = ['portfolio', 'symbol']
+        unique_together = ['portfolio', 'symbol', 'position_type']
 
 class PortfolioTransaction(models.Model):
     portfolio = models.ForeignKey(VirtualPortfolio, on_delete=models.CASCADE, related_name='transactions')
     symbol = models.CharField(max_length=20)
-    transaction_type = models.CharField(max_length=4, choices=[('BUY', 'Buy'), ('SELL', 'Sell')])
+    transaction_type = models.CharField(max_length=10, choices=[
+        ('BUY', 'Buy'), 
+        ('SELL', 'Sell'), 
+        ('SHORT', 'Short Sell'), 
+        ('COVER', 'Buy to Cover'),
+        ('STOP_LOSS', 'Stop Loss')
+    ])
     quantity = models.DecimalField(max_digits=10, decimal_places=4)
     price = models.DecimalField(max_digits=15, decimal_places=2)
     timestamp = models.DateTimeField(auto_now_add=True)

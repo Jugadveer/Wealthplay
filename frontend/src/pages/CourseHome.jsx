@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
+import { useGlobalData } from '../contexts/GlobalDataContext'
 import api from '../utils/api'
 import {
   BookOpen,
@@ -16,21 +17,33 @@ import {
 const CourseHome = () => {
   const navigate = useNavigate()
   const { user } = useAuth()
-  const [courses, setCourses] = useState([])
-  const [loading, setLoading] = useState(true)
+  const { courses: cachedCourses, refreshCourses, loadingCourses } = useGlobalData()
+  const [courses, setCourses] = useState(() => cachedCourses || [])
+  const [loading, setLoading] = useState(!(cachedCourses && cachedCourses.length > 0))
   const [filter, setFilter] = useState('all') 
 
+  // Sync local state with global cache when cache changes
   useEffect(() => {
-    loadCourses()
+    if (cachedCourses && cachedCourses.length > 0) {
+      setCourses(cachedCourses)
+      setLoading(false)
+    }
+  }, [cachedCourses])
+
+  // Initial load only if empty
+  useEffect(() => {
+    if (!cachedCourses || cachedCourses.length === 0) {
+      loadCourses(false)
+    }
   }, [])
 
   
   useEffect(() => {
     const handleFocus = () => {
-      loadCourses()
+      loadCourses(true)
     }
     const handleModuleCompleted = () => {
-      loadCourses()
+      loadCourses(true)
     }
     window.addEventListener('focus', handleFocus)
     window.addEventListener('module-completed', handleModuleCompleted)
@@ -40,10 +53,18 @@ const CourseHome = () => {
     }
   }, [])
 
-  const loadCourses = async () => {
+  const loadCourses = async (force = true) => {
     try {
+      const cached = typeof refreshCourses === 'function'
+        ? await refreshCourses(force)
+        : null
+
+      if (Array.isArray(cached)) {
+        setCourses(cached)
+        return
+      }
+
       const response = await api.getCourses()
-      
       const coursesData = Array.isArray(response.data) ? response.data : response.data.courses || []
       setCourses(coursesData)
     } catch (error) {

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useGlobalData } from '../contexts/GlobalDataContext'
 import api from '../utils/api'
 import {
   ArrowLeft,
@@ -78,22 +79,53 @@ const categoryInfo = {
 
 const Achievements = () => {
   const navigate = useNavigate()
-  const [serverAchievements, setServerAchievements] = useState([])
-  const [loading, setLoading] = useState(true)
+  const {
+    achievements: cachedAchievements,
+    refreshAchievements,
+    loadingAchievements,
+  } = useGlobalData()
+  const [serverAchievements, setServerAchievements] = useState(cachedAchievements || [])
+  const [loading, setLoading] = useState(!(cachedAchievements && cachedAchievements.length > 0))
   const [stats, setStats] = useState({ total_unlocked: 0, total_available: 0 })
 
   useEffect(() => {
     fetchAchievements()
   }, [])
 
+  useEffect(() => {
+    if (!Array.isArray(cachedAchievements)) return
+    setServerAchievements(cachedAchievements)
+    setStats({
+      total_unlocked: cachedAchievements.filter((a) => a.unlocked).length,
+      total_available: cachedAchievements.length || ALL_ACHIEVEMENTS.length,
+    })
+    if (cachedAchievements.length > 0) {
+      setLoading(false)
+    }
+  }, [cachedAchievements])
+
   const fetchAchievements = async () => {
     try {
+      const achievementsData = typeof refreshAchievements === 'function'
+        ? await refreshAchievements(true)
+        : null
+
+      if (Array.isArray(achievementsData)) {
+        setServerAchievements(achievementsData)
+        setStats({
+          total_unlocked: achievementsData.filter((a) => a.unlocked).length,
+          total_available: achievementsData.length || ALL_ACHIEVEMENTS.length,
+        })
+        return
+      }
+
       const response = await api.getAchievements()
       if (response.data) {
-        setServerAchievements(response.data.achievements || [])
+        const achievementsList = response.data.achievements || []
+        setServerAchievements(achievementsList)
         setStats({
           total_unlocked: response.data.total_unlocked || 0,
-          total_available: response.data.total_available || ALL_ACHIEVEMENTS.length,
+          total_available: response.data.total_available || achievementsList.length || ALL_ACHIEVEMENTS.length,
         })
       }
     } catch (error) {
@@ -129,7 +161,7 @@ const Achievements = () => {
     ? ((totalUnlocked / totalAvailable) * 100).toFixed(1)
     : 0
 
-  if (loading) {
+  if (loading && loadingAchievements && serverAchievements.length === 0) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-retro-bg">
         <Loader2 className="w-12 h-12 text-brand-1 animate-spin" />

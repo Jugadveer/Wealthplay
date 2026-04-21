@@ -6,6 +6,7 @@ import numpy as np
 import json
 from pathlib import Path
 import os
+import sys
 from django.conf import settings
 
 # --- Configuration ---
@@ -34,10 +35,20 @@ class PredictorService:
         self._load_models()
 
     def _load_models(self):
-        """Load trained LightGBM models and feature list"""
         try:
+            # Skip heavy loading during migrations to prevent crashes/hangs
+            if any(cmd in sys.argv for cmd in ['makemigrations', 'migrate', 'showmigrations', 'check']):
+                print("[ML] Skipping model load for management command")
+                self.models_loaded = False
+                return
+
+            # Attempt to load LightGBM.
             try:
                 import lightgbm as lgb
+            except Exception as e:
+                print(f"[ML] LightGBM unavailable: {e}")
+                self.models_loaded = False
+                return
             except Exception as e:
                 print(f"[ML] LightGBM unavailable: {e}")
                 self.models_loaded = False
@@ -45,16 +56,28 @@ class PredictorService:
 
             # Load models
             if (MODELS_DIR / "dir_model.txt").exists():
-                self.dir_model = lgb.Booster(model_file=str(MODELS_DIR / "dir_model.txt"))
-                print(f"[ML] Loaded direction model")
+                try:
+                    self.dir_model = lgb.Booster(model_file=str(MODELS_DIR / "dir_model.txt"))
+                    print(f"[ML] Loaded direction model")
+                except Exception as e:
+                    print(f"[ML] Direction model load failed: {e}")
+                    self.dir_model = None
 
             if (MODELS_DIR / "vol_model.txt").exists():
-                self.vol_model = lgb.Booster(model_file=str(MODELS_DIR / "vol_model.txt"))
-                print(f"[ML] Loaded volatility model")
+                try:
+                    self.vol_model = lgb.Booster(model_file=str(MODELS_DIR / "vol_model.txt"))
+                    print(f"[ML] Loaded volatility model")
+                except Exception as e:
+                    print(f"[ML] Volatility model load failed: {e}")
+                    self.vol_model = None
 
             if (MODELS_DIR / "regime_model.txt").exists():
-                self.regime_model = lgb.Booster(model_file=str(MODELS_DIR / "regime_model.txt"))
-                print(f"[ML] Loaded regime model")
+                try:
+                    self.regime_model = lgb.Booster(model_file=str(MODELS_DIR / "regime_model.txt"))
+                    print(f"[ML] Loaded regime model")
+                except Exception as e:
+                    print(f"[ML] Regime model load failed: {e}")
+                    self.regime_model = None
 
             # Load feature list
             if (ARTIFACTS_DIR / "feature_cols.json").exists():

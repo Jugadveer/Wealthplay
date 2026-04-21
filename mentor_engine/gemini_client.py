@@ -8,95 +8,136 @@ import os
 
 import requests 
 
-GEMINI_MODEL =os .environ .get ("GEMINI_MODEL","gemini-2.0-flash")
-GEMINI_URL =f"https://generativelanguage.googleapis.com/v1beta/models/{GEMINI_MODEL }:generateContent"
+_CANONICAL_GEMINI_MODEL = "gemini-2.0-flash-lite"
 
 
-def _gemini_api_keys ():
+def _resolve_gemini_model():
+    """Normalize legacy model aliases to the supported Gemini 2.0 Flash Lite model."""
+    configured = os.environ.get("GEMINI_MODEL", _CANONICAL_GEMINI_MODEL).strip()
+    if not configured:
+        return _CANONICAL_GEMINI_MODEL
+
+    legacy_aliases = {
+        "gemini-2.0-flash-lite-preview-02-05",
+        "gemini-2.0-flash-lite-preview",
+        "gemini-2.0-flash-lite-preview-02-10",
+    }
+    if configured in legacy_aliases:
+        return _CANONICAL_GEMINI_MODEL
+
+    return configured
+
+
+GEMINI_MODEL = _resolve_gemini_model()
+GEMINI_URL = f"https://generativelanguage.googleapis.com/v1beta/models/{GEMINI_MODEL}:generateContent"
+
+
+def _gemini_api_keys():
     """Load Gemini API keys from env with support for multiple key formats."""
-    keys =[]
+    keys = []
+
+    raw_list = os.environ.get("GEMINI_API_KEYS", "")
+    if raw_list:
+        keys.extend([k.strip() for k in raw_list.split(",") if k.strip()])
+
+    for env_name in ("GEMINI_API_KEY", "GEMINI_API_KEY_1", "GEMINI_API_KEY_2"):
+        value = os.environ.get(env_name, "").strip()
+        if value:
+            keys.append(value)
+
+    seen = set()
+    ordered_keys = []
+    for key in keys:
+        if key not in seen:
+            ordered_keys.append(key)
+            seen.add(key)
+
+    return ordered_keys
 
 
-    raw_list =os .environ .get ("GEMINI_API_KEYS","")
-    if raw_list :
-        keys .extend ([k .strip ()for k in raw_list .split (",")if k .strip ()])
-
-
-    for env_name in ("GEMINI_API_KEY","GEMINI_API_KEY_1","GEMINI_API_KEY_2"):
-        value =os .environ .get (env_name ,"").strip ()
-        if value :
-            keys .append (value )
-
-
-    seen =set ()
-    ordered_keys =[]
-    for key in keys :
-        if key not in seen :
-            ordered_keys .append (key )
-            seen .add (key )
-
-    return ordered_keys 
-
-
-def gemini_chat (prompt ,system_prompt =None ,temperature =0.7 ,max_tokens =2048 ):
+def gemini_chat(prompt, system_prompt=None, temperature=0.7, max_tokens=2048):
     """
     Send a prompt to Gemini and get a response text.
     Automatically fails over across configured API keys.
     """
-    api_keys =_gemini_api_keys ()
-    if not api_keys :
-        raise Exception ("No Gemini API key configured. Set GEMINI_API_KEYS or GEMINI_API_KEY.")
+    api_keys = _gemini_api_keys()
+    if not api_keys:
+        raise Exception("No Gemini API key configured. Set GEMINI_API_KEYS or GEMINI_API_KEY.")
 
-    contents =[]
-    if system_prompt :
-        contents .append ({"role":"user","parts":[{"text":system_prompt }]})
-        contents .append ({"role":"model","parts":[{"text":"Understood. I will follow these instructions."}]})
+    contents = []
+    if system_prompt:
+        contents.append({"role": "user", "parts": [{"text": system_prompt}]})
+        contents.append({"role": "model", "parts": [{"text": "Understood. I will follow these instructions."}]})
 
-    contents .append ({"role":"user","parts":[{"text":prompt }]})
+    contents.append({"role": "user", "parts": [{"text": prompt}]})
 
-    payload ={
-    "contents":contents ,
-    "generationConfig":{
-    "temperature":temperature ,
-    "maxOutputTokens":max_tokens ,
-    },
+    payload = {
+        "contents": contents,
+        "generationConfig": {
+            "temperature": temperature,
+            "maxOutputTokens": max_tokens,
+        },
     }
 
-    last_error =None 
-    for api_key in api_keys :
-        try :
-            response =requests .post (
-            f"{GEMINI_URL }?key={api_key }",
-            json =payload ,
-            headers ={"Content-Type":"application/json"},
-            timeout =30 ,
+    last_error = None
+    for api_key in api_keys:
+        try:
+            print(f"[Gemini] Attempting {GEMINI_MODEL} with key {api_key[:8]}...")
+            response = requests.post(
+                f"{GEMINI_URL}?key={api_key}",
+                json=payload,
+                headers={"Content-Type": "application/json"},
+                timeout=30,
             )
-            response .raise_for_status ()
-            data =response .json ()
-
-            candidates =data .get ("candidates",[])
-            if candidates :
-                parts =candidates [0 ].get ("content",{}).get ("parts",[])
-                if parts :
-                    return parts [0 ].get ("text","")
+            
+            if response.status_code != 200:
+                print(f"[Gemini] Key {api_key[:8]} failed: {response.status_code} {response.text}")
+                last_error = f"{response.status_code}: {response.text}"
+                if response.status_code == 404 and GEMINI_MODEL != _CANONICAL_GEMINI_MODEL:
+                    try:
+                        fallback_url = f"https://generativelanguage.googleapis.com/v1beta/models/{_CANONICAL_GEMINI_MODEL}:generateContent"
+                        fallback_response = requests.post(
+                            f"{fallback_url}?key={api_key}",
+                            json=payload,
+                            headers={"Content-Type": "application/json"},
+                            timeout=30,
+                        )
+                        if fallback_response.status_code == 200:
+                            data = fallback_response.json()
+                            candidates = data.get("candidates", [])
+                            if candidates:
+                                parts = candidates[0].get("content", {}).get("parts", [])
+                                if parts:
+                                    return parts[0].get("text", "")
+                            return "No response generated."
+                        last_error = f"{fallback_response.status_code}: {fallback_response.text}"
+                    except requests.exceptions.RequestException as fallback_exc:
+                        last_error = str(fallback_exc)
+                continue
+                
+            data = response.json()
+            candidates = data.get("candidates", [])
+            if candidates:
+                parts = candidates[0].get("content", {}).get("parts", [])
+                if parts:
+                    return parts[0].get("text", "")
 
             return "No response generated."
-        except requests .exceptions .Timeout as exc :
-            last_error =f"timeout: {exc }"
-        except requests .exceptions .RequestException as exc :
-            last_error =str (exc )
+        except requests.exceptions.Timeout as exc:
+            last_error = f"timeout: {exc}"
+        except requests.exceptions.RequestException as exc:
+            last_error = str(exc)
 
-    raise Exception (f"Gemini API failed for all configured keys. Last error: {last_error }")
+    raise Exception(f"Gemini API failed for all configured keys. Last error: {last_error}")
 
 
-def gemini_chat_json (prompt ,system_prompt =None ,temperature =0.3 ):
+def gemini_chat_json(prompt, system_prompt=None, temperature=0.3):
     """Send a prompt to Gemini and parse JSON from the response."""
-    text =gemini_chat (prompt ,system_prompt =system_prompt ,temperature =temperature )
+    text = gemini_chat(prompt, system_prompt=system_prompt, temperature=temperature)
 
+    if "```json" in text:
+        text = text.split("```json", 1)[1].split("```", 1)[0].strip()
+    elif "```" in text:
+        text = text.split("```", 1)[1].split("```", 1)[0].strip()
 
-    if "```json"in text :
-        text =text .split ("```json",1 )[1 ].split ("```",1 )[0 ].strip ()
-    elif "```"in text :
-        text =text .split ("```",1 )[1 ].split ("```",1 )[0 ].strip ()
-
-    return json .loads (text )
+    return json.loads(text)

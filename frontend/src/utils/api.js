@@ -190,6 +190,17 @@ export const api = {
   
   getPortfolioHistory: (config) => apiAxios.get('/users/portfolio/history/', config),
   getAIRecommendation: (data) => apiAxios.post('/users/portfolio/ai-recommendation/', data),
+  getProactiveMentorNudge: () => apiAxios.get('/users/portfolio/proactive-mentor/'),
+  getPortfolioESG: () => apiAxios.get('/users/portfolio/esg/'),
+  getHindsightReplay: (data) => apiAxios.post('/users/portfolio/hindsight-replay/', data),
+  getCopyTradingHub: () => apiAxios.get('/users/portfolio/copy-trading/'),
+  followCopyTrader: (data) => apiAxios.post('/users/portfolio/copy-trading/follow/', data),
+  postTradeRationale: (data) => apiAxios.post('/users/portfolio/copy-trading/post/', data),
+  
+  // Time Capsule
+  listCrises: () => apiAxios.get('/users/time-capsule/crises/'),
+  startTimeCapsuleSession: (crisisId) => apiAxios.post(`/users/time-capsule/start/${crisisId}/`),
+  getTimeCapsuleSimData: (sessionId) => apiAxios.get(`/users/time-capsule/sim-data/${sessionId}/`),
 }
 
 

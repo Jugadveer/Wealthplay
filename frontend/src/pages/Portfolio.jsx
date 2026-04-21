@@ -18,52 +18,80 @@ import {
 const Portfolio = () => {
   const location = useLocation()
   const { user } = useAuth()
-  const { stocks: globalStocks, refreshStocks } = useGlobalData()
-  const [portfolio, setPortfolio] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const [activeTab, setActiveTab] = useState('overview')
+  const {
+    stocks: globalStocks,
+    refreshStocks,
+    portfolio: globalPortfolio,
+    refreshPortfolio,
+  } = useGlobalData()
+
+  const normalizePortfolio = (data) => {
+    if (!data) return null
+    const holdings = data.holdings || data.assets || []
+    const invested = data.invested ?? holdings.reduce((sum, a) => {
+      const qty = Number(a.quantity || 0)
+      const avg = Number(a.avg_price ?? a.average_buy_price ?? 0)
+      return sum + (qty * avg)
+    }, 0)
+    const current_value = data.current_value ?? holdings.reduce((sum, a) => {
+      const value = Number(a.current_value ?? a.total_value ?? 0)
+      return sum + value
+    }, 0)
+    const total_pnl = data.total_pnl ?? (current_value - invested)
+    const total_pnl_percent = data.total_pnl_percent ?? (invested > 0 ? (total_pnl / invested) * 100 : 0)
+
+    return {
+      balance: data.balance ?? data.cash_balance ?? 50000,
+      invested,
+      current_value,
+      total_value: data.total_value ?? ((data.balance ?? data.cash_balance ?? 50000) + current_value),
+      total_pnl,
+      total_pnl_percent,
+      holdings,
+      holdings_count: data.holdings_count ?? holdings.length,
+    }
+  }
+
+  const [portfolio, setPortfolio] = useState(() => normalizePortfolio(globalPortfolio))
+  const [loading, setLoading] = useState(!globalPortfolio)
+  const [activeTab, setActiveTab] = useState('holdings')
 
   useEffect(() => {
-    
     const path = location.pathname.split('/').pop()
     if (path === 'portfolio' || path === 'overview' || !path) {
-      setActiveTab('overview')
+      setActiveTab('holdings')
     } else {
       setActiveTab(path)
     }
-    fetchPortfolio()
   }, [location.pathname])
 
-  const fetchPortfolio = async () => {
+  useEffect(() => {
+    if (globalPortfolio) {
+      setPortfolio(normalizePortfolio(globalPortfolio))
+      setLoading(false)
+    }
+    fetchPortfolio(false)
+  }, [])
+
+  useEffect(() => {
+    if (!globalPortfolio) return
+    setPortfolio(normalizePortfolio(globalPortfolio))
+    setLoading(false)
+  }, [globalPortfolio])
+
+  const fetchPortfolio = async (force = true) => {
     try {
+      const data = typeof refreshPortfolio === 'function'
+        ? await refreshPortfolio(force)
+        : null
+
+      if (data) {
+        setPortfolio(normalizePortfolio(data))
+        return
+      }
+
       const response = await api.getPortfolio()
-      const data = response.data
-
-      
-      
-      const holdings = data.holdings || data.assets || []
-      const invested = data.invested ?? holdings.reduce((sum, a) => {
-        const qty = Number(a.quantity || 0)
-        const avg = Number(a.avg_price ?? a.average_buy_price ?? 0)
-        return sum + (qty * avg)
-      }, 0)
-      const current_value = data.current_value ?? holdings.reduce((sum, a) => {
-        const value = Number(a.current_value ?? a.total_value ?? 0)
-        return sum + value
-      }, 0)
-      const total_pnl = data.total_pnl ?? (current_value - invested)
-      const total_pnl_percent = data.total_pnl_percent ?? (invested > 0 ? (total_pnl / invested) * 100 : 0)
-
-      setPortfolio({
-        balance: data.balance ?? data.cash_balance ?? 50000,
-        invested: invested,
-        current_value: current_value,
-        total_value: data.total_value ?? ((data.balance ?? data.cash_balance ?? 50000) + current_value),
-        total_pnl: total_pnl,
-        total_pnl_percent: total_pnl_percent,
-        holdings,
-        holdings_count: data.holdings_count ?? holdings.length,
-      })
+      setPortfolio(normalizePortfolio(response.data))
     } catch (error) {
       console.error('Error fetching portfolio:', error)
     } finally {
@@ -111,7 +139,7 @@ const Portfolio = () => {
           </Link>
           <Link 
             to="/portfolio/holdings" 
-            className={`px-6 py-2 rounded-lg font-bold text-sm transition-all ${activeTab === 'holdings' ? 'bg-brand-1/20 text-text-main shadow-sm' : 'text-text-muted hover:text-text-main hover:bg-brand-1/5'}`}
+            className={`px-6 py-2 rounded-lg font-bold text-sm transition-all ${activeTab === 'holdings' || activeTab === 'overview' ? 'bg-brand-1/20 text-text-main shadow-sm' : 'text-text-muted hover:text-text-main hover:bg-brand-1/5'}`}
           >
             Dashboard
           </Link>
@@ -133,7 +161,7 @@ const Portfolio = () => {
 
       {}
       <div className="flex-1 w-full max-w-7xl mx-auto px-4 py-6 lg:px-10 lg:py-8">
-        {(activeTab === 'overview' || activeTab === 'holdings') && (
+        <div className={activeTab === 'overview' || activeTab === 'holdings' ? 'block' : 'hidden'}>
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
             <div className="lg:col-span-8 space-y-6">
               <PortfolioOverview portfolio={portfolioData} onRefresh={fetchPortfolio} />
@@ -179,16 +207,18 @@ const Portfolio = () => {
               </div>
             </div>
           </div>
-        )}
-        {activeTab === 'trade' && (
+        </div>
+        <div className={activeTab === 'trade' ? 'block' : 'hidden'}>
           <PortfolioTrade
             portfolio={portfolioData}
             onRefresh={fetchPortfolio}
             stocksCache={globalStocks}
             refreshStocksCache={refreshStocks}
           />
-        )}
-        {activeTab === 'analysis' && <PortfolioAnalysis portfolio={portfolioData} onRefresh={fetchPortfolio} />}
+        </div>
+        <div className={activeTab === 'analysis' ? 'block' : 'hidden'}>
+          <PortfolioAnalysis portfolio={portfolioData} stocksCache={globalStocks} onRefresh={fetchPortfolio} />
+        </div>
       </div>
     </div>
   )

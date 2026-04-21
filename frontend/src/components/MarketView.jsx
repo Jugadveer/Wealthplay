@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import api from '../utils/api';
 import { Activity, Newspaper, TrendingUp, TrendingDown } from 'lucide-react';
+import TradingViewChart from './TradingViewChart';
 
 const HIGHLIGHT_TERMS = [
   'Relative Strength Index',
@@ -82,8 +82,16 @@ const MarketView = () => {
             const currentPrice = message.data[currentSymbol].price;
             setChartData(prev => {
               const now = new Date();
-              const newData = [...prev, { time: now.toLocaleTimeString(), price: currentPrice, rawTime: now.getTime() }];
-              return newData.slice(-60);
+              // Use ISO string so the chart component can parse it robustly
+              const newData = [...prev, { 
+                time: now.toISOString(), 
+                price: currentPrice,
+                open: currentPrice, 
+                high: currentPrice, 
+                low: currentPrice, 
+                close: currentPrice 
+              }];
+              return newData.slice(-100); // Keep a bit more history
             });
           }
         }
@@ -109,16 +117,19 @@ const MarketView = () => {
   }, []);
 
   
+  // Fetch historical data for candlestick chart
   useEffect(() => {
-    const initialData = [];
-    const timeNow = new Date().getTime();
-    let basePrice = 150;
-    for (let i = 60; i > 0; i--) {
-      basePrice = basePrice + (Math.random() * 2 - 1);
-      const pastTime = new Date(timeNow - i * 1000);
-      initialData.push({ time: pastTime.toLocaleTimeString(), price: basePrice, rawTime: pastTime.getTime() });
-    }
-    setChartData(initialData);
+    const fetchHistory = async () => {
+      try {
+        const res = await api.getStockDetail(activeSymbol);
+        if (res.data && res.data.price_history) {
+          setChartData(res.data.price_history);
+        }
+      } catch (err) {
+        console.error("Failed to fetch history", err);
+      }
+    };
+    fetchHistory();
   }, [activeSymbol]);
 
   
@@ -202,48 +213,15 @@ const MarketView = () => {
             <p className="text-sm font-medium text-text-muted">Live Tracker</p>
         </div>
         
-        <div className="w-full h-[300px] mt-12" style={{ minWidth: 1, minHeight: 300 }}>
-          {isChartReady && (
-            <ResponsiveContainer width="100%" height="100%" minWidth={1} minHeight={1}>
-              <AreaChart data={chartData}>
-              <defs>
-                <linearGradient id="colorPriceMktView" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor={isUp ? "#ffb089" : "#ef4444"} stopOpacity={0.42}/>
-                  <stop offset="30%" stopColor={isUp ? "#ff8f66" : "#ef4444"} stopOpacity={0.2}/>
-                  <stop offset="95%" stopColor={isUp ? "#ff6b35" : "#d94c4c"} stopOpacity={0}/>
-                </linearGradient>
-              </defs>
-              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(148,163,184,0.35)" />
-              <XAxis 
-                dataKey="time" 
-                tick={{fill: '#475569', fontSize: 12}}
-                tickLine={false}
-                axisLine={false}
-                minTickGap={30}
-              />
-              <YAxis 
-                domain={['auto', 'auto']}
-                tick={{fill: '#475569', fontSize: 12}}
-                tickLine={false}
-                axisLine={false}
-                tickFormatter={(val) => val.toFixed(1)}
-                width={50}
-              />
-              <Tooltip 
-                contentStyle={{ borderRadius: '12px', border: '1px solid rgba(148,163,184,0.35)', boxShadow: '0 10px 28px rgba(15,23,42,0.12)', backgroundColor: '#ffffff', color: '#0f172a' }}
-                itemStyle={{ fontWeight: 'bold', color: '#0f172a' }}
-                labelStyle={{ color: '#ff6b35' }}
-              />
-              <Area 
-                type="monotone" 
-                dataKey="price" 
-                stroke={isUp ? "#ff6b35" : "#ef4444"} 
-                strokeWidth={3}
-                fill="url(#colorPriceMktView)" 
-                isAnimationActive={false}
-              />
-              </AreaChart>
-            </ResponsiveContainer>
+        <div className="w-full h-[350px] mt-12 bg-white rounded-xl overflow-hidden border border-slate-200">
+          {chartData.length > 0 && (
+            <TradingViewChart 
+              data={chartData} 
+              colors={{
+                background: '#ffffff',
+                textColor: '#1e293b'
+              }}
+            />
           )}
         </div>
       </div>
@@ -258,17 +236,25 @@ const MarketView = () => {
         {loadingNews ? (
           <div className="animate-pulse space-y-4">
             <div className="h-28 bg-brand-1/5 rounded-xl"></div>
-            <div className="h-28 bg-brand-1/5 rounded-xl"></div>
           </div>
         ) : news.length > 0 ? (
-          <div className="space-y-4">
+          <div className="space-y-4 max-w-3xl mx-auto">
             {news.map((item, i) => (
-              <div key={i} className="bg-white rounded-2xl p-5 border border-slate-200 hover:border-brand-1/40 hover:shadow-md transition-all">
-                <a href={item.link} target="_blank" rel="noopener noreferrer" className="text-lg font-bold text-text-main hover:text-brand-1 transition-colors">
-                  {item.title}
-                </a>
-                <p className="text-xs font-semibold text-text-muted mt-1 mb-3 uppercase tracking-wider">{item.publisher}</p>
-                <div className="bg-brand-2/10 p-4 rounded-lg text-sm text-text-muted font-medium whitespace-pre-line border-l-4 border-brand-2">
+              <div key={i} className="bg-white rounded-2xl p-8 border border-slate-200 shadow-sm hover:shadow-md transition-all group">
+                <div className="flex justify-between items-start mb-4">
+                  <a href={item.link} target="_blank" rel="noopener noreferrer" className="text-xl font-bold text-text-main group-hover:text-brand-1 transition-colors leading-tight">
+                    {item.title}
+                  </a>
+                  <span className="text-[10px] font-bold bg-brand-1/10 text-brand-1 px-2 py-1 rounded uppercase flex-shrink-0 ml-4">
+                    Top Story
+                  </span>
+                </div>
+                <p className="text-xs font-bold text-text-muted mb-6 uppercase tracking-widest flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-brand-1 animate-pulse"></span>
+                  {item.publisher} • {new Date(item.providerPublishTime * 1000).toLocaleDateString()}
+                </p>
+                <div className="bg-brand-1/[0.03] p-6 rounded-2xl text-base text-text-main/90 font-medium leading-relaxed border border-brand-1/10 relative overflow-hidden">
+                  <div className="absolute top-0 left-0 w-1 h-full bg-brand-1 opacity-20"></div>
                   {highlightSummary(item.summary)}
                 </div>
               </div>

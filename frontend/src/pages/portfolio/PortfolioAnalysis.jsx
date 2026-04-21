@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip, BarChart, Bar, XAxis, YAxis } from 'recharts'
+import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip, BarChart, Bar, XAxis, YAxis, LineChart, Line, CartesianGrid } from 'recharts'
 import {
   TrendingUp,
   TrendingDown,
@@ -10,23 +10,69 @@ import {
   BarChart3,
   PieChart as PieChartIcon,
   Loader2,
+  Leaf,
+  Users,
+  Calendar,
 } from 'lucide-react'
+import { useGlobalData } from '../../contexts/GlobalDataContext'
 import api from '../../utils/api'
 
-const PortfolioAnalysis = ({ portfolio, onRefresh }) => {
+const PortfolioAnalysis = ({ portfolio, stocksCache = [], onRefresh }) => {
+  const { stocks: globalStocks } = useGlobalData()
+  const stockLookup = [...(stocksCache || []), ...(globalStocks || [])].reduce((acc, stock) => {
+    if (stock?.symbol) acc[stock.symbol.toUpperCase()] = stock
+    return acc
+  }, {})
   const [analysis, setAnalysis] = useState(null)
   const [aiRecommendations, setAiRecommendations] = useState([])
+  const [proactiveNudge, setProactiveNudge] = useState(null)
+  const [esgData, setEsgData] = useState(null)
+  const [hindsightData, setHindsightData] = useState(null)
+  const [hindsightLoading, setHindsightLoading] = useState(false)
+  const [hindsightPreset, setHindsightPreset] = useState('2020-pandemic')
+  const [copyHub, setCopyHub] = useState({ top_traders: [], feed: [] })
+  const [rationaleDraft, setRationaleDraft] = useState('')
+  const [rationaleSymbol, setRationaleSymbol] = useState('')
+  const [rationaleAction, setRationaleAction] = useState('BUY')
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     fetchAnalysis()
-  }, [portfolio.holdings_count, portfolio.holdings])
+  }, [portfolio.holdings_count, portfolio.holdings, globalStocks, stocksCache])
 
   const fetchAnalysis = async () => {
     setLoading(true)
     try {
-      const recommendations = []
       const holdingsArray = Array.isArray(portfolio.holdings) ? portfolio.holdings : []
+      const totalInvested = portfolio.invested || 0
+      const totalValue = portfolio.current_value || 0
+      const totalPnL = portfolio.total_pnl || 0
+      const totalPnLPercent = portfolio.total_pnl_percent || 0
+
+      const sectorData = {}
+      holdingsArray.forEach((holding) => {
+        const stockMeta = stockLookup[holding.symbol?.toUpperCase()]
+        const sector = holding.sector || stockMeta?.sector || stockMeta?.category || 'Other'
+        sectorData[sector] = (sectorData[sector] || 0) + Number(holding.current_value || 0)
+      })
+
+      const sectorDistribution = Object.entries(sectorData).map(([name, value]) => ({
+        name,
+        value: parseFloat(value),
+        percent: totalValue > 0 ? ((value / totalValue) * 100).toFixed(1) : '0.0',
+      }))
+
+      setAnalysis({
+        totalInvested,
+        totalValue,
+        totalPnL,
+        totalPnLPercent,
+        sectorDistribution,
+      })
+
+      setLoading(false)
+
+      const recommendations = []
       if (holdingsArray.length > 0) {
         for (const holding of holdingsArray.slice(0, 5)) {
           try {
@@ -42,30 +88,24 @@ const PortfolioAnalysis = ({ portfolio, onRefresh }) => {
       }
       setAiRecommendations(recommendations)
 
-      const totalInvested = portfolio.invested || 0
-      const totalValue = portfolio.current_value || 0
-      const totalPnL = portfolio.total_pnl || 0
-      const totalPnLPercent = portfolio.total_pnl_percent || 0
+      api.getProactiveMentorNudge()
+        .then((nudgeResponse) => setProactiveNudge(nudgeResponse.data?.nudge || null))
+        .catch((nudgeError) => {
+          console.error('Error fetching proactive mentor nudge:', nudgeError)
+          setProactiveNudge(null)
+        })
 
-      const sectorData = {}
-      holdingsArray.forEach((holding) => {
-        const sector = holding.sector || 'Other'
-        sectorData[sector] = (sectorData[sector] || 0) + (holding.current_value || 0)
-      })
-
-      const sectorDistribution = Object.entries(sectorData).map(([name, value]) => ({
-        name,
-        value: parseFloat(value),
-        percent: ((value / totalValue) * 100).toFixed(1),
-      }))
-
-      setAnalysis({
-        totalInvested,
-        totalValue,
-        totalPnL,
-        totalPnLPercent,
-        sectorDistribution,
-      })
+      Promise.all([
+        api.getPortfolioESG(),
+        api.getCopyTradingHub(),
+      ])
+        .then(([esgResponse, copyResponse]) => {
+          setEsgData(esgResponse.data || null)
+          setCopyHub(copyResponse.data || { top_traders: [], feed: [] })
+        })
+        .catch((advancedError) => {
+          console.error('Error fetching advanced analysis blocks:', advancedError)
+        })
     } catch (error) {
       console.error('Error fetching analysis:', error)
     } finally {
@@ -82,6 +122,45 @@ const PortfolioAnalysis = ({ portfolio, onRefresh }) => {
   }
 
   const COLORS = ['#ff6b35', '#f59e0b', '#fb923c', '#d94c4c', '#fdba74', '#f97316']
+
+  const runHindsightReplay = async () => {
+    setHindsightLoading(true)
+    try {
+      const response = await api.getHindsightReplay({ preset: hindsightPreset })
+      setHindsightData(response.data)
+    } catch (error) {
+      console.error('Error running hindsight replay:', error)
+      setHindsightData(null)
+    } finally {
+      setHindsightLoading(false)
+    }
+  }
+
+  const handleFollowToggle = async (userId, isFollowed) => {
+    try {
+      await api.followCopyTrader({ user_id: userId, follow: !isFollowed })
+      const refreshed = await api.getCopyTradingHub()
+      setCopyHub(refreshed.data || { top_traders: [], feed: [] })
+    } catch (error) {
+      console.error('Error toggling follow:', error)
+    }
+  }
+
+  const handlePostRationale = async () => {
+    if (!rationaleSymbol || !rationaleDraft) return
+    try {
+      await api.postTradeRationale({
+        symbol: rationaleSymbol.toUpperCase(),
+        action: rationaleAction,
+        rationale: rationaleDraft,
+      })
+      setRationaleDraft('')
+      const refreshed = await api.getCopyTradingHub()
+      setCopyHub(refreshed.data || { top_traders: [], feed: [] })
+    } catch (error) {
+      console.error('Error posting rationale:', error)
+    }
+  }
 
   if (loading) {
     return (
@@ -330,6 +409,38 @@ const PortfolioAnalysis = ({ portfolio, onRefresh }) => {
           </div>
         </div>
       </div>
+
+      {proactiveNudge?.enabled && (
+        <div className="bg-retro-surface/80 rounded-xl shadow-card border border-brand-2/20 p-6">
+          <div className="flex items-center gap-3 mb-3">
+            <div className="w-11 h-11 rounded-xl bg-brand-2/10 flex items-center justify-center border border-brand-2/20">
+              <Sparkles className="w-5 h-5 text-brand-2" />
+            </div>
+            <div>
+              <h3 className="text-lg font-bold text-text-main">Proactive AI Mentor</h3>
+              <p className="text-xs text-text-muted">Live diversification coaching</p>
+            </div>
+          </div>
+
+          <p className="text-sm text-text-main mb-2">{proactiveNudge.message}</p>
+          <p className="text-xs text-text-muted mb-4">{proactiveNudge.risk_note}</p>
+
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+            <div className="rounded-lg border border-brand-1/10 bg-retro-surface p-3">
+              <p className="text-xs text-text-muted">Top Sector</p>
+              <p className="text-sm font-bold text-text-main">{proactiveNudge.top_sector || 'N/A'}</p>
+            </div>
+            <div className="rounded-lg border border-brand-1/10 bg-retro-surface p-3">
+              <p className="text-xs text-text-muted">Top Weight</p>
+              <p className="text-sm font-bold text-text-main">{proactiveNudge.top_sector_weight_percent ?? 0}%</p>
+            </div>
+            <div className="rounded-lg border border-brand-1/10 bg-retro-surface p-3">
+              <p className="text-xs text-text-muted">Diversification</p>
+              <p className="text-sm font-bold text-text-main">{proactiveNudge.diversification_score ?? 0}/100</p>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

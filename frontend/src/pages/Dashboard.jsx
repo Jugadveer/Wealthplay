@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
+import { useGlobalData } from '../contexts/GlobalDataContext'
 import { useAchievements } from '../contexts/AchievementContext'
 import api from '../utils/api'
 import {
@@ -17,11 +18,18 @@ import {
   CheckCircle2,
   Sparkles,
   Trophy,
+  History,
 } from 'lucide-react'
 import MarketView from '../components/MarketView'
 
 const Dashboard = () => {
   const { user } = useAuth()
+  const {
+    portfolio: cachedPortfolio,
+    achievements: cachedAchievements,
+    refreshPortfolio,
+    refreshAchievements,
+  } = useGlobalData()
   const { checkAchievements } = useAchievements()
   const [profile, setProfile] = useState(null)
   const [portfolioPL, setPortfolioPL] = useState(0)
@@ -30,25 +38,39 @@ const Dashboard = () => {
   const [portfolioValue, setPortfolioValue] = useState(50000)
   const [insight, setInsight] = useState('')
   const [challengeStreak, setChallengeStreak] = useState(0)
-  const [loading, setLoading] = useState(true)
-
   useEffect(() => {
     fetchProfile()
-    fetchPortfolioPL()
-    generateInsight()
+    fetchPortfolioPL(cachedPortfolio)
+    generateInsight(cachedPortfolio, profile || user)
     
     checkAchievements()
+    refreshAchievements(false)
+    refreshPortfolio(false)
     
   }, [])
 
   useEffect(() => {
+    if (!cachedPortfolio) return
+    fetchPortfolioPL(cachedPortfolio)
+    generateInsight(cachedPortfolio, profile || user)
+  }, [cachedPortfolio])
+
+  useEffect(() => {
     const handlePortfolioUpdated = () => {
-      fetchPortfolioPL()
-      generateInsight()
+      fetchPortfolioPL(cachedPortfolio)
+      generateInsight(cachedPortfolio, profile || user)
+    }
+
+    const handleAchievementUpdated = () => {
+      refreshAchievements(true)
     }
 
     window.addEventListener('portfolio-updated', handlePortfolioUpdated)
-    return () => window.removeEventListener('portfolio-updated', handlePortfolioUpdated)
+    window.addEventListener('achievement-updated', handleAchievementUpdated)
+    return () => {
+      window.removeEventListener('portfolio-updated', handlePortfolioUpdated)
+      window.removeEventListener('achievement-updated', handleAchievementUpdated)
+    }
   }, [])
 
   const fetchProfile = async () => {
@@ -57,12 +79,18 @@ const Dashboard = () => {
       setProfile(response.data)
     } catch (error) {
       console.error('Error fetching profile:', error)
-    } finally {
-      setLoading(false)
     }
   }
 
-  const fetchPortfolioPL = async () => {
+  const fetchPortfolioPL = async (portfolioData = cachedPortfolio) => {
+    if (portfolioData) {
+      setPortfolioPL(portfolioData.total_pnl || 0)
+      setPortfolioPLPercent(portfolioData.total_pnl_percent || 0)
+      setPortfolioBalance(portfolioData.balance || 50000)
+      setPortfolioValue(portfolioData.total_value || 50000)
+      return
+    }
+
     try {
       const response = await api.getPortfolio()
       if (response.data) {
@@ -76,17 +104,11 @@ const Dashboard = () => {
     }
   }
 
-  const generateInsight = async () => {
+  const generateInsight = async (portfolioData = cachedPortfolio, profileDataInput = profile || user) => {
     try {
-      
-      const [profileRes, portfolioRes, challengeRes] = await Promise.all([
-        api.getProfile().catch(() => ({ data: null })),
-        api.getPortfolio().catch(() => ({ data: null })),
-        api.getUserChallengeStats().catch(() => ({ data: null }))
-      ])
+      const challengeRes = await api.getUserChallengeStats().catch(() => ({ data: null }))
 
-      const profileData = profileRes?.data
-      const portfolioData = portfolioRes?.data
+      const profileData = profileDataInput
       const challengeData = challengeRes?.data
       setChallengeStreak(challengeData?.current_streak ?? profileData?.streak ?? 0)
 
@@ -117,13 +139,7 @@ const Dashboard = () => {
     }
   }
 
-  if (loading || !profile) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-1"></div>
-      </div>
-    )
-  }
+  const profileData = profile || user || { level: 'beginner', xp: 0 }
 
   
   const levelMap = {
@@ -131,8 +147,9 @@ const Dashboard = () => {
     intermediate: { current: 750, xpNeeded: 1200, next: 'Advanced' },
     advanced: { current: 1200, xpNeeded: 2000, next: 'Expert' },
   }
-  const levelInfo = levelMap[profile.level] || levelMap.beginner
-  const currentXP = profile.xp || 0
+  const levelKey = typeof profileData.level === 'string' ? profileData.level.toLowerCase() : 'beginner'
+  const levelInfo = levelMap[levelKey] || levelMap.beginner
+  const currentXP = profileData.xp || 0
   const xpInLevel = Math.max(0, currentXP - levelInfo.current)
   const xpForLevel = levelInfo.xpNeeded - levelInfo.current
   const xpPercent = xpForLevel > 0 ? Math.min(100, (xpInLevel / xpForLevel) * 100) : 0
@@ -142,56 +159,21 @@ const Dashboard = () => {
   const levelRingOffset = levelRingCircumference - (xpPercent / 100) * levelRingCircumference
 
   
-  const RecentAchievements = () => {
-    const [recentAchievements, setRecentAchievements] = useState([])
-    const { user } = useAuth() 
+  const RecentAchievements = ({ achievements = [] }) => {
+    const recentAchievements = (achievements || [])
+      .filter((a) => {
+        if (a.unlocked !== true) return false
+        if (!a.unlocked_at || typeof a.unlocked_at !== 'string' || a.unlocked_at.length === 0) return false
 
-    useEffect(() => {
-      
-      setRecentAchievements([])
-      
-      const fetchRecent = async () => {
-        if (!user) {
-          setRecentAchievements([])
-          return
-        }
-        
-        try {
-          const response = await api.getAchievements()
-          if (response.data && response.data.achievements) {
-            
-            
-            
-            const unlocked = response.data.achievements
-              .filter(a => {
-                
-                
-                
-                
-                if (a.unlocked !== true) return false
-                if (!a.unlocked_at || typeof a.unlocked_at !== 'string' || a.unlocked_at.length === 0) return false
-                
-                const date = new Date(a.unlocked_at)
-                if (isNaN(date.getTime())) return false
-                return true
-              })
-              .sort((a, b) => {
-                if (!a.unlocked_at) return 1
-                if (!b.unlocked_at) return -1
-                return new Date(b.unlocked_at) - new Date(a.unlocked_at)
-              })
-              .slice(0, 3)
-            setRecentAchievements(unlocked)
-          } else {
-            setRecentAchievements([])
-          }
-        } catch (error) {
-          console.error('Error fetching recent achievements:', error)
-          setRecentAchievements([]) 
-        }
-      }
-      fetchRecent()
-    }, [user]) 
+        const date = new Date(a.unlocked_at)
+        return !isNaN(date.getTime())
+      })
+      .sort((a, b) => {
+        if (!a.unlocked_at) return 1
+        if (!b.unlocked_at) return -1
+        return new Date(b.unlocked_at) - new Date(a.unlocked_at)
+      })
+      .slice(0, 3)
 
     const iconMap = {
       sparkles: Sparkles,
@@ -298,7 +280,7 @@ const Dashboard = () => {
               <div>
                 <p className="text-sm text-text-muted mb-1">Level</p>
                 <p className="text-2xl font-bold text-text-main capitalize">
-                  {profile.level || 'Beginner'}
+                  {profileData.level || 'Beginner'}
                 </p>
               </div>
             </div>
@@ -382,6 +364,8 @@ const Dashboard = () => {
           </Link>
 
           {}
+
+          {}
           <Link
             to="/portfolio"
             className="group bg-retro-surface rounded-xl p-6 shadow-card hover:shadow-card-hover hover:-translate-y-2 transition-all duration-360 border border-brand-1/10 hover:border-brand-1"
@@ -432,7 +416,7 @@ const Dashboard = () => {
               View All →
             </Link>
           </div>
-          <RecentAchievements />
+          <RecentAchievements achievements={cachedAchievements} />
         </div>
 
         {}

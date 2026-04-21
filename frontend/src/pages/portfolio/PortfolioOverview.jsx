@@ -44,8 +44,17 @@ const PortfolioOverview = ({ portfolio, onRefresh }) => {
     return `${value >= 0 ? '+' : ''}${value?.toFixed(2)}%`
   }
 
-  const hasMeaningfulHistory = history.length >= 2
-  const chartPoints = history
+  const normalizedHistory = history.reduce((acc, entry) => {
+    const key = entry.timestamp ? new Date(entry.timestamp).toISOString().slice(0, 10) : entry.date
+    if (!key) return acc
+    acc[key] = entry
+    return acc
+  }, {})
+
+  const orderedHistory = Object.values(normalizedHistory).sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp))
+
+  const hasMeaningfulHistory = orderedHistory.length >= 2
+  const chartPoints = orderedHistory
     .map((entry) => ({
       ...entry,
       invested_value: Number(entry.invested_value ?? 0),

@@ -107,7 +107,7 @@ class UserProgress(models.Model):
     started_at = models.DateTimeField(null=True, blank=True)
     completed_at = models.DateTimeField(null=True, blank=True)
     last_accessed = models.DateTimeField(auto_now=True)
-    flashcards_flipped = models.IntegerField(default=0)
+    flashcards_flipped = models.JSONField(default=list, blank=True)
     mcqs_progress = models.JSONField(default=dict, blank=True)
     
     class Meta:
@@ -140,6 +140,48 @@ class DemoPortfolio(models.Model):
     
     def __str__(self):
         return f"{self.user.username}'s Portfolio - ₹{self.balance}"
+
+
+class PortfolioFollow(models.Model):
+    """User follows another user's portfolio activity for learning."""
+    follower = models.ForeignKey(User, on_delete=models.CASCADE, related_name='portfolio_following')
+    followed_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='portfolio_followers')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ['follower', 'followed_user']
+        indexes = [
+            models.Index(fields=['follower', 'followed_user']),
+            models.Index(fields=['followed_user', 'created_at']),
+        ]
+
+    def __str__(self):
+        return f"{self.follower.username} follows {self.followed_user.username}"
+
+
+class TradeRationalePost(models.Model):
+    """Short social post explaining trade intent or reasoning."""
+    ACTION_CHOICES = [
+        ('BUY', 'Buy'),
+        ('SELL', 'Sell'),
+        ('HOLD', 'Hold'),
+    ]
+
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='trade_rationale_posts')
+    symbol = models.CharField(max_length=20)
+    action = models.CharField(max_length=4, choices=ACTION_CHOICES)
+    rationale = models.CharField(max_length=140)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
+        indexes = [
+            models.Index(fields=['author', 'created_at']),
+            models.Index(fields=['symbol', 'created_at']),
+        ]
+
+    def __str__(self):
+        return f"{self.author.username} {self.action} {self.symbol}: {self.rationale[:40]}"
 
 
 class ChallengeLeaderboard(models.Model):
@@ -398,3 +440,61 @@ class StockPredictionQuestion(models.Model):
     
     def __str__(self):
         return f"{self.stock_symbol} - {self.question[:50]}..."
+
+
+class HistoricalCrisis(models.Model):
+    """Historical financial crises for the Time Capsule feature"""
+    name = models.CharField(max_length=200)
+    slug = models.SlugField(unique=True)
+    description = models.TextField()
+    start_date = models.DateField()
+    end_date = models.DateField()
+    initial_balance = models.DecimalField(max_digits=12, decimal_places=2, default=50000.00)
+    difficulty = models.CharField(max_length=20, default='Hard')  # Easy, Medium, Hard
+    icon = models.CharField(max_length=50, default='flame')  # Lucide icon name
+    
+    # Crisis specifics
+    narrative_intro = models.TextField(blank=True)
+    recovery_period_months = models.IntegerField(default=12)
+    
+    def __str__(self):
+        return self.name
+
+
+class HistoricalNews(models.Model):
+    """News events mapped to specific dates within a crisis"""
+    crisis = models.ForeignKey(HistoricalCrisis, on_delete=models.CASCADE, related_name='news')
+    relative_day = models.IntegerField(default=0)  # Days from start_date
+    headline = models.CharField(max_length=300)
+    impact_description = models.TextField()
+    sentiment = models.CharField(max_length=20)  # bearish, bullish, panic
+    
+    class Meta:
+        ordering = ['relative_day']
+        verbose_name_plural = "Historical News"
+
+    def __str__(self):
+        return f"{self.crisis.name} - Day {self.relative_day}: {self.headline[:30]}"
+
+
+class TimeCapsuleSession(models.Model):
+    """Tracking a user's progress in a Time Capsule simulation"""
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='time_capsule_sessions')
+    crisis = models.ForeignKey(HistoricalCrisis, on_delete=models.CASCADE)
+    
+    # State tracking
+    current_sim_day = models.IntegerField(default=0)  # Days from crisis start
+    portfolio_balance = models.DecimalField(max_digits=12, decimal_places=2)
+    holdings = models.JSONField(default=dict)  # {symbol: {quantity, avg_price}}
+    
+    # Performance tracking
+    equity_curve = models.JSONField(default=list)  # [{day, total_value}]
+    is_completed = models.BooleanField(default=False)
+    final_score = models.IntegerField(default=0)
+    survival_report = models.JSONField(null=True, blank=True)
+    
+    created_at = models.DateTimeField(auto_now_add=True)
+    last_played = models.DateTimeField(auto_now=True)
+    
+    def __str__(self):
+        return f"{self.user.username} in {self.crisis.name}"

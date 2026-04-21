@@ -23,6 +23,7 @@ import Achievements from './pages/Achievements'
 import StockChallenge from './pages/StockChallenge'
 import WealthPlaySimulator from './pages/WealthPlaySimulator'
 
+
 function App() {
   return (
     <ErrorBoundary>
@@ -129,6 +130,7 @@ function App() {
                 </PrivateRoute>
               }
             />
+
             <Route
               path="/wealthplay"
               element={

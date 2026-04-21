@@ -241,7 +241,6 @@ def general_inquiry (request ):
             "type":"error"
             },status =400 )
 
-
         try :
             from mentor_engine .gemini_client import gemini_chat 
 
@@ -254,11 +253,12 @@ def general_inquiry (request ):
             "reply":answer ,
             "type":"llm"
             })
-        except Exception as e :
+        except Exception:
+            fallback_reply ="• I’m offline right now, but I can still help with the basics.\n• Keep questions focused on budgeting, saving, investing, or risk.\n• If you want, I can help you think through the next best money move."
             return JsonResponse ({
-            "reply":f"Sorry, I encountered an error: {str (e )}",
-            "type":"error"
-            },status =500 )
+            "reply":fallback_reply ,
+            "type":"fallback"
+            })
 
     except Exception as e :
         return JsonResponse ({

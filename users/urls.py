@@ -6,10 +6,13 @@ from .views import award_xp
 from .progress_views import flashcard_flip, get_flashcard_progress, get_mcq_progress, get_module_progress, complete_module, mcq_answer
 from .portfolio_views import (
     get_portfolio, get_stocks, get_stock_detail, buy_stock, sell_stock,
-    get_portfolio_history, get_ai_recommendation
+    get_portfolio_history, get_ai_recommendation, get_proactive_mentor_nudge,
+    get_portfolio_esg, get_hindsight_replay, get_copy_trading_hub,
+    follow_copy_trader, post_trade_rationale
 )
 from .challenge_views import get_leaderboard, get_user_challenge_stats, submit_stock_prediction, get_random_stock_question
 from .achievement_views import get_achievements, check_achievements, mark_achievement_notified
+from .simulation_views import list_crises, start_session, get_sim_data
 
 router = DefaultRouter()
 # Note: progress endpoints are handled manually below, not via router
@@ -40,6 +43,12 @@ urlpatterns = [
     path('portfolio/buy/', buy_stock, name='buy_stock'),
     path('portfolio/sell/', sell_stock, name='sell_stock'),
     path('portfolio/ai-recommendation/', get_ai_recommendation, name='get_ai_recommendation'),
+    path('portfolio/proactive-mentor/', get_proactive_mentor_nudge, name='get_proactive_mentor_nudge'),
+    path('portfolio/esg/', get_portfolio_esg, name='get_portfolio_esg'),
+    path('portfolio/hindsight-replay/', get_hindsight_replay, name='get_hindsight_replay'),
+    path('portfolio/copy-trading/', get_copy_trading_hub, name='get_copy_trading_hub'),
+    path('portfolio/copy-trading/follow/', follow_copy_trader, name='follow_copy_trader'),
+    path('portfolio/copy-trading/post/', post_trade_rationale, name='post_trade_rationale'),
     # Challenge endpoints
     path('challenges/leaderboard/', get_leaderboard, name='get_leaderboard'),
     path('challenges/stats/', get_user_challenge_stats, name='get_user_challenge_stats'),
@@ -49,6 +58,10 @@ urlpatterns = [
     path('achievements/', get_achievements, name='get_achievements'),
     path('achievements/check/', check_achievements, name='check_achievements'),
     path('achievements/notify/', mark_achievement_notified, name='mark_achievement_notified'),
+    # Time Capsule endpoints
+    path('time-capsule/crises/', list_crises, name='list_crises'),
+    path('time-capsule/start/<int:crisis_id>/', start_session, name='start_session'),
+    path('time-capsule/sim-data/<int:session_id>/', get_sim_data, name='get_sim_data'),
     # Router URLs (must come last)
     path('', include(router.urls)),
 ]

@@ -35,6 +35,22 @@ const LessonDetail = () => {
   const [mcqProgress, setMcqProgress] = useState({}) 
   const [moduleProgress, setModuleProgress] = useState(null) 
 
+  const flippedCardCount = flippedFlashCards.size
+  const correctMcqCount = Object.values(mcqProgress).filter(m => m?.correct).length
+  const totalActivities = flashCards.length + mcqs.length
+  const completedActivities = flippedCardCount + correctMcqCount
+  const derivedModuleProgressPercent = totalActivities > 0
+    ? Math.min(100, Math.round((completedActivities / totalActivities) * 100))
+    : 0
+  const displayModuleProgress = moduleProgress
+    ? {
+        ...moduleProgress,
+        progress_percent: Math.max(moduleProgress.progress_percent || 0, derivedModuleProgressPercent),
+        flashcards_flipped: Math.max(moduleProgress.flashcards_flipped || 0, flippedCardCount),
+        mcqs_completed: Math.max(moduleProgress.mcqs_completed || 0, correctMcqCount),
+      }
+    : null
+
   useEffect(() => {
     loadModule()
   }, [courseId, moduleId])
@@ -172,45 +188,47 @@ const LessonDetail = () => {
         }
       )
       
+      const newFlippedSet = new Set([...flippedFlashCards, cardId])
+      setFlippedFlashCards(newFlippedSet)
+      
       if (response.data.xp_awarded && response.data.xp_awarded > 0) {
         showToast('+' + response.data.xp_awarded + ' XP earned!', 'success')
-        setFlippedFlashCards(new Set([...flippedFlashCards, cardId]))
-        
-        
-        setModuleProgress(prev => ({
-          ...prev,
-          flashcards_flipped: (prev?.flashcards_flipped || 0) + 1
-        }))
-        
-        
-        await loadModuleProgress(courseId, moduleId)
-        
-        
-        checkModuleCompletion()
       }
-    } catch (error) {
-      console.error('Error recording flashcard flip:', error)
       
-      setFlippedFlashCards(new Set([...flippedFlashCards, cardId]))
-      
+      // Update module progress count
       setModuleProgress(prev => ({
         ...prev,
-        flashcards_flipped: (prev?.flashcards_flipped || 0) + 1
+        flashcards_flipped: newFlippedSet.size,
+        progress_percent: Math.max(prev?.progress_percent || 0, derivedModuleProgressPercent),
       }))
+      
+      // We pass the updated set to check completion to avoid stale state issues
+      checkModuleCompletion(newFlippedSet)
+      
+      // Refresh full progress from server to keep sync
+      await loadModuleProgress(courseId, moduleId)
+    } catch (error) {
+      console.error('Error recording flashcard flip:', error)
+      // Optimistic update even on error to allow UI progress
+      const errorFlippedSet = new Set([...flippedFlashCards, cardId])
+      setFlippedFlashCards(errorFlippedSet)
+      checkModuleCompletion(errorFlippedSet)
     }
   }
 
   
-  const checkModuleCompletion = async () => {
+  const checkModuleCompletion = async (currentFlippedCards = null) => {
+    const cardsToUse = currentFlippedCards || flippedFlashCards
+    
     const allFlashcardsFlipped = flashCards.length > 0 && 
       flashCards.every(card => {
         const cardId = card.id || card.topic || `card-${flashCards.indexOf(card)}`
-        return flippedFlashCards.has(cardId)
+        return cardsToUse.has(cardId)
       })
     
+    // MCQs use local state which might also be a bit stale, but usually better
     const allMcqsAnswered = mcqs.length > 0 && 
       mcqs.every(mcq => mcqProgress[mcq.id]?.answered && mcqProgress[mcq.id]?.correct)
-    
     
     const hasActivities = (flashCards.length > 0 || mcqs.length > 0)
     const allActivitiesComplete = (flashCards.length === 0 || allFlashcardsFlipped) && (mcqs.length === 0 || allMcqsAnswered)
@@ -333,7 +351,8 @@ const LessonDetail = () => {
         const correctMcqsCount = Object.values(updatedMcqProgress).filter(m => m.correct).length
         setModuleProgress(prev => ({
           ...prev,
-          mcqs_completed: correctMcqsCount
+          mcqs_completed: correctMcqsCount,
+          progress_percent: Math.max(prev?.progress_percent || 0, derivedModuleProgressPercent),
         }))
         
         
@@ -407,13 +426,13 @@ const LessonDetail = () => {
                   {moduleProgress.status === 'completed' ? '✓ Module Completed' : 'Module Progress'}
                 </span>
                 <span className="text-sm text-text-muted">
-                  {Math.max(moduleProgress.flashcards_flipped || 0, flippedFlashCards.size)} / {flashCards.length} flashcards • {Math.max(moduleProgress.mcqs_completed || 0, Object.values(mcqProgress).filter(m => m.correct).length)} / {mcqs.length} MCQs
+                      {Math.max(displayModuleProgress.flashcards_flipped || 0, flippedCardCount)} / {flashCards.length} flashcards • {Math.max(displayModuleProgress.mcqs_completed || 0, correctMcqCount)} / {mcqs.length} MCQs
                 </span>
               </div>
               <div className="w-full h-2 bg-brand-1/15 rounded-full overflow-hidden">
                 <div
                   className="h-full bg-brand-1 rounded-full transition-all duration-500"
-                  style={{ width: `${moduleProgress.progress_percent || 0}%` }}
+                      style={{ width: `${displayModuleProgress.progress_percent || 0}%` }}
                 ></div>
               </div>
               {moduleProgress.status === 'completed' && (
