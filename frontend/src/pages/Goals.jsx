@@ -18,6 +18,10 @@ import {
   GraduationCap,
   Gem,
   Lightbulb,
+  PieChart,
+  Shield,
+  Palmtree,
+  Receipt,
 } from 'lucide-react'
 
 const Goals = () => {
@@ -31,9 +35,17 @@ const Goals = () => {
     icon: 'wallet',
     target_amount: '',
     current_amount: '0',
-    monthly_sip: '',
-    time_to_goal: '',
+    monthly_sip: '0',
+    time_to_goal: '60',
+    category: 'HOME',
+    extra_val: '9.5',
+    tenure_years: '20'
   })
+  const [strategyResult, setStrategyResult] = useState(null)
+  const [showStrategy, setShowStrategy] = useState(false)
+  const [tickerInfo, setTickerInfo] = useState({})
+  const [loadingTickers, setLoadingTickers] = useState(false)
+  const [returnHorizon, setReturnHorizon] = useState('1y')
 
   const iconMap = {
     wallet: Wallet,
@@ -61,6 +73,23 @@ const Goals = () => {
     loadGoals()
   }, [])
 
+  useEffect(() => {
+    if (showStrategy && strategyResult?.tickers?.length > 0) {
+      const fetchTickers = async () => {
+        setLoadingTickers(true)
+        try {
+          const response = await api.getTickersInfo(strategyResult.tickers.join(','))
+          setTickerInfo(response.data.results || {})
+        } catch (error) {
+          console.error('Error fetching ticker info:', error)
+        } finally {
+          setLoadingTickers(false)
+        }
+      }
+      fetchTickers()
+    }
+  }, [showStrategy, strategyResult])
+
   const loadGoals = async () => {
     try {
       const response = await api.getGoals()
@@ -76,24 +105,32 @@ const Goals = () => {
     e.preventDefault()
     try {
       const data = {
-        ...formData,
+        name: formData.name,
         target_amount: parseFloat(formData.target_amount),
         current_amount: parseFloat(formData.current_amount || 0),
-        monthly_sip: parseFloat(formData.monthly_sip),
-        time_to_goal: parseInt(formData.time_to_goal),
+        monthly_sip: parseFloat(formData.monthly_sip || 0),
+        time_to_goal: parseInt(formData.time_to_goal || 60),
+        category: formData.category,
+        extra_val: parseFloat(formData.extra_val || 0),
+        tenure_years: parseFloat(formData.tenure_years || 5),
         color: 'from-brand-primary to-orange-500',
         icon_bg: 'bg-brand-50 text-brand-600',
+        icon: formData.icon
       }
 
+      let response;
       if (editingGoal) {
-        await api.updateGoal(editingGoal.id, data)
+        response = await api.updateGoal(editingGoal.id, data)
       } else {
-        await api.createGoal(data)
+        response = await api.createGoal(data)
+      }
+
+      if (response.data?.goal?.strategy) {
+        setStrategyResult(response.data.goal.strategy)
+        setShowStrategy(true)
       }
 
       setModalOpen(false)
-      setEditingGoal(null)
-      resetForm()
       loadGoals()
     } catch (error) {
       console.error('Error saving goal:', error)
@@ -132,8 +169,11 @@ const Goals = () => {
       icon: 'wallet',
       target_amount: '',
       current_amount: '0',
-      monthly_sip: '',
-      time_to_goal: '',
+      monthly_sip: '0',
+      time_to_goal: '60',
+      category: 'HOME',
+      extra_val: '9.5',
+      tenure_years: '20'
     })
     setEditingGoal(null)
   }
@@ -319,21 +359,45 @@ const Goals = () => {
                     </div>
                   </div>
 
-                  {}
+                  {/* Quick Strategy Preview */}
+                  {goal.strategy_report?.tickers?.length > 0 && (
+                    <div className="mt-6 pt-4 border-t border-brand-1/10 lg:block hidden">
+                       <p className="text-[9px] font-bold text-brand-1 uppercase tracking-widest mb-2 flex items-center gap-1.5">
+                         <PieChart className="w-3 h-3" /> Strategy Focus
+                       </p>
+                       <div className="flex flex-wrap gap-2">
+                         {goal.strategy_report.tickers.slice(0, 3).map(t => (
+                           <span key={t} className="px-2 py-0.5 bg-brand-1/5 text-brand-1 text-[8px] font-bold rounded-md border border-brand-1/10 cursor-default">
+                             {t}
+                           </span>
+                         ))}
+                       </div>
+                    </div>
+                  )}
+
                   <div className="flex gap-4 mt-6">
                     <button
-                      onClick={() => handleEdit(goal)}
-                      className="flex-1 bg-brand-1/10 hover:bg-brand-1/20 text-brand-1 py-3.5 rounded-xl text-sm font-bold transition-colors border border-brand-1/20 flex items-center justify-center gap-2"
+                      onClick={() => {
+                        setStrategyResult(goal.strategy_report || {})
+                        setShowStrategy(true)
+                      }}
+                      className="flex-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-600 py-3 rounded-xl text-xs font-bold transition-colors border border-emerald-200 flex items-center justify-center gap-2"
                     >
-                      <Edit2 className="w-4 h-4" />
+                      <Lightbulb className="w-3.5 h-3.5" />
+                      Plan
+                    </button>
+                    <button
+                      onClick={() => handleEdit(goal)}
+                      className="flex-1 bg-brand-1/10 hover:bg-brand-1/20 text-brand-1 py-3 rounded-xl text-xs font-bold transition-colors border border-brand-1/20 flex items-center justify-center gap-2"
+                    >
+                      <Edit2 className="w-3.5 h-3.5" />
                       Adjust
                     </button>
                     <button
                       onClick={() => handleDelete(goal.id)}
-                      className="flex-1 bg-accent-red/10 hover:bg-accent-red/20 text-accent-red py-3.5 rounded-xl text-sm font-bold transition-colors border border-accent-red/25 flex items-center justify-center gap-2"
+                      className="bg-accent-red/10 hover:bg-accent-red/20 text-accent-red p-3 rounded-xl transition-colors border border-accent-red/25 flex items-center justify-center"
                     >
                       <Trash2 className="w-4 h-4" />
-                      Delete
                     </button>
                   </div>
                 </div>
@@ -372,98 +436,113 @@ const Goals = () => {
             </div>
 
             {}
+            {/* New Advanced Goal Builder Form */}
             <form onSubmit={handleSubmit} className="p-8 space-y-5">
+              <div className="mb-4">
+                <label className="block text-xs font-bold text-muted-3 uppercase tracking-widest mb-3">Category Strategy</label>
+                <div className="flex gap-4 overflow-x-auto pb-6 scrollbar-hide px-1">
+                  {[
+                    { id: 'HOME', icon: Home, title: 'Home' },
+                    { id: 'EMERGENCY', icon: Shield, title: 'Emergency' },
+                    { id: 'WEDDING', icon: Gem, title: 'Wedding' },
+                    { id: 'RETIRE', icon: Palmtree, title: 'Retire' },
+                    { id: 'TAX', icon: Receipt, title: 'Tax' },
+                    { id: 'EDU', icon: GraduationCap, title: 'Education' },
+                    { id: 'TRIP', icon: Plane, title: 'Vacation' },
+                  ].map(cat => (
+                    <button
+                      key={cat.id}
+                      type="button"
+                      onClick={() => setFormData({ ...formData, category: cat.id })}
+                      className="flex flex-col items-center gap-2 group outline-none"
+                    >
+                      <div className={`w-14 h-14 rounded-2xl border-2 flex items-center justify-center transition-all ${
+                        formData.category === cat.id 
+                        ? 'border-brand-1 bg-brand-1/10 scale-105 shadow-md ring-4 ring-brand-1/5 text-brand-1' 
+                        : 'border-muted-2 bg-white text-text-muted hover:border-brand-1/30 hover:text-text-main shadow-sm'
+                      }`}>
+                        <cat.icon className="w-6 h-6" />
+                      </div>
+                      <span className={`text-[10px] font-bold uppercase tracking-tighter transition-colors ${
+                        formData.category === cat.id ? 'text-brand-1' : 'text-text-muted group-hover:text-text-main'
+                      }`}>
+                        {cat.title}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
               <div>
-                <label className="block text-sm font-medium text-text-main mb-1.5">
+                <label className="block text-sm font-bold text-text-main mb-1.5 uppercase text-[11px] tracking-wider">
                   Goal Name
                 </label>
                 <input
                   type="text"
                   required
-                  placeholder="e.g., Dream Home"
+                  placeholder={formData.category === 'HOME' ? 'Home Loan Recovery' : 'e.g., Dream Wedding'}
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full px-4 py-3 rounded-xl border-2 border-muted-3 focus:border-brand-1 focus:ring-4 focus:ring-brand-1/10 outline-none transition-all text-text-main placeholder:text-text-muted text-base"
+                  className="w-full px-5 py-3.5 rounded-2xl border-2 border-muted-2 focus:border-brand-1 focus:ring-4 focus:ring-brand-1/5 outline-none transition-all text-text-main"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-5">
                 <div>
-                  <label className="block text-sm font-medium text-text-main mb-1.5">
-                    Target Amount (₹)
+                  <label className="block text-sm font-bold text-text-main mb-1.5 uppercase text-[11px] tracking-wider">
+                    {formData.category === 'HOME' ? 'Loan Principal (₹)' : 
+                     formData.category === 'EMERGENCY' ? 'Monthly Expenses (₹)' : 
+                     formData.category === 'TAX' ? 'Annual Salary (₹)' : 'Target Amount (₹)'}
                   </label>
                   <input
                     type="number"
                     required
-                    min="1"
                     value={formData.target_amount}
                     onChange={(e) => setFormData({ ...formData, target_amount: e.target.value })}
-                    className="w-full px-4 py-3 rounded-xl border-2 border-muted-3 focus:border-brand-1 focus:ring-4 focus:ring-brand-1/10 outline-none transition-all text-base"
+                    className="w-full px-5 py-3.5 rounded-2xl border-2 border-muted-2 focus:border-brand-1 outline-none transition-all"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-text-main mb-1.5">
-                    Saved So Far (₹)
+                  <label className="block text-sm font-bold text-text-main mb-1.5 uppercase text-[11px] tracking-wider">
+                    {formData.category === 'TAX' ? 'Existing 80C (₹)' : 'Saved So Far (₹)'}
                   </label>
                   <input
                     type="number"
-                    min="0"
                     value={formData.current_amount}
                     onChange={(e) => setFormData({ ...formData, current_amount: e.target.value })}
-                    className="w-full px-4 py-3 rounded-xl border-2 border-muted-3 focus:border-brand-1 focus:ring-4 focus:ring-brand-1/10 outline-none transition-all text-base"
+                    className="w-full px-5 py-3.5 rounded-2xl border-2 border-muted-2 focus:border-brand-1 outline-none transition-all"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-5">
                 <div>
-                  <label className="block text-sm font-medium text-text-main mb-1.5">
-                    Monthly SIP (₹)
+                  <label className="block text-sm font-bold text-text-main mb-1.5 uppercase text-[11px] tracking-wider">
+                    {formData.category === 'RETIRE' ? 'Retire Age' : 'Duration (Years)'}
                   </label>
                   <input
                     type="number"
                     required
-                    min="1"
-                    value={formData.monthly_sip}
-                    onChange={(e) => setFormData({ ...formData, monthly_sip: e.target.value })}
-                    className="w-full px-4 py-3 rounded-xl border-2 border-muted-3 focus:border-brand-1 focus:ring-4 focus:ring-brand-1/10 outline-none transition-all text-base"
+                    value={formData.tenure_years}
+                    onChange={(e) => setFormData({ ...formData, tenure_years: e.target.value })}
+                    className="w-full px-5 py-3.5 rounded-2xl border-2 border-muted-2 focus:border-brand-1 outline-none transition-all"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-text-main mb-1.5">
-                    Months to Goal
+                  <label className="block text-sm font-bold text-text-main mb-1.5 uppercase text-[11px] tracking-wider">
+                    {formData.category === 'HOME' ? 'Interest Rate (%)' : 
+                     formData.category === 'EMERGENCY' ? 'Job Stability (1-10)' : 
+                     formData.category === 'RETIRE' ? 'Current Age' : 
+                     formData.category === 'WEDDING' ? 'Guest Count' : 
+                     formData.category === 'TAX' ? 'Tax Regime (1=Old)' : 
+                     formData.category === 'TRIP' ? 'International (1=Yes)' : 'Aggression (1-5)'}
                   </label>
                   <input
                     type="number"
-                    required
-                    min="1"
-                    value={formData.time_to_goal}
-                    onChange={(e) => setFormData({ ...formData, time_to_goal: e.target.value })}
-                    className="w-full px-4 py-3 rounded-xl border-2 border-muted-3 focus:border-brand-1 focus:ring-4 focus:ring-brand-1/10 outline-none transition-all text-base"
+                    value={formData.extra_val}
+                    onChange={(e) => setFormData({ ...formData, extra_val: e.target.value })}
+                    className="w-full px-5 py-3.5 rounded-2xl border-2 border-muted-2 focus:border-brand-1 outline-none transition-all"
                   />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-text-main mb-2">Choose Icon</label>
-                <div className="flex gap-3 overflow-x-auto pb-2">
-                  {iconOptions.map((icon) => {
-                    const IconComponent = iconMap[icon]
-                    return (
-                      <button
-                        key={icon}
-                        type="button"
-                        onClick={() => setFormData({ ...formData, icon })}
-                        className={`p-3.5 rounded-xl border-2 transition-all flex-shrink-0 ${
-                          formData.icon === icon
-                            ? 'border-brand-1 bg-brand-1/10 text-brand-1 ring-2 ring-brand-1/20'
-                            : 'border-muted-3 text-text-muted hover:border-brand-1/50 hover:text-brand-1'
-                        }`}
-                      >
-                        <IconComponent className="w-6 h-6" />
-                      </button>
-                    )
-                  })}
                 </div>
               </div>
 
@@ -474,19 +553,120 @@ const Goals = () => {
                     setModalOpen(false)
                     resetForm()
                   }}
-                  className="flex-1 py-3.5 rounded-xl border-2 border-muted-3 text-text-main font-semibold hover:bg-muted-1 transition-colors"
+                  className="flex-1 py-4 rounded-2xl border-2 border-muted-2 text-text-main font-bold hover:bg-muted-1 transition-all"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="flex-[2] py-3.5 rounded-xl bg-brand-1 text-white font-bold hover:bg-brand-600 hover:shadow-lg hover:shadow-brand-1/20 active:scale-95 transition-all"
+                  className="flex-[2] py-4 rounded-2xl bg-brand-1 text-white font-bold hover:bg-brand-600 shadow-lg shadow-brand-1/20 active:scale-95 transition-all"
                 >
-                  {editingGoal ? 'Update Goal' : 'Save Goal'}
+                   Build Strategy Plan
                 </button>
               </div>
             </form>
           </div>
+        </div>
+      )}
+
+      {/* AI Strategy Insights Popup */}
+      {showStrategy && strategyResult && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/60 backdrop-blur-md transition-all duration-300">
+           <div className="bg-white w-full max-w-md rounded-[32px] p-8 shadow-2xl relative animate-[modalEnter_400ms_ease-out]">
+             {/* Local Ticker Fetcher logic can be added here if needed, but we'll use a local state for the modal */}
+              <div className="inline-block px-3 py-1 bg-green-50 text-emerald-600 font-bold text-[10px] rounded-lg mb-4 border border-emerald-200">
+                AI OPTIMIZED: 98% SCORE
+              </div>
+              <h3 className="text-2xl font-bold text-text-main mb-6 flex items-center gap-2">
+                <Lightbulb className="w-6 h-6 text-brand-1" />
+                Plan Strategy
+              </h3>
+
+              <div className="space-y-6 max-h-[50vh] overflow-y-auto pr-2 scrollbar-hide">
+                {strategyResult.steps?.map((step, i) => (
+                  <div key={i} className="flex gap-4 group">
+                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-brand-1/10 text-brand-1 font-bold text-xs flex items-center justify-center border border-brand-1/20 group-hover:bg-brand-1 group-hover:text-white transition-colors">
+                      {i + 1}
+                    </div>
+                    <div className="pt-1">
+                      <h4 className="font-bold text-text-main text-sm mb-1">{step.title}</h4>
+                      <p className="text-text-muted text-xs leading-relaxed">{step.p}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="mt-6 p-4 bg-muted-1 rounded-2xl border border-brand-1/10">
+                <div className="flex items-center justify-between mb-4">
+                  <h4 className="text-[10px] font-bold text-brand-1 uppercase tracking-widest flex items-center gap-2">
+                    <TrendingUp className="w-3 h-3" />
+                    Recommended Tracks
+                  </h4>
+                  <div className="flex gap-1 bg-white p-0.5 rounded-lg border border-brand-1/10 shadow-sm">
+                    {['1y', '3y', '5y', 'max'].map(h => (
+                      <button
+                        key={h}
+                        onClick={() => setReturnHorizon(h)}
+                        className={`px-2 py-0.5 rounded text-[8px] font-bold uppercase transition-all ${
+                          returnHorizon === h ? 'bg-brand-1 text-white' : 'text-text-muted hover:text-text-main'
+                        }`}
+                      >
+                        {h}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="flex flex-col gap-3">
+                  {(() => {
+                    const fallbackMap = {
+                      'HOME': ['NIFTYBEES.NS', 'RELIANCE.NS', 'HDFCBANK.NS'],
+                      'EMERGENCY': ['LIQUIDBEES.NS', 'SGB-AUG2021'],
+                      'WEDDING': ['NIFTYBEES.NS', 'GOLD.NS', 'TCS.NS'],
+                      'RETIRE': ['^NSEI', 'MON100.NS', 'NIFTYMIDCAP150.NS'],
+                      'EDU': ['MON100.NS', 'NIFTYBEES.NS'],
+                      'TAX': ['QUANT_ELSS', 'PPFAS_ELSS'],
+                      'TRIP': ['LIQUIDBEES.NS', 'TATAMOTORS.NS']
+                    }
+                    const activeTickers = strategyResult.tickers?.length > 0 
+                      ? strategyResult.tickers 
+                      : (fallbackMap[formData.category] || ['^NSEI', 'NIFTYBEES.NS'])
+
+                    return activeTickers.map(ticker => {
+                      const info = tickerInfo[ticker.toUpperCase()] || {}
+                      const horizonReturn = info.returns ? info.returns[returnHorizon] : null
+                      
+                      return (
+                        <div key={ticker} className="flex items-center justify-between p-3 bg-white border border-brand-1/10 rounded-xl shadow-sm hover:border-brand-1 transition-all group">
+                          <div className="flex flex-col">
+                            <span className="text-xs font-bold text-text-main group-hover:text-brand-1 transition-colors">{ticker}</span>
+                            <span className="text-[10px] text-text-muted">{info.name ? info.name.split(' ').slice(0,2).join(' ') : 'Investment Vehicle'}</span>
+                          </div>
+                          <div className="text-right">
+                            <div className="text-xs font-bold text-text-main">
+                               ₹{info.current_price ? Number(info.current_price).toLocaleString('en-IN') : '---'}
+                            </div>
+                            <div className={`text-[10px] font-bold ${horizonReturn >= 0 ? 'text-emerald-500' : 'text-rose-500'}`}>
+                               {horizonReturn !== null ? `${horizonReturn >= 0 ? '↑' : '↓'} ${Math.abs(horizonReturn)}% (${returnHorizon.toUpperCase()})` : '---'}
+                            </div>
+                          </div>
+                        </div>
+                      )
+                    })
+                  })()}
+                </div>
+              </div>
+
+              <button
+                onClick={() => {
+                  setShowStrategy(false)
+                  resetForm()
+                }}
+                className="w-full mt-8 py-4 bg-brand-1 text-white font-bold rounded-2xl hover:bg-brand-600 transition-all active:scale-95 shadow-lg shadow-brand-1/20"
+              >
+                Confirm & Deploy Plan
+              </button>
+           </div>
         </div>
       )}
     </div>

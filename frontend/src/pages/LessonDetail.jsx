@@ -1,8 +1,9 @@
 import { useEffect, useState, useRef } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate, Link } from 'react-router-dom'
 import api, { axios } from '../utils/api'
 import {
   ArrowLeft,
+  ArrowRight,
   Info,
   FileText,
   Lightbulb,
@@ -14,6 +15,7 @@ import {
   ChevronUp,
   Star,
   Play,
+  Sparkles,
 } from 'lucide-react'
 
 const LessonDetail = () => {
@@ -405,98 +407,155 @@ const LessonDetail = () => {
   }
 
   return (
-    <div className="min-h-screen bg-retro-bg text-text-main">
-      {}
-      <header className="bg-retro-surface border-b border-brand-1/20 shadow-lg px-6 py-8 lg:px-10 mt-20">
-        <div className="max-w-container mx-auto">
-          <button
-            onClick={() => navigate('/course')}
-            className="mb-4 bg-brand-1/20 hover:bg-brand-1/30 text-text-main px-5 py-2.5 rounded-full text-sm font-semibold shadow-md hover:scale-105 active:scale-95 transition-all flex items-center gap-2"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Back
-          </button>
-          <h1 className="text-4xl font-bold mb-2">{module.title}</h1>
-          <p className="text-lg text-text-muted">{module.summary}</p>
-          {}
+    <div className="min-h-screen bg-retro-bg">
+      <main className="max-w-container mx-auto px-6 py-10 lg:px-10">
+        {/* Breadcrumb & Title Section */}
+        <div className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
+          <div className="flex-1">
+            <div className="flex items-center gap-2 text-xs font-bold text-brand-1 mb-3">
+              <Link to="/course" className="hover:underline uppercase">ACADEMY</Link>
+              <span className="text-brand-1/30">/</span>
+              <span className="text-text-muted uppercase line-clamp-1">{course?.title || 'COURSE'}</span>
+            </div>
+            <h1 className="text-4xl font-bold text-text-main mb-2">{module.title}</h1>
+            <p className="text-lg text-text-muted line-clamp-2">{module.summary}</p>
+          </div>
+
           {moduleProgress && (
-            <div className="mt-4 bg-retro-bg rounded-lg p-4 border border-brand-1/20">
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-sm font-semibold text-text-main">
-                  {moduleProgress.status === 'completed' ? '✓ Module Completed' : 'Module Progress'}
+            <div className="w-full md:w-80 p-5 bg-retro-surface rounded-2xl shadow-glass border border-brand-1/10 backdrop-blur-md">
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-xs font-bold text-brand-1 tracking-wider uppercase">
+                  {moduleProgress.status === 'completed' ? 'Module Complete' : 'Your Progress'}
                 </span>
-                <span className="text-sm text-text-muted">
-                      {Math.max(displayModuleProgress.flashcards_flipped || 0, flippedCardCount)} / {flashCards.length} flashcards • {Math.max(displayModuleProgress.mcqs_completed || 0, correctMcqCount)} / {mcqs.length} MCQs
+                <span className="text-xs font-bold text-text-main">
+                  {displayModuleProgress.progress_percent || 0}%
                 </span>
               </div>
-              <div className="w-full h-2 bg-brand-1/15 rounded-full overflow-hidden">
+              <div className="w-full h-2.5 bg-brand-1/10 rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-brand-1 rounded-full transition-all duration-500"
-                      style={{ width: `${displayModuleProgress.progress_percent || 0}%` }}
+                  className="h-full bg-gradient-to-r from-brand-1 to-brand-2 rounded-full transition-all duration-700 ease-out"
+                  style={{ width: `${displayModuleProgress.progress_percent || 0}%` }}
                 ></div>
               </div>
-              {moduleProgress.status === 'completed' && (
-                <p className="text-sm text-accent-green mt-2">
-                  🎉 You've completed this module! +{moduleProgress.xp_awarded || 0} XP earned
-                </p>
-              )}
+              <div className="mt-3 flex items-center justify-between text-[10px] text-text-muted uppercase font-bold tracking-tight">
+                <span>{Math.max(displayModuleProgress.flashcards_flipped || 0, flippedCardCount)} / {flashCards.length} CARDS</span>
+                <span>{Math.max(displayModuleProgress.mcqs_completed || 0, correctMcqCount)} / {mcqs.length} QUIZZES</span>
+              </div>
             </div>
           )}
         </div>
-      </header>
-
-      <main className="max-w-container mx-auto px-6 py-10 lg:px-10">
         {/* Lesson Content */}
-        <div className="bg-retro-surface rounded-xl p-8 shadow-card mb-8 border border-brand-1/20">
-          <div className="flex items-center gap-3 mb-6">
-            <FileText className="w-6 h-6 text-brand-1" />
-            <h2 className="text-2xl font-bold text-text-main">Lesson Content</h2>
-          </div>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+          <div className="lg:col-span-2 space-y-8">
+            <div className="bg-retro-surface rounded-3xl p-8 shadow-glass border border-brand-1/10 relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-brand-1/5 rounded-full -mr-16 -mt-16 blur-3xl"></div>
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-10 h-10 rounded-xl bg-brand-1/10 flex items-center justify-center text-brand-1">
+                  <FileText className="w-6 h-6" />
+                </div>
+                <h2 className="text-2xl font-bold text-text-main">Lesson Theory</h2>
+              </div>
 
-          <p className="text-text-muted leading-relaxed mb-6">
-            {module.theory_text || module.summary || 'Learn key concepts through interactive content.'}
-          </p>
+              <div className="prose prose-slate max-w-none text-text-muted leading-relaxed mb-6 space-y-4">
+                {(module.theory_text || module.summary || 'Learn key concepts through interactive content.').split('\n').map((para, i) => (
+                  <p key={i}>{para}</p>
+                ))}
+              </div>
 
-          {/* Action Buttons */}
-          <div className="flex gap-4 mb-8">
-            <button
-              onClick={() => setOverviewOpen(!overviewOpen)}
-              className="flex items-center gap-2 px-6 py-3 rounded-xl border-2 border-brand-1 bg-retro-surface text-brand-1 font-semibold hover:bg-brand-1 hover:text-white transition-all duration-180 active:scale-95"
-            >
-              <Info className="w-5 h-5" />
-              Overview
-            </button>
-            <button
-              onClick={() => setExplainOpen(!explainOpen)}
-              className="flex items-center gap-2 px-6 py-3 rounded-xl border-2 border-brand-1 bg-retro-surface text-brand-1 font-semibold hover:bg-brand-1 hover:text-white transition-all duration-180 active:scale-95"
-            >
-              <FileText className="w-5 h-5" />
-              Explain
-            </button>
-          </div>
+              {/* Action Buttons */}
+              <div className="flex flex-wrap gap-4 mt-8">
+                <button
+                  onClick={() => setOverviewOpen(!overviewOpen)}
+                  className="flex items-center gap-2 px-6 py-3 rounded-2xl border border-brand-1/30 bg-retro-surface text-brand-1 font-bold text-sm hover:bg-brand-1 hover:text-white transition-all active:scale-95 shadow-sm"
+                >
+                  <Info className="w-4 h-4" />
+                  KEY CONCEPTS
+                </button>
+                <button
+                  onClick={() => setExplainOpen(!explainOpen)}
+                  className="flex items-center gap-2 px-6 py-3 rounded-2xl border border-brand-1/30 bg-retro-surface text-brand-1 font-bold text-sm hover:bg-brand-1 hover:text-white transition-all active:scale-95 shadow-sm"
+                >
+                  <Lightbulb className="w-4 h-4" />
+                  SIMPLIFIED ANALOGY
+                </button>
+              </div>
 
-          {/* Overview/Explain Widgets */}
-          {(overviewOpen || explainOpen) && (
-            <div className="mb-8 p-6 bg-gradient-to-br from-brand-1/10 to-brand-2/10 rounded-xl border-2 border-brand-1/20 animate-[modalEnter_360ms_ease-out_forwards]">
-              <button
-                onClick={() => {
-                  setOverviewOpen(false)
-                  setExplainOpen(false)
-                }}
-                className="float-right text-text-muted hover:text-text-main"
-              >
-                <X className="w-5 h-5" />
-              </button>
-              <h3 className="text-lg font-bold text-text-main mb-3">
-                {overviewOpen ? 'Overview' : 'Explanation'}
-              </h3>
+              {/* Overview/Explain Widgets */}
+              {(overviewOpen || explainOpen) && (
+                <div className="mt-6 p-6 bg-brand-1/5 rounded-2xl border border-brand-1/20 animate-[fadeSlideDown_300ms_ease-out_forwards]">
+                  <div className="flex items-center justify-between mb-3">
+                    <h3 className="text-sm font-extrabold text-brand-1 uppercase tracking-widest">
+                      {overviewOpen ? 'Module Overview' : 'Nex Deep-Dive'}
+                    </h3>
+                    <button onClick={() => { setOverviewOpen(false); setExplainOpen(false); }} className="text-text-muted hover:text-text-main">
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
+                  <p className="text-sm text-text-muted leading-relaxed">
+                    {overviewOpen
+                      ? module.summary || 'Summary of the core principles discussed here.'
+                      : module.theory_text || 'An expanded explanation focused on real-world application.'}
+                  </p>
+                </div>
+              )}
+            </div>
+
+            {/* Did You Know Card */}
+            <div className="bg-gradient-to-br from-brand-2/10 to-brand-1/10 rounded-3xl p-8 border border-brand-2/20 relative group">
+              <div className="absolute -top-4 -left-4 w-12 h-12 bg-white rounded-2xl shadow-lg flex items-center justify-center text-brand-2 group-hover:rotate-12 transition-transform">
+                <Star className="w-6 h-6 fill-current" />
+              </div>
+              <h3 className="text-xl font-extrabold text-text-main mb-3">Wealth Insight</h3>
               <p className="text-text-muted leading-relaxed">
-                {overviewOpen
-                  ? module.summary || 'Overview of key concepts in this module.'
-                  : module.theory_text || module.summary || 'Detailed explanation of the concepts.'}
+                {module.did_you_know || "The concept of 'Compound Interest' was famously called the eighth wonder of the world. Mastering small, consistent gains is the key to outperforming high-risk speculative trading over the long term."}
               </p>
             </div>
-          )}
+          </div>
+
+          <div className="space-y-6">
+            <div className="bg-retro-surface rounded-3xl p-6 shadow-glass border border-brand-1/10">
+              <h3 className="text-lg font-bold text-text-main mb-4 flex items-center gap-2">
+                <Play className="w-5 h-5 text-brand-1" />
+                Study Bench
+              </h3>
+              <div className="space-y-3">
+                {[
+                  { name: 'Technical Cheat Sheet', type: 'PDF', icon: 'FileText' },
+                  { name: 'Formula Reference', type: 'Sheet', icon: 'TrendingUp' },
+                  { name: 'Case Study: Market Crashes', type: 'Case', icon: 'BookOpen' }
+                ].map((item, idx) => (
+                  <button key={idx} className="w-full p-4 flex items-center justify-between bg-retro-bg rounded-2xl border border-brand-1/5 hover:border-brand-1 transition-all group">
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 rounded-lg bg-brand-1/10 flex items-center justify-center text-brand-1 group-hover:scale-110 transition-transform text-xs font-bold uppercase">
+                        {item.type}
+                      </div>
+                      <span className="text-sm font-bold text-text-main">{item.name}</span>
+                    </div>
+                    <ArrowRight className="w-4 h-4 text-brand-1 opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0 transition-all" />
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="bg-retro-surface rounded-3xl p-6 shadow-glass border border-brand-1/10">
+              <h3 className="text-lg font-bold text-text-main mb-4">Mentor Nex</h3>
+              <div className="flex items-center gap-4 p-4 bg-brand-1/5 rounded-2xl border border-brand-1/10">
+                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-brand-1 to-brand-2 flex items-center justify-center text-white font-bold text-xl">
+                  N
+                </div>
+                <div>
+                  <p className="text-xs font-extrabold text-brand-1 uppercase tracking-widest">Always Online</p>
+                  <p className="text-sm text-text-main font-bold">Ask me anything!</p>
+                </div>
+              </div>
+              <button 
+                onClick={() => setChatOpen(true)}
+                className="w-full mt-4 py-3 rounded-xl bg-brand-1 text-white font-bold text-sm hover:scale-[1.02] active:scale-95 transition-all shadow-lg shadow-brand-1/20"
+              >
+                OPEN MENTOR CHAT
+              </button>
+            </div>
+          </div>
         </div>
 
         {/* Interactive Activities */}
@@ -508,73 +567,75 @@ const LessonDetail = () => {
 
           {/* Flash Cards */}
           {flashCards.length > 0 && (
-            <div className="mb-8">
-              <div className="bg-gradient-to-br from-brand-1/10 to-brand-2/10 rounded-xl p-6 border-2 border-brand-1/20">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-bold text-text-main flex items-center gap-2">
-                    <Star className="w-5 h-5 text-brand-1" />
-                    Flash Cards
-                    <span className="text-sm font-normal text-text-muted">
-                      ({currentFlashCard + 1} / {flashCards.length})
-                    </span>
-                  </h3>
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm font-semibold text-brand-1">
-                      +{flashCards[currentFlashCard]?.reward?.xp || 25} XP
-                    </span>
-                  </div>
-                </div>
+            <div className="mb-12">
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-xl font-bold text-text-main flex items-center gap-2">
+                  <Star className="w-5 h-5 text-brand-1" />
+                  Key Flashcards
+                </h3>
+                <span className="px-4 py-1.5 rounded-full bg-brand-1/10 text-brand-1 text-xs font-bold tracking-widest uppercase">
+                  {currentFlashCard + 1} of {flashCards.length}
+                </span>
+              </div>
 
-                {flashCards[currentFlashCard] && (
-                  <div className="relative min-h-[200px]">
-                    <div
-                      className={`bg-retro-bg border border-brand-1/30 rounded-xl p-8 shadow-lg cursor-pointer transform transition-all duration-360 ${
-                        flashCardRevealed ? 'rotateY-180' : ''
-                      }`}
-                      onClick={handleFlashCardFlip}
-                      style={{ transformStyle: 'preserve-3d' }}
-                    >
-                      {!flashCardRevealed ? (
-                        <div className="text-center">
-                          <p className="text-sm text-text-muted mb-2">{flashCards[currentFlashCard].theory_title || flashCards[currentFlashCard].topic || 'Topic'}</p>
-                          <p className="text-xl font-bold text-text-main mb-4">
-                            {flashCards[currentFlashCard].topic || flashCards[currentFlashCard].question || 'Tap to reveal answer'}
-                          </p>
-                          <p className="text-sm text-text-muted">Click to flip</p>
-                        </div>
-                      ) : (
-                        <div className="text-center">
-                          <p className="text-lg font-semibold text-text-main mb-4">
-                            {flashCards[currentFlashCard].theory_title || flashCards[currentFlashCard].topic}
-                          </p>
-                          <p className="text-base text-text-muted leading-relaxed">
-                            {flashCards[currentFlashCard].theory_content || flashCards[currentFlashCard].answer}
-                          </p>
-                          {flashCards[currentFlashCard] && flippedFlashCards.has(flashCards[currentFlashCard].id) && (
-                            <p className="text-sm text-accent-green mt-4">✓ Earned +{flashCards[currentFlashCard]?.reward?.xp || 25} XP</p>
-                          )}
-                        </div>
-                      )}
+              <div className="relative group perspective-lg max-w-2xl mx-auto h-80">
+                <div 
+                  className={`relative w-full h-full cursor-pointer transition-all duration-700 preserve-3d ${flashCardRevealed ? 'rotate-y-180' : ''}`}
+                  onClick={handleFlashCardFlip}
+                >
+                  {/* Front Side */}
+                  <div className="absolute inset-0 backface-hidden bg-retro-surface rounded-[40px] p-10 border-2 border-brand-1/20 shadow-glass flex flex-col items-center justify-center text-center">
+                    <p className="text-xs font-bold text-brand-1 uppercase tracking-[0.2em] mb-4">
+                      {flashCards[currentFlashCard].theory_title || flashCards[currentFlashCard].topic || 'QUESTION'}
+                    </p>
+                    <h4 className="text-2xl font-bold text-text-main leading-tight">
+                      {flashCards[currentFlashCard].topic || flashCards[currentFlashCard].question}
+                    </h4>
+                    <div className="mt-8 flex items-center gap-2 text-text-muted text-sm font-semibold opacity-60">
+                      <span>Click to flip</span>
+                      <Play className="w-3 h-3 fill-current" />
                     </div>
                   </div>
-                )}
 
-                <div className="flex items-center justify-between mt-6">
-                  <button
-                    onClick={prevFlashCard}
-                    disabled={currentFlashCard === 0}
-                    className="px-4 py-2 rounded-lg bg-retro-surface border-2 border-muted-3 text-text-main font-semibold hover:border-brand-1 hover:text-brand-1 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    Previous
-                  </button>
-                  <button
-                    onClick={nextFlashCard}
-                    disabled={currentFlashCard === flashCards.length - 1}
-                    className="px-4 py-2 rounded-lg bg-brand-1 text-text-main font-semibold hover:bg-brand-2 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    Next
-                  </button>
+                  {/* Back Side */}
+                  <div className="absolute inset-0 backface-hidden rotate-y-180 bg-gradient-to-br from-brand-1 to-brand-2 rounded-[40px] p-10 shadow-glass flex flex-col items-center justify-center text-center text-white">
+                    <h4 className="text-sm font-bold opacity-80 uppercase tracking-widest mb-6 border-b border-white/20 pb-2">
+                      Expert Answer
+                    </h4>
+                    <p className="text-lg font-medium leading-relaxed">
+                      {flashCards[currentFlashCard].theory_content || flashCards[currentFlashCard].answer}
+                    </p>
+                    <div className="mt-8 px-4 py-2 rounded-full bg-white/20 backdrop-blur-sm text-xs font-bold flex items-center gap-2">
+                      <Sparkles className="w-4 h-4" />
+                      +{flashCards[currentFlashCard]?.reward?.xp || 25} XP EARNED
+                    </div>
+                  </div>
                 </div>
+              </div>
+
+              <div className="flex items-center justify-center gap-4 mt-8">
+                <button
+                  onClick={prevFlashCard}
+                  disabled={currentFlashCard === 0}
+                  className="w-12 h-12 rounded-full bg-retro-surface border border-brand-1/10 flex items-center justify-center text-text-muted hover:border-brand-1 hover:text-brand-1 transition-all disabled:opacity-30 disabled:cursor-not-allowed group"
+                >
+                  <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
+                </button>
+                <div className="flex gap-2">
+                  {flashCards.map((_, idx) => (
+                    <div 
+                      key={idx} 
+                      className={`w-2 h-2 rounded-full transition-all duration-300 ${idx === currentFlashCard ? 'w-8 bg-brand-1' : 'bg-brand-1/20'}`}
+                    />
+                  ))}
+                </div>
+                <button
+                  onClick={nextFlashCard}
+                  disabled={currentFlashCard === flashCards.length - 1}
+                  className="w-12 h-12 rounded-full bg-retro-surface border border-brand-1/10 flex items-center justify-center text-text-muted hover:border-brand-1 hover:text-brand-1 transition-all disabled:opacity-30 disabled:cursor-not-allowed group"
+                >
+                  <ArrowLeft className="w-5 h-5 rotate-180 group-hover:translate-x-1 transition-transform" />
+                </button>
               </div>
             </div>
           )}

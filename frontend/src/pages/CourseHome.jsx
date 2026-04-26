@@ -37,18 +37,13 @@ const CourseHome = () => {
     }
   }, [])
 
-  
+  // Sync completion updates
   useEffect(() => {
-    const handleFocus = () => {
-      loadCourses(true)
-    }
     const handleModuleCompleted = () => {
       loadCourses(true)
     }
-    window.addEventListener('focus', handleFocus)
     window.addEventListener('module-completed', handleModuleCompleted)
     return () => {
-      window.removeEventListener('focus', handleFocus)
       window.removeEventListener('module-completed', handleModuleCompleted)
     }
   }, [])
@@ -97,25 +92,18 @@ const CourseHome = () => {
   }
 
   return (
-    <div className="min-h-screen bg-retro-bg text-text-main">
-      {}
-      <header className="bg-retro-surface border-b border-brand-1/20 shadow-lg px-6 py-8 lg:px-10 mt-20">
-        <div className="max-w-container mx-auto">
-          <div className="flex items-center gap-5 mb-4">
-            <button
-              onClick={() => navigate('/dashboard')}
-              className="bg-brand-1/10 hover:bg-brand-1/20 border border-brand-1/30 text-brand-1 px-5 py-2.5 rounded-full text-sm font-semibold shadow-sm hover:scale-105 active:scale-95 transition-all flex items-center gap-2"
-            >
-              <ArrowRight className="w-4 h-4 rotate-180" />
-              Back
-            </button>
-          </div>
-          <h1 className="text-4xl font-bold mb-2">Financial Courses</h1>
-          <p className="text-lg text-text-muted">Learn at your own pace with interactive lessons</p>
-        </div>
-      </header>
-
+    <div className="min-h-screen bg-retro-bg">
       <main className="max-w-container mx-auto px-6 py-10 lg:px-10">
+        {/* Breadcrumb & Title */}
+        <div className="mb-10">
+          <div className="flex items-center gap-2 text-sm font-bold text-brand-1 mb-3">
+            <Link to="/dashboard" className="hover:underline">DASHBOARD</Link>
+            <span className="text-brand-1/30">/</span>
+            <span className="text-text-muted">COURSES</span>
+          </div>
+          <h1 className="text-4xl font-bold text-text-main">Wealth Academy</h1>
+          <p className="text-lg text-text-muted mt-1">Foundational knowledge and advanced strategies</p>
+        </div>
         {}
         <div className="mb-8 flex flex-wrap gap-4">
           <button

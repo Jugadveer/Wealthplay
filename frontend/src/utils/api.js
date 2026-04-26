@@ -179,7 +179,7 @@ export const api = {
   
   getLeaderboard: (type = 'scores') => apiAxios.get(`/users/challenges/leaderboard/?type=${type}`),
   getUserChallengeStats: () => apiAxios.get('/users/challenges/stats/'),
-  getRandomStockQuestion: () => apiAxios.get('/users/challenges/question/'),
+  getRandomStockQuestion: (difficulty) => apiAxios.get('/users/challenges/question/', { params: { difficulty } }),
   submitStockPrediction: (data) => apiAxios.post('/users/challenges/predict/', data),
   
   
@@ -201,6 +201,8 @@ export const api = {
   listCrises: () => apiAxios.get('/users/time-capsule/crises/'),
   startTimeCapsuleSession: (crisisId) => apiAxios.post(`/users/time-capsule/start/${crisisId}/`),
   getTimeCapsuleSimData: (sessionId) => apiAxios.get(`/users/time-capsule/sim-data/${sessionId}/`),
+  
+  getTickersInfo: (symbols) => apiAxios.get('/users/portfolio/tickers-info/', { params: { symbols } }),
 }
 
 

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import api, { axios } from '../utils/api'
 import {
   ArrowLeft,
@@ -99,77 +99,50 @@ const ScenarioHome = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#fffaf5] via-[#f8fbff] to-[#f4f7fb] text-text-main">
-      {}
-      <header className="bg-white border-b border-[#f1d8c2] px-6 py-12 lg:px-10 mt-20 rounded-b-[28px] shadow-card">
-        <div className="max-w-container mx-auto">
-          <div className="flex items-center justify-between mb-4">
-            <button
-              onClick={() => navigate('/dashboard')}
-              className="bg-[#ff6b35] text-white hover:bg-[#f97316] border border-[#ff6b35] px-5 py-2.5 rounded-[12px] text-sm font-semibold shadow-sm hover:scale-105 active:scale-95 transition-all flex items-center gap-2"
-            >
-              <ArrowLeft className="w-4 h-4" />
-              Go to Dashboard
-            </button>
-          </div>
-          <div className="text-center">
-            <h1 className="text-5xl font-bold text-text-main mb-4">Challenge Arena</h1>
-            <p className="text-xl text-text-muted">
-              Test your trading knowledge and compete with others
-            </p>
-          </div>
-          
-          {}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8 max-w-4xl mx-auto">
-            <div className="bg-white rounded-[12px] p-6 border border-[#f1d8c2] shadow-sm">
-              <Eye className="w-8 h-8 mx-auto mb-3 text-brand-1" />
-              <p className="text-4xl font-bold mb-2 text-text-main">{totalScore}</p>
-              <p className="text-sm text-text-muted">Total Score</p>
-            </div>
-            <div className="bg-white rounded-[12px] p-6 border border-[#f1d8c2] shadow-sm">
-              <Flame className="w-8 h-8 mx-auto mb-3 text-brand-1" />
-              <p className="text-4xl font-bold mb-2 text-text-main">{currentStreak}</p>
-              <p className="text-sm text-text-muted">Day Streak</p>
-            </div>
-            <div className="bg-white rounded-[12px] p-6 border border-[#f1d8c2] shadow-sm">
-              <Trophy className="w-8 h-8 mx-auto mb-3 text-brand-1" />
-              <p className="text-4xl font-bold mb-2 text-text-main">{winRate.toFixed(1)}%</p>
-              <p className="text-sm text-text-muted">Win Rate</p>
-            </div>
-          </div>
-        </div>
-      </header>
-
+    <div className="min-h-screen bg-retro-bg">
       <main className="max-w-container mx-auto px-6 py-10 lg:px-10">
-        {}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <div className="bg-white border border-[#f1d8c2] rounded-[12px] p-6 shadow-card hover:border-[#ff6b35] transition-colors">
-            <p className="text-sm text-text-muted mb-2">Total Score</p>
-            <p className="text-3xl font-bold text-brand-1">{totalScore}</p>
+        {/* Breadcrumb & Title */}
+        <div className="mb-10">
+          <div className="flex items-center gap-2 text-sm font-bold text-brand-1 mb-3">
+            <Link to="/dashboard" className="hover:underline">DASHBOARD</Link>
+            <span className="text-brand-1/30">/</span>
+            <span className="text-text-muted">CHALLENGE HUB</span>
           </div>
-          <div className="bg-white border border-[#f1d8c2] rounded-[12px] p-6 shadow-card hover:border-[#ff6b35] transition-colors">
-            <p className="text-sm text-text-muted mb-2 flex items-center gap-2">
-              <BarChart3 className="w-4 h-4" />
-              Stock Game Score
-            </p>
-            <p className="text-3xl font-bold text-text-main">{stockScore}</p>
-          </div>
-          <div className="bg-white border border-[#f1d8c2] rounded-[12px] p-6 shadow-card hover:border-[#ff6b35] transition-colors">
-            <p className="text-sm text-text-muted mb-2 flex items-center gap-2">
-              <Target className="w-4 h-4" />
-              Scenario Score
-            </p>
-            <p className="text-3xl font-bold text-brand-2">{scenarioScore}</p>
-          </div>
-          <div className="bg-white border border-[#f1d8c2] rounded-[12px] p-6 shadow-card hover:border-[#ff6b35] transition-colors">
-            <p className="text-sm text-text-muted mb-2 flex items-center gap-2">
-              <Flame className="w-4 h-4 text-brand-1" />
-              Current Streak
-            </p>
-            <p className="text-3xl font-bold text-brand-1">{currentStreak}</p>
-          </div>
+          <h1 className="text-4xl font-bold text-text-main">Challenge Arena</h1>
+          <p className="text-lg text-text-muted mt-1">Test your market instincts and climb the ranks</p>
         </div>
 
+        {/* Global Stats Overview */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+          <div className="bg-retro-surface rounded-2xl p-6 shadow-card border border-brand-1/10 flex flex-col items-center text-center group hover:border-brand-1 transition-all">
+            <div className="w-12 h-12 rounded-xl bg-brand-1/5 flex items-center justify-center mb-4 text-brand-1 group-hover:scale-110 transition-transform">
+              <Eye className="w-6 h-6" />
+            </div>
+            <p className="text-3xl font-bold text-text-main number-tabular">{totalScore}</p>
+            <p className="text-sm font-semibold text-text-muted uppercase tracking-tight">Total XP</p>
+          </div>
+          <div className="bg-retro-surface rounded-2xl p-6 shadow-card border border-brand-1/10 flex flex-col items-center text-center group hover:border-brand-1 transition-all">
+            <div className="w-12 h-12 rounded-xl bg-brand-1/5 flex items-center justify-center mb-4 text-brand-1 group-hover:scale-110 transition-transform">
+              <Flame className="w-6 h-6" />
+            </div>
+            <p className="text-3xl font-bold text-text-main number-tabular">{currentStreak}</p>
+            <p className="text-sm font-semibold text-text-muted uppercase tracking-tight">Day Streak</p>
+          </div>
+          <div className="bg-retro-surface rounded-2xl p-6 shadow-card border border-brand-1/10 flex flex-col items-center text-center group hover:border-brand-1 transition-all">
+            <div className="w-12 h-12 rounded-xl bg-brand-1/5 flex items-center justify-center mb-4 text-brand-1 group-hover:scale-110 transition-transform">
+              <Trophy className="w-6 h-6" />
+            </div>
+            <p className="text-3xl font-bold text-text-main number-tabular">{winRate.toFixed(1)}%</p>
+            <p className="text-sm font-semibold text-text-muted uppercase tracking-tight">Success Rate</p>
+          </div>
+          <div className="bg-retro-surface rounded-2xl p-6 shadow-card border border-brand-1/10 flex flex-col items-center text-center group hover:border-brand-1 transition-all">
+            <div className="w-12 h-12 rounded-xl bg-brand-1/5 flex items-center justify-center mb-4 text-brand-1 group-hover:scale-110 transition-transform">
+              <Target className="w-6 h-6" />
+            </div>
+            <p className="text-3xl font-bold text-text-main number-tabular">{scenarioScore}</p>
+            <p className="text-sm font-semibold text-text-muted uppercase tracking-tight">Scenario Pts</p>
+          </div>
+        </div>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {}
           <div className="lg:col-span-2 space-y-6">

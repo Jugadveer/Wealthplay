@@ -14,6 +14,7 @@ import {
   Home,
   Wallet,
 } from 'lucide-react'
+import GoalTracker from '../components/GoalTracker'
 
 const Portfolio = () => {
   const location = useLocation()
@@ -205,6 +206,9 @@ const Portfolio = () => {
                    </div>
                 </div>
               </div>
+
+              {/* Goal Tracker Integration */}
+              <GoalTracker compact={true} />
             </div>
           </div>
         </div>

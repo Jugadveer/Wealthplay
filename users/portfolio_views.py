@@ -10,11 +10,14 @@ from datetime import timedelta, datetime, date
 from decimal import Decimal
 import json
 import random
+import os
+
+import requests
 
 # --- UPDATED IMPORTS ---
 import yfinance as yf
 import pandas as pd
-from .ml_predictor import ML_PREDICTOR, TICKERS
+from .ml_predictor import ML_PREDICTOR, TICKERS, get_stock_info, get_stock_price
 # -----------------------
 
 from .models import (
@@ -28,6 +31,163 @@ from .models import (
 
 
 USD_TO_INR_FALLBACK = Decimal('85')
+
+
+def _get_groq_stock_insight(symbol, stock_info, prediction_results):
+    """Generate LLM-based recommendation using Groq; return None on any failure."""
+    keys = [
+        (os.environ.get('GROQ_API_KEY') or '').strip(),
+        (os.environ.get('GROQ_API_KEY_2') or '').strip()
+    ]
+    keys = [k for k in keys if k]
+    if not keys:
+        return None
+
+    model = (os.environ.get('GROQ_MODEL') or 'llama-3.1-8b-instant').strip()
+
+    prompt = (
+        "You are an Elite Financial Quant Analyst. "
+        "Analyze the following stock snapshot and ML signals to provide a precise recommendation. "
+        "Return a strict JSON object with keys: "
+        "recommendation (BUY|SELL|HOLD|WAIT), confidence (0.0 to 1.0), message (concise pedagogical insight), "
+        "reasons (array of 3 distinct technical reasons), trend (BULLISH|BEARISH|NEUTRAL).\n\n"
+        f"SYMBOL: {symbol}\n"
+        f"ENTITY: {stock_info.get('name', symbol)}\n"
+        f"PRICE: ₹{stock_info.get('current_price', 0)}\n"
+        f"VOLATILITY: {prediction_results.get('vol', 0.02):.4f}\n"
+        f"MARKET REGIME: {prediction_results.get('regime', 'Normal')}\n"
+        f"PREDICTED DIRECTION: {prediction_results.get('direction', 'neutral')}\n"
+        f"ML CONFIDENCE: {prediction_results.get('confidence', 0.5):.2f}\n"
+        "Ensure the recommendation strictly aligns with the ML confidence and regime."
+    )
+
+    payload = {
+        'model': model,
+        'messages': [
+            {
+                'role': 'system',
+                'content': 'Return only valid JSON. Keep output concise and educational.',
+            },
+            {
+                'role': 'user',
+                'content': prompt,
+            },
+        ],
+        'temperature': 0.0,
+        'max_tokens': 400,
+    }
+
+    content = ''
+
+    # Try each key until one succeeds
+    for api_key in keys:
+        try:
+            response = requests.post(
+                'https://api.groq.com/openai/v1/chat/completions',
+                json=payload,
+                headers={
+                    'Authorization': f'Bearer {api_key}',
+                    'Content-Type': 'application/json',
+                },
+                timeout=20,
+            )
+            response.raise_for_status()
+            data = response.json()
+
+            choices = data.get('choices', [])
+            if not choices:
+                continue
+
+            content = choices[0].get('message', {}).get('content', '').strip()
+            if content:
+                break
+        except Exception as e:
+            print(f"[Groq] API error with key ending in ..{api_key[-4:]}: {e}")
+            continue
+
+    if not content:
+        return None
+
+    if '```json' in content:
+        content = content.split('```json', 1)[1].split('```', 1)[0].strip()
+    elif '```' in content:
+        content = content.split('```', 1)[1].split('```', 1)[0].strip()
+
+    try:
+        parsed = json.loads(content)
+        rec = str(parsed.get('recommendation', 'WAIT')).upper()
+        if rec not in {'BUY', 'SELL', 'HOLD', 'WAIT'}:
+            rec = 'WAIT'
+
+        confidence = parsed.get('confidence', 0.5)
+        try:
+            confidence = float(confidence)
+        except (TypeError, ValueError):
+            confidence = 0.5
+        confidence = max(0.0, min(1.0, confidence))
+
+        reasons = parsed.get('reasons', [])
+        if not isinstance(reasons, list):
+            reasons = []
+        reasons = [str(item) for item in reasons if str(item).strip()][:4]
+
+        return {
+            'recommendation': rec,
+            'confidence': confidence,
+            'message': str(parsed.get('message', 'LLM insight generated from current market context.')),
+            'reasons': reasons,
+            'trend': str(parsed.get('trend', 'NEUTRAL')).upper(),
+            'source': 'groq',
+            'model': model,
+        }
+    except Exception as e:
+        print(f"[Groq] LLM insight parse failed for {symbol}: {e}")
+        return None
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_tickers_info(request):
+    """Batch fetch info for multiple tickers (used for goal strategy visualization)"""
+    symbols = request.GET.get('symbols', '').split(',')
+    symbols = [s.strip().upper() for s in symbols if s.strip()]
+    
+    if not symbols:
+        return Response({'results': {}})
+        
+    results = {}
+    for sym in symbols:
+        info = get_stock_info(sym, use_cache=True, allow_live_fetch=True)
+        # Add historical trends
+        try:
+            ticker = yf.Ticker(sym)
+            hist = ticker.history(period='max') # Fetch all to calculate different windows
+            if not hist.empty:
+                current = float(hist['Close'].iloc[-1])
+                
+                # Helper to calculate returns
+                def get_ret(days):
+                    if len(hist) > days:
+                        prev = float(hist['Close'].iloc[-days])
+                        return round(((current - prev) / prev) * 100, 2)
+                    return None
+
+                info['returns'] = {
+                    '1y': get_ret(252),
+                    '3y': get_ret(252 * 3),
+                    '5y': get_ret(252 * 5),
+                    '10y': get_ret(252 * 10),
+                    'max': round(((current - float(hist['Close'].iloc[0])) / float(hist['Close'].iloc[0])) * 100, 2)
+                }
+            else:
+                info['returns'] = {}
+        except Exception as e:
+            print(f"Error calculating returns for {sym}: {e}")
+            info['returns'] = {}
+            
+        results[sym] = info
+        
+    return Response({'results': results})
 
 
 def get_usd_to_inr_rate():
@@ -315,6 +475,7 @@ def generate_price_history(symbol, days=60, use_cache=True):
         pass  # Fall through to real stock lookup
     
     # Try cache first for instant response
+
     if use_cache:
         try:
             cached = PredictedStockData.objects.get(symbol=symbol)
@@ -972,7 +1133,7 @@ def get_stock_detail(request, symbol):
             pass  # Fall through to live fetch
         
         # Fallback to live data if cache miss
-        stock_info = get_stock_info(symbol, use_cache=False)
+        stock_info = get_stock_info(symbol, use_cache=True, allow_live_fetch=True)
         if stock_info.get('current_price', 0.0) <= 0.0:
             return Response({'error': 'Stock not found'}, status=404)
         
@@ -1276,6 +1437,9 @@ def get_ai_recommendation(request):
                 'message': analysis_data['analysis'],
                 'target_price': analysis_data['target_price'],
                 'regime': 'Virtual Simulation',
+                'metadata': {
+                    'source': 'custom-sim',
+                },
                 'is_custom': True
             })
         except CustomStock.DoesNotExist:
@@ -1291,6 +1455,37 @@ def get_ai_recommendation(request):
                 confidence = cached.ml_confidence
                 regime = cached.ml_regime
                 vol = cached.ml_volatility
+
+                cached_stock_info = {
+                    'name': cached.name or symbol,
+                    'current_price': float(cached.current_price or 0.0),
+                    'change_percent': float(cached.change_percent or 0.0),
+                    'sector': cached.sector or 'Unknown',
+                }
+                cached_prediction_results = {
+                    'direction': recommendation,
+                    'confidence': float(confidence or 0.5),
+                    'regime': regime or 'Calm',
+                    'vol': float(vol or 0.02),
+                }
+
+                llm_insight = _get_groq_stock_insight(symbol, cached_stock_info, cached_prediction_results)
+                if llm_insight:
+                    return Response({
+                        'symbol': symbol,
+                        'recommendation': llm_insight['recommendation'],
+                        'confidence': round(llm_insight['confidence'], 2),
+                        'message': llm_insight['message'],
+                        'reasons': llm_insight['reasons'],
+                        'metadata': {
+                            'regime': cached_prediction_results.get('regime', 'Calm'),
+                            'volatility': round(float(cached_prediction_results.get('vol', 0.02)), 4),
+                            'source': llm_insight.get('source', 'groq'),
+                            'llm_model': llm_insight.get('model', ''),
+                            'based_on': 'ml-cache',
+                        },
+                        'is_custom': False,
+                    })
                 
                 # Convert prediction to recommendation message
                 if recommendation == 'bullish':
@@ -1309,18 +1504,83 @@ def get_ai_recommendation(request):
                     'confidence': confidence,
                     'message': message,
                     'regime': regime,
+                    'metadata': {
+                        'source': 'ml-cache',
+                        'regime': regime,
+                        'volatility': round(float(vol or 0.0), 4),
+                    },
                     'is_custom': False
                 })
         except PredictedStockData.DoesNotExist:
             pass  # Fall through to live prediction
         
         # Fallback to live prediction if cache miss
-        stock_info = get_stock_info(symbol, use_cache=False)
+        stock_info = get_stock_info(symbol, use_cache=True, allow_live_fetch=True)
         if stock_info.get('current_price', 0.0) <= 0.0:
-            return Response({'error': 'Stock data not available for AI analysis'}, status=404)
+            llm_no_price = _get_groq_stock_insight(
+                symbol,
+                stock_info,
+                {
+                    'direction': 'neutral',
+                    'confidence': 0.5,
+                    'regime': 'Unknown',
+                    'vol': 0.02,
+                },
+            )
+            if llm_no_price:
+                return Response({
+                    'symbol': symbol,
+                    'recommendation': llm_no_price['recommendation'],
+                    'confidence': round(llm_no_price['confidence'], 2),
+                    'message': llm_no_price['message'],
+                    'reasons': llm_no_price['reasons'],
+                    'metadata': {
+                        'source': llm_no_price.get('source', 'groq'),
+                        'llm_model': llm_no_price.get('model', ''),
+                        'regime': 'Unknown',
+                        'volatility': 0.02,
+                        'based_on': 'no-live-price',
+                    },
+                    'is_custom': False,
+                })
+
+            return Response({
+                'symbol': symbol,
+                'recommendation': 'WAIT',
+                'confidence': 0.5,
+                'message': 'Stock data is temporarily unavailable for AI analysis. Please try again shortly.',
+                'reasons': [
+                    'Live data fetch returned no price for this symbol.',
+                    'Using a safe fallback signal until data is refreshed.',
+                ],
+                'metadata': {
+                    'source': 'fallback-no-price',
+                    'regime': 'Unknown',
+                    'volatility': 0.0,
+                },
+                'is_custom': False,
+            }, status=200)
         
         # Run the actual ML prediction
         prediction_results = ML_PREDICTOR.predict(symbol)
+
+        # Try LLM enrichment first (if GROQ_API_KEY is configured).
+        llm_insight = _get_groq_stock_insight(symbol, stock_info, prediction_results)
+        if llm_insight:
+            return Response({
+                'symbol': symbol,
+                'recommendation': llm_insight['recommendation'],
+                'confidence': round(llm_insight['confidence'], 2),
+                'message': llm_insight['message'],
+                'reasons': llm_insight['reasons'],
+                'metadata': {
+                    'regime': prediction_results.get('regime', 'Calm'),
+                    'volatility': round(float(prediction_results.get('vol', 0.02)), 4),
+                    'source': llm_insight.get('source', 'groq'),
+                    'llm_model': llm_insight.get('model', ''),
+                },
+                'is_custom': False,
+            })
         
         recommendation = prediction_results['direction']
         confidence = prediction_results['confidence']
@@ -1328,7 +1588,12 @@ def get_ai_recommendation(request):
         vol = prediction_results['vol']
         
         # Convert prediction to recommendation message
-        if recommendation == 'bullish':
+        # Threshold: Only recommend BUY/SELL if confidence >= 50%
+        if confidence < 0.5:
+            message = f"ML Analysis: The model is **Neutral** with {round(confidence * 100)}% confidence. Signal strength is too low for a conclusive action."
+            action_text = "WAIT"
+            recommendation = "neutral"
+        elif recommendation == 'bullish':
             message = f"ML Analysis: The model suggests an **Up** move with {round(confidence * 100)}% confidence."
             action_text = "BUY"
         elif recommendation == 'bearish':
@@ -1346,20 +1611,37 @@ def get_ai_recommendation(request):
         
         return Response({
             'symbol': symbol,
-            'recommendation': recommendation,
+            'recommendation': action_text,
             'confidence': round(confidence, 2),
             'message': message,
             'reasons': reasons,
             'metadata': {
+                'source': 'ml-live',
                 'regime': regime,
                 'volatility': round(vol, 4)
-            }
+            },
+            'is_custom': False,
         })
     except Exception as e:
         import traceback
         print(f"Error in get_ai_recommendation: {e}")
         print(traceback.format_exc())
-        return Response({'error': str(e)}, status=500)
+        return Response({
+            'symbol': request.data.get('symbol') or 'UNKNOWN',
+            'recommendation': 'WAIT',
+            'confidence': 0.5,
+            'message': 'Insight generation hit a temporary issue. Returning a safe fallback recommendation.',
+            'reasons': [
+                'Backend encountered a transient exception while generating the insight.',
+                'Please retry; live AI path should recover automatically.',
+            ],
+            'metadata': {
+                'source': 'fallback-exception',
+                'regime': 'Unknown',
+                'volatility': 0.0,
+            },
+            'is_custom': False,
+        }, status=200)
 
 
 @api_view(['GET'])

@@ -192,7 +192,7 @@ const PortfolioTrade = ({ portfolio, onRefresh, stocksCache = [], refreshStocksC
                 }}
                 className="mt-1 text-xs bg-accent-red/20 hover:bg-accent-red/30 py-1 rounded border border-accent-red/30 transition-all font-bold"
               >
-                Go to Module ->
+                Go to Module -&gt;
               </button>
             </div>
           )

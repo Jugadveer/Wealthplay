@@ -14,46 +14,40 @@ const Header = ({ onAuthClick }) => {
   return (
     <>
       <header className="fixed top-6 left-0 right-0 z-50 flex justify-center px-4">
-        <div className={`bg-retro-surface/95 border border-brand-1/15 shadow-card text-text-main backdrop-blur-md rounded-[12px] px-6 py-3 flex items-center gap-8 text-sm font-semibold tracking-widest uppercase`}>
-          {}
-          <button
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className={`md:hidden p-2 transition-all text-text-main hover:text-brand-1`}
+        <div className="bg-retro-surface/90 border border-brand-1/15 shadow-glass text-text-main backdrop-blur-lg rounded-2xl px-2 py-2 flex items-center gap-1 text-[11px] font-bold tracking-widest uppercase">
+          <Link
+            to={user ? "/dashboard" : "/"}
+            className="flex items-center gap-2 px-4 py-2 hover:bg-brand-1/5 rounded-xl transition-all group"
           >
-            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-          </button>
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-brand-1 to-brand-2 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+              <Hexagon className="w-5 h-5 text-white" />
+            </div>
+          </Link>
 
-          {}
-          <div className={`hidden md:flex flex-row items-center gap-6 text-text-muted`}>
-            <Link
-              to={user ? "/dashboard" : "/"}
-              className={`${isActive('/dashboard') ? 'text-brand-1 border-b-2 border-brand-1 pb-0.5' : 'text-text-muted hover:text-text-main'} transition-all`}
-            >
-              Home
-            </Link>
+          <div className="hidden md:flex flex-row items-center gap-1">
             {user && (
               <>
                 <Link
                   to="/course"
-                  className={`${isActive('/course') ? 'text-brand-1 border-b-2 border-brand-1 pb-0.5' : 'text-text-muted hover:text-text-main'} transition-all`}
+                  className={`px-4 py-2.5 rounded-xl transition-all ${isActive('/course') ? 'bg-brand-1/10 text-brand-1 shadow-sm' : 'text-text-muted hover:text-text-main hover:bg-brand-1/5'}`}
                 >
                   Lessons
                 </Link>
                 <Link
                   to="/scenario"
-                  className={`${isActive('/scenario') ? 'text-brand-1 border-b-2 border-brand-1 pb-0.5' : 'text-text-muted hover:text-text-main'} transition-all`}
+                  className={`px-4 py-2.5 rounded-xl transition-all ${isActive('/scenario') ? 'bg-brand-1/10 text-brand-1 shadow-sm' : 'text-text-muted hover:text-text-main hover:bg-brand-1/5'}`}
                 >
                   Simulator
                 </Link>
                 <Link
                   to="/portfolio"
-                  className={`${isActive('/portfolio') ? 'text-brand-1 border-b-2 border-brand-1 pb-0.5' : 'text-text-muted hover:text-text-main'} transition-all`}
+                  className={`px-4 py-2.5 rounded-xl transition-all ${isActive('/portfolio') ? 'bg-brand-1/10 text-brand-1 shadow-sm' : 'text-text-muted hover:text-text-main hover:bg-brand-1/5'}`}
                 >
                   Portfolio
                 </Link>
                 <Link
                   to="/achievements"
-                  className={`${isActive('/achievements') ? 'text-brand-1 border-b-2 border-brand-1 pb-0.5' : 'text-text-muted hover:text-text-main'} transition-all`}
+                  className={`px-4 py-2.5 rounded-xl transition-all ${isActive('/achievements') ? 'bg-brand-1/10 text-brand-1 shadow-sm' : 'text-text-muted hover:text-text-main hover:bg-brand-1/5'}`}
                 >
                   Achievements
                 </Link>
@@ -61,43 +55,54 @@ const Header = ({ onAuthClick }) => {
             )}
           </div>
 
-          <div className={`flex items-center gap-4 pl-6 h-6 border-l border-muted-2`}>
+          <div className="flex items-center gap-2 ml-2 pl-2 border-l border-brand-1/10 min-h-[32px]">
             {user ? (
               <div className="group relative">
                 <button
-                  className={`flex items-center transition-all text-text-main hover:text-brand-1`}
+                  className="flex items-center gap-2 px-3 py-2 hover:bg-brand-1/5 rounded-xl transition-all text-text-main"
                   aria-label="User menu"
                 >
-                  <User className="w-5 h-5" />
+                  <div className="w-8 h-8 rounded-full bg-brand-1/10 border border-brand-1/20 flex items-center justify-center">
+                    <User className="w-4 h-4 text-brand-1" />
+                  </div>
+                  <span className="hidden lg:inline-block normal-case tracking-normal">{user.username}</span>
                 </button>
-                <div className={`absolute right-0 top-full mt-4 w-48 rounded-[12px] shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all bg-retro-surface border border-muted-2`}>
-                  <div className={`px-4 py-3 border-b text-xs border-muted-2 text-text-muted`}>
-                    Logged in as <span className={`text-text-main font-bold`}>{user.username}</span>
+                <div className="absolute right-0 top-full mt-3 w-56 rounded-2xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible translate-y-2 group-hover:translate-y-0 transition-all duration-200 bg-retro-surface border border-brand-1/15 backdrop-blur-xl p-2 z-[60]">
+                  <div className="px-4 py-3 border-b border-brand-1/10 text-xs text-text-muted mb-1">
+                    Logged in as <span className="text-text-main font-bold">{user.username}</span>
                   </div>
                   <button
                     onClick={logout}
-                    className={`w-full text-left px-4 py-3 text-red-600 transition-all font-bold rounded-b-[12px] flex items-center gap-2 hover:bg-red-50 hover:text-red-700`}
+                    className="w-full text-left px-4 py-3 text-red-500 hover:bg-red-500/10 transition-all font-bold rounded-xl flex items-center gap-3 overflow-hidden group/logout"
                   >
-                    <LogOut className="w-4 h-4" /> Logout
+                    <LogOut className="w-4 h-4 group-hover/logout:-translate-x-1 transition-transform" /> 
+                    <span>Log out</span>
                   </button>
                 </div>
               </div>
             ) : (
-              <div className="flex items-center gap-4 text-xs">
+              <div className="flex items-center gap-2 text-xs">
                 <button
                   onClick={() => onAuthClick?.('login')}
-                  className={`transition-all text-text-main hover:text-brand-1`}
+                  className="px-4 py-2.5 text-text-main hover:text-brand-1 rounded-xl transition-all font-bold"
                 >
                   LOGIN
                 </button>
                 <button
                   onClick={() => onAuthClick?.('signup')}
-                  className="bg-brand-1 text-white px-4 py-1.5 rounded-[12px] hover:bg-brand-2 transition-all shadow-md"
+                  className="bg-brand-1 text-white px-5 py-2.5 rounded-xl hover:bg-brand-2 transition-all shadow-glow font-bold"
                 >
-                  SIGN UP
+                  JOIN
                 </button>
               </div>
             )}
+            
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="md:hidden w-10 h-10 flex items-center justify-center hover:bg-brand-1/5 rounded-xl transition-all text-text-main ml-1"
+            >
+              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
           </div>
         </div>
       </header>

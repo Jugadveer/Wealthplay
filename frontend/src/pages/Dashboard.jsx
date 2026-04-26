@@ -160,7 +160,8 @@ const Dashboard = () => {
 
   
   const RecentAchievements = ({ achievements = [] }) => {
-    const recentAchievements = (achievements || [])
+    const achievementsList = Array.isArray(achievements) ? achievements : []
+    const recentAchievements = achievementsList
       .filter((a) => {
         if (a.unlocked !== true) return false
         if (!a.unlocked_at || typeof a.unlocked_at !== 'string' || a.unlocked_at.length === 0) return false

@@ -14,6 +14,7 @@ from .models import Scenario ,DecisionOption ,QuizRun ,UserScenarioAttempt
 from users .models import UserProfile ,ChallengeLeaderboard 
 from django .utils import timezone 
 from datetime import timedelta 
+from django.conf import settings
 
 
 @api_view (['POST'])
@@ -102,10 +103,15 @@ def start_quiz_api (request ):
         'runId':run .id ,
         'redirect':f'/scenario/quiz/{run .id }'
         })
-    except Exception as e :
-        import traceback 
-        traceback .print_exc ()
-        return Response ({'error':str (e )},status =500 )
+    except Exception as e:
+        import traceback
+        print(f"Error in start_quiz_api: {e}")
+        print(traceback.format_exc())
+        return Response({
+            'success': False, 
+            'error': str(e),
+            'traceback': traceback.format_exc() if settings.DEBUG else None
+        }, status=500)
 
 
 @api_view (['GET'])

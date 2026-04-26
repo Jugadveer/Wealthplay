@@ -62,6 +62,20 @@ def _ensure_achievement(achievement_id):
     return achievement
 
 
+def _grant_xp(user, amount):
+    """Safely grant XP to a user's profile"""
+    try:
+        from .models import UserProfile
+        profile, _ = UserProfile.objects.get_or_create(user=user)
+        profile.xp += amount
+        # Logic for level up can go here if needed (e.g. floor(xp/500))
+        profile.save()
+        return True
+    except Exception as e:
+        print(f"Error granting XP to user {user.id}: {e}")
+        return False
+
+
 def check_and_unlock_achievements(user):
     """Check user's activity and unlock achievements"""
     unlocked = []
@@ -88,6 +102,7 @@ def check_and_unlock_achievements(user):
                     achievement=achievement
                 )
                 if created:
+                    _grant_xp(user, achievement.xp_reward)
                     unlocked.append(achievement)
     
     # Check streak achievements
@@ -99,6 +114,7 @@ def check_and_unlock_achievements(user):
                 achievement=achievement
             )
             if created:
+                _grant_xp(user, achievement.xp_reward)
                 unlocked.append(achievement)
     
     if profile.streak >= 10:
@@ -138,6 +154,7 @@ def check_and_unlock_achievements(user):
                     achievement=achievement
                 )
                 if created:
+                    _grant_xp(user, achievement.xp_reward)
                     unlocked.append(achievement)
         
         # Diversified portfolio
@@ -149,6 +166,7 @@ def check_and_unlock_achievements(user):
                     achievement=achievement
                 )
                 if created:
+                    _grant_xp(user, achievement.xp_reward)
                     unlocked.append(achievement)
         
         # Portfolio Pro - 10% returns
@@ -170,6 +188,7 @@ def check_and_unlock_achievements(user):
                     achievement=achievement
                 )
                 if created:
+                    _grant_xp(user, achievement.xp_reward)
                     unlocked.append(achievement)
         
         # Portfolio Master - 25% returns
@@ -181,6 +200,7 @@ def check_and_unlock_achievements(user):
                     achievement=achievement
                 )
                 if created:
+                    _grant_xp(user, achievement.xp_reward)
                     unlocked.append(achievement)
         
     except DemoPortfolio.DoesNotExist:
@@ -203,6 +223,7 @@ def check_and_unlock_achievements(user):
                 achievement=achievement
             )
             if created:
+                _grant_xp(user, achievement.xp_reward)
                 unlocked.append(achievement)
     
     # Check for perfect scenario quiz
@@ -227,6 +248,7 @@ def check_and_unlock_achievements(user):
                         achievement=achievement
                     )
                     if created:
+                        _grant_xp(user, achievement.xp_reward)
                         unlocked.append(achievement)
                 break  # Only award once
     except Exception as e:
@@ -280,10 +302,19 @@ def check_and_unlock_achievements(user):
 def get_achievements(request):
     """Get all achievements with user's unlock status - USER-SPECIFIC"""
     try:
-        # IMPORTANT: Only check for new achievements - don't auto-unlock incorrectly
-        # This function will only unlock achievements if user actually meets criteria
-        # For new users with no activity, this will return empty list
-        check_and_unlock_achievements(request.user)
+        # Optimization: Only check for new achievements every 10 minutes unless forced
+        from datetime import datetime, timedelta
+        last_check_str = request.session.get('last_achievement_check')
+        should_check = True
+        
+        if last_check_str:
+            last_check = datetime.fromisoformat(last_check_str)
+            if datetime.now() - last_check < timedelta(minutes=10):
+                should_check = False
+                
+        if should_check:
+            check_and_unlock_achievements(request.user)
+            request.session['last_achievement_check'] = datetime.now().isoformat()
         
         all_achievements = Achievement.objects.filter(is_active=True).order_by('category', 'xp_reward')
         # CRITICAL: Only get achievements that actually have UserAchievement records with valid unlocked_at timestamps
@@ -357,7 +388,9 @@ def check_achievements(request):
             'count': len(unlocked_data),
         })
     except Exception as e:
-        return Response({'error': str(e)}, status=500)
+        print(f"Error in check_achievements: {e}")
+        print(traceback.format_exc())
+        return Response({'newly_unlocked': [], 'count': 0, 'error': str(e)}, status=200)
 
 
 @api_view(['POST'])

@@ -311,3 +311,56 @@ class PredictorService:
 
 # Initialize the service globally to load models once
 ML_PREDICTOR = PredictorService()
+
+
+def get_stock_price(symbol):
+    """Simple wrapper to get current price for any symbol"""
+    ticker_name = ML_PREDICTOR._get_full_ticker(symbol)
+    try:
+        ticker = yf.Ticker(ticker_name)
+        data = ticker.history(period='1d')
+        if not data.empty:
+            return float(data['Close'].iloc[-1])
+    except:
+        pass
+    return 0.0
+
+
+def get_stock_info(symbol, use_cache=True, allow_live_fetch=True):
+    """Get basic stock info: price, name, change, etc."""
+    # This is a simplified version of what might be in views.py
+    ticker_name = ML_PREDICTOR._get_full_ticker(symbol)
+    try:
+        ticker = yf.Ticker(ticker_name)
+        info = ticker.info
+        hist = ticker.history(period='2d')
+        
+        current_price = 0.0
+        change_pct = 0.0
+        
+        if not hist.empty:
+            current_price = float(hist['Close'].iloc[-1])
+            if len(hist) > 1:
+                prev_close = float(hist['Close'].iloc[-2])
+                change_pct = ((current_price - prev_close) / prev_close) * 100
+
+        return {
+            'symbol': symbol,
+            'name': info.get('longName', symbol),
+            'current_price': round(current_price, 2),
+            'change_percent': round(change_pct, 2),
+            'sector': info.get('sector', 'N/A'),
+            'market_cap': info.get('marketCap', 0),
+            'currency': info.get('currency', 'INR' if '.NS' in ticker_name else 'USD')
+        }
+    except Exception as e:
+        print(f"[ML] Error fetching info for {symbol}: {e}")
+        return {
+            'symbol': symbol,
+            'name': symbol,
+            'current_price': 0.0,
+            'change_percent': 0.0,
+            'sector': 'N/A',
+            'market_cap': 0,
+            'currency': 'USD'
+        }

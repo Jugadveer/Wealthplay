@@ -83,6 +83,19 @@ const PortfolioAnalysis = ({ portfolio, stocksCache = [], onRefresh }) => {
             })
           } catch (error) {
             console.error(`Error fetching recommendation for ${holding.symbol}:`, error)
+            const pnlPercent = Number(holding.pnl_percent || 0)
+            recommendations.push({
+              ...holding,
+              recommendation: {
+                recommendation: pnlPercent >= 2 ? 'HOLD' : (pnlPercent <= -5 ? 'REVIEW' : 'WAIT'),
+                confidence: 0.5,
+                message: 'Live AI insight is temporarily unavailable. Showing a fallback suggestion from your current position performance.',
+                reasons: [
+                  `Current position return: ${pnlPercent.toFixed(2)}%`,
+                  'Fallback insight is rule-based and should be validated with market context.',
+                ],
+              },
+            })
           }
         }
       }
@@ -302,12 +315,18 @@ const PortfolioAnalysis = ({ portfolio, stocksCache = [], onRefresh }) => {
         {aiRecommendations.length === 0 ? (
           <div className="text-center py-12">
             <Sparkles className="w-16 h-16 text-text-muted mx-auto mb-4 opacity-30" />
-            <p className="text-text-muted">No holdings to analyze yet</p>
-            <p className="text-sm text-text-muted mt-2">Start building your portfolio to get AI insights</p>
+            <p className="text-text-muted">No AI insights available yet</p>
+            <p className="text-sm text-text-muted mt-2">
+              {Array.isArray(portfolio.holdings) && portfolio.holdings.length > 0
+                ? 'Holdings found, but insights are still loading. Please retry in a moment.'
+                : 'Start building your portfolio to get AI insights'}
+            </p>
           </div>
         ) : (
           <div className="space-y-4">
-            {aiRecommendations.map((item) => (
+            {aiRecommendations.map((item) => {
+              const recommendationText = String(item.recommendation.recommendation || '').toLowerCase()
+              return (
               <div
                 key={item.symbol}
                 className="border border-brand-1/15 rounded-xl p-6 hover:border-brand-1/40 transition-colors bg-retro-surface"
@@ -317,14 +336,19 @@ const PortfolioAnalysis = ({ portfolio, stocksCache = [], onRefresh }) => {
                     <div className="flex items-center gap-3 mb-2">
                       <h3 className="text-lg font-bold text-text-main">{item.symbol}</h3>
                       <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                        item.recommendation.recommendation === 'buy'
+                        recommendationText === 'buy'
                           ? 'bg-accent-green/15 text-accent-green'
-                          : item.recommendation.recommendation === 'sell'
+                          : recommendationText === 'sell'
                           ? 'bg-accent-red/15 text-accent-red'
                           : 'bg-yellow-500/15 text-yellow-400'
                       }`}>
                         {item.recommendation.recommendation.toUpperCase()}
                       </span>
+                      {item.recommendation?.metadata?.source && (
+                        <span className="px-2 py-1 rounded-full text-[10px] font-bold uppercase tracking-wide bg-brand-1/10 border border-brand-1/20 text-brand-1">
+                          {item.recommendation.metadata.source}
+                        </span>
+                      )}
                     </div>
                     <p className="text-sm text-text-muted">{item.name}</p>
                   </div>
@@ -375,7 +399,8 @@ const PortfolioAnalysis = ({ portfolio, stocksCache = [], onRefresh }) => {
                   </Link>
                 </div>
               </div>
-            ))}
+              )
+            })}
           </div>
         )}
       </div>

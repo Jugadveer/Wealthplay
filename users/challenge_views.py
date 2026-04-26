@@ -31,6 +31,15 @@ def extract_direction_from_prediction(prediction_text):
 
 def analyze_stock_trend(stock_symbol, price_history):
     """Analyze stock trend based on price history - returns bullish/bearish/neutral"""
+    # 1. Check if it's a CustomStock with predefined behavior
+    from .models import CustomStock
+    try:
+        custom_stock = CustomStock.objects.get(symbol=stock_symbol)
+        if custom_stock.trend != 'neutral':
+            return 'bullish' if custom_stock.trend == 'bullish' else 'bearish'
+    except CustomStock.DoesNotExist:
+        pass
+
     if not price_history or len(price_history) < 2:
         return 'neutral'
     
@@ -57,10 +66,10 @@ def analyze_stock_trend(stock_symbol, price_history):
         elif current_price < ma20 and current_price < ma50:
             return 'bearish'
     
-    # Fallback to price trend
-    if change_percent > 2:
+    # Fallback to price trend - reduced threshold for more sensitive detection
+    if change_percent > 0.5:
         return 'bullish'
-    elif change_percent < -2:
+    elif change_percent < -0.5:
         return 'bearish'
     
     return 'neutral'
@@ -216,9 +225,18 @@ def get_user_challenge_stats(request):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_random_stock_question(request):
-    """Get a random stock prediction question"""
+    """Get a random stock prediction question with optional difficulty filtering"""
     try:
+        difficulty = request.query_params.get('difficulty')
+        
         questions = StockPredictionQuestion.objects.filter(is_active=True)
+        if difficulty:
+            questions = questions.filter(difficulty__iexact=difficulty)
+            
+        if not questions.exists():
+            # Fallback if specific difficulty doesn't exist
+            questions = StockPredictionQuestion.objects.filter(is_active=True)
+            
         if not questions.exists():
             return Response({'error': 'No questions available'}, status=404)
         
@@ -231,6 +249,8 @@ def get_random_stock_question(request):
             'question': question.question,
             'chart_data': question.chart_data,
             'difficulty': question.difficulty,
+            'hint': question.hint,
+            'explanation': question.explanation,
         })
     except Exception as e:
         return Response({'error': str(e)}, status=500)
@@ -270,22 +290,26 @@ def submit_stock_prediction(request):
                 direction_match = (user_direction == question.expected_direction)
                 
                 # Calculate score based on keyword matches and direction
-                if direction_match and keyword_score > 0.5:
+                if direction_match and keyword_score > 0.7:
                     is_correct = True
                     score = question.max_score
-                    feedback = f"Excellent! {question.explanation}"
-                elif direction_match or keyword_score > 0.6:
+                    feedback = f"Masterful prediction! Your technical analysis was spot-on. {question.explanation}"
+                elif direction_match and keyword_score > 0.3:
                     is_correct = True
                     score = question.base_score + int((question.max_score - question.base_score) * keyword_score)
-                    feedback = f"Good prediction! {question.explanation}"
-                elif keyword_score > 0.3:
+                    feedback = f"Good prediction! You identified the correct trend and valid support/resistance levels. {question.explanation}"
+                elif direction_match:
+                    is_correct = True
+                    score = question.base_score
+                    feedback = f"Correct trend! Although more technical detail would have earned more points. {question.explanation}"
+                elif keyword_score > 0.5:
                     is_correct = False
-                    score = int(question.base_score * keyword_score)
-                    feedback = f"Partially correct. {question.explanation}"
+                    score = int(question.base_score * 0.5)
+                    feedback = f"You identified the right technical patterns, but the overall price action was {question.expected_direction}. {question.explanation}"
                 else:
                     is_correct = False
                     score = 0
-                    feedback = f"Not quite right. {question.explanation}"
+                    feedback = f"Not quite right. The technical setup favored a {question.expected_direction} move. {question.explanation}"
                 
                 # Save prediction
                 prediction = StockPredictionChallenge.objects.create(

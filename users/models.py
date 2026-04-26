@@ -328,6 +328,12 @@ class FinancialGoal(models.Model):
     icon = models.CharField(max_length=50, default='wallet', blank=True)  # Icon name for frontend
     color = models.CharField(max_length=100, default='from-brand-primary to-orange-500', blank=True)  # Gradient color
     icon_bg = models.CharField(max_length=100, default='bg-brand-50 text-brand-600', blank=True)  # Icon background
+    
+    # NEW FIELDS FOR AI GOAL ALGO
+    category = models.CharField(max_length=50, default='GENERAL') # HOME, EMERGENCY, WEDDING, RETIRE, TAX, EDU, TRIP
+    extra_data = models.JSONField(default=dict, blank=True) # Interest rates, etc.
+    strategy_report = models.JSONField(default=dict, blank=True) # AI generated recovery rules, etc.
+    
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
@@ -428,12 +434,13 @@ class StockPredictionQuestion(models.Model):
     
     # Metadata
     difficulty = models.CharField(max_length=20, choices=[
-        ('easy', 'Easy'),
-        ('medium', 'Medium'),
-        ('hard', 'Hard'),
-    ], default='medium')
+        ('beginner', 'Beginner'),
+        ('intermediate', 'Intermediate'),
+        ('advanced', 'Advanced'),
+    ], default='beginner')
     created_at = models.DateTimeField(auto_now_add=True)
     is_active = models.BooleanField(default=True)
+    hint = models.TextField(blank=True, null=True)
     
     class Meta:
         ordering = ['-created_at']

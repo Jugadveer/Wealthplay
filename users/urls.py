@@ -8,7 +8,7 @@ from .portfolio_views import (
     get_portfolio, get_stocks, get_stock_detail, buy_stock, sell_stock,
     get_portfolio_history, get_ai_recommendation, get_proactive_mentor_nudge,
     get_portfolio_esg, get_hindsight_replay, get_copy_trading_hub,
-    follow_copy_trader, post_trade_rationale
+    follow_copy_trader, post_trade_rationale, get_tickers_info
 )
 from .challenge_views import get_leaderboard, get_user_challenge_stats, submit_stock_prediction, get_random_stock_question
 from .achievement_views import get_achievements, check_achievements, mark_achievement_notified
@@ -37,6 +37,7 @@ urlpatterns = [
     path('award-xp/', award_xp, name='award_xp'),
     # Portfolio endpoints
     path('portfolio/', get_portfolio, name='get_portfolio'),
+    path('portfolio/tickers-info/', get_tickers_info, name='get_tickers_info'),
     path('portfolio/history/', get_portfolio_history, name='get_portfolio_history'),
     path('portfolio/stocks/', get_stocks, name='get_stocks'),
     path('portfolio/stocks/<str:symbol>/', get_stock_detail, name='get_stock_detail'),

@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { AreaChart, Area, BarChart, Bar, Line, LineChart, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts'
-import { ArrowLeft, X, Eye, EyeOff, TrendingUp, TrendingDown, Sparkles, Loader2 } from 'lucide-react'
+import { ArrowLeft, X, Eye, EyeOff, TrendingUp, TrendingDown, Sparkles, Loader2, Lightbulb, Target } from 'lucide-react'
 import api from '../utils/api'
+import TradingViewChart from '../components/TradingViewChart'
 
 const AI_TERMS = [
   'Relative Strength Index',
@@ -37,24 +38,30 @@ const highlightAiTerms = (text) => {
 
 const StockChallenge = () => {
   const navigate = useNavigate()
-  const [currentQuestion, setCurrentQuestion] = useState(null)
+  const [selectedDifficulty, setSelectedDifficulty] = useState('beginner')
+  const [showDifficultySelect, setShowDifficultySelect] = useState(true)
   const [currentStock, setCurrentStock] = useState(null)
+  const [currentQuestion, setCurrentQuestion] = useState(null)
   const [priceHistory, setPriceHistory] = useState([])
-  const [showMA, setShowMA] = useState(true)
+  const [loading, setLoading] = useState(true)
+  const [submitting, setSubmitting] = useState(false)
   const [predictionDirection, setPredictionDirection] = useState('')
   const [predictionReason, setPredictionReason] = useState('')
+  const [showFeedback, setShowFeedback] = useState(false)
+  const [aiFeedback, setAiFeedback] = useState(null)
   const [score, setScore] = useState(0)
   const [totalScore, setTotalScore] = useState(0)
   const [currentStreak, setCurrentStreak] = useState(0)
-  const [loading, setLoading] = useState(true)
-  const [submitting, setSubmitting] = useState(false)
-  const [aiFeedback, setAiFeedback] = useState(null)
-  const [showFeedback, setShowFeedback] = useState(false)
+  const [showMA, setShowMA] = useState(false)
+  const [showHint, setShowHint] = useState(false)
+  const [loadingHint, setLoadingHint] = useState(false)
   const [xpFloatText, setXpFloatText] = useState('')
   const [showConfetti, setShowConfetti] = useState(false)
 
   useEffect(() => {
-    loadRandomQuestion()
+    // Initial load: don't load random question immediately, show level selection first if desired
+    // Or just load beginner
+    loadRandomQuestion('beginner')
     fetchUserStats()
   }, [])
 
@@ -70,13 +77,15 @@ const StockChallenge = () => {
     }
   }
 
-  const loadRandomQuestion = async () => {
+  const loadRandomQuestion = async (difficulty = 'beginner') => {
     setLoading(true)
     setShowFeedback(false)
     setPredictionDirection('')
     setPredictionReason('')
+    setSelectedDifficulty(difficulty)
+    
     try {
-      const questionResponse = await api.getRandomStockQuestion()
+      const questionResponse = await api.getRandomStockQuestion(difficulty)
       if (questionResponse.data) {
         const question = questionResponse.data
         setCurrentQuestion(question)
@@ -87,6 +96,10 @@ const StockChallenge = () => {
           change_percent: 0,
         })
         setPriceHistory(question.chart_data || [])
+        // Auto-show MAs for intermediate/advanced
+        if (difficulty !== 'beginner') {
+          setShowMA(true)
+        }
       } else {
         loadRandomStock()
       }
@@ -170,7 +183,8 @@ const StockChallenge = () => {
     setPredictionReason('')
     setAiFeedback(null)
     setShowFeedback(false)
-    loadRandomQuestion()
+    setShowHint(false)
+    loadRandomQuestion(selectedDifficulty)
   }
 
   const formatCurrency = (value) => {
@@ -180,26 +194,48 @@ const StockChallenge = () => {
   }
 
   return (
-    <div className="min-h-screen bg-retro-bg text-text-main">
-      {}
-      <header className="bg-retro-surface border-b border-brand-1/20 text-text-main px-6 py-6 lg:px-10">
-        <div className="max-w-container mx-auto flex items-center justify-between">
+    <div className="min-h-screen bg-retro-bg">
+      {/* Content Container */}
+      <div className="max-w-container mx-auto px-6 py-6 lg:px-10">
+        <div className="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold mb-1 text-text-main">Challenges: Your Learning vs Ours</h1>
-            <p className="text-sm text-text-muted">Predict stock performance and test your skills</p>
+            <div className="flex items-center gap-2 text-sm font-bold text-brand-1 mb-2">
+              <Link to="/scenario" className="hover:underline">SIMULATOR</Link>
+              <span className="text-brand-1/30">/</span>
+              <span className="text-text-muted uppercase">STOCK CHALLENGE</span>
+            </div>
+            <h1 className="text-3xl font-bold text-text-main">Market Oracle</h1>
+            <p className="text-text-muted mt-1">Predict movements and master technical charts</p>
           </div>
           <button
             onClick={() => navigate('/scenario')}
-            className="bg-brand-1/10 hover:bg-brand-1/20 border border-brand-1/20 text-brand-1 px-5 py-2.5 rounded-full text-sm font-semibold shadow-sm hover:scale-105 active:scale-95 transition-all flex items-center gap-2"
+            className="w-fit bg-brand-1/10 hover:bg-brand-1/20 border border-brand-1/20 text-brand-1 px-6 py-2.5 rounded-xl text-sm font-bold shadow-sm transition-all flex items-center gap-2"
           >
             <X className="w-4 h-4" />
-            EXIT GAME
+            EXIT TO HUB
           </button>
         </div>
-      </header>
+        {}
+        <div className="flex flex-wrap items-center gap-3 mb-8 p-1.5 bg-retro-surface/50 rounded-2xl w-fit border border-brand-1/10">
+          {[
+            { id: 'beginner', label: 'Beginner', color: 'bg-accent-green' },
+            { id: 'intermediate', label: 'Intermediate', color: 'bg-brand-1' },
+            { id: 'advanced', label: 'Advanced', color: 'bg-brand-2' }
+          ].map((lvl) => (
+            <button
+              key={lvl.id}
+              onClick={() => loadRandomQuestion(lvl.id)}
+              className={`px-6 py-2.5 rounded-xl text-sm font-bold transition-all ${
+                selectedDifficulty === lvl.id 
+                ? `${lvl.color} text-white shadow-lg shadow-${lvl.color}/20 scale-105` 
+                : 'text-text-muted hover:text-text-main hover:bg-brand-1/5'
+              }`}
+            >
+              {lvl.label}
+            </button>
+          ))}
+        </div>
 
-      {}
-      <div className="max-w-container mx-auto px-6 py-6 lg:px-10">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <div className="bg-retro-surface/80 rounded-xl p-6 shadow-card border border-brand-1/20">
             <p className="text-sm text-text-muted mb-2">Total Score</p>
@@ -408,6 +444,39 @@ const StockChallenge = () => {
                       <p className="text-sm text-text-muted mb-4">
                         {currentQuestion?.question || 'Based on the chart above, how do you think this stock will perform?'}
                       </p>
+
+                      <div className="flex flex-col gap-4 mb-6">
+                        {!showHint ? (
+                          <button
+                            onClick={() => {
+                              setLoadingHint(true);
+                              setTimeout(() => {
+                                setShowHint(true);
+                                setLoadingHint(false);
+                              }, 800);
+                            }}
+                            disabled={loadingHint}
+                            className="w-full py-3 rounded-xl border border-brand-2/30 bg-brand-2/5 text-brand-2 font-bold text-sm hover:bg-brand-2/10 transition-all flex items-center justify-center gap-2 group outline-none"
+                          >
+                            {loadingHint ? (
+                              <Loader2 className="w-4 h-4 animate-spin" />
+                            ) : (
+                              <Lightbulb className="w-4 h-4 group-hover:scale-110 transition-transform" />
+                            )}
+                            {loadingHint ? 'ANALYZING CHART...' : 'GET AI HINT'}
+                          </button>
+                        ) : (
+                          <div className="p-4 bg-brand-2/5 border border-brand-2/20 rounded-xl animate-[fadeSlideDown_400ms_ease-out_forwards]">
+                            <div className="flex items-center gap-2 mb-2 text-brand-2">
+                              <Sparkles className="w-4 h-4" />
+                              <span className="text-xs font-extrabold uppercase tracking-widest">NEX HINT</span>
+                            </div>
+                            <p className="text-sm text-text-main italic leading-relaxed">
+                              "{currentQuestion?.hint || `Look closely at the recent candlestick patterns around the ${formatCurrency(currentStock?.current_price)} level. The volume volume surge suggests a potential trend reversal.`}"
+                            </p>
+                          </div>
+                        )}
+                      </div>
 
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
                         <button

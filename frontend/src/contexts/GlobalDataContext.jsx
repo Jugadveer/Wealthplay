@@ -29,9 +29,15 @@ export const GlobalDataProvider = ({ children }) => {
   
   
   const [stocks, setStocks] = useState(() => readCachedJson('wp_stocks_cache', []));
-  const [portfolio, setPortfolio] = useState(() => readCachedJson('wp_portfolio_cache', null));
+  const [portfolio, setPortfolio] = useState(() => {
+    if (!user) return null;
+    return readCachedJson(`wp_portfolio_cache_${user.id}`, null);
+  });
   const [courses, setCourses] = useState([]);
-  const [achievements, setAchievements] = useState(() => readCachedJson('wp_achievements_cache', []));
+  const [achievements, setAchievements] = useState(() => {
+    if (!user) return [];
+    return readCachedJson(`wp_achievements_cache_${user.id}`, []);
+  });
   
   
   const [loadingStocks, setLoadingStocks] = useState(false);
@@ -41,6 +47,7 @@ export const GlobalDataProvider = ({ children }) => {
   
   
   const fetchStocks = useCallback(async (force = false) => {
+    if (loadingStocks) return;
     setLoadingStocks(true);
     try {
       const response = await api.getStocks();
@@ -54,14 +61,15 @@ export const GlobalDataProvider = ({ children }) => {
     } finally {
       setLoadingStocks(false);
     }
-  }, []);
+  }, [loadingStocks]);
 
   const fetchPortfolio = useCallback(async (force = false) => {
+    if (loadingPortfolio) return;
     setLoadingPortfolio(true);
     try {
       const response = await api.getPortfolio();
       setPortfolio(response.data);
-      writeCachedJson('wp_portfolio_cache', response.data);
+      if (user) writeCachedJson(`wp_portfolio_cache_${user.id}`, response.data);
       return response.data;
     } catch (error) {
       console.error('Error fetching global portfolio:', error);
@@ -69,10 +77,10 @@ export const GlobalDataProvider = ({ children }) => {
     } finally {
       setLoadingPortfolio(false);
     }
-  }, []);
+  }, [user, loadingPortfolio]);
 
   const fetchCourses = useCallback(async () => {
-    // Return early if already fetching to prevent context loops
+    if (loadingCourses) return;
     setLoadingCourses(true);
     try {
       const response = await api.getCourses();
@@ -85,15 +93,16 @@ export const GlobalDataProvider = ({ children }) => {
     } finally {
       setLoadingCourses(false);
     }
-  }, []);
+  }, [loadingCourses]);
 
   const fetchAchievements = useCallback(async (force = false) => {
+    if (loadingAchievements) return;
     setLoadingAchievements(true);
     try {
-      const response = await api.getAchievements();
-      const achievementsData = response.data.achievements || [];
+      const response = force ? await api.checkAchievements() : await api.getAchievements();
+      const achievementsData = Array.isArray(response.data) ? response.data : (response.data.achievements || []);
       setAchievements(achievementsData);
-      writeCachedJson('wp_achievements_cache', achievementsData);
+      if (user) writeCachedJson(`wp_achievements_cache_${user.id}`, achievementsData);
       return achievementsData;
     } catch (error) {
       console.error('Error fetching global achievements:', error);
@@ -101,39 +110,28 @@ export const GlobalDataProvider = ({ children }) => {
     } finally {
       setLoadingAchievements(false);
     }
-  }, []);
+  }, [user, loadingAchievements]);
 
   
   const isHydrated = useRef(false);
 
   // Data hydration and cleanup
   useEffect(() => {
-    if (user) {
-      if (!isHydrated.current) {
-        console.log('User authenticated, single-pass pre-loading global assets...');
-        isHydrated.current = true;
-        
-        fetchStocks(false);
-        fetchPortfolio(false);
+    if (user?.id) {
+      if (isHydrated.current !== user.id) {
+        fetchStocks();
+        fetchPortfolio();
         fetchCourses();
         fetchAchievements(false);
+        isHydrated.current = user.id;
       }
     } else {
-      if (isHydrated.current) {
-        console.log('User logged out, clearing global assets...');
-        isHydrated.current = false;
-        
-        setStocks([]);
-        setPortfolio(null);
-        setCourses([]);
-        setAchievements([]);
-        
-        writeCachedJson('wp_stocks_cache', []);
-        writeCachedJson('wp_portfolio_cache', null);
-        writeCachedJson('wp_achievements_cache', []);
-      }
+      // Clear data on logout
+      setPortfolio(null);
+      setAchievements([]);
+      isHydrated.current = false;
     }
-  }, [user, fetchStocks, fetchPortfolio, fetchCourses, fetchAchievements]);
+  }, [user?.id, fetchStocks, fetchPortfolio, fetchCourses, fetchAchievements]);
 
   useEffect(() => {
     if (!user) return;

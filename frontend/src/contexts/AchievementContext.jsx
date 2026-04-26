@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useCallback, useEffect } from 'react'
 import api from '../utils/api'
 import AchievementPopup from '../components/AchievementPopup'
+import { useAuth } from './AuthContext'
 
 const AchievementContext = createContext()
 
@@ -13,10 +14,12 @@ export const useAchievements = () => {
 }
 
 export const AchievementProvider = ({ children }) => {
+  const { user } = useAuth()
   const [currentAchievement, setCurrentAchievement] = useState(null)
   const [notifiedAchievements, setNotifiedAchievements] = useState(new Set())
 
   const checkAchievements = useCallback(async () => {
+    if (!user) return
     try {
       const response = await api.checkAchievements()
       if (response.data && response.data.newly_unlocked && response.data.newly_unlocked.length > 0) {
@@ -29,10 +32,11 @@ export const AchievementProvider = ({ children }) => {
     } catch (error) {
       console.error('Error checking achievements:', error)
     }
-  }, [notifiedAchievements])
+  }, [notifiedAchievements, user])
 
   useEffect(() => {
-    
+    if (!user) return
+
     checkAchievements()
 
     
@@ -46,7 +50,7 @@ export const AchievementProvider = ({ children }) => {
       clearInterval(interval)
       window.removeEventListener('achievement-check', handleImmediateCheck)
     }
-  }, [checkAchievements])
+  }, [checkAchievements, user])
 
   const handleAchievementNotified = useCallback((achievementId) => {
     setNotifiedAchievements(prev => new Set([...prev, achievementId]))

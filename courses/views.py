@@ -257,6 +257,7 @@ def generate_custom_course (request ):
 from django .views .decorators .csrf import csrf_exempt 
 from django .views .decorators .http import require_http_methods 
 
+@csrf_exempt
 @api_view (['POST'])
 @permission_classes ([AllowAny ])
 def login_view (request ):
@@ -303,6 +304,7 @@ def login_view (request ):
     return JsonResponse ({'success':False ,'error':'Invalid credentials'},status =401 )
 
 
+@csrf_exempt
 @api_view (['POST'])
 @permission_classes ([AllowAny ])
 def signup_view (request ):
@@ -373,6 +375,7 @@ def signup_view (request ):
         return JsonResponse ({'success':False ,'error':str (e )},status =500 )
 
 
+@csrf_exempt
 @api_view (['POST'])
 @permission_classes ([AllowAny ])
 def logout_view (request ):
