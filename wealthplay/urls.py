@@ -20,6 +20,7 @@ urlpatterns = [
     path('api/users/', include('users.urls')),
     path('api/scenario/', include('simulator.urls')),
     path('api/daily/', include('daily.urls')),
+    path('api/ai/', include('ai.urls')),
     path('', home, name='home'),
 ]
 
