@@ -229,17 +229,37 @@ def _call_gemini(prompt: str, system: str, temperature: float, max_tokens: int) 
 # Health                                                                       #
 # --------------------------------------------------------------------------- #
 
+# How long a reachability check is trusted. Long enough that a deployment with
+# no Ollama does not probe a dead address on every request; short enough that
+# starting Ollama locally is reflected without a restart.
+READY_TTL = 60
+
+
 def ollama_ready() -> bool:
-    """True when Ollama is up and the configured model is pulled."""
+    """True when Ollama is up and the configured model is pulled.
+
+    Cached, including the negative. On a hosted deployment there is no Ollama at
+    all, and this is called on every `status()`; without the cache each one pays
+    a connection attempt to an address that will never answer.
+    """
+    key = f'ollama-ready:{_ollama_host()}:{_ollama_model()}'
+    hit = cache.get(key)
+    if hit is not None:
+        return hit
+
     try:
         response = requests.get(f'{_ollama_host()}/api/tags', timeout=3)
         names = {m['name'] for m in response.json().get('models', [])}
+        wanted = _ollama_model()
+        # `qwen2.5:0.5b-instruct` and a bare `qwen2.5:0.5b` are the same weights.
+        ready = any(
+            name == wanted or name.startswith(wanted.split(':')[0] + ':') for name in names
+        )
     except (requests.RequestException, ValueError, KeyError):
-        return False
+        ready = False
 
-    wanted = _ollama_model()
-    # `qwen2.5:0.5b-instruct` and a bare `qwen2.5:0.5b` are the same weights.
-    return any(name == wanted or name.startswith(wanted.split(':')[0] + ':') for name in names)
+    cache.set(key, ready, READY_TTL)
+    return ready
 
 
 def is_configured() -> bool:
