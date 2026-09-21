@@ -1,15 +1,21 @@
 """
 The mentor, Nex.
 
-One endpoint serves both the in-lesson mentor and the floating assistant; the
-only difference is whether a module id is supplied. There used to be two
-endpoints with two prompts, two histories, and two greetings — one of which
-called the mentor "Next".
+One endpoint serves the assistant everywhere it appears. There used to be two,
+with two prompts, two histories and two greetings — one of which called the
+mentor "Next".
 
-Questions are grounded in the module the learner is reading, resolved through
-:mod:`courses.content`. Previously the mentor searched an unrelated JSON file
-that never contained the real course ids, so every question answered
-"Course 'investing-basics' not found."
+Answers are grounded twice over. A question the open module already answers in
+its Q&A gets the authored answer verbatim, which is faster and exactly right.
+Anything else is searched across all 60 modules by :mod:`ai.retrieve` and the
+model rewrites what comes back.
+
+That second step is the difference between a useful assistant and a harmful
+one. The local model asked "what is an index fund?" from memory replies that it
+is "also known as an ETF" holding "a single underlying stock", and cites the
+S&P 500 to a user in India. Handed the authored passage on the same question it
+answers with the Nifty 50 and the real fee gap. The model is a writer here, not
+a source.
 """
 
 from __future__ import annotations
@@ -40,10 +46,16 @@ UNAVAILABLE = (
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def ask_mentor(request):
-    """Answer a question, grounded in the current module when there is one."""
+    """Answer a question, grounded in the course content.
+
+    ``zone`` is the section of the app the question was asked from. It only
+    widens the search — a question asked on the markets page is still answered
+    from whichever module covers it.
+    """
     question = (request.data.get('question') or '').strip()[:MAX_QUESTION_LENGTH]
     course_id = (request.data.get('course_id') or '').strip()
     module_id = (request.data.get('module_id') or '').strip()
+    zone = (request.data.get('zone') or '').strip()
 
     if not question:
         return Response({'error': 'Ask me something first.'}, status=400)
@@ -56,20 +68,39 @@ def ask_mentor(request):
         authored = _authored_answer(question, module['qna'])
         if authored:
             _record(request.user, course_id, module_id, question, authored)
-            return Response({'reply': authored, 'source': 'lesson', 'available': True})
+            return Response({
+                'reply': authored,
+                'source': 'lesson',
+                'available': True,
+                'sources': [{
+                    'title': module['title'],
+                    'where': module['title'],
+                    'course_id': course_id,
+                    'module_id': module_id,
+                }],
+            })
 
-    reply = tutor.answer_lesson_question(
+    answer = tutor.answer_question(
         question,
-        module_title=module['title'] if module else 'general finance',
+        course_id=course_id or _COURSE_FOR_ZONE.get(zone, ''),
+        module_id=module_id,
+        module_title=module['title'] if module else '',
         theory=module['theory'] if module else '',
         history=_recent_turns(request.user, course_id, module_id),
     )
 
-    if reply is None:
+    if answer is None:
         return Response({'reply': UNAVAILABLE, 'source': 'unavailable', 'available': False})
 
-    _record(request.user, course_id, module_id, question, reply)
-    return Response({'reply': reply, 'source': 'model', 'available': True})
+    _record(request.user, course_id, module_id, question, answer['reply'])
+    return Response({
+        'reply': answer['reply'],
+        # Which of the three it is matters to the reader: a glossary entry and a
+        # sentence the model wrote are not equally reliable, and the UI says so.
+        'source': answer.get('source', 'model'),
+        'available': True,
+        'sources': answer['sources'],
+    })
 
 
 @api_view(['GET'])
@@ -92,6 +123,18 @@ def mentor_history(request, course_id, module_id=''):
             ]
         }
     )
+
+
+# The course a section of the app is mostly about, used to break ties in
+# search when the question was not asked inside a lesson.
+_COURSE_FOR_ZONE = {
+    'markets': 'stock-market-101',
+    'goals': 'financial-goals',
+    'play': 'behavioral-finance',
+    'progress': 'investing-basics',
+    'today': '',
+    'learn': '',
+}
 
 
 def _authored_answer(question: str, qna: list[dict]) -> str | None:
