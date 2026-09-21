@@ -29,6 +29,8 @@ class PuzzleKind(models.TextChoices):
     TICKER = 'ticker', 'Ticker Tiles'
     CALL = 'call', 'Market Call'
     ESTIMATE = 'estimate', 'Number Sense'
+    LEDGER = 'ledger', 'Ledger'
+    RANK = 'rank', 'Rank It'
 
 
 class DailyPuzzle(models.Model):

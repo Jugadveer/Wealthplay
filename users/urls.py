@@ -38,6 +38,7 @@ urlpatterns = [
     # Challenges
     path('challenges/leaderboard/', challenge_views.get_leaderboard, name='get_leaderboard'),
     path('challenges/stats/', challenge_views.get_user_challenge_stats, name='get_user_challenge_stats'),
+    path('challenges/calibration/', challenge_views.get_calibration, name='get_calibration'),
     path('challenges/question/', challenge_views.get_random_stock_question, name='get_random_stock_question'),
     path('challenges/hint/', challenge_views.get_prediction_hint, name='get_prediction_hint'),
     path('challenges/predict/', challenge_views.submit_stock_prediction, name='submit_stock_prediction'),

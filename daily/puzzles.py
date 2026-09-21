@@ -108,6 +108,22 @@ ESTIMATE_FACTS = [
 ]
 
 
+def daily_pick(items: list, day: date, kind: str, count: int = 1) -> list:
+    """Pick from ``items`` so that nothing repeats until everything has been used.
+
+    ``rng.choice`` was drawing independently each day, so the same ticker could
+    come up twice in a week and Number Sense repeated a question inside a
+    fortnight. Instead the list is shuffled once with a fixed seed and then
+    walked in order, which makes the cycle exactly as long as the list, is
+    identical for every player, and still looks unordered.
+    """
+    order = list(items)
+    random.Random(f'wealthplay:cycle:{kind}').shuffle(order)
+
+    start = day.toordinal() * count
+    return [order[(start + offset) % len(order)] for offset in range(count)]
+
+
 def seeded_random(day: date, kind: str) -> random.Random:
     """A generator that depends only on the day and puzzle kind."""
     digest = hashlib.sha256(f'wealthplay:{day.isoformat()}:{kind}'.encode()).hexdigest()
@@ -120,10 +136,16 @@ def get_or_create(day: date, kind: str) -> DailyPuzzle:
     if existing:
         return existing
 
+    # Imported here rather than at module scope: games.py needs PUZZLE_UNIVERSE
+    # and daily_pick from this module, so a top-level import would be circular.
+    from . import games
+
     builders = {
         PuzzleKind.TICKER: _build_ticker,
         PuzzleKind.CALL: _build_call,
         PuzzleKind.ESTIMATE: _build_estimate,
+        PuzzleKind.LEDGER: games.build_ledger,
+        PuzzleKind.RANK: games.build_rank,
     }
     payload, solution = builders[kind](day)
 
@@ -145,8 +167,7 @@ def _build_ticker(day: date) -> tuple[dict, dict]:
     Clues run from broad to narrow, so an informed player can often get it in
     two or three and a beginner still converges by five.
     """
-    rng = seeded_random(day, PuzzleKind.TICKER)
-    symbol, name, sector = rng.choice(PUZZLE_UNIVERSE)
+    symbol, name, sector = daily_pick(PUZZLE_UNIVERSE, day, PuzzleKind.TICKER)[0]
 
     quote = pricing.quote(symbol)
     series = services.get_history(symbol, days=250)
@@ -236,8 +257,7 @@ def score_ticker(guess_count: int, solved: bool) -> int:
 
 def _build_call(day: date) -> tuple[dict, dict]:
     """A binary call on one index or large-cap, resolved from the next close."""
-    rng = seeded_random(day, PuzzleKind.CALL)
-    symbol, name, _ = rng.choice(PUZZLE_UNIVERSE[:8])
+    symbol, name, _ = daily_pick(PUZZLE_UNIVERSE, day, PuzzleKind.CALL)[0]
 
     quote = pricing.quote(symbol)
     series = services.get_history(symbol, days=30)
@@ -291,8 +311,7 @@ def resolve_call(puzzle: DailyPuzzle) -> dict:
 
 def _build_estimate(day: date) -> tuple[dict, dict]:
     """Guess a real figure. Scored on how close, not on being exact."""
-    rng = seeded_random(day, PuzzleKind.ESTIMATE)
-    fact = rng.choice(ESTIMATE_FACTS)
+    fact = daily_pick(ESTIMATE_FACTS, day, PuzzleKind.ESTIMATE)[0]
 
     return (
         {'question': fact['question'], 'unit': fact['unit']},

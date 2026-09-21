@@ -52,6 +52,18 @@ def _direction_from_series(series: list[dict]) -> str:
     return 'neutral'
 
 
+def _clamp_confidence(value) -> int:
+    """Confidence is a probability you assign to your own call, 50-100.
+
+    Below 50 you would simply call the other way, so the scale starts there.
+    """
+    try:
+        parsed = int(value)
+    except (TypeError, ValueError):
+        return 50
+    return max(50, min(100, parsed))
+
+
 def _normalise_call(text: str) -> str:
     """Map a free-text or button prediction onto bullish/bearish/neutral."""
     lowered = (text or '').lower()
@@ -192,13 +204,32 @@ def get_user_challenge_stats(request):
 # The game                                                                     #
 # --------------------------------------------------------------------------- #
 
+# The live pool. Wide enough that a player does not see the same chart twice in
+# a sitting, and every name is liquid enough to have a year of clean history.
+LIVE_UNIVERSE = (
+    'AAPL', 'MSFT', 'NVDA', 'GOOGL', 'AMZN', 'META', 'TSLA',
+    'RELIANCE', 'TCS', 'INFY', 'HDFCBANK', 'ICICIBANK', 'SBIN', 'ITC', 'BHARTIARTL',
+)
+
+# Varying the horizon changes the read: a week is momentum, a quarter is trend.
+LIVE_HORIZONS = (
+    ('the next week', 60),
+    ('the next month', 120),
+    ('the next quarter', 250),
+)
+
+RECENT_SYMBOL_MEMORY = 8
+
+
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_random_stock_question(request):
-    """Serve a prediction round.
+    """Serve a prediction round the player has not already seen.
 
-    Prefers the authored question bank; falls back to a live chart when the bank
-    is exhausted for the chosen difficulty, so the game never runs out.
+    The bank used to be drawn with ``order_by('?')`` and no memory, so with
+    seven authored questions a player saw repeats within a handful of rounds.
+    Now every answered question is recorded and excluded, and once the bank runs
+    out the game continues on live charts — which never run out.
     """
     difficulty = request.query_params.get('difficulty')
 
@@ -207,7 +238,9 @@ def get_random_stock_question(request):
         narrowed = questions.filter(difficulty__iexact=difficulty)
         questions = narrowed if narrowed.exists() else questions
 
-    question = questions.order_by('?').first()
+    seen = StockPredictionChallenge.objects.filter(user=request.user).exclude(question=None)
+    question = questions.exclude(id__in=seen.values('question_id')).order_by('?').first()
+
     if question:
         return Response(
             {
@@ -221,22 +254,32 @@ def get_random_stock_question(request):
             }
         )
 
-    symbol = random.choice(['AAPL', 'MSFT', 'NVDA', 'RELIANCE', 'TCS', 'INFY'])
-    quote = pricing.quote(symbol)
-    series = pricing.history(symbol, days=90)
+    return Response(_live_round(request.user, difficulty))
 
-    return Response(
-        {
-            'id': None,
-            'source': 'live',
-            'stock_name': quote['name'],
-            'stock_symbol': symbol,
-            'question': f'Where does {quote["name"]} go over the next week?',
-            'chart_data': series,
-            'currency': quote['currency'],
-            'difficulty': difficulty or 'intermediate',
-        }
+
+def _live_round(user, difficulty: str | None) -> dict:
+    """A round built from a real chart, avoiding this player's recent symbols."""
+    recent = list(
+        StockPredictionChallenge.objects.filter(user=user)
+        .order_by('-created_at')
+        .values_list('stock_symbol', flat=True)[:RECENT_SYMBOL_MEMORY]
     )
+    pool = [symbol for symbol in LIVE_UNIVERSE if symbol not in recent] or list(LIVE_UNIVERSE)
+
+    symbol = random.choice(pool)
+    horizon, window = random.choice(LIVE_HORIZONS)
+    quote = pricing.quote(symbol)
+
+    return {
+        'id': None,
+        'source': 'live',
+        'stock_name': quote['name'],
+        'stock_symbol': symbol,
+        'question': f'Where does {quote["name"]} go over {horizon}?',
+        'chart_data': pricing.history(symbol, days=window),
+        'currency': quote['currency'],
+        'difficulty': difficulty or 'intermediate',
+    }
 
 
 @api_view(['GET'])
@@ -264,6 +307,7 @@ def submit_stock_prediction(request):
     """Record a call, score it, and return feedback on the reasoning."""
     call_text = (request.data.get('prediction') or '').strip()
     rationale = (request.data.get('rationale') or '').strip()
+    confidence = _clamp_confidence(request.data.get('confidence'))
     question_id = request.data.get('question_id')
     symbol = (request.data.get('stock_symbol') or '').strip().upper()
 
@@ -309,6 +353,8 @@ def submit_stock_prediction(request):
 
     StockPredictionChallenge.objects.create(
         user=request.user,
+        question=question,
+        confidence=confidence,
         stock_symbol=symbol,
         prediction=call_text,
         prediction_direction=call,
@@ -332,7 +378,77 @@ def submit_stock_prediction(request):
             'feedback': feedback,
             'feedback_available': bool(feedback),
             'rationale_bonus': RATIONALE_BONUS if rationale else 0,
+            'confidence': confidence,
             'total_score': entry.total_score,
             'current_streak': entry.current_streak,
         }
     )
+
+
+# --------------------------------------------------------------------------- #
+# Calibration                                                                  #
+# --------------------------------------------------------------------------- #
+
+CALIBRATION_BANDS = ((50, 60), (60, 70), (70, 80), (80, 90), (90, 101))
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_calibration(request):
+    """How often the player was right, bucketed by how sure they said they were.
+
+    Being right a lot is easy on easy calls. Being *calibrated* — right 70% of
+    the times you said 70% — is the skill, and it is the one thing here that a
+    quiz cannot teach. A perfectly calibrated player sits on the diagonal.
+    """
+    calls = list(
+        StockPredictionChallenge.objects.filter(user=request.user).values_list(
+            'confidence', 'is_correct'
+        )
+    )
+
+    bands = []
+    for low, high in CALIBRATION_BANDS:
+        inside = [correct for confidence, correct in calls if low <= confidence < high]
+        bands.append(
+            {
+                'label': f'{low}-{min(high, 100)}%',
+                'stated': (low + min(high, 100)) / 2,
+                'calls': len(inside),
+                'actual': round(sum(inside) / len(inside) * 100, 1) if inside else None,
+            }
+        )
+
+    measured = [band for band in bands if band['calls']]
+    gap = (
+        round(
+            sum(abs(band['actual'] - band['stated']) * band['calls'] for band in measured)
+            / sum(band['calls'] for band in measured),
+            1,
+        )
+        if measured
+        else None
+    )
+
+    return Response(
+        {
+            'bands': bands,
+            'total_calls': len(calls),
+            # One number: average distance between what you claimed and what
+            # happened. Lower is better; 0 is perfectly calibrated.
+            'calibration_gap': gap,
+            'verdict': _calibration_verdict(gap, len(calls)),
+        }
+    )
+
+
+def _calibration_verdict(gap: float | None, calls: int) -> str:
+    if calls < 5:
+        return f'Make {5 - calls} more calls and this starts to mean something.'
+    if gap is None:
+        return 'No calls with a stated confidence yet.'
+    if gap <= 10:
+        return 'Well calibrated. Your confidence matches your hit rate.'
+    if gap <= 20:
+        return 'Roughly calibrated. Watch the bands where you overclaim.'
+    return 'Overconfident. You are surer than your record supports.'

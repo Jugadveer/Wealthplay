@@ -18,7 +18,13 @@ from django.test import TestCase
 from daily.models import Streak
 from market_data.services import Quote
 from users.achievement_views import CATALOGUE, check_and_unlock_achievements
-from users.models import DemoPortfolio, UserAchievement, UserProfile
+from users.models import (
+    DemoPortfolio,
+    StockPredictionChallenge,
+    StockPredictionQuestion,
+    UserAchievement,
+    UserProfile,
+)
 from users.portfolio.valuation import value_portfolio
 
 
@@ -177,3 +183,88 @@ class StreakTests(TestCase):
 
         self.assertEqual(self.streak.current, 1)
         self.assertEqual(self.streak.longest, 4)
+
+
+class OracleRepetitionTests(TestCase):
+    """A bank of seven questions must not be served twice to the same player."""
+
+    def setUp(self):
+        self.user = User.objects.create_user('oracle', password='x')
+        self.client.force_login(self.user)
+        for index in range(4):
+            StockPredictionQuestion.objects.create(
+                stock_name=f'Company {index}',
+                stock_symbol=f'SYM{index}',
+                question='Where next?',
+                expected_direction='up',
+                difficulty='beginner',
+                is_active=True,
+            )
+
+    def test_an_answered_question_is_never_served_again(self):
+        """Regression: order_by('?') with no memory repeated inside a few rounds."""
+        first = self.client.get('/api/users/challenges/question/').json()
+        StockPredictionChallenge.objects.create(
+            user=self.user,
+            question_id=first['id'],
+            stock_symbol=first['stock_symbol'],
+            prediction='bullish',
+        )
+
+        for _ in range(6):
+            served = self.client.get('/api/users/challenges/question/').json()
+            self.assertNotEqual(served['id'], first['id'])
+
+    def test_the_game_continues_once_the_bank_is_empty(self):
+        StockPredictionQuestion.objects.update(is_active=False)
+        served = self.client.get('/api/users/challenges/question/').json()
+        self.assertEqual(served['source'], 'live')
+        self.assertTrue(served['stock_symbol'])
+
+
+class CalibrationTests(TestCase):
+    """Calibration is the product's one genuinely distinctive measure."""
+
+    def setUp(self):
+        self.user = User.objects.create_user('calib', password='x')
+        self.client.force_login(self.user)
+
+    def _call(self, confidence, correct):
+        StockPredictionChallenge.objects.create(
+            user=self.user,
+            stock_symbol='AAPL',
+            prediction='bullish',
+            confidence=confidence,
+            is_correct=correct,
+        )
+
+    def test_confidence_is_clamped_to_a_probability_you_would_act_on(self):
+        from users.challenge_views import _clamp_confidence
+
+        self.assertEqual(_clamp_confidence(10), 50)
+        self.assertEqual(_clamp_confidence(140), 100)
+        self.assertEqual(_clamp_confidence('not a number'), 50)
+        self.assertEqual(_clamp_confidence(75), 75)
+
+    def test_a_perfectly_calibrated_player_has_no_gap(self):
+        for _ in range(7):
+            self._call(70, True)
+        for _ in range(3):
+            self._call(70, False)
+
+        data = self.client.get('/api/users/challenges/calibration/').json()
+        self.assertEqual(data['calibration_gap'], 5.0)
+        self.assertIn('calibrated', data['verdict'])
+
+    def test_overclaiming_is_named(self):
+        for _ in range(10):
+            self._call(95, False)
+
+        data = self.client.get('/api/users/challenges/calibration/').json()
+        self.assertGreater(data['calibration_gap'], 20)
+        self.assertIn('Overconfident', data['verdict'])
+
+    def test_too_few_calls_says_so_rather_than_inventing_a_verdict(self):
+        self._call(80, True)
+        data = self.client.get('/api/users/challenges/calibration/').json()
+        self.assertIn('more calls', data['verdict'])

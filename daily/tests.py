@@ -11,8 +11,9 @@ from unittest.mock import patch
 from django.contrib.auth.models import User
 from django.test import TestCase
 
-from daily import puzzles
+from daily import games, puzzles
 from daily.models import PuzzleKind, ReviewCard
+from daily.words import LEDGER_WORDS
 
 
 class SeedingTests(TestCase):
@@ -102,3 +103,75 @@ class ReviewSchedulingTests(TestCase):
         today = date(2026, 1, 1)
         self.card.review(True, today)
         self.assertGreater(self.card.due_on, today)
+
+class RepetitionTests(TestCase):
+    """Nothing in the daily set may repeat before the whole list has been used."""
+
+    def test_a_pick_cycles_before_it_repeats(self):
+        """Regression: rng.choice drew independently, so tickers repeated in a week."""
+        items = list(range(10))
+        picks = [puzzles.daily_pick(items, date(2026, 1, 1) + timedelta(days=offset), 'x')[0]
+                 for offset in range(10)]
+        self.assertEqual(sorted(picks), items)
+
+    def test_a_pick_is_the_same_for_everyone(self):
+        day = date(2026, 5, 4)
+        first = puzzles.daily_pick(list(range(20)), day, 'ticker')
+        second = puzzles.daily_pick(list(range(20)), day, 'ticker')
+        self.assertEqual(first, second)
+
+    def test_different_games_pick_differently_on_the_same_day(self):
+        day = date(2026, 5, 4)
+        self.assertNotEqual(
+            puzzles.daily_pick(list(range(30)), day, 'ticker'),
+            puzzles.daily_pick(list(range(30)), day, 'ledger'),
+        )
+
+
+class LedgerTests(TestCase):
+    def test_marks_exact_letters_first(self):
+        self.assertEqual(
+            games.mark_guess('STOCK', 'STOCK'),
+            ['hit', 'hit', 'hit', 'hit', 'hit'],
+        )
+
+    def test_a_repeated_letter_is_not_double_credited(self):
+        """SPLIT against STOCK has one T, so only one tile may be marked for it."""
+        marks = games.mark_guess('SPLIT', 'STOCK')
+        self.assertEqual(marks[0], 'hit')
+        self.assertEqual(marks.count('near'), 1)
+
+    def test_a_letter_not_in_the_word_misses(self):
+        self.assertEqual(games.mark_guess('ZZZZZ', 'STOCK'), ['miss'] * 5)
+
+    def test_score_rewards_fewer_guesses(self):
+        self.assertGreater(games.score_ledger(1, True), games.score_ledger(5, True))
+        self.assertEqual(games.score_ledger(6, False), 0)
+
+    def test_every_word_is_five_letters_with_a_definition(self):
+        for word, meaning in LEDGER_WORDS:
+            with self.subTest(word=word):
+                self.assertEqual(len(word), 5)
+                self.assertTrue(word.isalpha() and word.isupper())
+                self.assertTrue(meaning.strip())
+
+    def test_no_duplicate_words(self):
+        words = [word for word, _ in LEDGER_WORDS]
+        self.assertEqual(len(words), len(set(words)))
+
+
+class RankTests(TestCase):
+    def test_a_perfect_order_scores_every_pair(self):
+        points, concordant, pairs = games.score_rank(['A', 'B', 'C', 'D'], ['A', 'B', 'C', 'D'])
+        self.assertEqual((concordant, pairs), (6, 6))
+        self.assertEqual(points, 50)
+
+    def test_a_reversed_order_scores_nothing(self):
+        points, concordant, _ = games.score_rank(['D', 'C', 'B', 'A'], ['A', 'B', 'C', 'D'])
+        self.assertEqual((points, concordant), (0, 0))
+
+    def test_one_swap_still_earns_most_of_the_marks(self):
+        """Knowing the winner and the loser is most of the understanding."""
+        points, concordant, pairs = games.score_rank(['A', 'C', 'B', 'D'], ['A', 'B', 'C', 'D'])
+        self.assertEqual((concordant, pairs), (5, 6))
+        self.assertGreater(points, 40)

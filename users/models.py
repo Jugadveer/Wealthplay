@@ -174,8 +174,26 @@ class ChallengeLeaderboard(models.Model):
 
 
 class StockPredictionChallenge(models.Model):
-    """Track user's stock prediction challenges"""
+    """One call a user made on one stock.
+
+    ``confidence`` is what makes the game more than a coin flip: the score cares
+    whether you were right, and the calibration view cares whether your
+    confidence matched how often you were right.
+
+    ``question`` is nullable because a round can be served live from the market
+    when the authored bank is exhausted. It is recorded so the same bank
+    question is never served to the same user twice.
+    """
+
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='stock_predictions')
+    question = models.ForeignKey(
+        'StockPredictionQuestion',
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name='attempts',
+    )
+    confidence = models.IntegerField(default=50)
     stock_symbol = models.CharField(max_length=20)
     prediction = models.TextField()
     prediction_direction = models.CharField(max_length=10, default='neutral')  # up, down, neutral

@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import logging
+
 from datetime import date, timedelta
 
 from django.db.models import Count, Q
@@ -13,8 +15,10 @@ from rest_framework.response import Response
 from ai import tutor
 from users.models import UserProfile
 
-from . import puzzles, review
+from . import games, puzzles, review
 from .models import DailyPuzzle, PuzzleAttempt, PuzzleKind, ReviewCard, Streak
+
+logger = logging.getLogger(__name__)
 
 
 def _streak_for(user) -> Streak:
@@ -45,6 +49,29 @@ def _current_xp(user) -> int:
     return profile.xp
 
 
+PLAYABLE_KINDS = (
+    PuzzleKind.TICKER,
+    PuzzleKind.LEDGER,
+    PuzzleKind.CALL,
+    PuzzleKind.RANK,
+    PuzzleKind.ESTIMATE,
+)
+
+
+def _safe_puzzle(day: date, kind: str) -> DailyPuzzle | None:
+    """Build a puzzle, or report none.
+
+    Rank It needs a year of prices for several symbols. If the provider cannot
+    supply them, that one game is missing from today's set — which is better
+    than the whole page failing on it.
+    """
+    try:
+        return puzzles.get_or_create(day, kind)
+    except Exception:
+        logger.warning('could not build the %s puzzle for %s', kind, day, exc_info=True)
+        return None
+
+
 # --------------------------------------------------------------------------- #
 # Today                                                                        #
 # --------------------------------------------------------------------------- #
@@ -57,8 +84,10 @@ def today(request):
     streak = _streak_for(request.user)
 
     plays = []
-    for kind in (PuzzleKind.TICKER, PuzzleKind.CALL, PuzzleKind.ESTIMATE):
-        puzzle = puzzles.get_or_create(day, kind)
+    for kind in PLAYABLE_KINDS:
+        puzzle = _safe_puzzle(day, kind)
+        if puzzle is None:
+            continue
         attempt = PuzzleAttempt.objects.filter(user=request.user, puzzle=puzzle).first()
         plays.append(
             {
@@ -68,8 +97,15 @@ def today(request):
                 'solved': bool(attempt and attempt.solved),
                 'score': attempt.score if attempt else 0,
                 # A market call is placed today and settles tomorrow, so it is
-                # neither untouched nor finished in between.
-                'pending': bool(attempt and attempt.guesses and not attempt.finished),
+                # neither untouched nor finished in between. Every other game
+                # resolves immediately, so a part-played board is in progress,
+                # not pending — labelling Ledger "settles tomorrow" was wrong.
+                'pending': bool(
+                    kind == PuzzleKind.CALL and attempt and attempt.guesses and not attempt.finished
+                ),
+                'in_progress': bool(
+                    kind != PuzzleKind.CALL and attempt and attempt.guesses and not attempt.finished
+                ),
             }
         )
 
@@ -408,3 +444,102 @@ def recap(request):
     narrative = tutor.weekly_recap(stats)
 
     return Response({'stats': stats, 'narrative': narrative, 'narrative_available': bool(narrative)})
+
+
+# --------------------------------------------------------------------------- #
+# Ledger                                                                       #
+# --------------------------------------------------------------------------- #
+
+def _ledger_state(attempt: PuzzleAttempt, puzzle: DailyPuzzle) -> dict:
+    rows = attempt.guesses
+    return {
+        **puzzle.payload,
+        'rows': rows,
+        'finished': attempt.finished,
+        'solved': attempt.solved,
+        'score': attempt.score,
+        # The word is only ever sent once the board is closed, win or lose.
+        'answer': puzzle.solution if attempt.finished else None,
+        'share': (
+            games.ledger_share([row['marks'] for row in rows], puzzle.puzzle_date, attempt.solved)
+            if attempt.finished
+            else None
+        ),
+    }
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def ledger_board(request):
+    """Today's word board, showing only what this player has already guessed."""
+    puzzle = puzzles.get_or_create(date.today(), PuzzleKind.LEDGER)
+    return Response(_ledger_state(_attempt_for(request.user, puzzle), puzzle))
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def ledger_guess(request):
+    """Submit one five-letter guess."""
+    puzzle = puzzles.get_or_create(date.today(), PuzzleKind.LEDGER)
+    attempt = _attempt_for(request.user, puzzle)
+
+    if attempt.finished:
+        return Response({'error': "Today's board is already closed."}, status=400)
+
+    guess = (request.data.get('word') or '').strip().upper()
+    answer = puzzle.solution['word']
+
+    if len(guess) != len(answer) or not guess.isalpha():
+        return Response({'error': f'Enter a {len(answer)}-letter word.'}, status=400)
+    if any(row['word'] == guess for row in attempt.guesses):
+        return Response({'error': 'You already tried that one.'}, status=400)
+
+    marks = games.mark_guess(guess, answer)
+    attempt.guesses.append({'word': guess, 'marks': marks})
+
+    solved = guess == answer
+    used = len(attempt.guesses)
+
+    if solved or used >= games.LEDGER_MAX_GUESSES:
+        _complete(attempt, solved=solved, score=games.score_ledger(used, solved))
+    else:
+        attempt.save()
+
+    return Response(_ledger_state(attempt, puzzle))
+
+
+# --------------------------------------------------------------------------- #
+# Rank It                                                                      #
+# --------------------------------------------------------------------------- #
+
+@api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated])
+def rank_board(request):
+    """Read today's four companies, or submit an ordering."""
+    puzzle = puzzles.get_or_create(date.today(), PuzzleKind.RANK)
+    attempt = _attempt_for(request.user, puzzle)
+
+    if request.method == 'POST':
+        if attempt.finished:
+            return Response({'error': "You have already ranked today's board."}, status=400)
+
+        submitted = [str(symbol).upper() for symbol in request.data.get('order') or []]
+        expected = {card['symbol'] for card in puzzle.payload['cards']}
+
+        if set(submitted) != expected:
+            return Response({'error': 'Order every company exactly once.'}, status=400)
+
+        score, concordant, pairs = games.score_rank(submitted, puzzle.solution['order'])
+        attempt.guesses.append({'order': submitted, 'pairs': concordant, 'of': pairs})
+        _complete(attempt, solved=concordant == pairs, score=score)
+
+    return Response(
+        {
+            **puzzle.payload,
+            'finished': attempt.finished,
+            'solved': attempt.solved,
+            'score': attempt.score,
+            'result': attempt.guesses[-1] if attempt.guesses else None,
+            'answer': puzzle.solution if attempt.finished else None,
+        }
+    )

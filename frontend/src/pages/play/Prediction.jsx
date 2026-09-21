@@ -27,6 +27,7 @@ export default function Prediction() {
   const [round, setRound] = useState(null)
   const [call, setCall] = useState(null)
   const [rationale, setRationale] = useState('')
+  const [confidence, setConfidence] = useState(70)
   const [hint, setHint] = useState(null)
   const [result, setResult] = useState(null)
   const [busy, setBusy] = useState(false)
@@ -39,6 +40,7 @@ export default function Prediction() {
     setRound(null)
     setCall(null)
     setRationale('')
+    setConfidence(70)
     setHint(null)
     setResult(null)
     api.predictionQuestion(level).then(setRound).catch(() => setRound(null))
@@ -61,6 +63,7 @@ export default function Prediction() {
         stock_symbol: round.stock_symbol,
         prediction: call,
         rationale,
+        confidence,
       })
       setResult(outcome)
       invalidate('challenge:', 'profile')
@@ -134,6 +137,27 @@ export default function Prediction() {
                   {label}
                 </button>
               ))}
+            </div>
+
+            <div>
+              <div className="flex items-baseline justify-between">
+                <span className="eyebrow">How sure are you?</span>
+                <span className="num text-sm font-semibold text-accent">{confidence}%</span>
+              </div>
+              <input
+                type="range"
+                min={50}
+                max={100}
+                step={5}
+                value={confidence}
+                onChange={(event) => setConfidence(Number(event.target.value))}
+                aria-label="Confidence in this call"
+                className="mt-2 w-full accent-[rgb(var(--accent))]"
+              />
+              <p className="mt-1 text-[11px] text-ink-faint">
+                Below 50% you would call it the other way, so the scale starts there. This is what
+                your calibration is measured against.
+              </p>
             </div>
 
             <label className="block">

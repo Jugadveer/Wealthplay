@@ -56,15 +56,38 @@ def _serialise_scenario(scenario: Scenario, run: QuizRun, position: int, total: 
     }
 
 
+def _pick_scenarios(user, ids: list[int]) -> list[int]:
+    """Unseen scenarios first, then the least recently attempted."""
+    seen_order = list(
+        UserScenarioAttempt.objects.filter(user=user)
+        .order_by('-attempted_at')
+        .values_list('scenario_id', flat=True)
+    )
+    seen = list(dict.fromkeys(seen_order))
+
+    unseen = [scenario_id for scenario_id in ids if scenario_id not in seen]
+    random.shuffle(unseen)
+
+    # `seen` is most-recent-first, so reversing puts the stalest ones next.
+    queue = unseen + [scenario_id for scenario_id in reversed(seen) if scenario_id in ids]
+    return queue[:SCENARIOS_PER_RUN]
+
+
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def start_quiz_api(request):
-    """Begin a run of randomly chosen scenarios."""
+    """Begin a run, preferring scenarios this player has not seen.
+
+    The previous version sampled the whole table at random, so with twenty
+    scenarios a player met repeats in their second or third run. Unseen ones go
+    first; only when those run out does it fall back, and then to the ones seen
+    longest ago rather than to a fresh random draw.
+    """
     ids = list(Scenario.objects.values_list('id', flat=True))
     if not ids:
         return Response({'error': 'No scenarios are loaded.'}, status=503)
 
-    chosen = random.sample(ids, min(SCENARIOS_PER_RUN, len(ids)))
+    chosen = _pick_scenarios(request.user, ids)
 
     run = QuizRun.objects.create(
         user=request.user,
