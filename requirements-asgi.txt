@@ -1,0 +1,55 @@
+# Optional: the ASGI server and the background worker.
+#
+#   pip install -r requirements.txt -r requirements-asgi.txt
+#
+# Install these on a host that runs a long-lived process — Railway, Render, Fly,
+# a VM — where `Procfile` can serve through Daphne and Celery Beat can run the
+# two scheduled jobs.
+#
+# They are not in the base file because a serverless deployment can use none of
+# them and they cost about 80 MB against a 250 MB function limit. Nothing breaks
+# without them: `settings.py` registers Daphne and Channels only when they
+# import, and `wealthplay/__init__.py` skips Celery when it is absent.
+#
+# There are currently no WebSocket routes — see `wealthplay/asgi.py`. Channels
+# stays configured so that adding one later is a routing change rather than a
+# deployment change.
+
+# --- ASGI / WebSockets -------------------------------------------------------
+channels==4.3.2
+channels_redis==4.3.0
+daphne==4.2.1
+Twisted==25.5.0
+autobahn==25.12.2
+txaio==25.12.2
+Automat==25.4.16
+constantly==23.10.4
+hyperlink==21.0.0
+Incremental==24.11.0
+service-identity==24.2.0
+zope.interface==8.2
+pyOpenSSL==26.0.0
+pyasn1==0.6.3
+pyasn1_modules==0.4.2
+
+# --- Background work ---------------------------------------------------------
+# Runs `users.tasks`: warming the market cache and advancing simulated prices.
+# On a host without a worker, hit the scheduled endpoints instead — see
+# `vercel.json` and `market_data/cron.py`.
+celery==5.6.3
+kombu==5.6.2
+billiard==4.2.4
+amqp==5.3.1
+vine==5.1.0
+click==8.3.2
+click-didyoumean==0.3.1
+click-plugins==1.1.1.2
+click-repl==0.3.0
+prompt_toolkit==3.0.52
+wcwidth==0.6.0
+
+# --- Serialisation used by autobahn ------------------------------------------
+msgpack==1.1.2
+cbor2==5.9.0
+py-ubjson==0.16.1
+ujson==5.12.0

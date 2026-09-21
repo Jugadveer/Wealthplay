@@ -1,6 +1,18 @@
-# WealthPlay backend dependencies.
+# WealthPlay — runtime dependencies.
+#
 # Pinned exactly so a clean clone reproduces the environment that was tested.
-# Install:  pip install -r requirements.txt   (Python 3.11+)
+# Install:  pip install -r requirements.txt   (Python 3.12+)
+#
+# This is the deployable set, and it is deliberately the smaller one. Serverless
+# hosts cap an unzipped function at 250 MB; this comes to roughly 200 MB, and
+# the ASGI and worker stacks that used to sit here accounted for about 80 MB
+# while serving no route the app actually has.
+#
+# Daphne, Channels, Twisted and Celery now live in `requirements-asgi.txt`.
+# Install that as well on a host that runs a long-lived ASGI process or a
+# scheduled worker. Nothing in the code requires them: `settings.py` adds the
+# apps only when they import, and `wealthplay/__init__.py` skips Celery when it
+# is absent.
 
 # --- Web framework -----------------------------------------------------------
 Django==5.2.12
@@ -12,34 +24,21 @@ whitenoise==6.12.0
 sqlparse==0.5.5
 asgiref==3.11.1
 
-# --- ASGI / WebSockets -------------------------------------------------------
-# Daphne serves the app; Channels powers the live market feed.
-channels==4.3.2
-channels_redis==4.3.0
-daphne==4.2.1
-Twisted==25.5.0
-autobahn==25.12.2
-txaio==25.12.2
-websockets==16.0
-Automat==25.4.16
-constantly==23.10.4
-hyperlink==21.0.0
-Incremental==24.11.0
-service-identity==24.2.0
-zope.interface==8.2
+# --- WSGI server -------------------------------------------------------------
+# For hosts that run a process. Serverless platforms supply their own handler
+# and ignore this.
+gunicorn==23.0.0
 
 # --- Database ----------------------------------------------------------------
-# SQLite locally; psycopg is only used when DATABASE_URL points at Postgres.
+# SQLite locally; psycopg is used when DATABASE_URL points at Postgres, which
+# is required in production because a serverless filesystem does not persist.
 psycopg==3.3.3
 psycopg-binary==3.3.3
 
-# --- Background work ---------------------------------------------------------
-celery==5.6.3
+# --- Cache -------------------------------------------------------------------
+# Optional: only used when REDIS_URL is set. Without it the database cache is
+# used, which is the right choice on serverless anyway.
 redis==7.4.0
-kombu==5.6.2
-billiard==4.2.4
-amqp==5.3.1
-vine==5.1.0
 
 # --- Market data -------------------------------------------------------------
 yfinance==1.2.0
@@ -49,9 +48,12 @@ frozendict==2.4.7
 peewee==4.0.4
 beautifulsoup4==4.14.3
 soupsieve==2.8.3
+protobuf==7.34.1
+websockets==16.0
 
 # --- Data --------------------------------------------------------------------
-# Required by yfinance for its dataframes.
+# Required by yfinance for its dataframes. Together these are half the
+# deployment size and there is no smaller path to real market history.
 numpy==2.4.4
 pandas==3.0.2
 
@@ -62,32 +64,15 @@ certifi==2026.2.25
 charset-normalizer==3.4.7
 idna==3.11
 cryptography==46.0.6
-pyOpenSSL==26.0.0
-pyasn1==0.6.3
-pyasn1_modules==0.4.2
 cffi==2.0.0
 pycparser==3.0
 
-# --- Serialisation / misc ----------------------------------------------------
-pillow==12.2.0
-protobuf==7.34.1
-msgpack==1.1.2
-cbor2==5.9.0
-py-ubjson==0.16.1
-ujson==5.12.0
+# --- Dates / misc ------------------------------------------------------------
 python-dateutil==2.9.0.post0
 pytz==2026.1.post1
 tzdata==2026.1
 tzlocal==5.3.1
-packaging==26.0
 platformdirs==4.9.4
 typing_extensions==4.15.0
 six==1.17.0
-attrs==26.1.0
-colorama==0.4.6
-click==8.3.2
-click-didyoumean==0.3.1
-click-plugins==1.1.1.2
-click-repl==0.3.0
-prompt_toolkit==3.0.52
-wcwidth==0.6.0
+packaging==26.0
