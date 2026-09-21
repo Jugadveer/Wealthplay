@@ -1,82 +1,73 @@
-
+/**
+ * Tailwind maps 1:1 onto the CSS custom properties in index.css.
+ *
+ * Colours are declared as `rgb(var(--x) / <alpha-value>)` so every Tailwind
+ * opacity modifier (`bg-accent/10`) keeps working while the underlying value
+ * still switches with the theme. There is one source of truth for colour, and
+ * it is index.css — no component should ever contain a hex value.
+ */
 export default {
-  content: [
-    "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}",
-  ],
+  darkMode: ['class', '[data-theme="dark"]'],
+  content: ['./index.html', './src/**/*.{js,jsx,ts,tsx}'],
   theme: {
     extend: {
       colors: {
-        brand: {
-          1: '#ff6b35',
-          2: '#f59e0b',
-          50: '#fff7ed',
-          100: '#ffedd5',
-          400: '#fb923c',
-          500: '#ff6b35',
-          600: '#ea580c',
-          primary: '#ff6b35',
-          primaryDark: '#ea580c',
+        paper: {
+          DEFAULT: 'rgb(var(--paper) / <alpha-value>)',
+          raised: 'rgb(var(--paper-raised) / <alpha-value>)',
+          sunken: 'rgb(var(--paper-sunken) / <alpha-value>)',
         },
-        authority: {
-          navy: '#0f172a',
+        ink: {
+          DEFAULT: 'rgb(var(--ink) / <alpha-value>)',
+          muted: 'rgb(var(--ink-muted) / <alpha-value>)',
+          faint: 'rgb(var(--ink-faint) / <alpha-value>)',
+        },
+        rule: {
+          DEFAULT: 'rgb(var(--rule) / <alpha-value>)',
+          strong: 'rgb(var(--rule-strong) / <alpha-value>)',
         },
         accent: {
-          green: '#10b981',
-          red: '#f43f5e',
-          blue: '#6366f1',
-          gold: '#f59e0b',
+          DEFAULT: 'rgb(var(--accent) / <alpha-value>)',
+          hover: 'rgb(var(--accent-hover) / <alpha-value>)',
+          on: 'rgb(var(--on-accent) / <alpha-value>)',
         },
-        retro: {
-          bg: '#f8fafc',
-          surface: '#ffffff',
-          board: '#f1f5f9',
-          text: '#1e293b',
-          highlight: '#ff6b35'
-        },
-        muted: {
-          1: '#e2e8f0',
-          2: '#cbd5e1',
-          3: '#94a3b8',
-        },
-        text: {
-          main: '#1e293b',
-          muted: '#475569',
-          light: '#94a3b8',
-        },
+        play: 'rgb(var(--play) / <alpha-value>)',
+        up: 'rgb(var(--up) / <alpha-value>)',
+        down: 'rgb(var(--down) / <alpha-value>)',
       },
       fontFamily: {
-        sans: ['"Geist"', '"Segoe UI"', 'Tahoma', 'Geneva', 'Verdana', 'sans-serif'],
-        ui: ['"Inter"', '"Segoe UI"', 'Tahoma', 'Geneva', 'Verdana', 'sans-serif'],
-        mono: ['"JetBrains Mono"', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', '"Liberation Mono"', '"Courier New"', 'monospace'],
+        display: ['"Instrument Serif"', 'Georgia', 'serif'],
+        sans: ['Geist', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        mono: ['"Geist Mono"', 'ui-monospace', 'monospace'],
       },
-      boxShadow: {
-        'card': '0 10px 26px rgba(15, 23, 42, 0.08)',
-        'card-hover': '0 16px 38px rgba(15, 23, 42, 0.12)',
-        'modal': '0 20px 60px rgba(0, 0, 0, 0.4)',
+      fontSize: {
+        // Editorial scale: small text stays small, display text gets genuinely
+        // large. The gap between them is the hierarchy.
+        micro: ['10px', { lineHeight: '1.4', letterSpacing: '0.14em' }],
+        display: ['clamp(2.6rem, 6vw, 4.5rem)', { lineHeight: '1.02', letterSpacing: '-0.025em' }],
+        headline: ['clamp(1.75rem, 3.4vw, 2.6rem)', { lineHeight: '1.08', letterSpacing: '-0.02em' }],
+        title: ['1.3rem', { lineHeight: '1.2', letterSpacing: '-0.015em' }],
       },
       borderRadius: {
-        '1': '14px',
-        '2': '8px',
-        '3': '16px',
-        'pill': '9999px',
+        sm: 'var(--radius-sm)',
+        DEFAULT: 'var(--radius)',
+        lg: 'var(--radius-lg)',
       },
-      transitionDuration: {
-        'fast': '180ms',
-        'medium': '360ms',
-        'slow': '500ms',
-      },
-      transitionTimingFunction: {
-        'easing': 'cubic-bezier(0.2, 0.9, 0.3, 1)',
-        'bounce': 'cubic-bezier(0.68, -0.55, 0.265, 1.55)',
+      boxShadow: {
+        raise: 'var(--shadow-raise)',
+        float: 'var(--shadow-float)',
       },
       maxWidth: {
-        'container': '1180px',
+        page: '1200px',
+        wide: '1400px',
+      },
+      spacing: {
+        header: 'var(--header-h)',
+      },
+      transitionTimingFunction: {
+        out: 'cubic-bezier(0.22, 1, 0.36, 1)',
       },
     },
   },
   plugins: [],
 }
-
-
-

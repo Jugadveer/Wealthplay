@@ -1,294 +1,199 @@
-import { Navigate } from 'react-router-dom'
-import { useAuth } from '../contexts/AuthContext'
-import {
-  GraduationCap,
-  TrendingUp,
-  Bot,
-  ArrowRight,
-  Rocket,
-  ShieldCheck,
-  Sparkles,
-  CheckCircle2,
-  LineChart,
-  Star,
-} from 'lucide-react'
-import { Link } from 'react-router-dom'
+/**
+ * The landing page.
+ *
+ * Built as a newspaper front page: a masthead rule, a lead story, a markets
+ * strip, and columns. Deliberately none of the generic marketing shape the old
+ * page used — centred hero, gradient CTA, a 4-box stat strip, three equal
+ * feature cards, a 1-2-3 "how it works", and two invented 5-star testimonials.
+ */
+import { useEffect, useState } from 'react'
+import { ArrowRight } from 'lucide-react'
 
-const Landing = () => {
-  const { user, loading } = useAuth()
+import { api } from '../lib/api'
+import { percent } from '../lib/format'
+import { Button } from '../ui'
 
-  
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-1"></div>
-      </div>
-    )
-  }
+const openAuth = (mode) => window.dispatchEvent(new CustomEvent('wp:auth', { detail: mode }))
 
-  
-  
-  const hasQueryParam = window.location.search.length > 0
-  
-  
-  if (user && !hasQueryParam) {
-    return <Navigate to="/dashboard" replace />
-  }
+const today = new Date().toLocaleDateString('en-GB', {
+  weekday: 'long',
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+})
 
+export default function Landing() {
   return (
-      <div className="min-h-screen bg-retro-bg">
-      {}
-      {!user && (
-        <header className="sticky top-0 z-50 bg-retro-surface/90 backdrop-blur-md shadow-sm border-b border-brand-1/10">
-          <div className="max-w-container mx-auto px-6 lg:px-10">
-            <div className="flex items-center justify-between h-[70px]">
-              <Link to="/" className="flex items-center gap-2 text-xl font-bold text-text-main hover:scale-105 transition-transform">
-                <span>WealthPlay</span>
-              </Link>
-              <div className="flex items-center gap-4">
-                <button
-                  onClick={() => {
-                    const event = new CustomEvent('openAuthModal', { detail: 'login' })
-                    window.dispatchEvent(event)
-                  }}
-                  className="px-4 py-2 rounded-full bg-retro-surface border border-brand-1/20 text-text-main font-semibold hover:bg-brand-1/10 transition-all active:scale-95"
-                >
-                  Login
-                </button>
-                <button
-                  onClick={() => {
-                    const event = new CustomEvent('openAuthModal', { detail: 'signup' })
-                    window.dispatchEvent(event)
-                  }}
-                  className="px-4 py-2 rounded-full bg-retro-surface border border-brand-1/20 text-text-main font-semibold hover:bg-brand-1/10 hover:border-brand-1/30 transition-all active:scale-95"
-                >
-                  Sign Up
-                </button>
-              </div>
-            </div>
-          </div>
-        </header>
-      )}
-      {}
-      <div className="max-w-container mx-auto px-6 py-20 lg:px-10">
-        <div className="text-center mb-16 fade-slide-up">
-          <h1 className="text-5xl md:text-6xl font-bold text-text-main mb-6">
-            WealthPlay
-          </h1>
-          <p className="text-xl text-text-muted max-w-2xl mx-auto leading-relaxed mb-10">
-            Master financial literacy through interactive courses and real-world scenarios.
-            Learn, practice, and make better financial decisions.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button
-              onClick={() => {
-                
-                const event = new CustomEvent('openAuthModal', { detail: 'signup' })
-                window.dispatchEvent(event)
-              }}
-              className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-brand-1 text-white font-semibold hover:bg-brand-2 hover:shadow-lg hover:shadow-brand-1/20 hover:-translate-y-1 active:scale-95 transition-all duration-180"
-            >
-              <Rocket className="w-5 h-5" />
-              Get Started
-            </button>
-            <Link
-              to="/#features"
-              className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full bg-retro-surface border-2 border-brand-1 text-text-main font-semibold hover:bg-brand-1/10 hover:border-brand-1/40 hover:text-text-main transition-all duration-180 active:scale-95"
-            >
-              Learn More
-              <ArrowRight className="w-5 h-5" />
-            </Link>
-          </div>
-        </div>
-
-        {}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-16">
-          <div className="bg-retro-surface rounded-[12px] border border-brand-1/15 p-5 shadow-card">
-            <p className="text-3xl font-bold text-text-main number-tabular">25+</p>
-            <p className="text-sm text-text-muted">Interactive Modules</p>
-          </div>
-          <div className="bg-retro-surface rounded-[12px] border border-brand-1/15 p-5 shadow-card">
-            <p className="text-3xl font-bold text-text-main number-tabular">120+</p>
-            <p className="text-sm text-text-muted">Scenario Challenges</p>
-          </div>
-          <div className="bg-retro-surface rounded-[12px] border border-brand-1/15 p-5 shadow-card">
-            <p className="text-3xl font-bold text-text-main number-tabular">4.9</p>
-            <p className="text-sm text-text-muted">Learner Rating</p>
-          </div>
-          <div className="bg-retro-surface rounded-[12px] border border-brand-1/15 p-5 shadow-card">
-            <p className="text-3xl font-bold text-text-main number-tabular">24/7</p>
-            <p className="text-sm text-text-muted">AI Mentor Support</p>
-          </div>
-        </div>
-
-        {}
-        <div className="bg-retro-surface rounded-[12px] border border-brand-1/15 p-6 md:p-8 shadow-card mb-16">
-          <div className="grid md:grid-cols-3 gap-6">
-            <div className="flex items-start gap-3">
-              <ShieldCheck className="w-6 h-6 text-brand-1 mt-0.5" />
-              <div>
-                <p className="font-bold text-text-main">Safe Practice Zone</p>
-                <p className="text-sm text-text-muted">Learn investing with simulated portfolios and zero real-money risk.</p>
-              </div>
-            </div>
-            <div className="flex items-start gap-3">
-              <LineChart className="w-6 h-6 text-brand-1 mt-0.5" />
-              <div>
-                <p className="font-bold text-text-main">Market-Style Decisions</p>
-                <p className="text-sm text-text-muted">Train with practical scenarios designed around real financial tradeoffs.</p>
-              </div>
-            </div>
-            <div className="flex items-start gap-3">
-              <Sparkles className="w-6 h-6 text-brand-1 mt-0.5" />
-              <div>
-                <p className="font-bold text-text-main">Level up your wealth.</p>
-                <p className="text-sm text-text-muted">Build consistent habits with progress tracking, streaks, and badges.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {}
-        <div id="features" className="mt-24">
-          <h2 className="text-4xl font-bold text-center text-text-main mb-4">
-            Why WealthPlay?
-          </h2>
-          <p className="text-center text-text-muted mb-12 text-lg">
-            Everything you need to master personal finance
-          </p>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            {}
-            <div className="bg-retro-surface rounded-xl p-8 shadow-card hover:shadow-card-hover hover:-translate-y-2 transition-all duration-360 border border-transparent hover:border-brand-1/20">
-              <div className="w-16 h-16 rounded-xl bg-brand-1/10 flex items-center justify-center mb-6">
-                <GraduationCap className="w-8 h-8 text-brand-1" />
-              </div>
-              <h3 className="text-xl font-bold text-text-main mb-3">
-                Interactive Courses
-              </h3>
-              <p className="text-text-muted leading-relaxed">
-                Learn financial concepts through engaging, conversational lessons with AI
-                mentors guiding you every step.
-              </p>
-            </div>
-
-            {}
-            <div className="bg-retro-surface rounded-xl p-8 shadow-card hover:shadow-card-hover hover:-translate-y-2 transition-all duration-360 border border-transparent hover:border-brand-1/20">
-              <div className="w-16 h-16 rounded-xl bg-brand-1/10 flex items-center justify-center mb-6">
-                <TrendingUp className="w-8 h-8 text-brand-1" />
-              </div>
-              <h3 className="text-xl font-bold text-text-main mb-3">Real Scenarios</h3>
-              <p className="text-text-muted leading-relaxed">
-                Practice decision-making with realistic financial scenarios that test your
-                knowledge and build confidence.
-              </p>
-            </div>
-
-            {}
-            <div className="bg-retro-surface rounded-xl p-8 shadow-card hover:shadow-card-hover hover:-translate-y-2 transition-all duration-360 border border-transparent hover:border-brand-1/20">
-              <div className="w-16 h-16 rounded-xl bg-brand-1/10 flex items-center justify-center mb-6">
-                <Bot className="w-8 h-8 text-brand-1" />
-              </div>
-              <h3 className="text-xl font-bold text-text-main mb-3">AI-Powered Learning</h3>
-              <p className="text-text-muted leading-relaxed">
-                Get personalized guidance from AI mentors that adapt to your learning style
-                and answer your questions instantly.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {}
-        <div className="mt-24">
-          <h2 className="text-4xl font-bold text-center text-text-main mb-4">How It Works</h2>
-          <p className="text-center text-text-muted mb-12 text-lg">Get started in minutes with a guided flow</p>
-
-          <div className="grid md:grid-cols-3 gap-6">
-            <div className="bg-retro-surface rounded-[12px] border border-brand-1/15 p-7 shadow-card">
-              <div className="w-10 h-10 rounded-full bg-brand-1 text-white flex items-center justify-center font-bold mb-4">1</div>
-              <h3 className="text-xl font-bold text-text-main mb-2">Set Your Profile</h3>
-              <p className="text-text-muted">Tell us your goals and risk comfort so lessons and challenges can match your level.</p>
-            </div>
-            <div className="bg-retro-surface rounded-[12px] border border-brand-1/15 p-7 shadow-card">
-              <div className="w-10 h-10 rounded-full bg-brand-1 text-white flex items-center justify-center font-bold mb-4">2</div>
-              <h3 className="text-xl font-bold text-text-main mb-2">Learn and Practice</h3>
-              <p className="text-text-muted">Complete lessons, then apply concepts in simulator rounds and stock prediction games.</p>
-            </div>
-            <div className="bg-retro-surface rounded-[12px] border border-brand-1/15 p-7 shadow-card">
-              <div className="w-10 h-10 rounded-full bg-brand-1 text-white flex items-center justify-center font-bold mb-4">3</div>
-              <h3 className="text-xl font-bold text-text-main mb-2">Track Progress</h3>
-              <p className="text-text-muted">Monitor XP, streaks, confidence, and portfolio performance as your skills grow.</p>
-            </div>
-          </div>
-        </div>
-
-        {}
-        <div className="mt-24">
-          <h2 className="text-4xl font-bold text-center text-text-main mb-4">What Learners Say</h2>
-          <p className="text-center text-text-muted mb-12 text-lg">A finance learning app that feels practical, not theoretical</p>
-
-          <div className="grid md:grid-cols-2 gap-6">
-            <div className="bg-retro-surface rounded-[12px] border border-brand-1/15 p-7 shadow-card">
-              <div className="flex items-center gap-1 mb-4 text-brand-2">
-                <Star className="w-4 h-4 fill-current" />
-                <Star className="w-4 h-4 fill-current" />
-                <Star className="w-4 h-4 fill-current" />
-                <Star className="w-4 h-4 fill-current" />
-                <Star className="w-4 h-4 fill-current" />
-              </div>
-              <p className="text-text-main leading-relaxed mb-4">
-                “The scenario challenges helped me think like an investor instead of just memorizing terms.”
-              </p>
-              <p className="text-sm text-text-muted">Aarav, Beginner Investor</p>
-            </div>
-            <div className="bg-retro-surface rounded-[12px] border border-brand-1/15 p-7 shadow-card">
-              <div className="flex items-center gap-1 mb-4 text-brand-2">
-                <Star className="w-4 h-4 fill-current" />
-                <Star className="w-4 h-4 fill-current" />
-                <Star className="w-4 h-4 fill-current" />
-                <Star className="w-4 h-4 fill-current" />
-                <Star className="w-4 h-4 fill-current" />
-              </div>
-              <p className="text-text-main leading-relaxed mb-4">
-                “I finally understand portfolio decisions because the AI feedback explains tradeoffs clearly.”
-              </p>
-              <p className="text-sm text-text-muted">Nisha, Early Professional</p>
-            </div>
-          </div>
-        </div>
-
-        {}
-        <div className="mt-24 bg-authority-navy rounded-[12px] p-8 md:p-12 text-center border border-white/10 shadow-[0_18px_40px_rgba(15,23,42,0.2)]">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-3">Ready to build investing confidence?</h2>
-          <p className="text-white/70 mb-8 max-w-2xl mx-auto">
-            Join WealthPlay and start making smarter money decisions through practice-first learning.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button
-              onClick={() => {
-                const event = new CustomEvent('openAuthModal', { detail: 'signup' })
-                window.dispatchEvent(event)
-              }}
-              className="inline-flex items-center justify-center gap-2 px-8 py-3 rounded-[12px] bg-brand-1 text-white font-semibold hover:bg-brand-2 hover:shadow-lg hover:shadow-brand-1/25 transition-all"
-            >
-              <CheckCircle2 className="w-5 h-5" />
-              Create Free Account
-            </button>
-            <button
-              onClick={() => {
-                const event = new CustomEvent('openAuthModal', { detail: 'login' })
-                window.dispatchEvent(event)
-              }}
-              className="inline-flex items-center justify-center gap-2 px-8 py-3 rounded-[12px] bg-white/10 border border-white/25 text-white font-semibold hover:bg-white/15 transition-all"
-            >
-              Login
-            </button>
-          </div>
-        </div>
-      </div>
+    <div className="mx-auto max-w-page px-4 pb-20">
+      <Masthead />
+      <Lead />
+      <Ticker />
+      <Columns />
+      <Closing />
     </div>
   )
 }
 
-export default Landing
+function Masthead() {
+  return (
+    <div className="flex flex-wrap items-baseline justify-between gap-2 border-b border-rule py-3 text-[11px] uppercase tracking-widest text-ink-faint">
+      <span>{today}</span>
+      <span>Practice edition · virtual money only</span>
+    </div>
+  )
+}
 
+function Lead() {
+  return (
+    <section className="grid gap-10 border-b border-rule py-12 md:grid-cols-[1.25fr_1fr] md:gap-16 md:py-16">
+      <div>
+        <p className="eyebrow">The daily financial workout</p>
+        <h1 className="mt-3 text-display">
+          Learn money the way you
+          <br />
+          read the paper.
+        </h1>
+        <p className="measure mt-5 text-base text-ink-muted">
+          Five minutes a day: one puzzle, one market call, one number to estimate, and five
+          questions drawn from what you studied last week. Then practise on a ₹50,000 portfolio
+          where being wrong costs nothing.
+        </p>
+
+        <div className="mt-7 flex flex-wrap items-center gap-3">
+          <Button size="lg" onClick={() => openAuth('signup')}>
+            Read today's edition
+            <ArrowRight size={16} />
+          </Button>
+          <button
+            type="button"
+            onClick={() => openAuth('login')}
+            className="text-sm text-ink-muted underline decoration-rule-strong underline-offset-4 transition-colors hover:text-ink"
+          >
+            I already have an account
+          </button>
+        </div>
+      </div>
+
+      {/* The masthead's counterpart: a sample of the actual daily puzzle rather
+          than a stock illustration. */}
+      <aside className="self-start rounded-lg border border-rule bg-paper-raised p-5">
+        <p className="eyebrow">Today's puzzle</p>
+        <h2 className="mt-1 text-title">Ticker Tiles</h2>
+        <p className="mt-2 text-sm text-ink-muted">
+          Name the listed company in five guesses. Each miss reveals one more clue.
+        </p>
+
+        <ol className="mt-4 space-y-2 text-sm">
+          {[
+            ['Sector', 'Technology'],
+            ['Listed in', 'India'],
+            ['Market cap', 'over ₹10 trillion'],
+            ['Past year', '+18%'],
+            ['Starts with', '?'],
+          ].map(([label, value], index) => (
+            <li
+              key={label}
+              className="flex items-baseline justify-between gap-3 border-b border-rule pb-2 last:border-0"
+              style={{ opacity: index < 3 ? 1 : 0.35 }}
+            >
+              <span className="eyebrow">{label}</span>
+              <span className="num text-ink">{value}</span>
+            </li>
+          ))}
+        </ol>
+
+        <div className="mt-4 flex gap-1" aria-hidden="true">
+          {['🟩', '⬛', '⬛', '⬛', '⬛'].map((square, index) => (
+            <span key={index} className="text-lg leading-none">
+              {square}
+            </span>
+          ))}
+        </div>
+      </aside>
+    </section>
+  )
+}
+
+/** Live quotes, because a finance product that shows fake prices is a bad sign. */
+function Ticker() {
+  const [quotes, setQuotes] = useState([])
+
+  useEffect(() => {
+    api
+      .quotes('AAPL,MSFT,NVDA,RELIANCE,TCS,HDFCBANK')
+      .then((data) => setQuotes(data.quotes.filter((q) => q.price > 0)))
+      .catch(() => setQuotes([]))
+  }, [])
+
+  if (!quotes.length) return null
+
+  return (
+    <section className="overflow-x-auto border-b border-rule py-4">
+      <div className="flex min-w-max gap-8">
+        {quotes.map((quote) => (
+          <div key={quote.symbol} className="flex items-baseline gap-2">
+            <span className="num text-xs font-semibold text-ink">{quote.symbol}</span>
+            <span className="num text-xs text-ink-muted">
+              {quote.currency === 'INR' ? '₹' : '$'}
+              {quote.price.toLocaleString('en-IN', { maximumFractionDigits: 2 })}
+            </span>
+            <span
+              className={`num text-xs ${quote.change_percent >= 0 ? 'text-up' : 'text-down'}`}
+            >
+              {percent(quote.change_percent, 1)}
+            </span>
+          </div>
+        ))}
+      </div>
+    </section>
+  )
+}
+
+const SECTIONS = [
+  {
+    kicker: 'Section A',
+    title: 'The desk',
+    body: 'A ₹50,000 practice portfolio over real listings and a set of fictional stocks that move on their own. Buy, sell, and get told when an exit looked like panic rather than a plan.',
+  },
+  {
+    kicker: 'Section B',
+    title: 'The classroom',
+    body: 'Twenty-five courses from what a bank account actually does through to options and valuation. Every module ends in questions that come back days later, when forgetting them is the point.',
+  },
+  {
+    kicker: 'Section C',
+    title: 'The puzzle page',
+    body: 'Ticker Tiles, a daily market call scored on calibration rather than luck, and one real number to estimate. Streaks survive one missed day — you get a freeze every week.',
+  },
+]
+
+function Columns() {
+  return (
+    <section className="grid gap-px border-b border-rule bg-rule md:grid-cols-3">
+      {SECTIONS.map((section) => (
+        <article key={section.title} className="bg-paper px-0 py-10 md:px-6">
+          <p className="eyebrow">{section.kicker}</p>
+          <h2 className="mt-2 text-title">{section.title}</h2>
+          <p className="mt-3 text-sm leading-relaxed text-ink-muted">{section.body}</p>
+        </article>
+      ))}
+    </section>
+  )
+}
+
+function Closing() {
+  return (
+    <section className="flex flex-wrap items-end justify-between gap-6 py-14">
+      <div>
+        <h2 className="text-headline">Start with today's edition.</h2>
+        <p className="measure mt-2 text-sm text-ink-muted">
+          No card, no real money. Everything you trade here is simulated, which is the only
+          honest way to learn this.
+        </p>
+      </div>
+      <Button size="lg" onClick={() => openAuth('signup')}>
+        Create a free account
+      </Button>
+    </section>
+  )
+}

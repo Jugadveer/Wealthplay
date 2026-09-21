@@ -1,156 +1,96 @@
-import React from 'react'
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
-import { AuthProvider } from './contexts/AuthContext'
-import { AchievementProvider } from './contexts/AchievementContext'
-import { GlobalDataProvider } from './contexts/GlobalDataContext'
-import PrivateRoute from './components/PrivateRoute'
-import Layout from './components/Layout'
+/**
+ * Routes.
+ *
+ * Every page below the landing route is lazily loaded, so the first paint ships
+ * the landing page and nothing else. Auth no longer blocks the tree: the app
+ * renders immediately and only guarded routes wait on the session check.
+ */
+import { Suspense, lazy } from 'react'
+import { BrowserRouter, Navigate, Outlet, Route, Routes, useLocation } from 'react-router-dom'
+
+import { AuthProvider, useAuth } from './auth/AuthContext'
 import ErrorBoundary from './components/ErrorBoundary'
-import AuthWrapper from './components/AuthWrapper'
-
-
+import Shell from './components/Shell'
+import { Skeleton } from './ui'
 import Landing from './pages/Landing'
-import Dashboard from './pages/Dashboard'
-import Onboarding from './pages/Onboarding'
-import Goals from './pages/Goals'
-import Portfolio from './pages/Portfolio'
-import CourseHome from './pages/CourseHome'
-import LessonDetail from './pages/LessonDetail'
-import ScenarioHome from './pages/ScenarioHome'
-import ScenarioPlay from './pages/ScenarioPlay'
-import ScenarioResult from './pages/ScenarioResult'
-import Achievements from './pages/Achievements'
-import StockChallenge from './pages/StockChallenge'
-import WealthPlaySimulator from './pages/WealthPlaySimulator'
 
+const Today = lazy(() => import('./pages/Today'))
+const Learn = lazy(() => import('./pages/Learn'))
+const Course = lazy(() => import('./pages/Course'))
+const Lesson = lazy(() => import('./pages/Lesson'))
+const Markets = lazy(() => import('./pages/Markets'))
+const Play = lazy(() => import('./pages/Play'))
+const Progress = lazy(() => import('./pages/Progress'))
+const Onboarding = lazy(() => import('./pages/Onboarding'))
+const NotFound = lazy(() => import('./pages/NotFound'))
 
-function App() {
+export default function App() {
   return (
     <ErrorBoundary>
-      <AuthProvider>
-        <GlobalDataProvider>
-          <AchievementProvider>
-            <AuthWrapper>
-              <Router
-              future={{
-                v7_startTransition: true,
-                v7_relativeSplatPath: true,
-              }}
-            >
-            <Routes>
-              {}
-            <Route path="/" element={<Layout showNav={false}><Landing /></Layout>} />
-            
-            {}
-            <Route
-              path="/onboarding"
-              element={
-                <PrivateRoute>
-                  <Layout><Onboarding /></Layout>
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/dashboard"
-              element={
-                <PrivateRoute>
-                  <Layout><Dashboard /></Layout>
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/goals"
-              element={
-                <PrivateRoute>
-                  <Layout><Goals /></Layout>
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/achievements"
-              element={
-                <PrivateRoute>
-                  <Layout><Achievements /></Layout>
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/portfolio/:tab?"
-              element={
-                <PrivateRoute>
-                  <Layout><Portfolio /></Layout>
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/course"
-              element={
-                <PrivateRoute>
-                  <Layout><CourseHome /></Layout>
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/course/:courseId/:moduleId"
-              element={
-                <PrivateRoute>
-                  <Layout><LessonDetail /></Layout>
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/scenario"
-              element={
-                <PrivateRoute>
-                  <Layout><ScenarioHome /></Layout>
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/scenario/quiz/:runId"
-              element={
-                <PrivateRoute>
-                  <Layout><WealthPlaySimulator /></Layout>
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/scenario/quiz/:runId/result"
-              element={
-                <PrivateRoute>
-                  <Layout><WealthPlaySimulator /></Layout>
-                </PrivateRoute>
-              }
-            />
-            <Route
-              path="/scenario/stock-challenge"
-              element={
-                <PrivateRoute>
-                  <Layout><StockChallenge /></Layout>
-                </PrivateRoute>
-              }
-            />
+      <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+        <AuthProvider>
+          <Shell>
+            <Suspense fallback={<PageFallback />}>
+              <Routes>
+                <Route path="/" element={<PublicHome />} />
 
-            <Route
-              path="/wealthplay"
-              element={
-                <PrivateRoute>
-                  <Layout><WealthPlaySimulator /></Layout>
-                </PrivateRoute>
-              }
-            />
-            
-            {}
-            <Route path="*" element={<Navigate to="/" replace />} />
-            </Routes>
-          </Router>
-            </AuthWrapper>
-          </AchievementProvider>
-        </GlobalDataProvider>
-      </AuthProvider>
+                <Route element={<RequireAuth />}>
+                  <Route path="/onboarding" element={<Onboarding />} />
+                  <Route path="/today" element={<Today />} />
+                  <Route path="/learn" element={<Learn />} />
+                  <Route path="/learn/:courseId" element={<Course />} />
+                  <Route path="/learn/:courseId/:moduleId" element={<Lesson />} />
+                  <Route path="/markets" element={<Markets />} />
+                  <Route path="/markets/:tab" element={<Markets />} />
+                  <Route path="/markets/explore/:symbol" element={<Markets />} />
+                  <Route path="/play" element={<Play />} />
+                  <Route path="/progress" element={<Progress />} />
+                </Route>
+
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </Suspense>
+          </Shell>
+        </AuthProvider>
+      </BrowserRouter>
     </ErrorBoundary>
   )
 }
 
-export default App
+/** Signed-in visitors land on today's edition rather than the marketing page. */
+function PublicHome() {
+  const { user, checked } = useAuth()
+  if (checked && user) return <Navigate to="/today" replace />
+  return <Landing />
+}
 
+/**
+ * Gate for authenticated routes.
+ *
+ * Waits only for the session check, and only here — the rest of the app has
+ * already rendered by this point.
+ */
+function RequireAuth() {
+  const { user, checked } = useAuth()
+  const location = useLocation()
+
+  if (!checked) return <PageFallback />
+  if (!user) return <Navigate to="/" replace state={{ from: location }} />
+
+  // A new account is sent through onboarding once, then never again.
+  if (user.needs_onboarding && location.pathname !== '/onboarding') {
+    return <Navigate to="/onboarding" replace />
+  }
+
+  return <Outlet />
+}
+
+function PageFallback() {
+  return (
+    <div className="mx-auto max-w-page space-y-4 px-4 py-10">
+      <Skeleton className="h-4 w-32" />
+      <Skeleton className="h-10 w-72" />
+      <Skeleton className="h-52" />
+    </div>
+  )
+}

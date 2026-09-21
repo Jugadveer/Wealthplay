@@ -1,54 +1,55 @@
-import React from 'react'
+/**
+ * Catches render errors so one broken component does not blank the app.
+ *
+ * Class component because React has no hook equivalent for error boundaries.
+ */
+import { Component } from 'react'
 
-class ErrorBoundary extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = { hasError: false, error: null }
-  }
+export default class ErrorBoundary extends Component {
+  state = { error: null }
 
   static getDerivedStateFromError(error) {
-    return { hasError: true, error }
+    return { error }
   }
 
-  componentDidCatch(error, errorInfo) {
-    console.error('Error caught by boundary:', error, errorInfo)
+  componentDidCatch(error, info) {
+    // Kept in the console rather than swallowed, so the stack is recoverable
+    // in development and by a monitoring hook in production.
+    console.error('Render failed:', error, info.componentStack)
   }
 
   render() {
-    if (this.state.hasError) {
-      return (
-        <div className="min-h-screen bg-muted-1 flex items-center justify-center p-6">
-          <div className="bg-white rounded-xl shadow-card p-8 max-w-md w-full text-center">
-            <h2 className="text-2xl font-bold text-text-main mb-4">Something went wrong</h2>
-            <p className="text-text-muted mb-6">
-              An unexpected error occurred. Please refresh the page or try again later.
-            </p>
-            <button
-              onClick={() => {
-                this.setState({ hasError: false, error: null })
-                window.location.reload()
-              }}
-              className="px-6 py-3 rounded-lg bg-brand-1 text-white font-semibold hover:bg-brand-2 transition-colors"
-            >
-              Refresh Page
-            </button>
-            {process.env.NODE_ENV === 'development' && this.state.error && (
-              <details className="mt-6 text-left">
-                <summary className="cursor-pointer text-sm text-text-muted mb-2">Error Details</summary>
-                <pre className="text-xs bg-muted-1 p-4 rounded overflow-auto max-h-48">
-                  {this.state.error.toString()}
-                  {this.state.error.stack}
-                </pre>
-              </details>
-            )}
-          </div>
-        </div>
-      )
-    }
+    if (!this.state.error) return this.props.children
 
-    return this.props.children
+    return (
+      <div className="mx-auto flex min-h-dvh max-w-page flex-col justify-center px-4">
+        <p className="eyebrow">Something broke</p>
+        <h1 className="mt-3 text-headline">This page failed to render.</h1>
+        <p className="measure mt-3 text-sm text-ink-muted">
+          Your data is safe — this is a display problem. Reloading usually clears it.
+        </p>
+        <div className="mt-6 flex gap-3">
+          <button
+            type="button"
+            onClick={() => window.location.reload()}
+            className="rounded bg-accent px-4 py-2 text-sm text-accent-on hover:bg-accent-hover"
+          >
+            Reload
+          </button>
+          <a
+            href="/"
+            className="rounded border border-rule px-4 py-2 text-sm text-ink-muted hover:text-ink"
+          >
+            Go home
+          </a>
+        </div>
+
+        {import.meta.env.DEV && (
+          <pre className="mt-8 overflow-auto rounded border border-rule bg-paper-sunken p-4 text-xs text-ink-muted">
+            {this.state.error.stack}
+          </pre>
+        )}
+      </div>
+    )
   }
 }
-
-export default ErrorBoundary
-
