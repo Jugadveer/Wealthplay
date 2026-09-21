@@ -2,12 +2,9 @@ from django.contrib import admin
 from django.urls import path, include, re_path
 from django.conf import settings
 from django.conf.urls.static import static
-from django.views.generic import TemplateView, RedirectView
+from django.views.generic import RedirectView
 from django.http import Http404
 from .views import home, get_csrf_token
-
-def react_app_view(request):
-    return TemplateView.as_view(template_name='react_app.html')(request)
 
 urlpatterns = [
     path('admin', RedirectView.as_view(url='/admin/', permanent=True)),
@@ -29,5 +26,7 @@ if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 urlpatterns += [
-    re_path(r'^(?!admin|static|media).*$', react_app_view, name='react_app'),
+    # Every route the API does not claim renders the built single-page app,
+    # so a deep link like /markets/analysis survives a refresh.
+    re_path(r'^(?!admin|static|media).*$', home, name='react_app'),
 ]
