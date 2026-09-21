@@ -89,6 +89,13 @@ export const api = {
   askMentor: (payload) => post('/chat/mentor/ask/', payload),
   mentorHistory: (courseId, moduleId) => get(`/chat/mentor/history/${courseId}/${moduleId}/`),
 
+  // Help, available from anywhere
+  aiStatus: () => get('/ai/status/'),
+  explain: (payload) => post('/ai/explain/', payload),
+  explainNumber: (payload) => post('/ai/explain-number/', payload),
+  pageHelp: (zone, facts) => post('/ai/page-help/', { zone, facts }),
+  searchContent: (q) => get('/ai/search/', { params: { q } }),
+
   // Portfolio
   portfolio: () => get('/users/portfolio/'),
   portfolioAnalysis: () => get('/users/portfolio/analysis/'),
