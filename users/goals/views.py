@@ -162,52 +162,37 @@ def assess_goal(request):
         criticality=category.criticality,
     )
 
-    written = tutor.assess_goal(
+    observations = tutor.assess_goal(
         description=description,
         facts={
             'target_today': f'Rs {target_amount:,.0f}',
             'years_away': round(months / 12, 1),
+            # Both units, because the guard checks any span of time an answer
+            # quotes and a horizon written in months is not an invention.
+            'months_away': months,
             'already_saved': f'Rs {_amount(request.data.get("current_amount")):,.0f}',
             'monthly_income': f'Rs {income:,.0f}',
             'monthly_commitments': f'Rs {commitments:,.0f}',
             'dependants': dependants,
-            'has_emergency_fund': bool(request.data.get('has_emergency_fund')),
         },
         capacity=capacity.as_dict(),
     )
 
+    # The verdict is computed. The model only supplies the observations under
+    # it, and only when every figure in them came from the user's own numbers.
+    #
+    # It used to write the headline and the stance too, and returned "The goal
+    # is too ambitious and unrealistic" for a goal the same response marked
+    # can_take_risk — two contradictory judgements on one screen.
     verdict = assessment.fallback_verdict(capacity, category)
-    if written:
-        reasoning = written.get('reasoning')
-        verdict = {
-            'available': True,
-            # The model may reclassify the goal from the description, but it may
-            # not talk the stance up past what the numbers support.
-            'criticality': written.get('criticality') or category.criticality,
-            'category': category.key,
-            'stance': _no_harder_than(written.get('stance'), capacity.level),
-            'headline': written.get('headline') or verdict['headline'],
-            'reasoning': reasoning if isinstance(reasoning, list) else [str(reasoning)],
-            'question': written.get('question') or verdict['question'],
-        }
+    if observations:
+        verdict = {**verdict, 'available': True, 'reasoning': observations}
 
     return Response({
         'assessment': {**verdict, 'capacity': capacity.as_dict(), 'category_label': category.label,
                        'icon': category.icon},
         'options': _appetite_options(capacity.level, category.criticality, months),
     })
-
-
-# A model may be more cautious than the arithmetic, never less.
-_STANCE_CEILING = {'low': 'stay_safe', 'moderate': 'be_careful', 'high': 'can_take_risk'}
-_STANCE_ORDER = {'stay_safe': 0, 'be_careful': 1, 'can_take_risk': 2}
-
-
-def _no_harder_than(stance: str | None, level: str) -> str:
-    ceiling = _STANCE_CEILING[level]
-    if stance not in _STANCE_ORDER:
-        return ceiling
-    return stance if _STANCE_ORDER[stance] <= _STANCE_ORDER[ceiling] else ceiling
 
 
 def _appetite_options(level: str, criticality: str, months: int) -> list[dict]:
