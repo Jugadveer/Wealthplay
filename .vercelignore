@@ -1,0 +1,43 @@
+# Files not uploaded to Vercel.
+#
+# This controls the upload, which the build then runs against — so anything the
+# build needs has to stay. `frontend/src` is not listed for exactly that reason:
+# `scripts/vercel-build.sh` compiles it, and without the sources there is
+# nothing to compile.
+#
+# What is listed is either reinstalled during the build, or never read at
+# runtime. The function has a 250 MB unzipped limit and the dependencies already
+# take about 200 MB, so the margin is worth protecting.
+
+# Reinstalled by the build
+frontend/node_modules/
+node_modules/
+
+# Local environments
+.venv*/
+venv/
+__pycache__/
+*.pyc
+
+# The local database. Postgres is required in production — settings.py refuses
+# to start on a serverless host without DATABASE_URL — so this would only be
+# confusing to find in the bundle.
+db.sqlite3
+*.sqlite3
+
+# Nothing imports these at runtime.
+**/tests.py
+**/tests_*.py
+docs/
+.claude/
+
+# Other deployment targets
+Procfile
+nixpacks.toml
+requirements-asgi.txt
+
+# Version control and editors
+.git/
+.github/
+.vscode/
+.idea/

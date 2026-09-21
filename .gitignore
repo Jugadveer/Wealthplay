@@ -55,3 +55,6 @@ tmp/
 
 # --- Agent tooling -----------------------------------------------------------
 .claude/
+
+# Vercel build output (staticfiles republished for the CDN)
+/public
