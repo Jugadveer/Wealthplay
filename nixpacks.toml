@@ -1,8 +1,29 @@
+# Build config for Nixpacks hosts (Railway, Coolify).
+#
+# Node is here because the React bundle has to be built before Django can serve
+# it: `wealthplay/views.py` reads `static/react/index.html`, and without a build
+# step the site returns a "frontend has not been built" page.
+#
+# Gunicorn rather than Daphne. There are no WebSocket routes — see
+# `wealthplay/asgi.py` — so the ASGI stack was 80 MB of dependencies serving
+# nothing. To go back to ASGI, add `requirements-asgi.txt` to the install step
+# and run `daphne -b 0.0.0.0 -p $PORT wealthplay.asgi:application`.
+
 [phases.setup]
-nixPkgs = ["python313", "gcc"]
+nixPkgs = ["python313", "nodejs_20", "gcc"]
 
 [phases.install]
-cmds = ["python -m pip install --upgrade pip", "pip install -r requirements.txt"]
+cmds = [
+  "python -m pip install --upgrade pip",
+  "pip install -r requirements.txt",
+  "npm --prefix frontend ci",
+]
+
+[phases.build]
+cmds = [
+  "npm --prefix frontend run build",
+  "python manage.py collectstatic --noinput",
+]
 
 [start]
-cmd = "python manage.py migrate --noinput ; python manage.py collectstatic --noinput ; daphne -b 0.0.0.0 -p $PORT wealthplay.asgi:application"
+cmd = "python manage.py migrate --noinput && python manage.py createcachetable && gunicorn wealthplay.wsgi:application --bind 0.0.0.0:$PORT --workers 3 --timeout 60"
