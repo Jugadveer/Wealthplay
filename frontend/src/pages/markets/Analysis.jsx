@@ -7,7 +7,7 @@
  * fetched ESG, copy-trading and hindsight data that it then never rendered.
  */
 import { useState } from 'react'
-import { Leaf, PieChart, Sparkles, Users } from 'lucide-react'
+import { Leaf, PieChart, Users } from 'lucide-react'
 
 import { api } from '../../lib/api'
 import { money, percent, toneFor } from '../../lib/format'
@@ -124,8 +124,7 @@ function Review({ review }) {
         <SectionHead label="Coaching" title="Risk review" />
         <Panel className="mt-4 p-5">
           <p className="text-sm text-ink-muted">
-            The written review needs a language model and none answered. Everything else on this
-            page is computed from your own numbers and is unaffected.
+            The review needs at least one open position to have something to read.
           </p>
         </Panel>
       </section>
@@ -134,15 +133,14 @@ function Review({ review }) {
 
   return (
     <section>
+      {/* Not badged as written by Nex any more, because it is not. The review
+          is worked out from the holdings themselves — the model, handed this
+          exact portfolio at 92% in one sector, called it well diversified and
+          advised buying more of that sector. */}
       <SectionHead
         label="Coaching"
         title="Risk review"
-        action={
-          <Badge tone="accent">
-            <Sparkles size={10} />
-            Written by Nex
-          </Badge>
-        }
+        action={<Badge>Calculated from your holdings</Badge>}
       />
 
       <Panel className="mt-4 p-6">

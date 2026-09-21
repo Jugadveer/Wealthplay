@@ -15,8 +15,6 @@ generated one.
 
 from __future__ import annotations
 
-from ai import tutor
-
 from . import pricing
 
 
@@ -196,29 +194,138 @@ def diversification_nudge(holdings: list[dict]) -> dict:
     }
 
 
-def narrative_review(portfolio_data: dict) -> dict:
-    """Model-written portfolio review.
+def concentration_grade(score: int) -> str:
+    """A letter for the diversification score.
 
-    ``available: False`` when no provider answered. The UI hides the block
-    rather than showing something written by a template.
+    Computed, never asked for. Given a portfolio with 90% of its value in one
+    stock and asked to grade the concentration, the local model returns "A" —
+    the best grade for the worst case. The thresholds below are arbitrary in the
+    way any grading scale is, but they are at least monotonic.
+    """
+    if score >= 75:
+        return 'A'
+    if score >= 55:
+        return 'B'
+    if score >= 30:
+        return 'C'
+    return 'D'
+
+
+
+
+def narrative_review(portfolio_data: dict) -> dict:
+    """The portfolio review: what is concentrated, what is losing, what to do.
+
+    Computed, not generated, and this one was measured before it was decided.
+    Handed a portfolio that is 81% IT, graded C, with every figure in the
+    prompt, the local model replied:
+
+        headline:  "The portfolio is well-diversified and has a return of +6%"
+        risk:      "Banking holdings have a negative return (-4.2%)"
+        next step: "Invest in more IT stocks"
+
+    The portfolio is not well diversified, -4.2% is INFY and INFY is IT, and
+    buying more IT is the thing that caused the concentration being reported.
+    A model that cannot attach a number to the right holding cannot be trusted
+    to phrase a risk either, because a risk *is* an attribution.
+
+    So the analysis is arithmetic. It is right every time, it costs nothing, and
+    it says the same thing twice for the same portfolio — which the model did
+    not. ``available`` stays in the payload so the UI contract is unchanged.
     """
     holdings = portfolio_data.get('holdings') or []
     if not holdings:
         return {'available': False}
 
-    review = tutor.review_portfolio(
-        holdings,
-        cash=portfolio_data.get('balance', 0),
-        pnl_percent=portfolio_data.get('total_pnl_percent', 0),
-    )
-    if not review:
-        return {'available': False}
+    stats = concentration(holdings)
+    grade = concentration_grade(stats['score'])
+    total = sum(float(h.get('current_value') or 0) for h in holdings)
+    cash = float(portfolio_data.get('balance') or 0)
+    pnl_percent = float(portfolio_data.get('total_pnl_percent') or 0)
 
-    risks = review.get('risks')
+    sector = stats['top_sector'] or 'one sector'
+    weight = stats['top_weight_percent']
+
     return {
         'available': True,
-        'headline': review.get('headline', ''),
-        'risks': risks if isinstance(risks, list) else [str(risks)],
-        'next_step': review.get('next_step', ''),
-        'concentration_grade': review.get('concentration_grade', ''),
+        'headline': _headline(grade, sector, weight, len(holdings)),
+        'risks': _risks(holdings, total=total, cash=cash, sector=sector, weight=weight),
+        'next_step': _next_step(grade, sector, len(holdings), cash, total),
+        'concentration_grade': grade,
+        'diversification_score': stats['score'],
+        'total_pnl_percent': round(pnl_percent, 2),
     }
+
+
+def _headline(grade: str, sector: str, weight: float, count: int) -> str:
+    """The single most important thing about the shape of this portfolio."""
+    if grade == 'D':
+        return f'Almost everything you own rides on {sector}, at {weight:.0f}% of your holdings.'
+    if grade == 'C':
+        return f'{sector} is {weight:.0f}% of your holdings, which is more than one sector should decide.'
+    if grade == 'B':
+        return f'Reasonably spread, with {sector} the largest at {weight:.0f}%.'
+    return f'Well spread across {count} holdings, {sector} largest at {weight:.0f}%.'
+
+
+def _risks(holdings: list[dict], *, total: float, cash: float, sector: str, weight: float) -> list[str]:
+    """Specific observations, each tied to a holding or a figure that exists."""
+    risks = []
+
+    if weight >= 40:
+        risks.append(
+            f'A shock to {sector} moves {weight:.0f}% of your holdings at once. '
+            'That is one decision, not a portfolio.'
+        )
+
+    largest = max(holdings, key=lambda h: float(h.get('current_value') or 0))
+    largest_weight = float(largest.get('current_value') or 0) / total * 100 if total else 0
+    if largest_weight >= 35:
+        risks.append(
+            f'{largest["symbol"]} alone is {largest_weight:.0f}% of your holdings. '
+            'A single company should not be able to decide your year.'
+        )
+
+    worst = min(holdings, key=lambda h: float(h.get('pnl_percent') or 0))
+    worst_pnl = float(worst.get('pnl_percent') or 0)
+    if worst_pnl <= -10:
+        risks.append(
+            f'{worst["symbol"]} is down {abs(worst_pnl):.1f}%. Check whether the reason you '
+            'bought it still holds, rather than waiting to get back to even.'
+        )
+
+    invested_share = total / (total + cash) * 100 if (total + cash) else 0
+    if invested_share < 40 and cash > 0:
+        risks.append(
+            f'Only {invested_share:.0f}% of the account is invested. Cash is a position too, '
+            'and right now it is your largest one.'
+        )
+
+    if len(holdings) < 3:
+        risks.append(
+            f'With {len(holdings)} holding{"s" if len(holdings) != 1 else ""}, luck and skill '
+            'look identical. You cannot read your own track record yet.'
+        )
+
+    # Never empty: a portfolio with no flags has earned being told so.
+    return risks[:3] or [
+        'Nothing here stands out as a concentration risk. Keep the position sizes '
+        'where they are as you add to it.'
+    ]
+
+
+def _next_step(grade: str, sector: str, count: int, cash: float, total: float) -> str:
+    """One action, in this simulator, that addresses the biggest issue found."""
+    if grade in {'C', 'D'}:
+        return (
+            f'Add a position outside {sector} rather than more inside it. Spreading across '
+            'sectors does more for your risk than picking a better name in the one you hold.'
+        )
+    if count < 4:
+        return 'Add a third or fourth sector so no single one can carry the whole result.'
+    if cash > total:
+        return 'Put some of the idle cash to work, or decide deliberately that you are waiting.'
+    return (
+        'Record why you hold each position. The review grades your reasoning, and it needs '
+        'something written down before the outcome is known.'
+    )
