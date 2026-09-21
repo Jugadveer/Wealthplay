@@ -2,16 +2,14 @@
  * Progress: the streak calendar, achievements, goals and the weekly recap.
  */
 import { useEffect, useState } from 'react'
-import { Flame, Lock, Rocket, Snowflake, Target, Trophy } from 'lucide-react'
+import { Flame, Lock, Rocket, Snowflake, Trophy } from 'lucide-react'
 
 import { useAuth } from '../auth/AuthContext'
 import { api } from '../lib/api'
-import { money, percent, shortDate } from '../lib/format'
-import { invalidate, useQuery } from '../lib/query'
+import { percent, shortDate } from '../lib/format'
+import { useQuery } from '../lib/query'
 import {
-  Badge,
   Button,
-  EmptyState,
   Meter,
   PageHeader,
   Panel,
@@ -46,7 +44,6 @@ export default function Progress() {
         <StreakCalendar />
         <Recap />
         <Achievements />
-        <Goals />
       </div>
     </div>
   )
@@ -269,7 +266,7 @@ function Achievements() {
   if (!data) return null
 
   const groups = data.achievements.reduce((acc, achievement) => {
-    ;(acc[achievement.category] ||= []).push(achievement)
+    (acc[achievement.category] ||= []).push(achievement)
     return acc
   }, {})
 
@@ -318,122 +315,5 @@ function Achievements() {
         ))}
       </div>
     </section>
-  )
-}
-
-function Goals() {
-  const { data } = useQuery('goals', api.goals, { ttl: 60_000 })
-  const [adding, setAdding] = useState(false)
-
-  const goals = data?.goals ?? []
-
-  return (
-    <section>
-      <SectionHead
-        label="Planning"
-        title="Goals"
-        action={
-          <Button size="sm" variant="secondary" onClick={() => setAdding((open) => !open)}>
-            {adding ? 'Cancel' : 'Add a goal'}
-          </Button>
-        }
-      />
-
-      {adding && <GoalForm onDone={() => setAdding(false)} />}
-
-      {goals.length === 0 && !adding ? (
-        <Panel className="mt-4">
-          <EmptyState
-            icon={Target}
-            title="No goals set"
-            body="A goal turns an abstract number into a monthly amount. Name the thing, the cost, and the date."
-            action={<Button onClick={() => setAdding(true)}>Set your first goal</Button>}
-          />
-        </Panel>
-      ) : (
-        <div className="mt-4 space-y-3">
-          {goals.map((goal) => (
-            <Panel key={goal.id} className="p-5">
-              <div className="flex flex-wrap items-baseline justify-between gap-3">
-                <h3 className="font-display text-title">{goal.title}</h3>
-                <span className="num text-sm text-ink-muted">
-                  {money(goal.current_amount)} of {money(goal.target_amount)}
-                </span>
-              </div>
-              <Meter
-                value={goal.current_amount}
-                max={goal.target_amount}
-                tone="play"
-                className="mt-3"
-              />
-              <div className="mt-3 flex flex-wrap gap-x-6 gap-y-1 text-xs text-ink-muted">
-                <span>Target {shortDate(goal.target_date)}</span>
-                {goal.monthly_sip > 0 && (
-                  <span className="num">{money(goal.monthly_sip)} a month needed</span>
-                )}
-              </div>
-            </Panel>
-          ))}
-        </div>
-      )}
-    </section>
-  )
-}
-
-function GoalForm({ onDone }) {
-  const [values, setValues] = useState({ title: '', target_amount: '', target_date: '' })
-  const [busy, setBusy] = useState(false)
-
-  const set = (field) => (event) =>
-    setValues((current) => ({ ...current, [field]: event.target.value }))
-
-  async function submit(event) {
-    event.preventDefault()
-    setBusy(true)
-    try {
-      await api.createGoal(values)
-      invalidate('goals')
-      onDone()
-    } finally {
-      setBusy(false)
-    }
-  }
-
-  return (
-    <Panel className="mt-4 p-5">
-      <form onSubmit={submit} className="grid gap-3 sm:grid-cols-[2fr_1fr_1fr_auto] sm:items-end">
-        <Field label="What for" value={values.title} onChange={set('title')} required />
-        <Field
-          label="Cost"
-          type="number"
-          min="1"
-          value={values.target_amount}
-          onChange={set('target_amount')}
-          required
-        />
-        <Field
-          label="By when"
-          type="date"
-          value={values.target_date}
-          onChange={set('target_date')}
-          required
-        />
-        <Button type="submit" disabled={busy}>
-          Save
-        </Button>
-      </form>
-    </Panel>
-  )
-}
-
-function Field({ label, ...props }) {
-  return (
-    <label className="block">
-      <span className="eyebrow">{label}</span>
-      <input
-        {...props}
-        className="mt-1 h-10 w-full rounded border border-rule-strong bg-paper px-3 text-sm text-ink outline-none transition-colors focus:border-accent"
-      />
-    </label>
   )
 }

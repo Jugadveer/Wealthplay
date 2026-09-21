@@ -1,0 +1,47 @@
+[
+  {
+    "id": 3270,
+    "question": "You make ₹1,00,000 on one crypto trade and lose ₹1,00,000 on another in the same year. What is your tax position in India?",
+    "options": [
+      "No tax, the two net off",
+      "Tax on ₹1,00,000 at 30%, with the loss unusable",
+      "Tax at your slab rate",
+      "Tax on ₹1,00,000 at 12.5%"
+    ],
+    "correct_answer": "Tax on ₹1,00,000 at 30%, with the loss unusable",
+    "ai_feedback": {
+      "correct": "Correct. Crypto losses cannot be set off, even against other crypto gains.",
+      "incorrect": "The no-set-off rule is what makes frequent crypto trading so tax-inefficient."
+    }
+  },
+  {
+    "id": 3271,
+    "question": "What is the main risk of holding crypto on an exchange rather than self-custody?",
+    "options": [
+      "Higher fees",
+      "You hold a claim against the exchange rather than the asset",
+      "Slower trades",
+      "Higher taxes"
+    ],
+    "correct_answer": "You hold a claim against the exchange rather than the asset",
+    "ai_feedback": {
+      "correct": "Correct. That is precisely the exposure that failed at FTX.",
+      "incorrect": "Custody decides whether you own the asset or owe-relationship with a company."
+    }
+  },
+  {
+    "id": 3272,
+    "question": "What advantage do sovereign gold bonds have over jewellery?",
+    "options": [
+      "They can be worn",
+      "They pay 2.5% interest and avoid making charges",
+      "They are tax free in all cases",
+      "They are more liquid than cash"
+    ],
+    "correct_answer": "They pay 2.5% interest and avoid making charges",
+    "ai_feedback": {
+      "correct": "Correct — and there is no storage risk or purity dispute.",
+      "incorrect": "Jewellery costs about 12% in making charges that are never recovered."
+    }
+  }
+]

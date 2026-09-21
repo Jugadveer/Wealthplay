@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1300,
+    "topic": "The OTP rule",
+    "theory_title": "One rule that stops most fraud",
+    "theory_content": "No bank, wallet, exchange or government body ever needs your OTP, PIN, CVV or password. Not to \"verify\" you, not to \"reverse\" a transaction, not to \"secure\" your account. An OTP authorises money leaving. If someone needs one to help you, they are not helping you. Hang up and call the number printed on your own card."
+  },
+  {
+    "id": 1301,
+    "topic": "Receiving is not scanning",
+    "theory_title": "The UPI trick that catches careful people",
+    "theory_content": "You never scan a QR code or enter a PIN to receive money. Both actions send. The \"buyer\" on a classifieds site who sends a QR to \"transfer the payment\" is taking money, not sending it. The same applies to collect requests: approving one pays out, it does not pay in."
+  },
+  {
+    "id": 1302,
+    "topic": "Pump and dump",
+    "theory_title": "Why the tip arrived after the move",
+    "theory_content": "Operators accumulate a thinly traded stock, promote it through messaging groups and sell into the buying they create. By the time a tip reaches a broadcast list, the accumulation is finished and you are the exit. The pattern is recognisable: a small company, a spectacular recent chart, urgency, and no discussion of valuation."
+  },
+  {
+    "id": 1303,
+    "topic": "Ponzi mechanics",
+    "theory_title": "How guaranteed returns are actually paid",
+    "theory_content": "A scheme promising a guaranteed 3% a month pays early investors with later investors’ principal. Early payouts are the mechanism, not the evidence — which is why \"my friend already got paid\" is the least useful information available. Government debt pays about 7% a year; anything promising five times that with certainty is describing a transfer, not a return."
+  }
+]

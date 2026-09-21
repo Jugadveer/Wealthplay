@@ -13,6 +13,8 @@ under an "AI" heading, including one that read "the volume volume surge".
 
 from __future__ import annotations
 
+from datetime import date
+
 import logging
 
 from . import client
@@ -217,7 +219,22 @@ def weekly_recap(stats: dict) -> str | None:
         'attention, and what to do next week. Address them as "you". No praise '
         'that the numbers do not support.'
     )
-    return _safe(client.complete, prompt, system=TUTOR_VOICE, max_tokens=220)
+
+    # Keyed on the figures themselves, and on the day. A recap is the same recap
+    # until one of the numbers changes; without this it regenerated on every
+    # visit to Progress and cost three seconds each time.
+    fingerprint = ':'.join(
+        f'{key}={stats.get(key)}'
+        for key in ('modules', 'accuracy', 'puzzles', 'streak', 'portfolio_return', 'weak_topic')
+    )
+
+    return _safe(
+        client.complete,
+        prompt,
+        system=TUTOR_VOICE,
+        max_tokens=220,
+        cache_key=f'recap:{date.today()}:{fingerprint}',
+    )
 
 
 def generate_drill_questions(module_title: str, theory: str, count: int = 3) -> list[dict] | None:

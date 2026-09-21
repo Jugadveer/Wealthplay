@@ -108,6 +108,7 @@ export const api = {
   quotes: (symbols) => get('/market/quotes/', { params: { symbols } }),
   marketHistory: (symbol, days = 90) => get(`/market/history/${symbol}/`, { params: { days } }),
   news: (symbol) => get('/market/news/', { params: { symbol } }),
+  marketNews: (limit = 8) => get('/market/news/', { params: { limit } }),
 
   // Challenges
   leaderboard: (type = 'scores') => get('/users/challenges/leaderboard/', { params: { type } }),
@@ -131,9 +132,14 @@ export const api = {
 
   // Goals
   goals: () => get('/users/goals/'),
+  planGoal: (payload) => post('/users/goals/plan/', payload),
   createGoal: (payload) => post('/users/goals/create/', payload),
   updateGoal: (id, payload) => post(`/users/goals/${id}/update/`, payload),
   deleteGoal: (id) => http.delete(`/users/goals/${id}/delete/`).then((r) => r.data),
+  linkGoal: (id, linked) => post(`/users/goals/${id}/link/`, { linked }),
+  setContribution: (amount) =>
+    post('/users/goals/contribution/', { monthly_contribution: amount }),
+  payContribution: () => post('/users/goals/contribution/pay/', {}),
 
   // Daily
   today: () => get('/daily/today/'),

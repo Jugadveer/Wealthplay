@@ -1,0 +1,14 @@
+[
+  {
+    "id": 1135,
+    "question": "Is a higher FD rate at a small co-operative bank worth taking?",
+    "answer": "Only up to ₹5,00,000, which is what deposit insurance covers. Above that you are lending unsecured to an institution offering above-market rates, and the reason it offers them is usually that it needs the deposits.",
+    "explanation": "An extra 1% is not worth an uninsured principal."
+  },
+  {
+    "id": 1136,
+    "question": "What is the difference between a recurring deposit and a SIP?",
+    "answer": "Both are monthly commitments. An RD earns a fixed, guaranteed rate around 6-7% with no price risk. A SIP buys units at whatever the market price is, with no guarantee and a much higher long-run expected return. RD for goals inside three years, SIP for goals beyond seven.",
+    "explanation": "The horizon decides which one is appropriate, not the return."
+  }
+]

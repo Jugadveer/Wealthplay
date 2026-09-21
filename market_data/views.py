@@ -10,14 +10,17 @@ from . import services
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def market_news(request):
-    """Recent headlines for one symbol.
+    """Headlines: one symbol's when asked for, otherwise the day's whole wire.
 
     Returns ``{"news": []}`` when the provider has nothing, so the client can
     render an honest empty state. The previous version manufactured a summary
     out of empty fields and shipped it as real reporting.
     """
-    symbol = request.GET.get('symbol', 'AAPL')
-    return Response({'news': services.get_news(symbol)})
+    symbol = request.GET.get('symbol')
+    limit = max(1, min(12, int(request.GET.get('limit') or 8)))
+
+    news = services.get_news(symbol) if symbol else services.get_market_news(limit)
+    return Response({'news': news})
 
 
 @api_view(['GET'])

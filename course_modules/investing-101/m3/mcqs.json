@@ -1,0 +1,47 @@
+[
+  {
+    "id": 2070,
+    "question": "Over ten years, roughly what share of active Indian large-cap funds beat their index?",
+    "options": [
+      "About 80%",
+      "About 50%",
+      "About 20%",
+      "Almost all"
+    ],
+    "correct_answer": "About 20%",
+    "ai_feedback": {
+      "correct": "Correct — and the winning fifth cannot be identified in advance.",
+      "incorrect": "Most active large-cap funds trail the index after fees over a decade."
+    }
+  },
+  {
+    "id": 2071,
+    "question": "What is the difference between the direct and regular plan of the same fund?",
+    "options": [
+      "Different portfolios",
+      "Different managers",
+      "The regular plan pays a distributor commission from your returns",
+      "The direct plan has a lock-in"
+    ],
+    "correct_answer": "The regular plan pays a distributor commission from your returns",
+    "ai_feedback": {
+      "correct": "Correct. Identical fund, one of them costs you 0.5-1% a year more.",
+      "incorrect": "The portfolio and manager are identical. Only the fee differs."
+    }
+  },
+  {
+    "id": 2072,
+    "question": "The average fund investor trails their own fund by about 1.7% a year. Why?",
+    "options": [
+      "Fund fees",
+      "Taxes",
+      "Buying after gains and selling after falls",
+      "Currency effects"
+    ],
+    "correct_answer": "Buying after gains and selling after falls",
+    "ai_feedback": {
+      "correct": "Correct. The gap is entirely behavioural — the fund’s return was available to anyone who sat still.",
+      "incorrect": "The fee is already deducted from the fund’s own return. This gap is timing."
+    }
+  }
+]

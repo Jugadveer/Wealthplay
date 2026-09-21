@@ -1,0 +1,14 @@
+[
+  {
+    "id": 3035,
+    "question": "How many holdings does a good portfolio need?",
+    "answer": "Fewer than most people think. One broad index fund plus a debt fund is a complete portfolio. Adding a mid-cap fund and some global exposure makes four. Beyond about six funds you are almost certainly holding the same companies repeatedly with multiple expense ratios.",
+    "explanation": "Check overlap in holdings, not the number of fund names."
+  },
+  {
+    "id": 3036,
+    "question": "Does rebalancing reduce returns?",
+    "answer": "Slightly, in a long bull market, because it keeps trimming the asset that is rising. It reduces volatility considerably more than it reduces return, and it is what stops a portfolio drifting to 90% equity just before a crash. Count the tax and exit loads when you do it.",
+    "explanation": "You give up a little return to keep the risk level you actually chose."
+  }
+]

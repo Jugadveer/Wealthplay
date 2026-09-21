@@ -34,7 +34,7 @@ export default function Analysis() {
           icon={PieChart}
           title="Nothing to analyse yet"
           body="Concentration, sector exposure and risk review all need positions to work from."
-          action={<Button to="/markets/explore">Browse stocks</Button>}
+          action={<Button to="/markets/trade">Browse stocks</Button>}
         />
       </Panel>
     )

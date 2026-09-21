@@ -347,7 +347,7 @@ function Finish({ module, courseId, moduleId, cacheKey }) {
               <Button to={`/learn/${courseId}`}>Back to the course</Button>
             )}
             <Button variant="ghost" to="/today">
-              Today's set
+              Today&rsquo;s set
             </Button>
           </div>
         </>

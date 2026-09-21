@@ -24,7 +24,7 @@ from __future__ import annotations
 
 import logging
 from dataclasses import asdict, dataclass
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
 
 import yfinance as yf
 from django.core.cache import cache
@@ -109,12 +109,24 @@ def _cached(key: str, ttl: int, producer):
 # --------------------------------------------------------------------------- #
 
 def _simulated_quote(symbol: str) -> Quote | None:
-    """Quote for a ``CustomStock``, or ``None`` if the symbol is a real listing."""
+    """Quote for a ``CustomStock``, or ``None`` if the symbol is a real listing.
+
+    Brings the stock up to today before quoting it. Each session's return is
+    seeded on ``(symbol, date)``, so advancing here produces exactly the series
+    a nightly job would have written — which means the practice market keeps
+    moving on a machine where nothing is scheduled.
+    """
     from users.models import CustomStock
+    from users.portfolio.simulation import advance
 
     stock = CustomStock.objects.filter(symbol=symbol.upper()).first()
     if stock is None:
         return None
+
+    try:
+        advance(stock)
+    except Exception:
+        logger.warning("could not advance %s", stock.symbol, exc_info=True)
 
     return Quote(
         symbol=stock.symbol,
@@ -278,6 +290,62 @@ def _fetch_history(symbol: str, days: int) -> list[dict]:
         }
         for index, row in frame.iterrows()
     ]
+
+
+def get_market_news(limit: int = 8) -> list[dict]:
+    """The day's headlines across the tracked universe, most recent first.
+
+    A single symbol's feed goes quiet for days at a time, so the wire used to
+    show the same four stories all week. This pulls from several listings at
+    once, rotates which ones lead on a daily cycle so the mix genuinely turns
+    over, then dedupes and sorts by publication time.
+
+    Cached for fifteen minutes: fresh enough to be a news feed, long enough that
+    a page load never waits on eight provider calls.
+    """
+    return _cached(f"news:market:{limit}:{date.today()}", TTL_NEWS, lambda: _fetch_market_news(limit)) or []
+
+
+# How many listings to poll for one wire. More would be slower without being
+# meaningfully more varied — the same wire services syndicate across all of them.
+NEWS_SOURCES = 5
+
+
+def _fetch_market_news(limit: int) -> list[dict]:
+    """Merge several symbols' feeds into one wire."""
+    universe = list(TRACKED_SYMBOLS)
+    start = date.today().toordinal() * NEWS_SOURCES
+    leaders = [universe[(start + offset) % len(universe)] for offset in range(NEWS_SOURCES)]
+
+    seen: set[str] = set()
+    articles = []
+
+    for symbol in leaders:
+        try:
+            for article in _fetch_news(symbol, limit):
+                key = (article.get("link") or article["title"]).strip().lower()
+                if key in seen:
+                    continue
+                seen.add(key)
+                articles.append({**article, "symbol": symbol})
+        except Exception:
+            logger.warning("news unavailable for %s", symbol, exc_info=True)
+
+    articles.sort(key=lambda article: _published_at(article), reverse=True)
+    return articles[:limit]
+
+
+def _published_at(article: dict) -> float:
+    """Sort key. Handles the epoch seconds and the ISO string the provider mixes."""
+    raw = article.get("published")
+    if isinstance(raw, (int, float)):
+        return float(raw)
+    if isinstance(raw, str) and raw:
+        try:
+            return datetime.fromisoformat(raw.replace("Z", "+00:00")).timestamp()
+        except ValueError:
+            return 0.0
+    return 0.0
 
 
 def _fetch_news(symbol: str, limit: int) -> list[dict]:

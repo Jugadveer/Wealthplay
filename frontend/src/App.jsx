@@ -21,6 +21,7 @@ const Lesson = lazy(() => import('./pages/Lesson'))
 const Markets = lazy(() => import('./pages/Markets'))
 const Play = lazy(() => import('./pages/Play'))
 const Progress = lazy(() => import('./pages/Progress'))
+const Goals = lazy(() => import('./pages/Goals'))
 const Onboarding = lazy(() => import('./pages/Onboarding'))
 const NotFound = lazy(() => import('./pages/NotFound'))
 
@@ -41,9 +42,10 @@ export default function App() {
                   <Route path="/learn/:courseId" element={<Course />} />
                   <Route path="/learn/:courseId/:moduleId" element={<Lesson />} />
                   <Route path="/markets" element={<Markets />} />
-                  <Route path="/markets/:tab" element={<Markets />} />
-                  <Route path="/markets/explore/:symbol" element={<Markets />} />
+                  <Route path="/markets/:screen" element={<Markets />} />
+                  <Route path="/markets/trade/:symbol" element={<Markets />} />
                   <Route path="/play" element={<Play />} />
+                  <Route path="/goals" element={<Goals />} />
                   <Route path="/progress" element={<Progress />} />
                 </Route>
 

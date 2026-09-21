@@ -1,0 +1,47 @@
+[
+  {
+    "id": 4120,
+    "question": "Your income varies between ₹40,000 and ₹1,20,000 a month. What should the budget be built on?",
+    "options": [
+      "The average",
+      "The highest months",
+      "The lowest three months",
+      "Last month"
+    ],
+    "correct_answer": "The lowest three months",
+    "ai_feedback": {
+      "correct": "Correct. Budgeting to the floor means good months create surplus rather than habit.",
+      "incorrect": "Averaging means overcommitting in the months you can least afford it."
+    }
+  },
+  {
+    "id": 4121,
+    "question": "Which change most improves a savings rate, sustainably?",
+    "options": [
+      "Cancelling streaming services",
+      "Reducing rent or commute cost",
+      "Cooking twice a week",
+      "Buying a cheaper phone"
+    ],
+    "correct_answer": "Reducing rent or commute cost",
+    "ai_feedback": {
+      "correct": "Correct. Fixed costs recur without willpower, so cutting them compounds.",
+      "incorrect": "Discretionary cuts need continuous effort. Fixed cuts happen once."
+    }
+  },
+  {
+    "id": 4122,
+    "question": "What is the point of tracking spending in detail for one month?",
+    "options": [
+      "To build a permanent habit",
+      "To find the categories you are wrong about",
+      "To reduce spending that month",
+      "To file taxes"
+    ],
+    "correct_answer": "To find the categories you are wrong about",
+    "ai_feedback": {
+      "correct": "Correct. Once found, a monthly review is enough to keep them in check.",
+      "incorrect": "The value is diagnostic. Permanent detailed tracking is what people abandon."
+    }
+  }
+]

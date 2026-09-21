@@ -1,0 +1,47 @@
+[
+  {
+    "id": 2320,
+    "question": "You expect to spend ₹80,000 a month in retirement. Roughly what corpus does the 4% rule imply, in today’s money?",
+    "options": [
+      "₹96 lakh",
+      "₹1.9 crore",
+      "₹2.4 crore",
+      "₹4 crore"
+    ],
+    "correct_answer": "₹2.4 crore",
+    "ai_feedback": {
+      "correct": "Correct. ₹9.6 lakh a year times twenty-five.",
+      "incorrect": "Multiply annual expenses by twenty-five: ₹9.6 lakh × 25."
+    }
+  },
+  {
+    "id": 2321,
+    "question": "What must happen to at least 40% of an NPS corpus at age 60?",
+    "options": [
+      "It is taxed at 30%",
+      "It must buy an annuity",
+      "It is locked for five more years",
+      "It must move to equity"
+    ],
+    "correct_answer": "It must buy an annuity",
+    "ai_feedback": {
+      "correct": "Correct, and that annuity income is then taxed at your slab.",
+      "incorrect": "The mandatory annuitisation is the main constraint of the NPS."
+    }
+  },
+  {
+    "id": 2322,
+    "question": "Why is a market fall in the first years of retirement more damaging than one in the middle?",
+    "options": [
+      "Losses are larger then",
+      "You are selling units into the fall, permanently reducing the corpus",
+      "Taxes are higher",
+      "Inflation is higher"
+    ],
+    "correct_answer": "You are selling units into the fall, permanently reducing the corpus",
+    "ai_feedback": {
+      "correct": "Correct. That is sequence risk, and holding a few years of debt is the defence.",
+      "incorrect": "The size of the fall is the same. What differs is that you are withdrawing during it."
+    }
+  }
+]

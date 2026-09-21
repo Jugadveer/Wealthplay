@@ -106,3 +106,47 @@ class CatalogueTests(TestCase):
     def test_unknown_ids_return_none(self):
         self.assertIsNone(content.get_course('no-such-course'))
         self.assertIsNone(content.get_module('investing-basics', 'no-such-module'))
+
+
+class CatalogueDepthTests(TestCase):
+    """Content is hand-written on disk, so these guard what hand-writing gets wrong."""
+
+    def test_no_module_ships_empty(self):
+        """Regression: investing-101/m1 had empty flash_cards.json and mcqs.json.
+
+        With no cards there is no title and no theory, so the module rendered as
+        "M1" above nothing at all — and nothing failed loudly enough to notice.
+        """
+        for course in content.catalogue():
+            for stub in course['modules']:
+                module = content.get_module(course['id'], stub['id'])
+                with self.subTest(module=f"{course['id']}/{stub['id']}"):
+                    self.assertTrue(module['cards'], 'module has no theory cards')
+                    self.assertTrue(module['title'].strip())
+
+    def test_every_course_has_more_than_one_module(self):
+        for course in content.catalogue():
+            with self.subTest(course=course['id']):
+                self.assertGreaterEqual(course['module_count'], 2)
+
+    def test_every_question_resolves_to_a_real_option(self):
+        for course in content.catalogue():
+            for stub in course['modules']:
+                module = content.get_module(course['id'], stub['id'])
+                for question in module['mcqs']:
+                    with self.subTest(question=question['id']):
+                        self.assertIn(question['correct_index'], range(len(question['options'])))
+                        self.assertEqual(
+                            len(set(question['options'])),
+                            len(question['options']),
+                            'duplicate options make the answer ambiguous',
+                        )
+
+    def test_a_card_does_not_give_away_its_own_answer(self):
+        """The front is a prompt. If it equals the back there is nothing to recall."""
+        for course in content.catalogue():
+            for stub in course['modules']:
+                module = content.get_module(course['id'], stub['id'])
+                for card in module['cards']:
+                    with self.subTest(card=card['id']):
+                        self.assertNotEqual(card['prompt'], card['answer'])

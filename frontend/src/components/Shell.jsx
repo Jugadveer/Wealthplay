@@ -23,6 +23,7 @@ const NAV = [
   { to: '/learn', label: 'Learn' },
   { to: '/markets', label: 'Markets' },
   { to: '/play', label: 'Play' },
+  { to: '/goals', label: 'Goals' },
   { to: '/progress', label: 'Progress' },
 ]
 
@@ -48,6 +49,11 @@ export default function Shell({ children, chrome = true }) {
 
   const zone = zoneFor(location.pathname)
 
+  // Markets replaces the site navigation with its own terminal bar. Leaving the
+  // five-item nav overhead invites you to wander off mid-decision, and the
+  // point of the terminal is that it is a different mode of use.
+  const terminal = zone === 'markets'
+
   useEffect(() => {
     document.documentElement.dataset.zone = zone
   }, [zone])
@@ -67,7 +73,7 @@ export default function Shell({ children, chrome = true }) {
         Skip to content
       </a>
 
-      {chrome && (
+      {chrome && !terminal && (
         <SiteHeader
           user={user}
           menuOpen={menuOpen}
@@ -80,7 +86,11 @@ export default function Shell({ children, chrome = true }) {
           without it, moving between sections swapped the text and nothing else,
           which read as one long page rather than as arriving somewhere.
           Bottom padding clears the floating mentor button. */}
-      <main id="main" key={location.pathname} className="relative z-10 rise pb-24">
+      <main
+        id="main"
+        key={location.pathname}
+        className={cx('relative z-10 rise', terminal ? 'pb-10' : 'pb-24')}
+      >
         {children}
       </main>
 

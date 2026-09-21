@@ -1,0 +1,14 @@
+[
+  {
+    "id": 2385,
+    "question": "How often should I rebalance?",
+    "answer": "Once a year, or whenever an allocation drifts more than about 5 percentage points from target. More frequently adds transaction costs and capital gains without improving outcomes; less frequently lets the portfolio drift into a risk level you never chose.",
+    "explanation": "Annual, or on a band. Not on a feeling."
+  },
+  {
+    "id": 2386,
+    "question": "Is holding cash a risk management tool or a drag?",
+    "answer": "Both, and which one depends on the horizon. Cash is the right holding for money needed within three years and a guaranteed real loss over twenty. The mistake is not holding cash; it is holding the wrong amount for the horizon.",
+    "explanation": "Cash is correct for a date, and expensive for a decade."
+  }
+]

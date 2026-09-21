@@ -1,0 +1,26 @@
+[
+  {
+    "id": 4050,
+    "topic": "Choosing a bank account",
+    "theory_title": "What the fine print charges you for",
+    "theory_content": "Compare four things rather than the advertised interest rate: the minimum balance requirement and the penalty for breaching it, free ATM withdrawals per month, debit card annual fees, and charges for cheque returns. A \"zero balance\" account with ₹500 in hidden annual fees costs more than a ₹10,000 minimum balance account without them."
+  },
+  {
+    "id": 4051,
+    "topic": "Autopay and standing instructions",
+    "theory_title": "Automating the parts you should not have to decide",
+    "theory_content": "Standing instructions for SIPs, EMIs and insurance premiums remove the two ways people fail: forgetting, and deciding not to this month. Set them for the day after payday, not the end of the month, so the money leaves before it can be spent. Keep a small buffer in the account, because a bounced auto-debit costs a fee and a mark on your credit record."
+  },
+  {
+    "id": 4052,
+    "topic": "Joint accounts and nominees",
+    "theory_title": "What happens to the balance afterwards",
+    "theory_content": "A joint account with \"either or survivor\" passes directly to the survivor without paperwork. A single account without a nominee requires a succession certificate — months of court process at the worst possible time. Adding a nominee takes ten minutes online and is the single highest-value piece of financial admin most people have never done."
+  },
+  {
+    "id": 4053,
+    "topic": "Digital payment safety",
+    "theory_title": "Small habits that remove most of the risk",
+    "theory_content": "Set a low daily UPI limit and raise it deliberately when needed. Use a separate account with a small balance for online payments. Turn off international usage on cards you do not use abroad. None of these prevent a determined attack, but they cap what any single compromise can cost you, which is the realistic goal."
+  }
+]

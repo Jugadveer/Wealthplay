@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1100,
+    "topic": "Sweep-in accounts",
+    "theory_title": "A savings account that behaves like an FD",
+    "theory_content": "A sweep-in facility automatically moves balances above a threshold into a fixed deposit, and pulls them back when you spend. You get FD-level interest on idle money with savings-level access. The trade-off is that the swept portion breaks in last-in-first-out order, so a withdrawal may cost you the interest on the most recent tranche only."
+  },
+  {
+    "id": 1101,
+    "topic": "Deposit insurance",
+    "theory_title": "How much of your balance the government actually guarantees",
+    "theory_content": "DICGC insures deposits up to ₹5,00,000 per depositor per bank, covering savings, current, fixed and recurring balances combined. Anything above that is an unsecured loan to the bank. This is why large balances belong across banks rather than in one account, and why a high rate at a small bank is not free money."
+  },
+  {
+    "id": 1102,
+    "topic": "Premature withdrawal",
+    "theory_title": "What breaking an FD costs",
+    "theory_content": "Breaking a fixed deposit early usually means you earn the rate that applied to the period you actually held it, minus a penalty of about 0.5-1%. A three-year FD broken at ten months earns roughly the ten-month rate less the penalty, not the three-year rate. Laddering across several smaller FDs avoids breaking the whole amount for a partial need."
+  },
+  {
+    "id": 1103,
+    "topic": "TDS on interest",
+    "theory_title": "The tax that is deducted before you see it",
+    "theory_content": "Banks deduct 10% TDS once interest across your deposits at that bank exceeds ₹40,000 in a year (₹50,000 for senior citizens). TDS is not the final tax: interest is added to your income and taxed at your slab, so a 30%-slab taxpayer owes more than the 10% already deducted. Form 15G/15H stops the deduction only if your total income is below the taxable limit."
+  }
+]

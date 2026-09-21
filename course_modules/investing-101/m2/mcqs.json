@@ -1,0 +1,47 @@
+[
+  {
+    "id": 2020,
+    "question": "A ₹10,000 SIP at 12% runs for thirty years. Roughly how much of the final corpus is your own contribution?",
+    "options": [
+      "About 10%",
+      "About 30%",
+      "About 60%",
+      "About 85%"
+    ],
+    "correct_answer": "About 10%",
+    "ai_feedback": {
+      "correct": "Correct. ₹36 lakh contributed becomes about ₹3.5 crore; the rest is compounding.",
+      "incorrect": "Contributions total ₹36 lakh against a corpus near ₹3.5 crore."
+    }
+  },
+  {
+    "id": 2021,
+    "question": "Which risk does diversification NOT remove?",
+    "options": [
+      "One company failing",
+      "A sector falling out of favour",
+      "The whole market falling",
+      "A fraud at one firm"
+    ],
+    "correct_answer": "The whole market falling",
+    "ai_feedback": {
+      "correct": "Correct. Market risk is the part that moves everything together and cannot be diversified away.",
+      "incorrect": "Diversification removes company- and sector-specific risk. It cannot remove the market."
+    }
+  },
+  {
+    "id": 2022,
+    "question": "Which decision most determines your portfolio’s volatility?",
+    "options": [
+      "Which fund manager you choose",
+      "The split between equity and debt",
+      "When you invest each month",
+      "Your broker"
+    ],
+    "correct_answer": "The split between equity and debt",
+    "ai_feedback": {
+      "correct": "Correct. Asset allocation drives most of the variation in outcomes.",
+      "incorrect": "Fund selection matters far less than the equity-to-debt split."
+    }
+  }
+]

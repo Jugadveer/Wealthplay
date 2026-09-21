@@ -1,0 +1,26 @@
+[
+  {
+    "id": 3350,
+    "topic": "Calls and puts",
+    "theory_title": "Rights, not obligations, for the buyer",
+    "theory_content": "A call gives the buyer the right to buy at a strike price; a put gives the right to sell. The buyer’s maximum loss is the premium paid. The seller collects that premium and takes on an obligation with a much larger potential loss — theoretically unlimited for a naked call. Buying and selling options are not mirror images in risk."
+  },
+  {
+    "id": 3351,
+    "topic": "Theta decay",
+    "theory_title": "Why most bought options expire worthless",
+    "theory_content": "An option loses value every day simply because there is less time left for the move to happen, and that decay accelerates near expiry. A buyer needs to be right about direction, size and timing; the seller only needs the move not to arrive. This is why roughly 80% of options held to expiry expire worthless, and why buying cheap weekly options is the fastest way to lose steadily."
+  },
+  {
+    "id": 3352,
+    "topic": "Covered calls",
+    "theory_title": "The one strategy with a sensible beginner case",
+    "theory_content": "Holding 100 shares and selling a call against them generates premium income and caps your upside at the strike. The risk is opportunity cost rather than ruin: if the stock runs, you sell at the strike and miss the rest. It is a genuine income strategy, unlike most option activity, because there is no naked exposure."
+  },
+  {
+    "id": 3353,
+    "topic": "Implied volatility",
+    "theory_title": "What you are actually paying for",
+    "theory_content": "Option prices embed an expectation of future volatility. Buying before a known event — results, a policy announcement — means paying an inflated IV, and the price often falls after the event even when the direction was right, because the uncertainty premium collapses. Being right about direction and still losing is the normal outcome of buying into elevated IV."
+  }
+]

@@ -1,0 +1,26 @@
+[
+  {
+    "id": 4200,
+    "topic": "Reading a loan offer",
+    "theory_title": "The number that matters is not the one advertised",
+    "theory_content": "Compare the annual percentage rate, not the headline interest rate: the APR includes processing fees, insurance bundled into the loan and administrative charges. A 10.5% loan with a 2% processing fee and a mandatory insurance premium can cost more than an 11.5% loan without them. Ask for the total amount repayable, which is the only figure that cannot be dressed up."
+  },
+  {
+    "id": 4201,
+    "topic": "Prepayment rules",
+    "theory_title": "What it costs to get out early",
+    "theory_content": "Floating-rate home loans to individuals cannot carry prepayment penalties in India; fixed-rate loans and most personal loans can, often 2-5% of the outstanding amount. Check before you borrow, because the option to prepay is worth a great deal if your income rises — and prepaying early in the term saves far more interest than prepaying late."
+  },
+  {
+    "id": 4202,
+    "topic": "Guaranteeing someone else’s loan",
+    "theory_title": "A liability with no asset attached",
+    "theory_content": "A guarantor is legally liable for the full amount if the borrower defaults, and the loan appears on the guarantor’s credit report, reducing their own borrowing capacity. Lenders pursue guarantors as readily as borrowers. Agreeing is a decision to take on the debt, and it should be made on that basis, not as a favour."
+  },
+  {
+    "id": 4203,
+    "topic": "Debt consolidation",
+    "theory_title": "When combining loans helps and when it hides",
+    "theory_content": "Consolidating several high-rate debts into one lower-rate loan reduces interest and simplifies repayment — genuinely useful. It becomes harmful when the longer term lowers the monthly payment enough that total interest rises, or when the cleared cards are used again. Consolidation solves a rate problem; it does not solve a spending problem."
+  }
+]

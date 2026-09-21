@@ -1,0 +1,47 @@
+[
+  {
+    "id": 3020,
+    "question": "What is the main argument for holding some global equity?",
+    "options": [
+      "Foreign returns are always higher",
+      "India is about 4% of world market value, so India-only is a concentrated bet",
+      "It reduces tax",
+      "It is more liquid"
+    ],
+    "correct_answer": "India is about 4% of world market value, so India-only is a concentrated bet",
+    "ai_feedback": {
+      "correct": "Correct. Country concentration is a real risk that stock count does not address.",
+      "incorrect": "The case is diversification of drivers and currency, not higher expected return."
+    }
+  },
+  {
+    "id": 3021,
+    "question": "In a core-satellite structure, what is the satellite for?",
+    "options": [
+      "Most of the money",
+      "Expressing views at a size that cannot end the portfolio",
+      "Reducing fees",
+      "Tax efficiency"
+    ],
+    "correct_answer": "Expressing views at a size that cannot end the portfolio",
+    "ai_feedback": {
+      "correct": "Correct. The satellite is where you can afford to be wrong.",
+      "incorrect": "The satellite is deliberately small. The core carries the weight."
+    }
+  },
+  {
+    "id": 3022,
+    "question": "Your 70/30 portfolio has drifted to 78/22 after a strong year. Under a 5-point band rule, what do you do?",
+    "options": [
+      "Nothing, momentum is working",
+      "Sell equity back to 70%",
+      "Buy more equity",
+      "Move everything to debt"
+    ],
+    "correct_answer": "Sell equity back to 70%",
+    "ai_feedback": {
+      "correct": "Correct. The band was breached, so the rule fires regardless of how it feels.",
+      "incorrect": "The point of a band is that it removes the judgement at the moment it is hardest."
+    }
+  }
+]

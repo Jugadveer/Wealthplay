@@ -1,16 +1,19 @@
 /**
- * The transition into Markets and into Play.
+ * Booting the practice terminal.
  *
- * Only those two. They are the places where the app stops being a reader and
- * becomes an environment — a trading account, an arcade — and the entry says
- * so: a running tape for Markets, flipping tiles for Play. Today, Learn and
- * Progress are reading surfaces you arrive at constantly, and a curtain in
- * front of them is an interruption rather than an arrival.
+ * Markets is the one place in the app that stops being a reader and becomes an
+ * environment: the site navigation goes away and a trading terminal takes over.
+ * This is the handover — a running tape, a connection line, and the account
+ * opening — so the change of mode reads as arriving somewhere rather than as a
+ * page that lost its header.
  *
- * It fires only when the zone actually changes — moving between tabs inside
- * Markets shows nothing — lasts under a second, and is skipped entirely when
- * the visitor has asked for reduced motion. A transition you cannot skip is a
- * loading screen, and this is not one: the page underneath has already rendered.
+ * Nowhere else gets one. Today, Learn, Play and Progress are surfaces you open
+ * constantly, and a curtain in front of one is an interruption.
+ *
+ * It fires only on entering Markets from outside — moving between terminal
+ * screens shows nothing — lasts under a second, and is skipped entirely under
+ * `prefers-reduced-motion`. A transition you cannot skip is a loading screen,
+ * and this is not one: the page underneath has already rendered.
  */
 import { useEffect, useRef, useState } from 'react'
 
@@ -18,16 +21,9 @@ const DURATION = 850
 
 const ZONES = {
   markets: {
-    eyebrow: 'Practice account',
-    title: 'Markets',
-    lede: 'Real listings, virtual money.',
-    motif: Tape,
-  },
-  play: {
-    eyebrow: 'Scored on reasoning',
-    title: 'Play',
-    lede: 'Call it, defend it, climb the board.',
-    motif: Tiles,
+    eyebrow: 'Connecting',
+    title: 'Practice terminal',
+    lede: 'Real listings. Virtual money. Nothing here touches a real account.',
   },
 }
 
@@ -53,18 +49,19 @@ export default function ZoneCurtain({ zone }) {
 
   if (!showing) return null
 
-  const { eyebrow, title, lede, motif: Motif } = ZONES[showing] ?? {}
+  const { eyebrow, title, lede } = ZONES[showing] ?? {}
   if (!title) return null
 
   return (
     <div className="curtain" aria-hidden="true">
-      <div className="flex flex-col items-center gap-5 px-6 text-center">
-        <Motif />
+      <div className="flex w-[min(460px,84vw)] flex-col items-center gap-5 text-center">
+        <Tape />
         <div>
           <p className="eyebrow">{eyebrow}</p>
           <h2 className="mt-2 text-display leading-none">{title}</h2>
           <p className="mt-2 text-sm text-ink-muted">{lede}</p>
         </div>
+        <span className="curtain-link h-px w-full bg-accent" />
       </div>
     </div>
   )
@@ -87,21 +84,6 @@ function Tape() {
           </span>
         ))}
       </div>
-    </div>
-  )
-}
-
-/** Four tiles turning over, which is what every game here does. */
-function Tiles() {
-  return (
-    <div className="flex gap-2">
-      {[0, 1, 2, 3].map((index) => (
-        <span
-          key={index}
-          className="curtain-tile h-10 w-10 rounded-sm bg-accent"
-          style={{ animationDelay: `${index * 90}ms` }}
-        />
-      ))}
     </div>
   )
 }

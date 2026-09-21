@@ -1,0 +1,14 @@
+[
+  {
+    "id": 2035,
+    "question": "Is it better to invest a lump sum or spread it out?",
+    "answer": "On average, investing immediately wins, because markets rise more often than they fall. But spreading a large sum over six months removes the worst case — everything invested on exactly the wrong day — and the worst case is what makes people abandon the plan entirely.",
+    "explanation": "The statistically better answer and the behaviourally better answer differ here."
+  },
+  {
+    "id": 2036,
+    "question": "How many funds should I hold?",
+    "answer": "Two to four. One broad index fund covers most of what you need; a second for mid-caps and a debt fund complete it. Holding eight equity funds usually means holding the same forty companies four times over, with four expense ratios.",
+    "explanation": "Overlap is not diversification. Check holdings, not fund names."
+  }
+]

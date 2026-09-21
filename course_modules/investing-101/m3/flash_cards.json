@@ -1,0 +1,26 @@
+[
+  {
+    "id": 2050,
+    "topic": "Index funds",
+    "theory_title": "Owning the market instead of guessing within it",
+    "theory_content": "An index fund buys every company in an index in proportion to its size, charges about 0.2% a year, and needs no manager to be right. Over ten years roughly 80% of active Indian large-cap funds fail to beat their index after fees — and you cannot identify the winning 20% in advance, because past performance does not persist."
+  },
+  {
+    "id": 2051,
+    "topic": "The cost of fees",
+    "theory_title": "A small number with a large consequence",
+    "theory_content": "A 2% expense ratio does not cost 2%. On a ₹50 lakh corpus over twenty years, the difference between 0.2% and 2% is roughly a third of the final amount. Fees compound against you exactly as returns compound for you, and they are charged whether the fund wins or loses."
+  },
+  {
+    "id": 2052,
+    "topic": "Direct versus regular plans",
+    "theory_title": "The same fund at two prices",
+    "theory_content": "Every mutual fund has a direct plan and a regular plan. Same manager, same portfolio, same everything — the regular plan simply pays a distributor commission of about 0.5 to 1% a year out of your returns. Over twenty years on ₹5 lakh that difference is roughly ₹7 lakh. If you are not receiving advice, you are paying for nothing."
+  },
+  {
+    "id": 2053,
+    "topic": "The behaviour gap",
+    "theory_title": "Why investors trail their own funds",
+    "theory_content": "The average equity fund investor underperforms the fund they hold by about 1.7% a year. The fund did not change; the investor bought after good years and sold after bad ones. Every mechanism that removes the decision — automatic SIPs, a written allocation, not checking daily — closes part of that gap."
+  }
+]

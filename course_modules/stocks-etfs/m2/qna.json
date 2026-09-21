@@ -1,0 +1,14 @@
+[
+  {
+    "id": 2235,
+    "question": "Are high-dividend stocks a good source of income?",
+    "answer": "They can be, but in India dividends are taxed at your slab, so a 30%-bracket investor keeps only ₹70 of every ₹100. Selling a small number of units from a growth fund instead is usually taxed more lightly under long-term capital gains.",
+    "explanation": "Prefer the route with the lower tax, not the one that feels like income."
+  },
+  {
+    "id": 2236,
+    "question": "Should a beginner hold small-cap funds?",
+    "answer": "Not as a core. Small-caps have higher long-run returns and far deeper falls — often 60-70% in a crash, recovering over years. A small allocation on top of a large-cap or index core is reasonable once you have sat through one correction.",
+    "explanation": "Higher return is paid for with volatility you have to survive to collect."
+  }
+]

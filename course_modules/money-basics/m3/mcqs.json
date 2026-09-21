@@ -1,0 +1,47 @@
+[
+  {
+    "id": 1070,
+    "question": "Which change improves financial outcomes most over the first ten years?",
+    "options": [
+      "Raising returns from 10% to 12%",
+      "Raising the savings rate from 10% to 25%",
+      "Switching to a cheaper fund",
+      "Timing entries better"
+    ],
+    "correct_answer": "Raising the savings rate from 10% to 25%",
+    "ai_feedback": {
+      "correct": "Correct. Early on, the amount saved dominates the rate earned.",
+      "incorrect": "Returns matter enormously later. In the first decade, contributions dominate."
+    }
+  },
+  {
+    "id": 1071,
+    "question": "You get a ₹15,000 raise. What is the most effective single action?",
+    "options": [
+      "Increase the automatic investment by ₹15,000 before it reaches your account",
+      "Save whatever is left at month end",
+      "Upgrade your flat and save later",
+      "Keep it in savings until you decide"
+    ],
+    "correct_answer": "Increase the automatic investment by ₹15,000 before it reaches your account",
+    "ai_feedback": {
+      "correct": "Correct. You cannot miss money that never arrived in the spending account.",
+      "incorrect": "Anything that routes the raise through your current account will mostly be spent."
+    }
+  },
+  {
+    "id": 1072,
+    "question": "An emergency fund should be sized against which number?",
+    "options": [
+      "Six months of income",
+      "Six months of expenses",
+      "Three months of salary",
+      "One year of rent"
+    ],
+    "correct_answer": "Six months of expenses",
+    "ai_feedback": {
+      "correct": "Correct. Expenses are what you must cover when income stops.",
+      "incorrect": "Income is what stops. Expenses are what continues, so size against those."
+    }
+  }
+]

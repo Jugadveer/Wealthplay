@@ -1,0 +1,47 @@
+[
+  {
+    "id": 3220,
+    "question": "A ₹60,00,000 flat rents for ₹18,000 a month against an 8.5% home loan. What is the annual carrying gap, before costs?",
+    "options": [
+      "Roughly break-even",
+      "About 5 percentage points negative",
+      "About 3 percentage points positive",
+      "It depends on the tenant"
+    ],
+    "correct_answer": "About 5 percentage points negative",
+    "ai_feedback": {
+      "correct": "Correct. A 3.6% gross yield against an 8.5% loan is a negative carry.",
+      "incorrect": "Compare the yield to the loan rate: 3.6% against 8.5%."
+    }
+  },
+  {
+    "id": 3221,
+    "question": "Why does the rent-versus-buy answer depend on how long you stay?",
+    "options": [
+      "Rents rise over time",
+      "Transaction costs of 8-10% must be amortised over the holding period",
+      "Loans get cheaper",
+      "Property taxes fall"
+    ],
+    "correct_answer": "Transaction costs of 8-10% must be amortised over the holding period",
+    "ai_feedback": {
+      "correct": "Correct. A short stay cannot absorb the entry and exit costs.",
+      "incorrect": "The upfront 8-10% is the dominant term over short holding periods."
+    }
+  },
+  {
+    "id": 3222,
+    "question": "What is the main practical advantage of a REIT over owning a flat?",
+    "options": [
+      "Higher returns",
+      "Liquidity and divisibility",
+      "No tax",
+      "Guaranteed income"
+    ],
+    "correct_answer": "Liquidity and divisibility",
+    "ai_feedback": {
+      "correct": "Correct. You can buy a few thousand rupees of it and sell in a session.",
+      "incorrect": "REIT returns are not guaranteed or automatically higher; the advantage is tradability."
+    }
+  }
+]

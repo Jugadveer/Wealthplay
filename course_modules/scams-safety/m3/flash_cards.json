@@ -1,0 +1,26 @@
+[
+  {
+    "id": 4250,
+    "topic": "Job and task scams",
+    "theory_title": "Paying to work",
+    "theory_content": "The pattern is consistent: an unsolicited message offers easy paid tasks, small payments arrive to establish trust, then a larger \"deposit\" is required to unlock higher earnings and nothing is ever paid again. No legitimate employer requires you to pay to be paid. The early small payouts are the cost of the fraud, not evidence against it."
+  },
+  {
+    "id": 4251,
+    "topic": "Loan app harassment",
+    "theory_title": "Why the permissions matter",
+    "theory_content": "Unregulated lending apps demand access to contacts and photos at install, lend small amounts at effective rates above 100%, and then threaten to message your contact list on default. Borrow only from RBI-regulated entities, and never grant contact or gallery access to a lending app. The permission request is the business model declaring itself."
+  },
+  {
+    "id": 4252,
+    "topic": "Impersonation of authority",
+    "theory_title": "Digital arrest and its relatives",
+    "theory_content": "A caller claims to be from the police, customs or a tax department, describes a legal problem, and keeps you on a video call while you transfer money to \"verify\" funds. No Indian agency arrests anyone by video call or asks for transfers to personal accounts. The isolation and urgency are the method: the call is designed to stop you consulting anyone."
+  },
+  {
+    "id": 4253,
+    "topic": "Recovering from fraud",
+    "theory_title": "The three-day window",
+    "theory_content": "Report to your bank in writing and on the national cybercrime helpline as fast as possible. Under RBI rules, a customer who reports an unauthorised electronic transaction within three working days generally bears zero liability; the liability rises sharply after that. Speed matters more than completeness — report first, gather details after."
+  }
+]

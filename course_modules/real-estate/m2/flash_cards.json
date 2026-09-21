@@ -1,0 +1,26 @@
+[
+  {
+    "id": 3200,
+    "topic": "Rental yield",
+    "theory_title": "What the property actually earns",
+    "theory_content": "Gross rental yield is annual rent divided by the purchase price. In most Indian cities it runs 2-4%. Against a home loan at 8.5%, a 3% yield means the property costs you 5.5% a year to hold before maintenance, property tax and vacancy. A rental that yields less than the loan rate is a bet on price appreciation alone."
+  },
+  {
+    "id": 3201,
+    "topic": "Transaction costs",
+    "theory_title": "The 8-10% you pay to change your mind",
+    "theory_content": "Stamp duty, registration, brokerage and legal fees typically total 8-10% of the price, and selling costs more on top. This is why the rent-versus-buy calculation turns on how long you will stay: below about seven years the transaction costs usually exceed any appreciation."
+  },
+  {
+    "id": 3202,
+    "topic": "Illiquidity",
+    "theory_title": "The risk that only shows up when you need out",
+    "theory_content": "A flat cannot be sold in a day, cannot be sold in parts, and in a weak market may not sell for months at any price you would accept. Equity can be liquidated in a session. Property concentration is therefore two risks at once: a single asset, in a single city, that you cannot exit quickly."
+  },
+  {
+    "id": 3203,
+    "topic": "REITs",
+    "theory_title": "Property exposure without the flat",
+    "theory_content": "A Real Estate Investment Trust holds commercial property and must distribute at least 90% of its income. Units trade on the exchange, so they are liquid and divisible, and the minimum investment is a few thousand rupees rather than a few crore. The distributions are taxed in parts at different rates, which is the main complication."
+  }
+]

@@ -1,0 +1,47 @@
+[
+  {
+    "id": 4220,
+    "question": "Loan A: 10.5% with a 2% processing fee and bundled insurance. Loan B: 11.5% with no fees. How should you compare them?",
+    "options": [
+      "By the headline rate",
+      "By the total amount repayable",
+      "By the monthly EMI alone",
+      "By the lender’s reputation"
+    ],
+    "correct_answer": "By the total amount repayable",
+    "ai_feedback": {
+      "correct": "Correct. Fees and bundled products can make the lower headline rate more expensive.",
+      "incorrect": "The headline rate excludes exactly the costs that differ between these two."
+    }
+  },
+  {
+    "id": 4221,
+    "question": "Which loan cannot carry a prepayment penalty for an individual borrower in India?",
+    "options": [
+      "A personal loan",
+      "A floating-rate home loan",
+      "A car loan",
+      "A fixed-rate home loan"
+    ],
+    "correct_answer": "A floating-rate home loan",
+    "ai_feedback": {
+      "correct": "Correct. Floating-rate home loans to individuals are protected from prepayment charges.",
+      "incorrect": "The protection is specific to floating-rate home loans taken by individuals."
+    }
+  },
+  {
+    "id": 4222,
+    "question": "What is the main risk of debt consolidation?",
+    "options": [
+      "Higher interest rates",
+      "A longer term can raise total interest, and cleared cards get reused",
+      "It damages your credit score permanently",
+      "It is not legal"
+    ],
+    "correct_answer": "A longer term can raise total interest, and cleared cards get reused",
+    "ai_feedback": {
+      "correct": "Correct. A lower monthly payment is not the same as a lower total cost.",
+      "incorrect": "Consolidation fixes the rate. It does nothing about the behaviour that created the debt."
+    }
+  }
+]

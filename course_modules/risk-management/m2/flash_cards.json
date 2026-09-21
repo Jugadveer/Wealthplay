@@ -1,0 +1,26 @@
+[
+  {
+    "id": 2350,
+    "topic": "Position sizing",
+    "theory_title": "How much, not just what",
+    "theory_content": "Whether a holding can hurt you is decided by its size, not by how good the idea was. A speculative position at 2% of the portfolio that goes to zero costs 2%; the same idea at 40% ends the portfolio. Professional risk management is mostly about sizing, and amateurs almost always focus on selection instead."
+  },
+  {
+    "id": 2351,
+    "topic": "Concentration risk",
+    "theory_title": "Measuring how lopsided a portfolio is",
+    "theory_content": "The Herfindahl index adds the squared weights of every holding: a portfolio split evenly across ten names scores 0.1, while one with 70% in a single stock scores over 0.5. It captures what a list of holdings hides — that \"twelve stocks\" can still be one bet if one of them is most of the money."
+  },
+  {
+    "id": 2352,
+    "topic": "Correlation",
+    "theory_title": "Diversification that only looks like diversification",
+    "theory_content": "Four IT companies are four names and one bet, because they rise and fall together. What reduces risk is holding things that respond to different drivers — sectors, geographies, and asset classes. In a genuine crash correlations rise towards one, which is exactly when diversification is needed and least available."
+  },
+  {
+    "id": 2353,
+    "topic": "Rebalancing",
+    "theory_title": "Selling what ran, buying what lagged",
+    "theory_content": "Set a target allocation, then restore it on a schedule or when a band is breached — say 5 percentage points. After a strong equity year this forces you to sell equity and buy debt, which feels wrong and is the point: it mechanically sells high and buys low without requiring a forecast."
+  }
+]

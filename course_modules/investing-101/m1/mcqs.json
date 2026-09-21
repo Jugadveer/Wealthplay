@@ -1,1 +1,47 @@
-[]
+[
+  {
+    "id": 4020,
+    "question": "You need ₹5,00,000 in eighteen months for a deposit. Should it be saved or invested in equity?",
+    "options": [
+      "Invested, for the higher return",
+      "Saved, because the date is fixed and near",
+      "Split evenly",
+      "Invested in small-caps for growth"
+    ],
+    "correct_answer": "Saved, because the date is fixed and near",
+    "ai_feedback": {
+      "correct": "Correct. Eighteen months is well inside the range where equity can be down sharply.",
+      "incorrect": "The horizon decides. Money with a near, fixed date cannot carry price risk."
+    }
+  },
+  {
+    "id": 4021,
+    "question": "A scheme pays returns to early investors from money paid in by later ones. What is it?",
+    "options": [
+      "A high-yield bond",
+      "A Ponzi scheme",
+      "A mutual fund",
+      "A dividend stock"
+    ],
+    "correct_answer": "A Ponzi scheme",
+    "ai_feedback": {
+      "correct": "Correct. No production is happening; money is simply moving between participants.",
+      "incorrect": "Ask who produces the return. If the answer is \"later investors\", it is a transfer."
+    }
+  },
+  {
+    "id": 4022,
+    "question": "Which question is most useful before making any investment?",
+    "options": [
+      "What did it return last year?",
+      "When will I need this money back?",
+      "Who else is buying it?",
+      "Is it in the news?"
+    ],
+    "correct_answer": "When will I need this money back?",
+    "ai_feedback": {
+      "correct": "Correct. The horizon determines which instruments are even appropriate.",
+      "incorrect": "Last year’s return is the least predictive of the four."
+    }
+  }
+]

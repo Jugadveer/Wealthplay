@@ -1,0 +1,26 @@
+[
+  {
+    "id": 3000,
+    "topic": "Core and satellite",
+    "theory_title": "A structure that survives being wrong",
+    "theory_content": "Hold 70-80% in a broad index or large-cap core that you do not touch, and 20-30% in satellites — mid-caps, a sector view, an individual stock. The core delivers the market return; the satellites are where you express opinions and find out whether they were any good. Being wrong in a satellite costs a few percent; being wrong with the whole portfolio ends it."
+  },
+  {
+    "id": 3001,
+    "topic": "Equity and debt split",
+    "theory_title": "The decision that sets your volatility",
+    "theory_content": "A common starting point is (100 minus age) percent in equity, but the better input is the horizon for each pot of money and how you actually behaved last time markets fell 30%. Someone who sold in March 2020 should not hold 80% equity regardless of their age — the allocation you can hold through a crash beats the one that is optimal on paper."
+  },
+  {
+    "id": 3002,
+    "topic": "International exposure",
+    "theory_title": "Why one country is a concentrated bet",
+    "theory_content": "India is about 4% of global market capitalisation. A portfolio entirely in Indian equity is a single-country, single-currency bet, however many Indian stocks it holds. A 10-20% allocation to global equity adds companies with different drivers and gives some protection when the rupee weakens. Note that Indian funds holding foreign equity are taxed as debt, not equity."
+  },
+  {
+    "id": 3003,
+    "topic": "Rebalancing bands",
+    "theory_title": "A rule instead of a judgement",
+    "theory_content": "Decide a target — say 70% equity, 30% debt — and a band, say 5 percentage points. When equity reaches 75%, sell back to 70%. This mechanically sells strength and buys weakness without forecasting anything, and it converts an emotional decision into a threshold you set when you were calm."
+  }
+]

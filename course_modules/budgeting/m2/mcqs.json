@@ -1,0 +1,47 @@
+[
+  {
+    "id": 1170,
+    "question": "Your budget keeps failing in months with festivals or premiums. What is missing?",
+    "options": [
+      "A bigger emergency fund",
+      "Sinking funds for predictable lumps",
+      "A stricter variable budget",
+      "A higher income"
+    ],
+    "correct_answer": "Sinking funds for predictable lumps",
+    "ai_feedback": {
+      "correct": "Correct. Known irregular costs should be funded monthly, not absorbed suddenly.",
+      "incorrect": "The emergency fund is for surprises. A premium you pay every year is not a surprise."
+    }
+  },
+  {
+    "id": 1171,
+    "question": "Needs take 65% of your take-home. Which change has the most effect?",
+    "options": [
+      "Cancelling subscriptions",
+      "Cooking more at home",
+      "Reducing housing or transport cost",
+      "Switching to a cheaper phone plan"
+    ],
+    "correct_answer": "Reducing housing or transport cost",
+    "ai_feedback": {
+      "correct": "Correct. When fixed costs are the problem, only fixed costs can fix it.",
+      "incorrect": "Variable cuts help at the margin. A 65% needs share is a structural problem."
+    }
+  },
+  {
+    "id": 1172,
+    "question": "What distinguishes zero-based budgeting from simply tracking spending?",
+    "options": [
+      "It happens weekly",
+      "Every rupee is assigned before the month starts",
+      "It uses an app",
+      "It ignores savings"
+    ],
+    "correct_answer": "Every rupee is assigned before the month starts",
+    "ai_feedback": {
+      "correct": "Correct. Assignment in advance is what stops leftovers becoming spending.",
+      "incorrect": "Tracking tells you what happened. Zero-based budgeting decides what will."
+    }
+  }
+]

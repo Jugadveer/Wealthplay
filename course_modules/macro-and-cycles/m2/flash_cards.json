@@ -1,0 +1,26 @@
+[
+  {
+    "id": 3150,
+    "topic": "Interest rates and asset prices",
+    "theory_title": "The gravity behind every valuation",
+    "theory_content": "When the RBI raises rates, borrowing costs rise, future cash flows are discounted more heavily and asset prices generally fall; when it cuts, the reverse. Rates are the single biggest external driver of valuations, which is why the repo rate announcement moves markets that have nothing directly to do with banking."
+  },
+  {
+    "id": 3151,
+    "topic": "The business cycle",
+    "theory_title": "Expansion, peak, contraction, trough",
+    "theory_content": "Economies move through repeating phases and different sectors lead in each: cyclicals and industrials in expansion, defensives such as FMCG and pharma in contraction. Knowing where you probably are is useful context; trying to time the turns precisely is where most of the money is lost, because turns are only obvious afterwards."
+  },
+  {
+    "id": 3152,
+    "topic": "Inflation and the policy response",
+    "theory_title": "Why good news for the economy can be bad for markets",
+    "theory_content": "Strong growth can raise inflation, which prompts rate rises, which lower valuations. This is why markets sometimes fall on strong employment data. The link runs through the central bank’s expected reaction, not through the data itself."
+  },
+  {
+    "id": 3153,
+    "topic": "Currency effects",
+    "theory_title": "What a weaker rupee does to an Indian portfolio",
+    "theory_content": "A falling rupee helps exporters — IT and pharma earn in dollars — and hurts importers and anyone with foreign-currency debt. It also raises the rupee value of any global holdings you own, which is part of why international exposure diversifies an Indian portfolio beyond the companies it contains."
+  }
+]

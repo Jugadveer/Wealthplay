@@ -1,0 +1,14 @@
+[
+  {
+    "id": 3185,
+    "question": "Should I change my portfolio based on the economic cycle?",
+    "answer": "Mostly no. Identifying the phase in advance is far harder than it looks in hindsight, and the cost of being early is the same as the cost of being wrong. Use the cycle to set expectations, not allocations; keep changes to the satellite portion if you make them at all.",
+    "explanation": "The cycle is context. It is a poor trading signal."
+  },
+  {
+    "id": 3186,
+    "question": "Why do markets sometimes fall on good economic news?",
+    "answer": "Because the market prices the expected policy response, not the news. Strong data can imply higher inflation, which implies rate rises, which lower valuations. The chain runs through the central bank.",
+    "explanation": "Markets react to what the news implies about rates, not to the news itself."
+  }
+]

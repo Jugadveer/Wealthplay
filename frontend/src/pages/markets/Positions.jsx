@@ -7,7 +7,7 @@ import { Briefcase } from 'lucide-react'
 import { api } from '../../lib/api'
 import { money, percent, toneFor } from '../../lib/format'
 import { useQuery } from '../../lib/query'
-import { Button, EmptyState, Panel, Skeleton, Stat, cx } from '../../ui'
+import { Button, EmptyState, Panel, Skeleton, cx } from '../../ui'
 import { LineChart } from '../../ui/charts'
 
 export default function Holdings() {
@@ -32,33 +32,22 @@ export default function Holdings() {
 
   return (
     <div className="space-y-6">
+      {/* The account figures live in the terminal bar, which is on screen the
+          whole time. Repeating them here would be the third copy on one screen. */}
       <Panel className="p-6">
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          <Stat label="Total value" value={money(data.total_value)} size="lg" />
-          <Stat
-            label="Return"
-            value={percent(data.total_pnl_percent)}
-            sub={money(data.total_pnl, { signed: true })}
-            tone={toneFor(data.total_pnl)}
-            size="lg"
-          />
-          <Stat label="Invested" value={money(data.invested)} />
-          <Stat label="Cash" value={money(data.balance)} sub="available to trade" />
-        </div>
-
         {hasCurve ? (
           <div className="mt-8 border-t border-rule pt-6">
-            <p className="eyebrow">Value over time</p>
+            <p className="eyebrow">Account value, every trade so far</p>
             <div className="mt-2">
               <LineChart
                 height={240}
                 series={[
                   {
-                    label: 'Total value',
+                    label: 'Account value',
                     points: points.map((p) => ({ x: p.timestamp, y: p.portfolio_value })),
                   },
                   {
-                    label: 'Invested',
+                    label: 'Invested at cost',
                     points: points.map((p) => ({ x: p.timestamp, y: p.invested_value })),
                   },
                 ]}
@@ -66,7 +55,7 @@ export default function Holdings() {
             </div>
           </div>
         ) : (
-          <p className="mt-6 border-t border-rule pt-4 text-xs text-ink-faint">
+          <p className="text-xs text-ink-faint">
             The value chart starts once you have made a trade.
           </p>
         )}
@@ -78,7 +67,7 @@ export default function Holdings() {
             icon={Briefcase}
             title="Nothing held yet"
             body="Buy something and it appears here with live valuation. There is no real money involved, so a bad first trade costs nothing but a lesson."
-            action={<Button to="/markets/explore">Browse stocks</Button>}
+            action={<Button to="/markets/trade">Browse stocks</Button>}
           />
         </Panel>
       ) : (
@@ -106,7 +95,7 @@ export default function Holdings() {
                 <tr key={holding.symbol} className="border-b border-rule last:border-0">
                   <td className="px-4 py-3">
                     <Link
-                      to={`/markets/explore/${holding.symbol}`}
+                      to={`/markets/trade/${holding.symbol}`}
                       className="block hover:text-accent"
                     >
                       <span className="num font-semibold text-ink">{holding.symbol}</span>

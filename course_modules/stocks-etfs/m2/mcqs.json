@@ -1,0 +1,47 @@
+[
+  {
+    "id": 2220,
+    "question": "A company pays a ₹15 dividend. What typically happens to the share price on the ex-dividend date?",
+    "options": [
+      "It rises by about ₹15",
+      "It falls by about ₹15",
+      "It is unaffected",
+      "It doubles the dividend"
+    ],
+    "correct_answer": "It falls by about ₹15",
+    "ai_feedback": {
+      "correct": "Correct. The cash left the company, so the company is worth that much less.",
+      "incorrect": "A dividend transfers value from the company to you. It does not create it."
+    }
+  },
+  {
+    "id": 2221,
+    "question": "Which is true of ETFs compared with index funds in India?",
+    "options": [
+      "ETFs need a demat account and trade at market prices",
+      "ETFs are actively managed",
+      "Index funds cannot be bought monthly",
+      "ETFs have no expense ratio"
+    ],
+    "correct_answer": "ETFs need a demat account and trade at market prices",
+    "ai_feedback": {
+      "correct": "Correct — which also means they can trade slightly away from underlying value.",
+      "incorrect": "Both track an index. The difference is how and where you buy them."
+    }
+  },
+  {
+    "id": 2222,
+    "question": "Under SEBI classification, a company ranked 180th by market capitalisation is:",
+    "options": [
+      "Large-cap",
+      "Mid-cap",
+      "Small-cap",
+      "Micro-cap"
+    ],
+    "correct_answer": "Mid-cap",
+    "ai_feedback": {
+      "correct": "Correct. Ranks 101 to 250 are mid-cap.",
+      "incorrect": "Large-cap is the top 100; mid-cap runs from 101 to 250."
+    }
+  }
+]

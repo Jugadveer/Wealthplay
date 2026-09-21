@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1050,
+    "topic": "Pay yourself first",
+    "theory_title": "Save before you spend, not after",
+    "theory_content": "Most people save what is left at the end of the month, and what is left is usually nothing. Reversing the order — moving a fixed amount out on payday, automatically — works because the remaining balance becomes the budget. A ₹10,000 auto-debit on the 1st is far more effective than an intention to save ₹10,000 by the 30th."
+  },
+  {
+    "id": 1051,
+    "topic": "The savings rate",
+    "theory_title": "The one lever that dominates everything",
+    "theory_content": "Your savings rate is the share of take-home income you do not spend. It matters more than your investment returns for the first decade. Saving 10% of income takes about fifty years to reach financial independence; saving 30% takes about twenty-eight; saving 50% takes about seventeen. Rate of return cannot make up for a low rate of saving, but the reverse is often true."
+  },
+  {
+    "id": 1052,
+    "topic": "Lifestyle inflation",
+    "theory_title": "Why raises disappear",
+    "theory_content": "Lifestyle inflation is the tendency for spending to rise with income, so a 20% raise leaves you no better off. The defence is mechanical: when income rises, raise the automatic transfer before the money reaches the spending account. You never adapt to money you did not see."
+  },
+  {
+    "id": 1053,
+    "topic": "Emergency buffer",
+    "theory_title": "The thing that stops small problems becoming debt",
+    "theory_content": "Six months of expenses — not income — held somewhere you can reach the same day. Its job is not to earn a return. Its job is to stop a ₹40,000 repair becoming ₹40,000 on a credit card at 42%. People who skip this step usually discover they needed it during the exact month they could least afford to borrow."
+  }
+]

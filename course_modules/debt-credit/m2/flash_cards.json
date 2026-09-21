@@ -1,0 +1,26 @@
+[
+  {
+    "id": 2100,
+    "topic": "The real cost of a card",
+    "theory_title": "Why 3.5% a month is not 42% a year",
+    "theory_content": "A credit card quoting 3.5% a month is quoting a monthly compounding rate. Compounded twelve times, that is about 51% a year, not 42%. On ₹1,00,000 paying only the minimum, the balance takes more than fifteen years to clear and costs more than the original amount again. The minimum due is the lender’s business model, not a repayment plan."
+  },
+  {
+    "id": 2101,
+    "topic": "Avalanche versus snowball",
+    "theory_title": "Two ways to clear multiple debts",
+    "theory_content": "The avalanche method pays the highest-rate debt first and costs the least in interest. The snowball method pays the smallest balance first and produces a visible win sooner. Avalanche is mathematically better; snowball is behaviourally better for people who have abandoned repayment plans before. The best plan is the one you finish."
+  },
+  {
+    "id": 2102,
+    "topic": "Credit utilisation",
+    "theory_title": "The largest single input to your score",
+    "theory_content": "Utilisation — balance divided by limit — is about 30% of a credit score. Using ₹90,000 of a ₹1,00,000 limit hurts even if you pay in full each month, because the statement balance is what gets reported. Keeping reported usage under 30%, by paying before the statement date or asking for a higher limit, moves a score faster than almost anything else."
+  },
+  {
+    "id": 2103,
+    "topic": "Secured versus unsecured",
+    "theory_title": "What the collateral buys you",
+    "theory_content": "A home loan at 8.5% is cheap because the house secures it; a personal loan at 13% and a card at 42% are expensive because nothing does. The rate is not the only term that matters, though: a secured loan means the lender can take the asset. Borrowing against your home for a business is cheaper money and a much larger downside."
+  }
+]

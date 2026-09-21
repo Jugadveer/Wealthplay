@@ -1,0 +1,26 @@
+[
+  {
+    "id": 2250,
+    "topic": "Old regime versus new",
+    "theory_title": "Which one actually costs you less",
+    "theory_content": "The new regime has lower slab rates and almost no deductions; the old regime has higher rates and allows 80C, 80D, HRA and home loan interest. The crossover depends entirely on how many deductions you genuinely claim. Someone paying rent, repaying a home loan and maxing 80C is often better off under the old regime; someone with few deductions is almost always better off under the new one. Compute both; do not assume."
+  },
+  {
+    "id": 2251,
+    "topic": "Capital gains on equity",
+    "theory_title": "What the holding period changes",
+    "theory_content": "Sell listed equity or an equity fund within twelve months and the gain is short-term, taxed at 20%. Hold beyond twelve months and it is long-term, taxed at 12.5% above an annual exemption of ₹1,25,000. The difference between selling at eleven months and thirteen is a third of the tax on the gain, for doing nothing."
+  },
+  {
+    "id": 2252,
+    "topic": "Tax-loss harvesting",
+    "theory_title": "Using a loss you already have",
+    "theory_content": "Realised capital losses offset realised capital gains in the same year, and unused losses carry forward for eight years if you file on time. Selling a losing position and rebuying a similar one resets your cost basis and banks the loss. India has no wash-sale rule, but the carry-forward requires the return to be filed by the due date."
+  },
+  {
+    "id": 2253,
+    "topic": "Harvesting the exemption",
+    "theory_title": "A free reset every year",
+    "theory_content": "The ₹1,25,000 annual LTCG exemption does not carry forward. Selling enough long-held units each year to realise a gain just under it, then rebuying, raises your cost basis at zero tax cost. Over a long holding period this measurably reduces the eventual bill for a few minutes of work each March."
+  }
+]

@@ -1,0 +1,26 @@
+[
+  {
+    "id": 3100,
+    "topic": "Price-to-earnings",
+    "theory_title": "What the market is paying for a rupee of profit",
+    "theory_content": "P/E is price divided by earnings per share. A P/E of 25 means paying ₹25 for every ₹1 of annual profit. It is only meaningful against something: the company’s own history, its peers, or the market. A high P/E is not automatically expensive — it reflects expected growth — and a low one is not automatically cheap, because it often reflects expected decline."
+  },
+  {
+    "id": 3101,
+    "topic": "Discounted cash flow",
+    "theory_title": "A company is worth the cash it will produce",
+    "theory_content": "A DCF estimates the future free cash flows of a business and discounts them back to today at a rate reflecting their risk. The arithmetic is simple; the inputs are not. Small changes to the growth rate or discount rate swing the answer enormously, which is why a DCF is best used to ask what the current price already assumes rather than to produce a target."
+  },
+  {
+    "id": 3102,
+    "topic": "Return on equity",
+    "theory_title": "How efficiently the business uses its capital",
+    "theory_content": "ROE is net profit divided by shareholders’ equity. A business earning 25% on equity compounds shareholder capital far faster than one earning 8%, and can fund its own growth without raising money. Check how it is achieved: ROE inflated by heavy debt is a different and more fragile thing than ROE from high margins."
+  },
+  {
+    "id": 3103,
+    "topic": "Margin of safety",
+    "theory_title": "The gap between value and price",
+    "theory_content": "Estimates are wrong, so buy only when the price is meaningfully below your estimate of value — the difference absorbs the error. This is the practical answer to the fragility of DCF: you do not need to be precisely right if you have bought with enough room to be somewhat wrong."
+  }
+]

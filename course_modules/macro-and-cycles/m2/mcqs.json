@@ -1,0 +1,47 @@
+[
+  {
+    "id": 3170,
+    "question": "The RBI raises the repo rate by 50 basis points. What is the usual effect on equity valuations, all else equal?",
+    "options": [
+      "They rise",
+      "They fall",
+      "No effect",
+      "Only banks are affected"
+    ],
+    "correct_answer": "They fall",
+    "ai_feedback": {
+      "correct": "Correct. Higher discount rates reduce the present value of future cash flows.",
+      "incorrect": "Rates affect every valuation through the discount rate, not just banks."
+    }
+  },
+  {
+    "id": 3171,
+    "question": "Which sectors have historically held up best during a contraction?",
+    "options": [
+      "Industrials and real estate",
+      "FMCG and pharma",
+      "Banks and metals",
+      "Small-cap technology"
+    ],
+    "correct_answer": "FMCG and pharma",
+    "ai_feedback": {
+      "correct": "Correct. Demand for soap and medicine is less cyclical than demand for steel.",
+      "incorrect": "Defensives are defined by demand that does not fall much with the cycle."
+    }
+  },
+  {
+    "id": 3172,
+    "question": "A weaker rupee most directly benefits which kind of Indian company?",
+    "options": [
+      "An importer of crude oil",
+      "An IT exporter earning in dollars",
+      "A domestic retailer",
+      "A company with dollar debt"
+    ],
+    "correct_answer": "An IT exporter earning in dollars",
+    "ai_feedback": {
+      "correct": "Correct. Dollar revenue converts into more rupees.",
+      "incorrect": "Exporters gain; importers and dollar borrowers lose."
+    }
+  }
+]

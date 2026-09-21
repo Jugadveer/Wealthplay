@@ -1,0 +1,26 @@
+[
+  {
+    "id": 3250,
+    "topic": "Indian crypto taxation",
+    "theory_title": "The rules that change the arithmetic",
+    "theory_content": "Gains on virtual digital assets are taxed at a flat 30% with no deduction except the cost of acquisition, losses cannot be set off against any other income or carried forward, and 1% TDS applies on each transfer above the threshold. A strategy that trades frequently loses 1% to TDS each time and cannot net its losses, which changes the maths far more than most people account for."
+  },
+  {
+    "id": 3251,
+    "topic": "Custody",
+    "theory_title": "Who actually holds the asset",
+    "theory_content": "On an exchange, the exchange holds the keys and you hold a claim against it — which is exactly what failed at FTX. In a self-custodied wallet, you hold the keys and an irrecoverable loss is entirely your own. There is no third option and no deposit insurance in either case. The trade-off is counterparty risk against operational risk."
+  },
+  {
+    "id": 3252,
+    "topic": "Volatility and sizing",
+    "theory_title": "Why position size is the entire risk decision",
+    "theory_content": "Bitcoin has fallen more than 70% from a peak on several occasions and recovered on some of them. Any allocation must be small enough that a total loss changes nothing about your plan — commonly 1-5% for people who want exposure. The asset’s volatility is not the risk; the position size is."
+  },
+  {
+    "id": 3253,
+    "topic": "Gold as the older alternative",
+    "theory_title": "What it has actually done",
+    "theory_content": "Gold has returned roughly 9-10% a year in rupee terms over long periods, much of that from rupee depreciation rather than the metal. It has no cash flow, so it cannot be valued the way a business can; its role is as a hedge that often rises when equity falls. Sovereign gold bonds add 2.5% annual interest and avoid making charges and storage."
+  }
+]

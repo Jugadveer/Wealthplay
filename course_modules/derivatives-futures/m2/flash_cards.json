@@ -1,0 +1,26 @@
+[
+  {
+    "id": 3300,
+    "topic": "What leverage actually does",
+    "theory_title": "It multiplies the outcome, not the odds",
+    "theory_content": "A futures contract requires margin of perhaps 15% of the contract value, so a 1% move in the underlying is roughly a 6-7% move in your capital. Leverage does not improve your probability of being right; it multiplies the consequence of both answers. This is the single most misunderstood point in derivatives and the reason most retail accounts lose."
+  },
+  {
+    "id": 3301,
+    "topic": "Margin calls",
+    "theory_title": "Being right eventually is not enough",
+    "theory_content": "If the position moves against you and your margin falls below the maintenance level, the broker demands more or closes the position — often at the worst point. A trade that would have been profitable a week later is still a realised loss if you were closed out on Tuesday. Solvency is a separate question from being correct."
+  },
+  {
+    "id": 3302,
+    "topic": "Hedging versus speculating",
+    "theory_title": "The same instrument, two opposite purposes",
+    "theory_content": "A futures contract used to lock in a price for something you already own or will need is a hedge: it reduces uncertainty. The identical contract bought without that underlying exposure is a directional bet: it creates uncertainty. The instrument is neutral; the purpose is what makes it risk management or gambling."
+  },
+  {
+    "id": 3303,
+    "topic": "The retail record",
+    "theory_title": "What the regulator’s own data shows",
+    "theory_content": "SEBI studies have found that about 91% of individual traders in equity derivatives lose money, with the average loser down about ₹1.2 lakh over three years. This is not a claim about skill being impossible; it is the base rate, and any plan to trade derivatives should start by explaining why it will differ from it."
+  }
+]

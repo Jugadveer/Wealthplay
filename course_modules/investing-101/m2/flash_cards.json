@@ -1,0 +1,26 @@
+[
+  {
+    "id": 2000,
+    "topic": "Compounding",
+    "theory_title": "Why the last decade does most of the work",
+    "theory_content": "A ₹10,000 monthly SIP at 12% reaches about ₹23 lakh after ten years, ₹1 crore after twenty, and ₹3.5 crore after thirty. The third decade adds more than the first two combined, on the same contribution. This is why the date you start matters more than the amount you start with, and why \"I will invest properly once I earn more\" is the most expensive sentence in personal finance."
+  },
+  {
+    "id": 2001,
+    "topic": "Risk and return",
+    "theory_title": "They are the same statement said twice",
+    "theory_content": "No instrument offers a high return without a matching uncertainty, because if one did, enough money would buy it that the price would rise and the return would fall. Government debt pays about 7% with near-certainty. Equity has returned about 12% over twenty years while falling 38% in 2020 and 61% in 2008. The extra 5% is the payment for sitting through those."
+  },
+  {
+    "id": 2002,
+    "topic": "Diversification",
+    "theory_title": "The one thing that is genuinely free",
+    "theory_content": "Holding twenty companies across different sectors removes most of the risk specific to any one of them without reducing expected return. What it cannot remove is market risk — the part that moves everything together. This is why an index fund is diversified and a portfolio of eight IT stocks is not, however many names it holds."
+  },
+  {
+    "id": 2003,
+    "topic": "Asset allocation",
+    "theory_title": "The decision that explains most of your outcome",
+    "theory_content": "How much you hold in equity versus debt explains far more of your return and almost all of your volatility than which fund you picked. A common starting point is (100 minus your age) percent in equity, adjusted for when you need the money and how you actually behaved the last time markets fell 30%."
+  }
+]

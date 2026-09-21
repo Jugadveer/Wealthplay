@@ -1,0 +1,14 @@
+[
+  {
+    "id": 1285,
+    "question": "How many goals should I run at once?",
+    "answer": "Three or four with named amounts and dates. More than that and contributions get so thin that nothing reaches its target, and you lose track of which pot is which. Combine the small ones into a single medium-term fund.",
+    "explanation": "Fewer goals with real numbers beat many goals with intentions."
+  },
+  {
+    "id": 1286,
+    "question": "What if I cannot afford the SIP the calculator says I need?",
+    "answer": "Then one of three things must move: the amount, the date, or the monthly commitment. Pretending all three can stay fixed is how goals quietly fail. Extending the date is usually the cheapest lever, because it also gives compounding more time.",
+    "explanation": "A goal is four numbers. If one will not move, another must."
+  }
+]

@@ -1,0 +1,14 @@
+[
+  {
+    "id": 4135,
+    "question": "What is a good savings rate to aim for?",
+    "answer": "Twenty percent is a reasonable target for most salaried people, and every percentage point above it pulls financial independence closer by more than you would expect. Saving 10% takes roughly fifty years to independence; 30% takes about twenty-eight; 50% takes about seventeen.",
+    "explanation": "The rate compresses the timeline non-linearly, which is why small increases matter."
+  },
+  {
+    "id": 4136,
+    "question": "I budget carefully and still overspend. What is going wrong?",
+    "answer": "Usually one of two things: the budget was built on an optimistic month rather than a real one, or irregular costs like premiums and festivals were never allocated. Both produce a budget that is technically correct and impossible to follow.",
+    "explanation": "Budgets fail on the numbers they omitted, not the ones they got wrong."
+  }
+]

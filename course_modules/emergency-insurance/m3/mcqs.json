@@ -1,0 +1,47 @@
+[
+  {
+    "id": 4170,
+    "question": "You want to switch health insurers after three years. What does portability preserve?",
+    "options": [
+      "Your premium",
+      "The waiting periods already served",
+      "The same hospital network",
+      "Your no-claim bonus only"
+    ],
+    "correct_answer": "The waiting periods already served",
+    "ai_feedback": {
+      "correct": "Correct — apply at least 45 days before renewal to use it.",
+      "incorrect": "Without porting, a new policy restarts the pre-existing-disease waiting period."
+    }
+  },
+  {
+    "id": 4171,
+    "question": "Which risk does a term life policy NOT cover?",
+    "options": [
+      "Death by illness",
+      "Death by accident",
+      "Surviving an illness that stops you working",
+      "Death during the policy term"
+    ],
+    "correct_answer": "Surviving an illness that stops you working",
+    "ai_feedback": {
+      "correct": "Correct. That is what disability and critical illness cover exist for.",
+      "incorrect": "Term insurance pays on death. Income loss from surviving illness is a separate gap."
+    }
+  },
+  {
+    "id": 4172,
+    "question": "Why is cashless treatment materially better than reimbursement?",
+    "options": [
+      "It is cheaper",
+      "You do not have to fund a large bill yourself and wait",
+      "It covers more conditions",
+      "It has no waiting period"
+    ],
+    "correct_answer": "You do not have to fund a large bill yourself and wait",
+    "ai_feedback": {
+      "correct": "Correct. The cash-flow difference matters most in exactly the situations you insured against.",
+      "incorrect": "The coverage is the same; what differs is who pays the hospital first."
+    }
+  }
+]

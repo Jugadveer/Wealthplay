@@ -1,0 +1,47 @@
+[
+  {
+    "id": 3070,
+    "question": "Fund A returns 18% with 30% volatility. Fund B returns 13% with 12%. The risk-free rate is 7%. Which has the better Sharpe ratio?",
+    "options": [
+      "Fund A",
+      "Fund B",
+      "They are equal",
+      "Cannot be determined"
+    ],
+    "correct_answer": "Fund B",
+    "ai_feedback": {
+      "correct": "Correct. B is (13−7)/12 = 0.50; A is (18−7)/30 = 0.37.",
+      "incorrect": "Compute (return minus risk-free) divided by volatility for each."
+    }
+  },
+  {
+    "id": 3071,
+    "question": "What happens to correlations between assets during a severe crash?",
+    "options": [
+      "They fall towards zero",
+      "They rise towards one",
+      "They stay stable",
+      "They become negative"
+    ],
+    "correct_answer": "They rise towards one",
+    "ai_feedback": {
+      "correct": "Correct — diversification weakens exactly when you need it most.",
+      "incorrect": "Everything tends to fall together in a panic, which is the model’s blind spot."
+    }
+  },
+  {
+    "id": 3072,
+    "question": "Why do simple allocation rules often beat optimised portfolios out of sample?",
+    "options": [
+      "They have lower fees",
+      "Optimisation is very sensitive to expected-return estimates that are unreliable",
+      "They take more risk",
+      "They rebalance more often"
+    ],
+    "correct_answer": "Optimisation is very sensitive to expected-return estimates that are unreliable",
+    "ai_feedback": {
+      "correct": "Correct. Precision applied to bad inputs produces confident, wrong answers.",
+      "incorrect": "The issue is estimation error in the inputs, not the mathematics."
+    }
+  }
+]

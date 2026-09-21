@@ -1,0 +1,14 @@
+[
+  {
+    "id": 1035,
+    "question": "If my savings account is \"safe\", how can I be losing money?",
+    "answer": "Safety and value are different things. A savings account guarantees the number stays the same. It guarantees nothing about what that number buys. At 3% interest against 6% inflation you lose about 3% of purchasing power every year, reliably.",
+    "explanation": "Nominal safety is not real safety. The risk moved; it did not disappear."
+  },
+  {
+    "id": 1036,
+    "question": "Should I calculate net worth including my house?",
+    "answer": "Yes, at a realistic sale price, and include the outstanding loan against it. Many people count the asset and forget the liability, which is how a heavily mortgaged flat looks like wealth.",
+    "explanation": "Net worth is only honest when both sides of the ledger are counted."
+  }
+]

@@ -1,0 +1,47 @@
+[
+  {
+    "id": 1020,
+    "question": "₹1,00,000 sits in a locker for ten years while inflation runs at 6%. Roughly what is it worth in today’s purchasing power?",
+    "options": [
+      "About ₹94,000",
+      "About ₹55,000",
+      "About ₹80,000",
+      "Still ₹1,00,000"
+    ],
+    "correct_answer": "About ₹55,000",
+    "ai_feedback": {
+      "correct": "Correct. At 6%, purchasing power roughly halves every twelve years.",
+      "incorrect": "Not quite. Inflation compounds: 0.94 to the power of ten, not 6% once."
+    }
+  },
+  {
+    "id": 1021,
+    "question": "A fixed deposit pays 7%. Inflation is 6% and you are taxed at 30%. What is the real return?",
+    "options": [
+      "+1.0%",
+      "+4.9%",
+      "−1.1%",
+      "+7.0%"
+    ],
+    "correct_answer": "−1.1%",
+    "ai_feedback": {
+      "correct": "Correct. 7% after 30% tax is 4.9%, which is 1.1% below inflation.",
+      "incorrect": "Remember to subtract tax first, then inflation. Both apply."
+    }
+  },
+  {
+    "id": 1022,
+    "question": "Which pair of numbers describes your financial position rather than your month?",
+    "options": [
+      "Salary and rent",
+      "Assets and liabilities",
+      "Income and expenses",
+      "Savings rate"
+    ],
+    "correct_answer": "Assets and liabilities",
+    "ai_feedback": {
+      "correct": "Correct. Assets minus liabilities is net worth, and it moves over years.",
+      "incorrect": "Income and expenses describe a month. Net worth describes a position."
+    }
+  }
+]

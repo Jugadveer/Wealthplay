@@ -94,7 +94,7 @@ export default function Trade({ symbol, onDone }) {
   return (
     <div className="space-y-5">
       <Link
-        to="/markets/explore"
+        to="/markets/trade"
         className="inline-flex items-center gap-1.5 text-sm text-ink-muted hover:text-ink"
       >
         <ArrowLeft size={14} />

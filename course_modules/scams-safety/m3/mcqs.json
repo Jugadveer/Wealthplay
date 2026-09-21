@@ -1,0 +1,47 @@
+[
+  {
+    "id": 4270,
+    "question": "A \"part-time job\" pays you ₹500 for three small tasks, then asks for a ₹10,000 deposit to unlock better-paying work. What is happening?",
+    "options": [
+      "A normal probation process",
+      "A task scam, where early payouts buy your trust",
+      "A legitimate franchise fee",
+      "A tax requirement"
+    ],
+    "correct_answer": "A task scam, where early payouts buy your trust",
+    "ai_feedback": {
+      "correct": "Correct. No legitimate employer requires payment in order to pay you.",
+      "incorrect": "The small payouts are the investment the fraudster makes to secure the larger one."
+    }
+  },
+  {
+    "id": 4271,
+    "question": "Why does an unregulated loan app demand access to your contacts?",
+    "options": [
+      "To verify your identity",
+      "To harass your contacts if you default",
+      "To speed up approval",
+      "Regulatory requirement"
+    ],
+    "correct_answer": "To harass your contacts if you default",
+    "ai_feedback": {
+      "correct": "Correct. The permission request tells you what the collection process will be.",
+      "incorrect": "No regulated lender needs your contact list to assess a loan."
+    }
+  },
+  {
+    "id": 4272,
+    "question": "You report an unauthorised transaction to your bank within two working days. What does RBI policy generally provide?",
+    "options": [
+      "Zero customer liability",
+      "Liability capped at 50%",
+      "No protection",
+      "Protection only above ₹1 lakh"
+    ],
+    "correct_answer": "Zero customer liability",
+    "ai_feedback": {
+      "correct": "Correct — which is why reporting immediately matters more than anything else.",
+      "incorrect": "The protection is strongest within three working days and weakens after."
+    }
+  }
+]

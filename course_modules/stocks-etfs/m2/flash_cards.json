@@ -1,0 +1,26 @@
+[
+  {
+    "id": 2200,
+    "topic": "What a share actually is",
+    "theory_title": "A claim on a business, not a ticker",
+    "theory_content": "A share is a fractional ownership of a company — its assets, its debts and its future profits. Buying one entitles you to a share of what the business earns, whether it pays that out as dividends or reinvests it. Everything else, including the price on the screen, is other people’s changing opinion about that claim."
+  },
+  {
+    "id": 2201,
+    "topic": "ETFs versus index funds",
+    "theory_title": "The same exposure, bought differently",
+    "theory_content": "Both track an index. An ETF trades on the exchange like a share, needs a demat account, and can trade slightly above or below its underlying value depending on liquidity. An index fund is bought at the day’s closing value directly from the AMC, with no demat account and no spread. For monthly SIPs, an index fund is usually simpler; for large lump sums, an ETF can be marginally cheaper."
+  },
+  {
+    "id": 2202,
+    "topic": "Market capitalisation",
+    "theory_title": "What large, mid and small actually mean",
+    "theory_content": "In India, SEBI defines the largest 100 listed companies as large-cap, the next 150 as mid-cap, and everything beyond as small-cap. The categories describe volatility as much as size: small-caps have historically delivered higher long-run returns and fallen much further in every crash. They are not a beginner’s core holding."
+  },
+  {
+    "id": 2203,
+    "topic": "Dividends",
+    "theory_title": "A transfer, not a bonus",
+    "theory_content": "When a company pays a ₹10 dividend, its share price typically falls by about ₹10 on the ex-dividend date. The money moved from the company to you; nothing was created. Dividends are taxed at your slab in India, so for someone in the 30% bracket a high-dividend strategy is usually less efficient than growth plus selective selling."
+  }
+]

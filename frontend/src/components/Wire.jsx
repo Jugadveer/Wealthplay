@@ -1,10 +1,13 @@
 /**
  * Market headlines.
  *
- * Real stories from the quote provider, not a curated list that would go stale
- * the week after it was written. Shared by the landing page and the signed-in
- * home. When the provider has nothing the block renders nothing, rather than an
- * empty heading over a gap.
+ * Real stories from the quote provider, aggregated across the tracked universe
+ * rather than pulled from one listing — a single symbol's feed goes quiet for
+ * days and the wire showed the same four stories all week. Which listings lead
+ * rotates daily, so the mix turns over on its own.
+ *
+ * Shared by the landing page and the signed-in home. When the provider has
+ * nothing the block renders nothing, rather than an empty heading over a gap.
  */
 import { useEffect, useState } from 'react'
 import { ArrowUpRight } from 'lucide-react'
@@ -12,19 +15,19 @@ import { ArrowUpRight } from 'lucide-react'
 import { api } from '../lib/api'
 import { cx } from '../ui'
 
-export default function Wire({ symbol = 'RELIANCE', limit = 4, heading = 'On the wire', className }) {
+export default function Wire({ limit = 5, heading = 'On the wire', className }) {
   const [stories, setStories] = useState([])
 
   useEffect(() => {
     let cancelled = false
     api
-      .news(symbol)
-      .then((data) => !cancelled && setStories((data.news || []).slice(0, limit)))
+      .marketNews(limit)
+      .then((data) => !cancelled && setStories(data.news || []))
       .catch(() => {})
     return () => {
       cancelled = true
     }
-  }, [symbol, limit])
+  }, [limit])
 
   if (!stories.length) return null
 
@@ -56,7 +59,10 @@ export default function Wire({ symbol = 'RELIANCE', limit = 4, heading = 'On the
                   {story.summary}
                 </p>
               )}
-              <p className="eyebrow mt-0.5">{story.publisher || 'Wire'}</p>
+              <p className="eyebrow mt-0.5">
+                {story.symbol ? `${story.symbol} · ` : ''}
+                {story.publisher || 'Wire'}
+              </p>
             </a>
           </li>
         ))}

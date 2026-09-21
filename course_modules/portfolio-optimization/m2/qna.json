@@ -1,0 +1,14 @@
+[
+  {
+    "id": 3085,
+    "question": "Is portfolio optimisation worth doing at all?",
+    "answer": "As a diagnostic, yes: it shows which holdings add nothing and where correlations are high. As a prescription, treat it carefully — the output changes dramatically with small input changes, and the inputs are estimates. Use it to find redundancy, not to set weights to the decimal.",
+    "explanation": "Good for finding what to remove. Poor at deciding exact weights."
+  },
+  {
+    "id": 3086,
+    "question": "What does a negative Sharpe ratio mean?",
+    "answer": "The portfolio returned less than the risk-free rate while taking risk to do it. You would have been better off in government debt, with no volatility. Over short periods this happens routinely; over a decade it means the strategy is not working.",
+    "explanation": "Risk taken without compensation is the definition of a bad trade."
+  }
+]

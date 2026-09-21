@@ -1,0 +1,14 @@
+[
+  {
+    "id": 3385,
+    "question": "Is selling options safer than buying them because most expire worthless?",
+    "answer": "Sellers win more often and lose much bigger. The profit is capped at the premium while the loss can be many multiples of it, so a run of small wins can be erased by one event. Selling is a positive-frequency, negative-skew strategy and needs capital and rules that buyers do not.",
+    "explanation": "Winning often and winning overall are different questions."
+  },
+  {
+    "id": 3386,
+    "question": "What should someone learn first about options?",
+    "answer": "That they price three things — direction, magnitude and time — and that a buyer must be right about all of them. Once that is genuinely understood, most of the appeal of buying weekly options disappears, which is the useful outcome.",
+    "explanation": "Understanding the payoff is what removes the temptation."
+  }
+]

@@ -19,6 +19,14 @@ completed, and nothing recurs until the whole list has been used: `daily_pick`
 shuffles each list once with a fixed seed and then walks it in order, so the
 cycle is exactly as long as the list.
 
+**A goal decides how much risk its plan may carry.** Most calculators turn a
+target and a date into a monthly figure and stop. `users/goals/planner.py` also
+asks what the goal is *for*: school fees in the year they are due cannot slip,
+a holiday can. The same fifteen-year horizon therefore produces 45% equity for a
+child's education and 75% for travel, and the growth option is never offered for
+a goal that cannot be postponed. Linking a goal to the practice account turns
+trading into practice for something specific rather than a score.
+
 **Calibration is the thing being taught.** Being right a lot is easy on easy
 calls. Being right 70% of the times you said 70% is a different and harder
 skill, and it is the one that transfers to actually risking money. Every
@@ -70,7 +78,7 @@ a second — get a key at [console.groq.com](https://console.groq.com/keys).
 python manage.py test
 ```
 
-70 tests covering currency conversion on foreign holdings, the achievement
+118 tests covering currency conversion on foreign holdings, the achievement
 rules, streak freezes, SM-2 intervals, puzzle determinism, content cleaning, and
 the LLM client's failure path. Each one pins a bug that actually shipped.
 
@@ -100,8 +108,11 @@ courses/
   views.py             catalogue, module, grading, completion
 users/
   portfolio/           pricing → valuation → insights → views
+    simulation.py        the practice market: shared factor, sector factor, seeded per day
+  goals/
+    planner.py           horizon x criticality -> allocation, SIP, ladder, EMI, feasibility
   achievement_views.py declarative rule table
-  challenge_views.py   prediction game and leaderboards
+  challenge_views.py   prediction game, calibration and leaderboards
 daily/               the habit loop
   puzzles.py           date-seeded generators, identical for every player
   games.py             Ledger and Rank It
@@ -183,7 +194,7 @@ Measured before and after, on the same machine.
 | Slowest endpoint | 5.62s | 0.03s |
 | `portfolio_views.py` | 1,950 lines | a 5-module package |
 | Working LLM providers | 0 (both models retired upstream) | Groq, with Gemini failover |
-| Tests | 0 | 70 |
+| Tests | 0 | 118 |
 
 Functional fixes, each verified in a browser:
 
@@ -220,6 +231,14 @@ Functional fixes, each verified in a browser:
   composition instead: 1.19s to 0.01s on a repeat load.
 - Finishing a puzzle closed the board before the reveal — the answer, the
   definition, the real returns, the share grid — could be read.
+- The practice stocks never moved. Advancing prices was a cron job and no cron
+  was running, so every position read exactly +0.00% forever. Prices now catch
+  up lazily on read, which is safe because each session's return is seeded on
+  `(symbol, date)`.
+- `investing-101/m1` shipped with empty `flash_cards.json` and `mcqs.json`, so
+  the module had no title and no theory and rendered as "M1" above nothing.
+- Thirty-six tests were never running: they lived in files named `*_tests.py`,
+  and Django discovers `test*.py`.
 
 ---
 
@@ -232,9 +251,9 @@ Functional fixes, each verified in a browser:
 - **Market Call and the daily set do not push.** A settled call is discovered on
   the next visit rather than announced. The notification bus is in place; a web
   push subscription is the missing half.
-- **Content depth.** Nineteen of twenty-five courses have a single module.
-  Generated drill questions cover the gap for daily use, but authored content
-  would be better.
+- **Deeper course content.** Every course now has two to four modules — 60 in
+  total, 210 theory cards, 180 questions — but the advanced tracks could carry
+  more than the beginner path needs.
 - **Multi-worker deployment** needs `REDIS_URL` set; the default database cache
   is correct but not fast enough under real load.
 - **The LightGBM price model was removed, not fixed.** `ml/` trained a direction

@@ -1,0 +1,14 @@
+[
+  {
+    "id": 3235,
+    "question": "Is buying a house always better than renting?",
+    "answer": "No. It depends on the rental yield, the loan rate, the transaction costs and how long you will stay. In cities where yields are near 3% and loans near 8.5%, renting and investing the difference has often done better — provided the difference is actually invested, which is the part that usually fails.",
+    "explanation": "It is an arithmetic question, and the answer varies by city and by horizon."
+  },
+  {
+    "id": 3236,
+    "question": "Should property be part of an investment portfolio?",
+    "answer": "Owning the home you live in is a lifestyle decision with a financial side. A second property as an investment is a large, illiquid, undiversified, leveraged position in one city. REITs give the exposure without three of those four problems.",
+    "explanation": "Live in property. Invest through instruments that let you exit."
+  }
+]

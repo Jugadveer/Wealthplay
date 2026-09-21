@@ -7,7 +7,6 @@
  * exhausting the way a fixed question bank does.
  */
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
 import { Check, X } from 'lucide-react'
 
 import { api } from '../../lib/api'

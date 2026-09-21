@@ -1,0 +1,47 @@
+[
+  {
+    "id": 1120,
+    "question": "You hold ₹12,00,000 at one bank. How much is covered by deposit insurance?",
+    "options": [
+      "₹12,00,000",
+      "₹5,00,000",
+      "₹1,00,000",
+      "All of it, if it is a public sector bank"
+    ],
+    "correct_answer": "₹5,00,000",
+    "ai_feedback": {
+      "correct": "Correct. ₹5 lakh per depositor per bank, regardless of how many accounts.",
+      "incorrect": "The limit is per depositor per bank, not per account, and it applies to all banks."
+    }
+  },
+  {
+    "id": 1121,
+    "question": "A three-year FD at 7.1% is broken after ten months. What rate applies?",
+    "options": [
+      "7.1%, since that was agreed",
+      "Roughly the ten-month rate, minus a penalty",
+      "Zero, the interest is forfeited",
+      "The savings account rate"
+    ],
+    "correct_answer": "Roughly the ten-month rate, minus a penalty",
+    "ai_feedback": {
+      "correct": "Correct. You earn the rate for the tenure actually served, less a penalty.",
+      "incorrect": "The contracted rate applies only if you hold to maturity."
+    }
+  },
+  {
+    "id": 1122,
+    "question": "Your bank deducted 10% TDS on FD interest and you are in the 30% slab. What follows?",
+    "options": [
+      "Nothing, the tax is settled",
+      "You owe the difference when you file",
+      "You can claim a refund",
+      "TDS replaces slab tax on interest"
+    ],
+    "correct_answer": "You owe the difference when you file",
+    "ai_feedback": {
+      "correct": "Correct. TDS is an advance deduction, not the final liability.",
+      "incorrect": "TDS at 10% is a floor. Interest is taxed at your slab."
+    }
+  }
+]

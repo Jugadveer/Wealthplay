@@ -1,0 +1,47 @@
+[
+  {
+    "id": 1270,
+    "question": "You need ₹8,00,000 for a house deposit in two years. Where should it sit?",
+    "options": [
+      "Equity mutual funds",
+      "A liquid fund or short-term FD",
+      "A mid-cap fund",
+      "Half in equity, half in gold"
+    ],
+    "correct_answer": "A liquid fund or short-term FD",
+    "ai_feedback": {
+      "correct": "Correct. Two years is well inside the window where equity can be down 30%.",
+      "incorrect": "Money with a fixed near date cannot carry price risk."
+    }
+  },
+  {
+    "id": 1271,
+    "question": "A goal costs ₹10,00,000 today and is fifteen years away. Education inflation is 10%. What should you plan for?",
+    "options": [
+      "₹10,00,000",
+      "About ₹15,00,000",
+      "About ₹42,00,000",
+      "About ₹25,00,000"
+    ],
+    "correct_answer": "About ₹42,00,000",
+    "ai_feedback": {
+      "correct": "Correct. Compounding at 10% for fifteen years is more than four times.",
+      "incorrect": "Inflation compounds. Fifteen years at 10% multiplies the target by about 4.2."
+    }
+  },
+  {
+    "id": 1272,
+    "question": "Which goal should generally be funded before a child’s education?",
+    "options": [
+      "A car",
+      "Your retirement",
+      "A holiday",
+      "A second property"
+    ],
+    "correct_answer": "Your retirement",
+    "ai_feedback": {
+      "correct": "Correct. Education can be funded with a loan; retirement cannot.",
+      "incorrect": "It sounds harsh, but no lender offers a retirement loan."
+    }
+  }
+]

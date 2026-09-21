@@ -1,0 +1,14 @@
+[
+  {
+    "id": 1085,
+    "question": "Where should the emergency fund actually sit?",
+    "answer": "Split it: one month in a savings account for same-day access, the rest in a liquid mutual fund or a sweep-in FD that reaches you within a day. Do not put it in equity, and do not put it somewhere that penalises early withdrawal.",
+    "explanation": "Accessibility is the feature. Return is a rounding error on six months of expenses."
+  },
+  {
+    "id": 1086,
+    "question": "Is it worth investing while I still have an emergency fund to build?",
+    "answer": "Build the fund first, or at least in parallel. Investing without a buffer means the first unexpected bill forces you to sell — usually at the worst time, because emergencies and market falls correlate more than people expect.",
+    "explanation": "The buffer is what lets you leave investments alone, which is where returns come from."
+  }
+]

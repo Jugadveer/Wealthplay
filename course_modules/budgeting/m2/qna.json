@@ -1,0 +1,14 @@
+[
+  {
+    "id": 1185,
+    "question": "How detailed does a budget need to be?",
+    "answer": "Detailed enough to catch a category you are wrong about, and no more. Five to eight categories is usually right. Thirty categories produces a spreadsheet nobody maintains past February.",
+    "explanation": "The budget you keep beats the budget that is precise."
+  },
+  {
+    "id": 1186,
+    "question": "I earn well but never seem to save. Where do I start?",
+    "answer": "Automate a transfer on payday before doing anything else, then track one month to find out where the rest goes. High earners rarely have a spending category problem; they have a sequencing problem — saving last instead of first.",
+    "explanation": "Order matters more than discipline."
+  }
+]

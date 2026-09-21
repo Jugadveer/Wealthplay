@@ -1,0 +1,14 @@
+[
+  {
+    "id": 3135,
+    "question": "Is a DCF worth building if the inputs are so uncertain?",
+    "answer": "Yes, but inverted. Rather than producing a target price, solve for what growth rate the current price implies and ask whether that is plausible. That turns an exercise in false precision into a genuine test of the market’s assumption.",
+    "explanation": "Use it to interrogate the price, not to predict it."
+  },
+  {
+    "id": 3136,
+    "question": "Which single ratio is most useful for a beginner?",
+    "answer": "None on its own. The useful minimum is three read together: P/E for what you are paying, ROE for how well the business uses capital, and debt-to-equity for how much risk sits underneath. Any one of them alone can be made to look good.",
+    "explanation": "Ratios are a set of cross-checks, not a score."
+  }
+]

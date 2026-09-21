@@ -1,10 +1,14 @@
 [
   {
+    "id": 4035,
     "question": "Why diversify?",
-    "answer": "Diversification spreads risk across assets so a single loss doesn't wipe out your portfolio."
+    "answer": "Because you will be wrong about something, and diversification decides whether being wrong is an inconvenience or a disaster. Spreading money across many companies and sectors removes the risk specific to any one of them at no cost to expected return — the only genuinely free improvement available in investing.",
+    "explanation": "It does not raise your return. It removes the outcomes that end the plan."
   },
   {
+    "id": 4036,
     "question": "What is an index fund?",
-    "answer": "An index fund is a fund that tracks a market index (e.g., NIFTY/S&P 500) offering broad market exposure and low fees."
+    "answer": "A fund that simply buys every company in an index, such as the Nifty 50, in proportion to size. Nobody picks stocks, so the fee is about 0.2% a year instead of 1.8%. Over ten years most active large-cap funds fail to beat their index after fees, which makes this the sensible default rather than a compromise.",
+    "explanation": "You give up the chance of beating the market in exchange for reliably matching it."
   }
 ]

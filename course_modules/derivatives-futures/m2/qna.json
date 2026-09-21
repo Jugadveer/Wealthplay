@@ -1,0 +1,14 @@
+[
+  {
+    "id": 3335,
+    "question": "Are derivatives ever appropriate for an individual investor?",
+    "answer": "For hedging a real exposure, yes — a business hedging currency, or an investor protecting a large concentrated holding. For directional speculation, the regulator’s own data suggests roughly nine in ten lose. If you cannot articulate what exposure you are offsetting, you are speculating.",
+    "explanation": "Hedging has a defensible use. Speculating has a documented base rate."
+  },
+  {
+    "id": 3336,
+    "question": "Why is the lot size so large?",
+    "answer": "Deliberately. Nifty contracts have a notional value of a couple of lakh rupees precisely so that derivatives are not a casual product. The size is a regulatory filter, and treating it as an obstacle to route around rather than a signal is how people end up in the 91%.",
+    "explanation": "The barrier is the warning."
+  }
+]

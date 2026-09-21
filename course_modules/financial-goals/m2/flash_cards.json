@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1250,
+    "topic": "Goal horizon decides the asset",
+    "theory_title": "Matching money to dates",
+    "theory_content": "The single most useful rule in goal planning: money needed within three years does not belong in equity, money needed beyond seven years mostly should, and the middle is a blend. Equity can be down 30% on the exact day you need it, and a house deposit does not reschedule. The horizon chooses the instrument, not the expected return."
+  },
+  {
+    "id": 1251,
+    "topic": "Inflating the target",
+    "theory_title": "Tomorrow’s price, not today’s",
+    "theory_content": "A goal costing ₹15,00,000 today at 8% inflation costs about ₹32,00,000 in ten years. Planning against the current price is the most common reason goals are underfunded. Education inflation runs near 10% and healthcare higher, so use category inflation rather than the headline number."
+  },
+  {
+    "id": 1252,
+    "topic": "Priority order",
+    "theory_title": "What to fund before what",
+    "theory_content": "A workable sequence: emergency fund, then high-interest debt, then insurance, then retirement, then everything else. Retirement sits above children’s education for a reason that sounds harsh and is not — education can be borrowed for, retirement cannot."
+  },
+  {
+    "id": 1253,
+    "topic": "SIP arithmetic",
+    "theory_title": "Working backwards from the goal",
+    "theory_content": "To reach ₹32,00,000 in ten years at an expected 12%, you need roughly ₹13,900 a month. At five years the same target needs about ₹39,000 a month. Halving the time nearly triples the monthly commitment, which is the clearest argument for starting now rather than saving more later."
+  }
+]

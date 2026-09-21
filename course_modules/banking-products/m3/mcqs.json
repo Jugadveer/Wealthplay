@@ -1,0 +1,47 @@
+[
+  {
+    "id": 4070,
+    "question": "When should a standing instruction for a SIP be scheduled?",
+    "options": [
+      "The last day of the month",
+      "The day after payday",
+      "Mid-month",
+      "Whenever you remember"
+    ],
+    "correct_answer": "The day after payday",
+    "ai_feedback": {
+      "correct": "Correct. The money leaves before it becomes available to spend.",
+      "incorrect": "Month-end debits compete with a month of spending and fail more often."
+    }
+  },
+  {
+    "id": 4071,
+    "question": "Your single-holder account has no nominee. What does your family face?",
+    "options": [
+      "Automatic transfer",
+      "A succession certificate process taking months",
+      "A 10% deduction",
+      "Nothing, banks transfer on request"
+    ],
+    "correct_answer": "A succession certificate process taking months",
+    "ai_feedback": {
+      "correct": "Correct — which is why adding a nominee is ten well-spent minutes.",
+      "incorrect": "Without a nominee or joint holder, the bank requires legal proof of succession."
+    }
+  },
+  {
+    "id": 4072,
+    "question": "Which practice most limits the damage from a compromised payment app?",
+    "options": [
+      "A longer password",
+      "Keeping a small balance in the account linked to payments",
+      "Using a newer phone",
+      "Checking statements yearly"
+    ],
+    "correct_answer": "Keeping a small balance in the account linked to payments",
+    "ai_feedback": {
+      "correct": "Correct. Capping the exposure is more reliable than preventing every attack.",
+      "incorrect": "Assume a compromise is possible and limit what it can reach."
+    }
+  }
+]

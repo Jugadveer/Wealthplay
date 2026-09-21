@@ -107,7 +107,10 @@
     --accent: 91 59 196;
     --accent-hover: 74 46 166;
   }
-  :root[data-zone='markets'] {
+  /* Goals shares the Markets hue on purpose: a goal drives the practice
+     account, and the two reading as one system is the point of linking them. */
+  :root[data-zone='markets'],
+  :root[data-zone='goals'] {
     --accent: 27 78 209;
     --accent-hover: 20 61 172;
   }
@@ -128,7 +131,8 @@
     --accent: 167 139 250;
     --accent-hover: 192 173 255;
   }
-  :root[data-theme='dark'][data-zone='markets'] {
+  :root[data-theme='dark'][data-zone='markets'],
+  :root[data-theme='dark'][data-zone='goals'] {
     --accent: 91 140 255;
     --accent-hover: 128 166 255;
   }
@@ -379,14 +383,15 @@
     }
   }
 
-  .curtain-tile {
-    animation: curtain-tile 700ms var(--ease) backwards;
+  /* The connection line drawing itself across, under the terminal name. */
+  .curtain-link {
+    transform-origin: left;
+    animation: curtain-link 760ms var(--ease) 120ms backwards;
   }
 
-  @keyframes curtain-tile {
+  @keyframes curtain-link {
     from {
-      transform: rotateY(90deg) scale(0.8);
-      opacity: 0;
+      transform: scaleX(0);
     }
   }
 

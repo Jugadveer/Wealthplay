@@ -10,10 +10,9 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { Search } from 'lucide-react'
 
 import { api } from '../../lib/api'
-import { compactMoney, money, percent, toneFor } from '../../lib/format'
+import { money, percent, toneFor } from '../../lib/format'
 import { useQuery } from '../../lib/query'
-import { Badge, Panel, Skeleton, Tabs, cx } from '../../ui'
-import { Sparkline } from '../../ui/charts'
+import { Badge, Skeleton, Tabs, cx } from '../../ui'
 import Trade from './Trade'
 
 const FILTERS = [
@@ -45,7 +44,7 @@ export default function Explore() {
   }, [data, query, filter])
 
   if (symbol) {
-    return <Trade symbol={symbol} onDone={() => navigate('/markets/holdings')} />
+    return <Trade symbol={symbol} onDone={() => navigate('/markets/positions')} />
   }
 
   return (
@@ -93,7 +92,7 @@ function StockRow({ stock }) {
   return (
     <button
       type="button"
-      onClick={() => navigate(`/markets/explore/${stock.symbol}`)}
+      onClick={() => navigate(`/markets/trade/${stock.symbol}`)}
       className="flex flex-col bg-paper p-4 text-left transition-colors hover:bg-paper-raised"
     >
       <div className="flex items-start justify-between gap-3">

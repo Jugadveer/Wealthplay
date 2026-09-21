@@ -1,0 +1,47 @@
+[
+  {
+    "id": 3120,
+    "question": "A company trades at a P/E of 12 while its sector averages 28. What does this tell you?",
+    "options": [
+      "It is definitely undervalued",
+      "It is definitely in decline",
+      "Something is different about it and the difference is what to investigate",
+      "Nothing at all"
+    ],
+    "correct_answer": "Something is different about it and the difference is what to investigate",
+    "ai_feedback": {
+      "correct": "Correct. A gap that large is a question, not an answer.",
+      "incorrect": "A low P/E is a starting point for research, not a conclusion in either direction."
+    }
+  },
+  {
+    "id": 3121,
+    "question": "Which input change most affects a DCF valuation?",
+    "options": [
+      "Last year’s revenue",
+      "The discount rate and terminal growth assumption",
+      "The share count",
+      "The dividend"
+    ],
+    "correct_answer": "The discount rate and terminal growth assumption",
+    "ai_feedback": {
+      "correct": "Correct. Most of a DCF’s value usually sits in the terminal value.",
+      "incorrect": "Small changes to the discount and terminal growth rates swing the answer hugely."
+    }
+  },
+  {
+    "id": 3122,
+    "question": "A company reports 30% ROE, funded largely by debt. What should you conclude?",
+    "options": [
+      "It is an excellent business",
+      "The return is real but more fragile than it looks",
+      "ROE is irrelevant",
+      "The debt makes it safer"
+    ],
+    "correct_answer": "The return is real but more fragile than it looks",
+    "ai_feedback": {
+      "correct": "Correct. Leverage magnifies ROE on the way up and losses on the way down.",
+      "incorrect": "How the ROE was achieved matters as much as its level."
+    }
+  }
+]

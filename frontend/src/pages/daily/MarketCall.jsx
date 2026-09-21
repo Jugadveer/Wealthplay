@@ -94,7 +94,7 @@ function Settlement({ result }) {
     <Panel
       className={cx('border-l-2 p-5', result.correct ? 'border-l-up' : 'border-l-down')}
     >
-      <p className="eyebrow">Yesterday's call, settled</p>
+      <p className="eyebrow">Yesterday&rsquo;s call, settled</p>
       <p className="mt-2 text-sm text-ink">
         You said <strong className="font-semibold">{result.your_call}</strong> on {result.name}. It
         closed <strong className="font-semibold">{result.outcome}</strong>, moving{' '}

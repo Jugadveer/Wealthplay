@@ -1,0 +1,47 @@
+[
+  {
+    "id": 2120,
+    "question": "You owe ₹60,000 at 42%, ₹2,00,000 at 13% and ₹8,00,000 at 8.5%. Which should you attack first with spare cash?",
+    "options": [
+      "The ₹8,00,000, because it is largest",
+      "The ₹60,000 at 42%",
+      "The ₹2,00,000, to reduce the count",
+      "Split it evenly"
+    ],
+    "correct_answer": "The ₹60,000 at 42%",
+    "ai_feedback": {
+      "correct": "Correct. Clearing the highest rate is a guaranteed 42% return.",
+      "incorrect": "Interest rate decides the order, not balance size."
+    }
+  },
+  {
+    "id": 2121,
+    "question": "You always pay your card in full but use ₹85,000 of a ₹1,00,000 limit. What happens to your score?",
+    "options": [
+      "Nothing, since you pay in full",
+      "It falls, because reported utilisation is 85%",
+      "It rises, because of high activity",
+      "It depends on your income"
+    ],
+    "correct_answer": "It falls, because reported utilisation is 85%",
+    "ai_feedback": {
+      "correct": "Correct. The statement balance is reported, whether or not you then pay it.",
+      "incorrect": "Paying in full avoids interest. It does not change what was reported."
+    }
+  },
+  {
+    "id": 2122,
+    "question": "Which repayment method minimises total interest paid?",
+    "options": [
+      "Snowball, smallest balance first",
+      "Avalanche, highest rate first",
+      "Paying equally across all debts",
+      "Paying the newest debt first"
+    ],
+    "correct_answer": "Avalanche, highest rate first",
+    "ai_feedback": {
+      "correct": "Correct. The highest rate compounds fastest, so it costs most to leave alone.",
+      "incorrect": "Snowball is easier to stick to, but avalanche costs less."
+    }
+  }
+]

@@ -1,0 +1,47 @@
+[
+  {
+    "id": 3370,
+    "question": "You buy a call. The stock moves up, but the option loses value. What most likely happened?",
+    "options": [
+      "The exchange repriced it",
+      "Implied volatility fell after an event, or time decay exceeded the gain",
+      "Calls do not gain on upward moves",
+      "The dividend was paid"
+    ],
+    "correct_answer": "Implied volatility fell after an event, or time decay exceeded the gain",
+    "ai_feedback": {
+      "correct": "Correct. Direction is only one of three things a buyer needs.",
+      "incorrect": "Options price direction, time and volatility. Being right about one is not enough."
+    }
+  },
+  {
+    "id": 3371,
+    "question": "Which position carries theoretically unlimited loss?",
+    "options": [
+      "Buying a call",
+      "Buying a put",
+      "Selling a naked call",
+      "A covered call"
+    ],
+    "correct_answer": "Selling a naked call",
+    "ai_feedback": {
+      "correct": "Correct. There is no ceiling on how far the underlying can rise.",
+      "incorrect": "Buyers risk the premium. Naked call sellers have no upper bound."
+    }
+  },
+  {
+    "id": 3372,
+    "question": "What is the real cost of a covered call when the stock rallies strongly?",
+    "options": [
+      "Unlimited loss",
+      "Opportunity cost — upside above the strike is given up",
+      "The premium",
+      "Margin calls"
+    ],
+    "correct_answer": "Opportunity cost — upside above the strike is given up",
+    "ai_feedback": {
+      "correct": "Correct. You keep the premium and the shares are called away at the strike.",
+      "incorrect": "The shares cover the obligation, so the loss is forgone gain rather than cash."
+    }
+  }
+]

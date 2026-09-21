@@ -36,30 +36,46 @@ export function Desk() {
         </Link>
       </div>
 
-      <div className="mt-3 flex flex-wrap items-baseline gap-x-6 gap-y-1">
-        <p className="num text-2xl font-semibold text-ink">{money(data.total_value)}</p>
-        <p className={cx('num text-sm', toneFor(data.total_pnl_percent))}>
-          {percent(data.total_pnl_percent)} all time
-        </p>
-      </div>
-
-      {top.length > 0 ? (
-        <ul className="mt-4 divide-y divide-rule border-t border-rule">
-          {top.map((holding) => (
-            <li key={holding.symbol} className="flex items-baseline justify-between gap-3 py-2">
-              <span className="num text-xs font-semibold text-ink">{holding.symbol}</span>
-              <span className="num text-xs text-ink-muted">{money(holding.current_value)}</span>
-              <span className={cx('num w-16 text-right text-xs', toneFor(holding.pnl_percent))}>
-                {percent(holding.pnl_percent, 1)}
-              </span>
-            </li>
-          ))}
-        </ul>
+      {/* Nothing invested means there is nothing to report. Printing the
+          opening balance as a portfolio value, beside a +0.00% return, states a
+          performance that has not happened yet. */}
+      {holdings.length === 0 ? (
+        <div className="mt-3">
+          <p className="text-sm text-ink-muted">
+            You have not invested anything yet.
+          </p>
+          <p className="num mt-3 border-t border-rule pt-3 text-xs text-ink-faint">
+            {money(data.balance)} available to trade
+          </p>
+          <Link
+            to="/markets"
+            className="mt-2 inline-flex items-center gap-1 text-xs text-accent transition-opacity hover:opacity-80"
+          >
+            Buy your first position
+            <ArrowRight size={12} />
+          </Link>
+        </div>
       ) : (
-        <p className="mt-4 border-t border-rule pt-4 text-sm text-ink-muted">
-          Nothing held yet. <Link to="/markets" className="text-accent underline underline-offset-2">Buy something</Link> and
-          watch what it does.
-        </p>
+        <>
+          <div className="mt-3 flex flex-wrap items-baseline gap-x-6 gap-y-1">
+            <p className="num text-2xl font-semibold text-ink">{money(data.total_value)}</p>
+            <p className={cx('num text-sm', toneFor(data.total_pnl_percent))}>
+              {percent(data.total_pnl_percent)} all time
+            </p>
+          </div>
+
+          <ul className="mt-4 divide-y divide-rule border-t border-rule">
+            {top.map((holding) => (
+              <li key={holding.symbol} className="flex items-baseline justify-between gap-3 py-2">
+                <span className="num text-xs font-semibold text-ink">{holding.symbol}</span>
+                <span className="num text-xs text-ink-muted">{money(holding.current_value)}</span>
+                <span className={cx('num w-16 text-right text-xs', toneFor(holding.pnl_percent))}>
+                  {percent(holding.pnl_percent, 1)}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </>
       )}
     </Panel>
   )

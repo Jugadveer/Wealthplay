@@ -1,0 +1,26 @@
+[
+  {
+    "id": 2300,
+    "topic": "The 4% rule",
+    "theory_title": "Turning a corpus into an income",
+    "theory_content": "A portfolio can historically sustain withdrawals of about 4% of its starting value, adjusted for inflation, for roughly thirty years. Read the other way, you need about twenty-five times your annual expenses. Someone spending ₹60,000 a month needs roughly ₹1.8 crore in today’s money — and considerably more by the time they get there."
+  },
+  {
+    "id": 2301,
+    "topic": "NPS mechanics",
+    "theory_title": "The retirement account with a condition attached",
+    "theory_content": "The National Pension System allows an extra ₹50,000 deduction under 80CCD(1B) beyond 80C, and lets you choose an equity allocation up to 75%. The condition is the exit: at 60, at least 40% of the corpus must buy an annuity, and annuity income is taxed at your slab. It is a good vehicle with a real constraint, not a free lunch."
+  },
+  {
+    "id": 2302,
+    "topic": "EPF and its compounding",
+    "theory_title": "The default that quietly works",
+    "theory_content": "The Employees Provident Fund credits about 8.25% a year, tax-free on maturity if held five years, with an employer contribution matching yours. For most salaried Indians it is the single best risk-free rate available. Withdrawing it when changing jobs — which many people do — removes decades of the compounding that made it worth holding."
+  },
+  {
+    "id": 2303,
+    "topic": "Sequence risk",
+    "theory_title": "Why the order of returns matters at the end",
+    "theory_content": "Two portfolios with identical average returns can end very differently if one suffers its worst years just after withdrawals begin. Selling units into a falling market depletes the corpus permanently. The standard defence is holding two to three years of expenses in debt at the point of retirement, so the equity portion is never sold during a crash."
+  }
+]

@@ -1,0 +1,26 @@
+[
+  {
+    "id": 2150,
+    "topic": "Loss aversion",
+    "theory_title": "Losses hurt about twice as much as gains please",
+    "theory_content": "Losing ₹10,000 feels roughly twice as bad as gaining ₹10,000 feels good. This asymmetry explains why people hold losing positions hoping to break even, sell winners too early to lock in a feeling, and keep money in savings accounts during decades when equity outperformed. Knowing the bias does not remove it; building rules in advance is what does."
+  },
+  {
+    "id": 2151,
+    "topic": "Anchoring",
+    "theory_title": "The first number sticks",
+    "theory_content": "The price you paid becomes the reference point for every later decision, even though the market has no idea what you paid. \"I will sell when it gets back to ₹500\" is anchoring. The only question that carries information is whether you would buy it today at today’s price."
+  },
+  {
+    "id": 2152,
+    "topic": "Recency bias",
+    "theory_title": "The last twelve months feel like the future",
+    "theory_content": "After a strong year, investors raise their expectations and their allocation; after a crash, they cut both. This is precisely backwards, and it is most of the 1.7% annual gap between what funds return and what their investors earn. Written rules, applied on a schedule, are the standard defence."
+  },
+  {
+    "id": 2153,
+    "topic": "Confirmation bias",
+    "theory_title": "Research that was never going to change your mind",
+    "theory_content": "Once you own something, you read about it differently: supporting views feel rigorous, contrary ones feel uninformed. The practical counter is to write down, before buying, what would make you sell — a specific number or event. If nothing would, you are not investing, you are supporting."
+  }
+]

@@ -1,0 +1,47 @@
+[
+  {
+    "id": 1220,
+    "question": "You earn ₹12,00,000 a year, owe ₹40,00,000 on a home loan and have ₹10,00,000 saved. Roughly how much term cover do you need?",
+    "options": [
+      "₹50,00,000",
+      "₹1,50,00,000",
+      "₹25,00,000",
+      "₹5,00,00,000"
+    ],
+    "correct_answer": "₹1,50,00,000",
+    "ai_feedback": {
+      "correct": "Correct. Roughly ten times income, plus the loan, less what you already have.",
+      "incorrect": "Cover has to replace income and clear debts, not just cover a funeral."
+    }
+  },
+  {
+    "id": 1221,
+    "question": "Which policy feature most often reduces a large hospital claim unexpectedly?",
+    "options": [
+      "The sum insured",
+      "The room rent limit",
+      "The premium",
+      "The insurer’s ranking"
+    ],
+    "correct_answer": "The room rent limit",
+    "ai_feedback": {
+      "correct": "Correct. Exceeding the room limit scales down every associated charge proportionally.",
+      "incorrect": "The sum insured is a ceiling. The room rent cap is what quietly reduces the payout."
+    }
+  },
+  {
+    "id": 1222,
+    "question": "Why is term insurance so much cheaper than an endowment policy?",
+    "options": [
+      "It covers less",
+      "It pays nothing if you survive the term",
+      "It is government subsidised",
+      "It has a shorter term"
+    ],
+    "correct_answer": "It pays nothing if you survive the term",
+    "ai_feedback": {
+      "correct": "Correct. You are buying pure protection with no savings component attached.",
+      "incorrect": "Term cover is usually far larger. The difference is that it has no maturity payout."
+    }
+  }
+]

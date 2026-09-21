@@ -1,0 +1,14 @@
+[
+  {
+    "id": 4235,
+    "question": "Does prepaying early really make that much difference?",
+    "answer": "Yes, because early EMIs are almost entirely interest. On a twenty-year home loan, a prepayment in year three removes far more total interest than the same amount in year fifteen. Ask the lender to reduce the tenure rather than the EMI — that is where the saving comes from.",
+    "explanation": "Reduce the term, not the instalment."
+  },
+  {
+    "id": 4236,
+    "question": "Is it worth taking a loan against my mutual funds instead of selling them?",
+    "answer": "Sometimes. A loan against securities at around 10-11% avoids realising capital gains and keeps you invested. But it is secured against the units, so a market fall can trigger a margin call forcing a sale at the worst time. Fine for short, certain needs; poor for open-ended ones.",
+    "explanation": "It preserves the investment and adds a forced-sale risk in exchange."
+  }
+]

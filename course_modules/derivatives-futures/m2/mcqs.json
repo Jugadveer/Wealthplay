@@ -1,0 +1,47 @@
+[
+  {
+    "id": 3320,
+    "question": "A futures position requires 15% margin. The underlying moves 2% against you. Roughly what happens to your capital?",
+    "options": [
+      "It falls about 2%",
+      "It falls about 13%",
+      "It falls about 30%",
+      "It is unaffected"
+    ],
+    "correct_answer": "It falls about 13%",
+    "ai_feedback": {
+      "correct": "Correct. 2% divided by 15% margin is roughly a 13% move on your capital.",
+      "incorrect": "Divide the underlying move by the margin percentage to get the effect on capital."
+    }
+  },
+  {
+    "id": 3321,
+    "question": "What distinguishes hedging from speculating with the same futures contract?",
+    "options": [
+      "The contract size",
+      "Whether you hold the underlying exposure it offsets",
+      "The expiry date",
+      "The broker used"
+    ],
+    "correct_answer": "Whether you hold the underlying exposure it offsets",
+    "ai_feedback": {
+      "correct": "Correct. A hedge reduces an existing exposure; without one, it creates a new bet.",
+      "incorrect": "The instrument is identical. The existing exposure is what changes its nature."
+    }
+  },
+  {
+    "id": 3322,
+    "question": "Why can a trader be directionally right and still lose on a futures position?",
+    "options": [
+      "Fees",
+      "A margin call can force the position closed before the move arrives",
+      "Taxes",
+      "Dividends"
+    ],
+    "correct_answer": "A margin call can force the position closed before the move arrives",
+    "ai_feedback": {
+      "correct": "Correct. Staying solvent is a separate requirement from being correct.",
+      "incorrect": "Leverage means you must survive the path, not just the destination."
+    }
+  }
+]

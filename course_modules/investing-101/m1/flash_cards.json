@@ -1,1 +1,26 @@
-[]
+[
+  {
+    "id": 4000,
+    "topic": "Saving versus investing",
+    "theory_title": "Two different jobs for your money",
+    "theory_content": "Saving puts money somewhere safe where the number does not fall — a savings account, a fixed deposit. Investing puts it somewhere the value can fall in the short term in exchange for growing faster over a long one. Saving protects money you need soon. Investing grows money you do not. Using either for the other job is where most financial damage starts."
+  },
+  {
+    "id": 4001,
+    "topic": "Where returns come from",
+    "theory_title": "Somebody has to actually produce something",
+    "theory_content": "A share returns money because the company behind it earns profits. A bond returns money because a borrower pays interest. A deposit returns money because the bank lends it on. If you cannot say who is producing the return and why, you are not looking at an investment — you are looking at a transfer from later entrants, which is what every Ponzi scheme is."
+  },
+  {
+    "id": 4002,
+    "topic": "The three questions",
+    "theory_title": "What to ask before any investment",
+    "theory_content": "Before committing money, answer three things: when will I need this back, what is the worst realistic outcome, and what am I paying in fees and tax. The horizon decides the instrument, the downside decides the size, and the costs decide how much of the return you keep. Most bad investments fail one of these obviously."
+  },
+  {
+    "id": 4003,
+    "topic": "Starting small",
+    "theory_title": "The amount matters less than the date",
+    "theory_content": "A ₹500 monthly SIP is not too small to matter. It builds the habit, teaches you how you react when the value falls, and starts the compounding clock. People who wait to invest \"properly\" usually start a decade late, and that decade costs more than any amount of optimisation later recovers."
+  }
+]

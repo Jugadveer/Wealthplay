@@ -1,0 +1,26 @@
+[
+  {
+    "id": 3050,
+    "topic": "The efficient frontier",
+    "theory_title": "The best return available at each level of risk",
+    "theory_content": "Plot every possible mix of assets by expected return and volatility, and the upper edge of the cloud is the efficient frontier: the portfolios that offer the most return for a given risk. Anything below the line is dominated — you could hold something with the same risk and more return. The practical lesson is that adding a less-correlated asset can raise return and lower risk at the same time."
+  },
+  {
+    "id": 3051,
+    "topic": "Sharpe ratio",
+    "theory_title": "Return per unit of risk taken",
+    "theory_content": "The Sharpe ratio is (portfolio return minus the risk-free rate) divided by volatility. A fund returning 18% with 30% volatility has a worse Sharpe than one returning 13% with 12%, despite the lower headline. It is the standard way to compare strategies that took different amounts of risk to get where they got."
+  },
+  {
+    "id": 3052,
+    "topic": "Correlation and its failure",
+    "theory_title": "Why the maths breaks in the crash",
+    "theory_content": "Optimisation assumes correlations hold. In a genuine panic they rise towards one: everything falls together and the diversification the model priced in disappears precisely when it is needed. This is why optimisation output should be treated as a sanity check rather than an instruction, and why cash and government debt still matter."
+  },
+  {
+    "id": 3053,
+    "topic": "Estimation error",
+    "theory_title": "Optimising precisely on numbers you do not know",
+    "theory_content": "Mean-variance optimisation is extremely sensitive to the expected returns you feed it, and expected returns are the hardest thing to estimate. Small input changes produce wildly different \"optimal\" portfolios. In practice, simple rules — equal weights, or a fixed equity-debt split — often outperform the optimised answer out of sample."
+  }
+]

@@ -1,0 +1,47 @@
+[
+  {
+    "id": 1320,
+    "question": "A caller knows your last transaction and says your account is compromised. They need an OTP to block the fraud. What does knowing your transaction prove?",
+    "options": [
+      "They work at your bank",
+      "That a data leak occurred, nothing more",
+      "The fraud is real",
+      "You should act quickly"
+    ],
+    "correct_answer": "That a data leak occurred, nothing more",
+    "ai_feedback": {
+      "correct": "Correct. Transaction data leaks routinely. It is the hook, not a credential.",
+      "incorrect": "Knowing a detail about you proves someone has your data, not that they are your bank."
+    }
+  },
+  {
+    "id": 1321,
+    "question": "A buyer on a resale app sends you a QR code to \"send you the money\". What happens if you scan it and enter your PIN?",
+    "options": [
+      "You receive the payment",
+      "You pay them",
+      "Nothing until they confirm",
+      "The app holds it in escrow"
+    ],
+    "correct_answer": "You pay them",
+    "ai_feedback": {
+      "correct": "Correct. Scanning and entering a PIN always sends money. Receiving needs neither.",
+      "incorrect": "Receiving money never requires your PIN. If a PIN is asked for, money is leaving."
+    }
+  },
+  {
+    "id": 1322,
+    "question": "Which is the strongest signal that an investment scheme is fraudulent?",
+    "options": [
+      "A slick website",
+      "Returns that are both high and guaranteed",
+      "It is new",
+      "It is not on the stock exchange"
+    ],
+    "correct_answer": "Returns that are both high and guaranteed",
+    "ai_feedback": {
+      "correct": "Correct. Risk and return are linked; a guarantee at five times the risk-free rate cannot be funded by real returns.",
+      "incorrect": "Plenty of legitimate investments are new or unlisted. None of them guarantee 36%."
+    }
+  }
+]

@@ -1,0 +1,47 @@
+[
+  {
+    "id": 2170,
+    "question": "You hold two stocks: one down 40%, one up 60%. You need cash. Which should you sell?",
+    "options": [
+      "The winner, to bank the gain",
+      "The loser, to cut it",
+      "Whichever you would not buy today",
+      "Neither; borrow instead"
+    ],
+    "correct_answer": "Whichever you would not buy today",
+    "ai_feedback": {
+      "correct": "Correct. What you paid is gone and carries no information about what to do now.",
+      "incorrect": "Both other answers anchor on the purchase price, which the market does not know."
+    }
+  },
+  {
+    "id": 2171,
+    "question": "Investors trailing their own funds by 1.7% a year is mostly explained by which bias?",
+    "options": [
+      "Anchoring",
+      "Recency bias driving buy-high, sell-low",
+      "Confirmation bias",
+      "Overconfidence about fees"
+    ],
+    "correct_answer": "Recency bias driving buy-high, sell-low",
+    "ai_feedback": {
+      "correct": "Correct. Money arrives after good years and leaves after bad ones.",
+      "incorrect": "The gap is a timing gap, created by extrapolating the recent past."
+    }
+  },
+  {
+    "id": 2172,
+    "question": "What is the most practical defence against confirmation bias when buying a stock?",
+    "options": [
+      "Reading more analyst reports",
+      "Writing down in advance what would make you sell",
+      "Diversifying more",
+      "Investing a smaller amount"
+    ],
+    "correct_answer": "Writing down in advance what would make you sell",
+    "ai_feedback": {
+      "correct": "Correct. A pre-committed exit condition is testable; a general intention is not.",
+      "incorrect": "More reading after the decision tends to reinforce it rather than test it."
+    }
+  }
+]

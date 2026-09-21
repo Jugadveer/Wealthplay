@@ -2,7 +2,7 @@ from django.urls import path
 
 from . import challenge_views
 from .achievement_views import check_achievements, get_achievements, mark_achievement_notified
-from .goals_views import create_goal, delete_goal, get_goals_api, update_goal
+from .goals import views as goals
 from .portfolio import analysis_views, social_views
 from .portfolio import views as portfolio
 from .simulation_views import get_sim_data, list_crises, start_session
@@ -15,10 +15,14 @@ urlpatterns = [
     path('award-xp/', award_xp, name='award_xp'),
 
     # Goals
-    path('goals/', get_goals_api, name='get_goals_api'),
-    path('goals/create/', create_goal, name='create_goal'),
-    path('goals/<int:goal_id>/update/', update_goal, name='update_goal'),
-    path('goals/<int:goal_id>/delete/', delete_goal, name='delete_goal'),
+    path('goals/', goals.list_goals, name='list_goals'),
+    path('goals/plan/', goals.preview_plan, name='preview_goal_plan'),
+    path('goals/create/', goals.create_goal, name='create_goal'),
+    path('goals/<int:goal_id>/update/', goals.update_goal, name='update_goal'),
+    path('goals/<int:goal_id>/delete/', goals.delete_goal, name='delete_goal'),
+    path('goals/<int:goal_id>/link/', goals.link_goal, name='link_goal'),
+    path('goals/contribution/', goals.set_contribution, name='set_contribution'),
+    path('goals/contribution/pay/', goals.pay_contribution, name='pay_contribution'),
 
     # Portfolio
     path('portfolio/', portfolio.get_portfolio, name='get_portfolio'),

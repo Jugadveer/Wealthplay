@@ -1,0 +1,47 @@
+[
+  {
+    "id": 2370,
+    "question": "Which portfolio is genuinely more diversified?",
+    "options": [
+      "Twelve IT stocks",
+      "Four stocks across IT, banking, energy and FMCG",
+      "Twenty small-caps",
+      "Eight stocks from the same index"
+    ],
+    "correct_answer": "Four stocks across IT, banking, energy and FMCG",
+    "ai_feedback": {
+      "correct": "Correct. Different drivers matter more than the number of names.",
+      "incorrect": "Twelve names in one sector is one bet expressed twelve times."
+    }
+  },
+  {
+    "id": 2371,
+    "question": "A portfolio has 70% in one stock and the rest spread across nine others. What does a concentration measure reveal that a holdings count does not?",
+    "options": [
+      "The fees",
+      "That it is effectively a single-stock bet",
+      "The expected return",
+      "The tax position"
+    ],
+    "correct_answer": "That it is effectively a single-stock bet",
+    "ai_feedback": {
+      "correct": "Correct. Ten holdings, one of which is most of the money, is not a diversified book.",
+      "incorrect": "The count says ten. The weights say one."
+    }
+  },
+  {
+    "id": 2372,
+    "question": "Why does rebalancing feel wrong to do?",
+    "options": [
+      "It costs a lot in fees",
+      "It means selling what has performed best",
+      "It requires a market forecast",
+      "It increases risk"
+    ],
+    "correct_answer": "It means selling what has performed best",
+    "ai_feedback": {
+      "correct": "Correct — and that discomfort is exactly why it works as a discipline.",
+      "incorrect": "Rebalancing needs no forecast. It just feels wrong, which is different."
+    }
+  }
+]

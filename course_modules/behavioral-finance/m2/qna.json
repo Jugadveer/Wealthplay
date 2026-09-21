@@ -1,0 +1,14 @@
+[
+  {
+    "id": 2185,
+    "question": "If everyone knows about these biases, why do they still work?",
+    "answer": "Because knowing a bias and feeling it are different. Loss aversion is not a mistake in reasoning you can correct by concentrating; it is how the decision feels. That is why the effective countermeasures are structural — automatic SIPs, written rules, scheduled rebalancing — rather than resolutions.",
+    "explanation": "You do not out-think a bias. You build around it."
+  },
+  {
+    "id": 2186,
+    "question": "Is checking my portfolio daily harmful?",
+    "answer": "Mostly yes. Daily checking raises the number of days you see a loss, which raises the chance loss aversion triggers a sale. Investors who check quarterly make fewer changes and keep more of the return. The portfolio does not need supervision; the checking does.",
+    "explanation": "More information at a higher frequency produces worse decisions here, not better."
+  }
+]

@@ -1,0 +1,14 @@
+[
+  {
+    "id": 1335,
+    "question": "I shared an OTP by mistake. What now?",
+    "answer": "Call the bank immediately on the number on your card and block the account, then raise a complaint on the national cybercrime portal and at your bank in writing within three working days. Under RBI rules, reporting an unauthorised electronic transaction within three days usually limits your liability to zero.",
+    "explanation": "Speed matters more than anything else. The three-day window is the protection."
+  },
+  {
+    "id": 1336,
+    "question": "How do I check whether an adviser or platform is legitimate?",
+    "answer": "Look them up on the SEBI register of investment advisers or the AMFI register for distributors, and confirm the registration number against the name. Legitimate firms display it; the number should resolve to the entity you are actually paying.",
+    "explanation": "A registration number you can verify independently is the minimum bar."
+  }
+]

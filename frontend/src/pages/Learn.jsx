@@ -11,7 +11,7 @@ import { Lock } from 'lucide-react'
 import { useAuth } from '../auth/AuthContext'
 import { api } from '../lib/api'
 import { useQuery } from '../lib/query'
-import { Badge, Meter, PageHeader, Panel, Skeleton, Tabs, cx } from '../ui'
+import { Badge, Meter, PageHeader, Skeleton, Tabs, cx } from '../ui'
 
 const LEVELS = [
   { value: 'all', label: 'All' },

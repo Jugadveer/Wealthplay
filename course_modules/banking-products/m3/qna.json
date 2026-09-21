@@ -1,0 +1,14 @@
+[
+  {
+    "id": 4085,
+    "question": "Is it worth keeping accounts at more than one bank?",
+    "answer": "Yes, for two reasons. Deposit insurance covers ₹5 lakh per bank, so large balances should be split. And a second account means a technical outage or a frozen account does not leave you with no access to money at all.",
+    "explanation": "Redundancy is worth more than the marginal interest rate."
+  },
+  {
+    "id": 4086,
+    "question": "What actually happens if I break the minimum balance?",
+    "answer": "Most banks charge a monthly penalty, often ₹150-600 plus tax, and some charge it proportionally to the shortfall. It is charged silently and is one of the most common avoidable costs in Indian retail banking. Either keep the balance or move to an account without the requirement.",
+    "explanation": "A penalty you do not notice is still a penalty you pay every month."
+  }
+]

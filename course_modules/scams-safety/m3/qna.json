@@ -1,0 +1,14 @@
+[
+  {
+    "id": 4285,
+    "question": "Someone claiming to be from a government agency called about a parcel and a legal case. What should I do?",
+    "answer": "Hang up. No Indian agency conducts investigations or arrests over a video call, and none asks for money to be transferred for \"verification\". Then call the person the caller told you not to call — isolation is the technique, so breaking it defeats the scam.",
+    "explanation": "The instruction not to tell anyone is the clearest signal in the whole call."
+  },
+  {
+    "id": 4286,
+    "question": "How do I check whether an investment app is regulated?",
+    "answer": "For brokers, check the SEBI registration number on the SEBI website; for lending, check the entity against the RBI list of registered NBFCs; for mutual funds, check AMFI. The number must resolve to the company you are actually sending money to, not a similarly named one.",
+    "explanation": "Verify the registration against the entity receiving your money, not the brand shown."
+  }
+]

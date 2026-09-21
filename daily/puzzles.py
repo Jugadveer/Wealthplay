@@ -16,6 +16,7 @@ from datetime import date
 from market_data import services
 from users.portfolio import pricing
 
+from .facts import ESTIMATE_FACTS
 from .models import DailyPuzzle, PuzzleKind
 
 logger = logging.getLogger(__name__)
@@ -40,71 +41,6 @@ PUZZLE_UNIVERSE = [
     ('SBIN', 'State Bank of India', 'Financial Services'),
     ('ITC', 'ITC', 'Consumer Defensive'),
     ('BHARTIARTL', 'Bharti Airtel', 'Communication Services'),
-]
-
-# Facts for Number Sense. Each is a real, checkable figure with a source note,
-# so a wrong guess still teaches the right magnitude.
-ESTIMATE_FACTS = [
-    {
-        'question': 'What is the RBI repo rate right now?',
-        'answer': 5.5,
-        'unit': '%',
-        'context': 'The rate at which the RBI lends to commercial banks. It sets the floor for your loan rate.',
-    },
-    {
-        'question': 'Roughly what does 10 grams of 24k gold cost in India?',
-        'answer': 118000,
-        'unit': '₹',
-        'context': 'Gold is the default savings instrument for most Indian households.',
-    },
-    {
-        'question': 'On a ₹30 lakh home loan over 20 years at 8.5%, what is the monthly EMI?',
-        'answer': 26035,
-        'unit': '₹',
-        'context': 'Over 20 years you repay about ₹62 lakh — more than double what you borrowed.',
-    },
-    {
-        'question': 'Invest ₹5,000 a month for 20 years at 12%. What does it grow to?',
-        'answer': 4997000,
-        'unit': '₹',
-        'context': 'You contribute ₹12 lakh. The other ₹38 lakh is compounding.',
-    },
-    {
-        'question': 'What is the long-run average inflation rate in India?',
-        'answer': 6.0,
-        'unit': '%',
-        'context': 'At 6%, prices double roughly every 12 years.',
-    },
-    {
-        'question': 'What percentage of Indian households hold any equity investment?',
-        'answer': 5.0,
-        'unit': '%',
-        'context': 'Most household wealth sits in property and gold, not markets.',
-    },
-    {
-        'question': 'How much must you invest today at 10% to have ₹1 crore in 25 years?',
-        'answer': 923000,
-        'unit': '₹',
-        'context': 'Time does most of the work. Ten years later the same target costs ₹3.9 lakh a year.',
-    },
-    {
-        'question': 'What is the maximum deduction under Section 80C per year?',
-        'answer': 150000,
-        'unit': '₹',
-        'context': 'Covers EPF, ELSS, life insurance premiums, principal on a home loan and more.',
-    },
-    {
-        'question': 'How many months of expenses belongs in an emergency fund?',
-        'answer': 6,
-        'unit': 'months',
-        'context': 'Six months is the usual advice. Three if your income is very stable.',
-    },
-    {
-        'question': 'By the rule of 72, how many years does money take to double at 9%?',
-        'answer': 8,
-        'unit': 'years',
-        'context': '72 divided by the rate. It is accurate enough for mental arithmetic.',
-    },
 ]
 
 

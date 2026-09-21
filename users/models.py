@@ -103,6 +103,12 @@ class DemoPortfolio(models.Model):
     holdings = models.JSONField(default=dict)  # {symbol: {quantity, avg_price}}
     trade_history = models.JSONField(default=list, blank=True)  # snapshot history for charting
     total_value = models.DecimalField(max_digits=12, decimal_places=2, default=50000.00)
+
+    # A monthly paid-in amount, so the practice account behaves like a real one
+    # being fed from a salary rather than a fixed pot that only ever shrinks.
+    monthly_contribution = models.DecimalField(max_digits=12, decimal_places=2, default=0.00)
+    last_contribution_on = models.DateField(null=True, blank=True)
+    total_contributed = models.DecimalField(max_digits=12, decimal_places=2, default=0.00)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
@@ -315,10 +321,23 @@ class FinancialGoal(models.Model):
     color = models.CharField(max_length=100, default='from-brand-primary to-orange-500', blank=True)  # Gradient color
     icon_bg = models.CharField(max_length=100, default='bg-brand-50 text-brand-600', blank=True)  # Icon background
     
-    # NEW FIELDS FOR AI GOAL ALGO
-    category = models.CharField(max_length=50, default='GENERAL') # HOME, EMERGENCY, WEDDING, RETIRE, TAX, EDU, TRIP
-    extra_data = models.JSONField(default=dict, blank=True) # Interest rates, etc.
-    strategy_report = models.JSONField(default=dict, blank=True) # AI generated recovery rules, etc.
+    # The kind of goal decides how much risk the plan may carry: see
+    # users.goals.planner.CATEGORIES. A holiday can slip; school fees cannot.
+    category = models.CharField(max_length=50, default='general')
+
+    # What the user says they can set aside each month. Without it the planner
+    # can only produce a required figure, not a verdict on whether it is possible.
+    monthly_capacity = models.DecimalField(max_digits=12, decimal_places=2, default=0.00)
+
+    # Which of the offered plans they picked.
+    plan_choice = models.CharField(max_length=16, default='balanced')
+
+    # Goal-based trading: while set, this goal's progress tracks the practice
+    # account, so a trade moves the goal. Only one goal may be linked at a time.
+    linked = models.BooleanField(default=False)
+
+    extra_data = models.JSONField(default=dict, blank=True)
+    strategy_report = models.JSONField(default=dict, blank=True)
     
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
