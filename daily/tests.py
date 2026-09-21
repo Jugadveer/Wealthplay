@@ -5,6 +5,8 @@ The puzzle must be identical for everyone on a given day — that is what makes 
 shared score meaningful — and the review scheduler must actually space cards out.
 """
 
+import json
+import math
 from datetime import date, timedelta
 from unittest.mock import patch
 
@@ -175,3 +177,44 @@ class RankTests(TestCase):
         points, concordant, pairs = games.score_rank(['A', 'C', 'B', 'D'], ['A', 'B', 'C', 'D'])
         self.assertEqual((concordant, pairs), (5, 6))
         self.assertGreater(points, 40)
+
+    @patch('daily.games.services.get_history')
+    def test_a_gap_in_the_series_is_skipped_rather_than_poisoning_it(self, get_history):
+        """A NaN close made the board unsavable and its answer meaningless.
+
+        `json.dumps` writes bare `NaN`, which JSON does not allow, so SQLite
+        rejected the row on its JSON_VALID constraint and Rank It failed to
+        build every day. It was caught and logged, so the only symptom was a
+        missing game. And `sorted` against NaN orders arbitrarily, so the
+        answer would have been wrong even if it had saved.
+        """
+        get_history.return_value = (
+            [{'close': 100.0}] * 60 + [{'close': float('nan')}] + [{'close': 150.0}] * 60
+        )
+        change = games._year_change('GAPPY')
+        self.assertIsNotNone(change)
+        self.assertTrue(math.isfinite(change), 'a gap in the series produced a NaN change')
+        self.assertAlmostEqual(change, 50.0, places=1)
+
+    @patch('daily.games.services.get_history')
+    def test_a_series_of_nothing_but_gaps_is_not_measurable(self, get_history):
+        get_history.return_value = [{'close': float('nan')}] * 120
+        self.assertIsNone(games._year_change('BROKEN'))
+
+    @patch('daily.games.services.get_history')
+    def test_a_clean_series_is_measured(self, get_history):
+        get_history.return_value = [{'close': 100.0}] * 100 + [{'close': 150.0}]
+        self.assertAlmostEqual(games._year_change('FINE'), 50.0, places=1)
+
+    def test_a_built_board_is_valid_json(self):
+        """What the database constraint actually checks."""
+        _, solution = games.build_rank(date.today())
+        encoded = json.dumps(solution)
+        self.assertNotIn('NaN', encoded)
+        self.assertNotIn('Infinity', encoded)
+        self.assertEqual(json.loads(encoded)['order'], solution['order'])
+
+    def test_a_built_board_is_ordered_best_first(self):
+        _, solution = games.build_rank(date.today())
+        changes = [solution['changes'][symbol] for symbol in solution['order']]
+        self.assertEqual(changes, sorted(changes, reverse=True))

@@ -23,6 +23,7 @@ The rules here:
 from __future__ import annotations
 
 import logging
+import math
 from dataclasses import asdict, dataclass
 from datetime import date, datetime, timedelta
 
@@ -278,18 +279,41 @@ def _fetch_profile(symbol: str) -> dict | None:
 
 
 def _fetch_history(symbol: str, days: int) -> list[dict]:
+    """Daily closes from the provider, with the gaps dropped rather than carried.
+
+    The provider returns a row for days it has no price for, with ``NaN`` in the
+    close. ``float(NaN)`` and ``round(NaN, 2)`` are both NaN and neither raises,
+    so those rows used to travel all the way out of here and break two things
+    well away from the cause:
+
+    * ``json.dumps`` refuses NaN, so the Oracle's chart question returned a 500
+      whenever a drawn symbol had a gap — intermittent, because which symbols
+      are drawn depends on the day.
+    * The Rank It board computed a NaN change, failed SQLite's ``JSON_VALID``
+      constraint, and was quietly skipped every day it included such a symbol.
+
+    A day with no price is not a data point, so it does not become one.
+    """
     frame = yf.Ticker(provider_symbol(symbol)).history(period=f"{days}d", interval="1d")
     if frame.empty:
         return []
 
-    return [
-        {
+    points = []
+    for index, row in frame.iterrows():
+        close = float(row["Close"])
+        if not math.isfinite(close):
+            continue
+
+        volume = row.get("Volume")
+        volume = int(volume) if volume is not None and math.isfinite(float(volume)) else 0
+
+        points.append({
             "date": index.date().isoformat(),
-            "close": round(float(row["Close"]), 2),
-            "volume": int(row.get("Volume") or 0),
-        }
-        for index, row in frame.iterrows()
-    ]
+            "close": round(close, 2),
+            "volume": volume,
+        })
+
+    return points
 
 
 def get_market_news(limit: int = 8) -> list[dict]:

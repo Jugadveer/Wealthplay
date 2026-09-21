@@ -10,6 +10,7 @@ been used.
 from __future__ import annotations
 
 import logging
+import math
 from datetime import date
 
 from market_data import services
@@ -121,11 +122,31 @@ def build_rank(day: date) -> tuple[dict, dict]:
 
 
 def _year_change(symbol: str) -> float | None:
+    """A symbol's change over the window, or ``None`` if it cannot be measured.
+
+    Every close is checked for being a finite number, not merely present. One
+    NaN in a series propagates through the subtraction, and NaN is truthy, so
+    the old `not closes[0]` guard let it past. Two things then broke, both
+    silently:
+
+    * ``json.dumps`` writes bare ``NaN``, which Python accepts and JSON does
+      not, so SQLite rejected the row on its ``JSON_VALID`` constraint and the
+      Rank It board failed to save every single day.
+    * ``sorted`` against NaN returns an arbitrary order, so the answer would
+      have been wrong even if it had saved.
+    """
     series = services.get_history(symbol, days=250)
-    closes = [point['close'] for point in series if point.get('close')]
+    closes = [
+        point['close']
+        for point in series
+        if isinstance(point.get('close'), (int, float)) and math.isfinite(point['close'])
+    ]
+
     if len(closes) < 100 or not closes[0]:
         return None
-    return (closes[-1] - closes[0]) / closes[0] * 100
+
+    change = (closes[-1] - closes[0]) / closes[0] * 100
+    return change if math.isfinite(change) else None
 
 
 def score_rank(submitted: list[str], answer: list[str]) -> tuple[int, int, int]:
