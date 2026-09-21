@@ -1,23 +1,9 @@
-from django .urls import path ,include 
-from rest_framework .routers import DefaultRouter 
-from .views import (
-ChatMessageViewSet ,AttachmentViewSet ,
-mentor_respond ,mentor_respond_rag ,general_inquiry ,
-get_topic_chat ,save_topic_message 
-)
+from django.urls import path
 
-router =DefaultRouter ()
-router .register (r'messages',ChatMessageViewSet ,basename ='message')
-router .register (r'attachments',AttachmentViewSet ,basename ='attachment')
+from . import views
 
-urlpatterns =[
-path ('mentor/respond/',mentor_respond ,name ='mentor_respond'),
-path ('mentor/rag/',mentor_respond_rag ,name ='mentor_respond_rag'),
-path ('mentor/inquiry/',general_inquiry ,name ='general_inquiry'),
-path ('topic/<str:course_id>/',get_topic_chat ,name ='get_topic_chat'),
-path ('topic/<str:course_id>/<str:module_id>/',get_topic_chat ,name ='get_topic_chat_with_module'),
-path ('topic/save/',save_topic_message ,name ='save_topic_message'),
-path ('',include (router .urls )),
+urlpatterns = [
+    path('mentor/ask/', views.ask_mentor, name='ask_mentor'),
+    path('mentor/history/<str:course_id>/', views.mentor_history, name='mentor_history'),
+    path('mentor/history/<str:course_id>/<str:module_id>/', views.mentor_history, name='mentor_history_module'),
 ]
-
-
