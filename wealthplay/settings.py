@@ -92,6 +92,7 @@ INSTALLED_APPS = [
     'simulator',
     'market_data',
     'daily',
+    'ai',
 ]
 
 MIDDLEWARE = [
