@@ -57,7 +57,7 @@ export default function App() {
   )
 }
 
-/** Signed-in visitors land on today's edition rather than the marketing page. */
+/** Signed-in visitors land on today's set rather than the marketing page. */
 function PublicHome() {
   const { user, checked } = useAuth()
   if (checked && user) return <Navigate to="/today" replace />

@@ -112,6 +112,7 @@ export const api = {
   // Challenges
   leaderboard: (type = 'scores') => get('/users/challenges/leaderboard/', { params: { type } }),
   challengeStats: () => get('/users/challenges/stats/'),
+  calibration: () => get('/users/challenges/calibration/'),
   predictionQuestion: (difficulty) => get('/users/challenges/question/', { params: { difficulty } }),
   predictionHint: (symbol) => get('/users/challenges/hint/', { params: { symbol } }),
   submitPrediction: (payload) => post('/users/challenges/predict/', payload),
@@ -139,6 +140,10 @@ export const api = {
   tickerBoard: () => get('/daily/ticker/'),
   submitTicker: (payload) => post('/daily/ticker/guess/', payload),
   tickerSearch: (q) => get('/daily/ticker/search/', { params: { q } }),
+  ledgerBoard: () => get('/daily/ledger/'),
+  ledgerGuess: (word) => post('/daily/ledger/guess/', { word }),
+  rankBoard: () => get('/daily/rank/'),
+  rankSubmit: (order) => post('/daily/rank/', { order }),
   marketCall: () => get('/daily/call/'),
   submitCall: (payload) => post('/daily/call/', payload),
   numberSense: () => get('/daily/estimate/'),

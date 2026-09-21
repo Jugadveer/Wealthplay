@@ -34,6 +34,34 @@ class CleanTests(TestCase):
         self.assertEqual(content.clean(''), '')
 
 
+class SummaryTests(TestCase):
+    """The catalogue blurb is the first thing a learner reads about a course."""
+
+    def test_ends_on_a_sentence(self):
+        """Regression: blurbs were a 180-character slice that stopped mid-word."""
+        theory = 'A savings account holds cash you may need today. ' + 'It pays little. ' * 20
+        self.assertTrue(content._summarise(theory, []).endswith('.'))
+
+    def test_flattens_markdown_emphasis(self):
+        """Regression: "**after-tax income**" rendered as literal asterisks."""
+        self.assertEqual(
+            content._summarise('Divide your **after-tax income** three ways.', []),
+            'Divide your after-tax income three ways.',
+        )
+
+    def test_falls_back_to_a_question(self):
+        self.assertEqual(
+            content._summarise('', [{'question': 'What is an FD?', 'answer': 'A fixed deposit.'}]),
+            'A fixed deposit.',
+        )
+
+    def test_every_course_blurb_is_readable(self):
+        for course in content.catalogue():
+            with self.subTest(course=course['id']):
+                self.assertNotIn('*', course['summary'])
+                self.assertTrue(course['summary'])
+
+
 class CatalogueTests(TestCase):
     def test_catalogue_loads(self):
         courses = content.catalogue()

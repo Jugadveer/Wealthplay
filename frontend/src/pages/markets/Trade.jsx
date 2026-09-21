@@ -14,6 +14,7 @@ import { ArrowLeft, Sparkles } from 'lucide-react'
 
 import { api } from '../../lib/api'
 import { money, percent, toneFor } from '../../lib/format'
+import { announceUnlocks, notifySuccess } from '../../lib/notify'
 import { invalidate, useQuery } from '../../lib/query'
 import { Badge, Button, Panel, Skeleton, Stat, cx } from '../../ui'
 import { LineChart } from '../../ui/charts'
@@ -79,6 +80,8 @@ export default function Trade({ symbol, onDone }) {
       }
 
       setOutcome(result)
+      notifySuccess(result.message)
+      announceUnlocks(result)
       setQuantity('')
       invalidate('portfolio', 'stocks', `stock:${symbol}`, 'profile')
     } catch (err) {

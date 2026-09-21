@@ -1,5 +1,5 @@
 /**
- * App chrome: masthead, navigation, mentor.
+ * App chrome: header, navigation, mentor.
  *
  * The header sits in normal document flow rather than floating over the page.
  * The old one was `fixed top-6` as a centred pill while `<main>` carried a
@@ -15,6 +15,8 @@ import AuthDialog from '../auth/AuthDialog'
 import { currentTheme, toggleTheme } from '../lib/theme'
 import { cx } from '../ui'
 import Mentor from './Mentor'
+import Toaster from './Toaster'
+import ZoneCurtain from './ZoneCurtain'
 
 const NAV = [
   { to: '/today', label: 'Today' },
@@ -24,6 +26,18 @@ const NAV = [
   { to: '/progress', label: 'Progress' },
 ]
 
+/**
+ * The section of the app a path belongs to.
+ *
+ * Writing it to `data-zone` on <html> is what makes each section feel like a
+ * place: index.css redefines --accent per zone, so the nav, the rules, the
+ * meters and the first chart series all shift together.
+ */
+function zoneFor(pathname) {
+  const root = pathname.split('/')[1]
+  return NAV.some((item) => item.to === `/${root}`) ? root : ''
+}
+
 export default function Shell({ children, chrome = true }) {
   const { user } = useAuth()
   const location = useLocation()
@@ -31,6 +45,12 @@ export default function Shell({ children, chrome = true }) {
   const [menuOpen, setMenuOpen] = useState(false)
 
   useEffect(() => setMenuOpen(false), [location.pathname])
+
+  const zone = zoneFor(location.pathname)
+
+  useEffect(() => {
+    document.documentElement.dataset.zone = zone
+  }, [zone])
 
   useEffect(() => {
     const open = (event) => setAuthMode(event.detail || 'signup')
@@ -48,7 +68,7 @@ export default function Shell({ children, chrome = true }) {
       </a>
 
       {chrome && (
-        <Masthead
+        <SiteHeader
           user={user}
           menuOpen={menuOpen}
           onMenu={() => setMenuOpen((open) => !open)}
@@ -56,13 +76,17 @@ export default function Shell({ children, chrome = true }) {
         />
       )}
 
-      {/* Bottom padding clears the floating mentor button, which would
-          otherwise sit over the last card on a phone. */}
-      <main id="main" className="relative z-10 pb-24">
+      {/* Keyed on the path so every navigation replays the entry animation:
+          without it, moving between sections swapped the text and nothing else,
+          which read as one long page rather than as arriving somewhere.
+          Bottom padding clears the floating mentor button. */}
+      <main id="main" key={location.pathname} className="relative z-10 rise pb-24">
         {children}
       </main>
 
       {chrome && user && <Mentor />}
+      {chrome && <ZoneCurtain zone={zone} />}
+      <Toaster />
 
       {authMode && (
         <AuthDialog
@@ -75,12 +99,26 @@ export default function Shell({ children, chrome = true }) {
   )
 }
 
-function Masthead({ user, menuOpen, onMenu, onAuth }) {
+function SiteHeader({ user, menuOpen, onMenu, onAuth }) {
   return (
     <header className="sticky top-0 z-40 border-b border-rule bg-paper/90 backdrop-blur">
       <div className="mx-auto flex h-header max-w-page items-center gap-6 px-4">
-        <Link to={user ? '/today' : '/'} className="shrink-0">
-          <span className="font-display text-xl tracking-tight text-ink">WealthPlay</span>
+        <Link to={user ? '/today' : '/'} className="flex shrink-0 items-center gap-2.5">
+          {/* The same mark as the favicon, so the tab and the header agree. */}
+          <svg viewBox="0 0 32 32" className="h-6 w-6" aria-hidden="true">
+            <rect width="32" height="32" rx="7" className="fill-ink" />
+            <path
+              d="M7 21.5 13 15l4.5 4.5L25 11"
+              fill="none"
+              className="stroke-paper"
+              strokeWidth="3"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+          <span className="font-display text-lg font-semibold tracking-tight text-ink">
+            WealthPlay
+          </span>
         </Link>
 
         {user && (
@@ -89,12 +127,14 @@ function Masthead({ user, menuOpen, onMenu, onAuth }) {
               <NavLink
                 key={item.to}
                 to={item.to}
+                // The active item carries the section's own colour, so the
+                // nav answers "where am I" before the page has rendered.
                 className={({ isActive }) =>
                   cx(
-                    'rounded px-3 py-1.5 text-sm transition-colors',
+                    'relative rounded px-3 py-1.5 text-sm transition-colors duration-200',
                     isActive
-                      ? 'bg-paper-sunken font-medium text-ink'
-                      : 'text-ink-muted hover:text-ink',
+                      ? 'bg-accent/10 font-medium text-accent'
+                      : 'text-ink-muted hover:bg-paper-sunken hover:text-ink',
                   )
                 }
               >
@@ -137,7 +177,7 @@ function Masthead({ user, menuOpen, onMenu, onAuth }) {
               <button
                 type="button"
                 onClick={() => onAuth('signup')}
-                className="rounded bg-accent px-3 py-1.5 text-sm text-accent-on transition-colors hover:bg-accent-hover"
+                className="rounded bg-ink px-3.5 py-2 text-sm font-medium text-paper transition-colors duration-200 hover:bg-ink/90"
               >
                 Start free
               </button>
@@ -155,7 +195,9 @@ function Masthead({ user, menuOpen, onMenu, onAuth }) {
               className={({ isActive }) =>
                 cx(
                   'block border-b border-rule px-4 py-3 text-sm',
-                  isActive ? 'bg-paper-sunken font-medium text-ink' : 'text-ink-muted',
+                  isActive
+                    ? 'border-l-2 border-l-accent bg-accent/10 font-medium text-accent'
+                    : 'text-ink-muted',
                 )
               }
             >

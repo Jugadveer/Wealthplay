@@ -19,7 +19,7 @@ export default function NotFound() {
       <nav className="mt-8 flex flex-wrap gap-3">
         {(user
           ? [
-              ['/today', "Today's edition"],
+              ['/today', "Today's set"],
               ['/learn', 'Courses'],
               ['/markets', 'Markets'],
             ]

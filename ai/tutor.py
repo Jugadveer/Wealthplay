@@ -161,19 +161,29 @@ def review_portfolio(holdings: list[dict], *, cash: float, pnl_percent: float) -
     prompt = (
         f'Practice portfolio, virtual money:\n{lines}\n'
         f'Uninvested cash: Rs {cash:,.0f}\n'
-        f'Overall return: {pnl_percent:+.2f}%\n\n'
+        # Whole percent, not two decimals: the review is about the shape of the
+        # portfolio, and quoting a figure that moves with every tick would make
+        # an otherwise identical prompt unique on every page load.
+        f'Overall return: {pnl_percent:+.0f}%\n\n'
         'Return JSON with:\n'
         '  headline: one sentence naming the single biggest issue\n'
         '  risks: 2-3 specific observations, each citing a holding or a number\n'
         '  next_step: one concrete action to take in this simulator\n'
         '  concentration_grade: one of A, B, C, D'
     )
+
+    composition = ','.join(sorted(f'{h["symbol"]}:{h["quantity"]:g}' for h in holdings))
+
     return _safe(
         client.complete_json,
         prompt,
         system=ANALYST_VOICE,
         schema_hint='headline, risks, next_step, concentration_grade',
         max_tokens=450,
+        # Cached on composition rather than on exact value: rebuying the same
+        # names should not cost a second of model time, but changing what you
+        # hold should.
+        cache_key=f'portfolio-review:{composition}',
     )
 
 

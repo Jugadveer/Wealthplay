@@ -5,7 +5,7 @@
  * context, returned a single error string, and logged the attempted username
  * and a masked password to the console on every submit.
  */
-import { useEffect, useRef, useState } from 'react'
+import { forwardRef, useEffect, useRef, useState } from 'react'
 
 import { Button } from '../ui'
 import { useAuth } from './AuthContext'
@@ -53,7 +53,7 @@ export function AuthDialog({ mode = 'login', onClose, onSwitch }) {
 
   return (
     <div
-      className="fixed inset-0 z-50 grid place-items-center overscroll-contain bg-ink/40 p-4 backdrop-blur-sm"
+      className="fixed inset-0 z-50 grid place-items-center overscroll-contain bg-scrim/60 p-4 backdrop-blur-sm"
       onMouseDown={(event) => event.target === event.currentTarget && onClose()}
     >
       <div
@@ -124,8 +124,6 @@ export function AuthDialog({ mode = 'login', onClose, onSwitch }) {
     </div>
   )
 }
-
-import { forwardRef } from 'react'
 
 const Field = forwardRef(function Field({ label, hint, ...props }, ref) {
   return (

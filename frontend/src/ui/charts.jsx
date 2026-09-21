@@ -5,22 +5,23 @@
  * strokes, 4px rounded data-ends anchored to the baseline, a 2px surface gap
  * between adjacent fills, recessive grid and axes, and a real crosshair.
  *
- * The categorical palette below is validated, not chosen by eye — both modes
- * clear the lightness band, chroma floor, CVD separation and normal-vision
- * floor on this app's own surfaces (#F7F5EF light, #1D1C17 dark). Four of the
- * light steps sit under 3:1 contrast, which obligates visible direct labels;
- * every chart here ships them, and `Breakdown` pairs the marks with a labelled
- * table rather than relying on colour alone.
+ * The categorical palette below is measured, not chosen by eye. On this app's
+ * own chart surfaces (#FFFFFF light, #16181D dark) every step clears 3:1
+ * contrast, and the set clears CIEDE2000 31 (light) / 29 (dark) for normal
+ * vision. Under deuteranopia and protanopia the first three slots clear 21 and
+ * 18; the fourth clears 10 and 12; the fifth does not separate from the fourth
+ * at all. Colour therefore never carries identity on its own — every chart here
+ * ships direct labels, and `Breakdown` pairs the marks with a labelled table.
  *
- * Series colour is assigned by fixed slot order and never cycled.
+ * Series colour is assigned by fixed slot order, worst-separating slots last.
  */
 import { useId, useState } from 'react'
 
 import { money, percent, shortDate } from '../lib/format'
 import { cx } from './index'
 
-const SERIES_LIGHT = ['#2a78d6', '#eb6834', '#1baf7a', '#eda100', '#e87ba4', '#008300']
-const SERIES_DARK = ['#3987e5', '#d95926', '#199e70', '#c98500', '#d55181', '#008300']
+const SERIES_LIGHT = ['#1b4ed1', '#e06c00', '#b6316e', '#0f8f8a', '#7a8a00']
+const SERIES_DARK = ['#6f9bff', '#ff9440', '#ff6f9c', '#cbd257', '#34c6a6']
 
 /** Slot colour for a series index. Past the palette, callers fold into "Other". */
 export function seriesColor(index, dark = false) {
@@ -46,13 +47,16 @@ function domainFor(values, { includeZero = false } = {}) {
   if (!clean.length) return [0, 1]
 
   let low = Math.min(...clean)
-  let high = Math.max(...clean)
+  const high = Math.max(...clean)
   if (includeZero) low = Math.min(low, 0)
 
   if (low === high) return [low - 1, high + 1]
 
+  // Padding may not invent a sign the data never had: a portfolio that was
+  // never worth less than nothing must not be drawn against a negative axis.
   const pad = (high - low) * 0.08
-  return [low - pad, high + pad]
+  const floor = low - pad
+  return [low >= 0 && floor < 0 ? 0 : floor, high + pad]
 }
 
 /** Four or five round tick values across a domain. */

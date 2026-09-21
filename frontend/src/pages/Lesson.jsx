@@ -16,6 +16,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom'
 import { ArrowRight, Check, RotateCcw, X } from 'lucide-react'
 
 import { api } from '../lib/api'
+import { announceUnlocks } from '../lib/notify'
 import { invalidate, useQuery } from '../lib/query'
 import { Badge, Button, Meter, Panel, Skeleton, cx } from '../ui'
 import Markdown from '../ui/Markdown'
@@ -47,7 +48,7 @@ export default function Lesson() {
         </Link>
       </nav>
 
-      <header className="rule-masthead mt-4 pt-4">
+      <header className="mt-5 border-t border-rule pt-5">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <h1 className="text-headline">{data.title}</h1>
           <span className="num text-xs text-ink-faint">
@@ -308,12 +309,13 @@ function Finish({ module, courseId, moduleId, cacheKey }) {
     setState('saving')
     const result = await api.completeModule({ course_id: courseId, module_id: moduleId })
     setUnlocked(result.newly_unlocked_achievements || [])
+    announceUnlocks(result)
     setState('done')
     invalidate('profile', 'courses', 'course:', 'daily:', cacheKey)
   }
 
   return (
-    <section className="rule-masthead pt-5">
+    <section className="border-t border-rule pt-6">
       {state === 'done' ? (
         <>
           <div className="flex items-center gap-2 text-up">
@@ -345,7 +347,7 @@ function Finish({ module, courseId, moduleId, cacheKey }) {
               <Button to={`/learn/${courseId}`}>Back to the course</Button>
             )}
             <Button variant="ghost" to="/today">
-              Today's edition
+              Today's set
             </Button>
           </div>
         </>

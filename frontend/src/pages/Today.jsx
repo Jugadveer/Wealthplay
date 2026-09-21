@@ -1,5 +1,5 @@
 /**
- * Today's edition — the home screen and the reason to come back.
+ * Today — the home screen and the reason to come back.
  *
  * Four short plays, all resolving in a few minutes, plus the streak. Everything
  * on this page is generated per day and shared by every player, so a score is
@@ -26,7 +26,7 @@ const PLAYS = {
 
 // Formatted client-side: the browser knows the reader's locale, and the server
 // would need platform-specific strftime directives to match.
-const edition = new Date().toLocaleDateString('en-GB', {
+const dateLabel = new Date().toLocaleDateString('en-GB', {
   weekday: 'long',
   day: 'numeric',
   month: 'long',
@@ -49,9 +49,9 @@ export default function Today() {
 
   return (
     <div className="mx-auto max-w-page px-4 py-8">
-      <header className="rule-masthead flex flex-wrap items-end justify-between gap-4 pt-4">
+      <header className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="eyebrow">Edition of {edition}</p>
+          <p className="eyebrow">{dateLabel}</p>
           <h1 className="mt-1 text-headline">Today</h1>
         </div>
         <StreakBadge streak={data?.streak} />
@@ -59,7 +59,7 @@ export default function Today() {
 
       <p className="mt-4 text-sm text-ink-muted">
         {done === plays.length
-          ? 'All four done. Come back tomorrow for a new edition.'
+          ? 'All four done. Come back tomorrow for a new set.'
           : `${done} of ${plays.length} finished — roughly ${Math.max(1, Math.round(((plays.length - done) * 90) / 60))} minutes left.`}
       </p>
 

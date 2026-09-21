@@ -31,22 +31,23 @@ export default {
           hover: 'rgb(var(--accent-hover) / <alpha-value>)',
           on: 'rgb(var(--on-accent) / <alpha-value>)',
         },
+        scrim: 'rgb(var(--scrim) / <alpha-value>)',
         play: 'rgb(var(--play) / <alpha-value>)',
         up: 'rgb(var(--up) / <alpha-value>)',
         down: 'rgb(var(--down) / <alpha-value>)',
       },
       fontFamily: {
-        display: ['"Instrument Serif"', 'Georgia', 'serif'],
+        display: ['"Space Grotesk"', 'ui-sans-serif', 'system-ui', 'sans-serif'],
         sans: ['Geist', 'ui-sans-serif', 'system-ui', 'sans-serif'],
         mono: ['"Geist Mono"', 'ui-monospace', 'monospace'],
       },
       fontSize: {
-        // Editorial scale: small text stays small, display text gets genuinely
-        // large. The gap between them is the hierarchy.
-        micro: ['10px', { lineHeight: '1.4', letterSpacing: '0.14em' }],
-        display: ['clamp(2.6rem, 6vw, 4.5rem)', { lineHeight: '1.02', letterSpacing: '-0.025em' }],
-        headline: ['clamp(1.75rem, 3.4vw, 2.6rem)', { lineHeight: '1.08', letterSpacing: '-0.02em' }],
-        title: ['1.3rem', { lineHeight: '1.2', letterSpacing: '-0.015em' }],
+        // Small text stays small and display text gets genuinely large. The gap
+        // between them is the hierarchy; there is nothing decorative in between.
+        micro: ['10px', { lineHeight: '1.4', letterSpacing: '0.1em' }],
+        display: ['clamp(2.5rem, 5.5vw, 4rem)', { lineHeight: '1.02', letterSpacing: '-0.04em' }],
+        headline: ['clamp(1.6rem, 3vw, 2.25rem)', { lineHeight: '1.1', letterSpacing: '-0.03em' }],
+        title: ['1.15rem', { lineHeight: '1.25', letterSpacing: '-0.02em' }],
       },
       borderRadius: {
         sm: 'var(--radius-sm)',
@@ -65,7 +66,7 @@ export default {
         header: 'var(--header-h)',
       },
       transitionTimingFunction: {
-        out: 'cubic-bezier(0.22, 1, 0.36, 1)',
+        out: 'var(--ease)',
       },
     },
   },

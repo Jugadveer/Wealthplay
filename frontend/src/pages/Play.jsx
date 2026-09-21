@@ -28,7 +28,7 @@ export default function Play() {
     <div className="mx-auto max-w-page px-4 py-8">
       <PageHeader
         eyebrow="Games"
-        title="The arena"
+        title="Play"
         lede="Read a chart, work through a decision, climb the board. Scored on reasoning as much as outcome."
       />
 

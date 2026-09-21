@@ -36,7 +36,7 @@ export default function Learn() {
     <div className="mx-auto max-w-page px-4 py-8">
       <PageHeader
         eyebrow="Courses"
-        title="The classroom"
+        title="Learn"
         lede="Twenty-five courses, from what a savings account actually does through to valuation. Finish a module and its questions join your daily drill."
       />
 

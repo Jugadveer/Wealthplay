@@ -1,18 +1,22 @@
 /*
- * WealthPlay design tokens — "The Financial Daily".
+ * WealthPlay design tokens.
  *
- * The visual model is a newspaper's markets-and-puzzle page: warm newsprint,
- * hairline rules instead of drop shadows, a serif masthead, and tabular figures
- * everywhere a number appears.
+ * The visual model is an instrument: a cool graphite shell, hairline structure,
+ * monospaced figures, and colour used only where it carries meaning.
  *
- * Colour rules that the whole app depends on:
- *   - ONE brand accent (--accent, ink blue). Nothing else is used decoratively.
+ * Colour rules the whole app depends on:
+ *   - Primary actions are INK, not the accent. A filled button is black on
+ *     light and white on dark, so the accent never becomes decoration.
+ *   - --accent (cobalt) marks interaction: links, active tabs, focus, meters.
  *   - --play (amber) is reserved for streaks, XP and puzzle tiles.
  *   - --up / --down are reserved for market direction. A red number in this app
  *     always means a loss, never "danger" or "delete".
+ *
+ * Every value is an `R G B` triple so Tailwind can apply opacity modifiers
+ * (`bg-accent/10`) to a colour that still switches with the theme.
  */
 
-@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -20,59 +24,126 @@
 
 @layer base {
   :root {
-    /* Surfaces, light ("paper") */
-    --paper: 247 245 239;
-    --paper-raised: 255 253 248;
-    --paper-sunken: 239 236 226;
-    --ink: 21 20 15;
-    --ink-muted: 85 81 74;
-    --ink-faint: 138 133 122;
-    --rule: 221 216 203;
-    --rule-strong: 196 189 172;
+    /* Surfaces */
+    --paper: 250 249 247;
+    --paper-raised: 255 255 255;
+    --paper-sunken: 242 240 236;
+    --ink: 25 23 20;
+    --ink-muted: 94 89 82;
+    --ink-faint: 146 140 131;
+    --rule: 228 225 219;
+    --rule-strong: 205 200 191;
 
-    /* Brand + semantics */
-    --accent: 30 58 95;
-    --accent-hover: 22 48 79;
-    --on-accent: 250 249 245;
-    --play: 217 164 65;
-    --up: 21 128 61;
-    --down: 185 28 28;
+    /* Meaning */
+    --accent: 27 78 209;
+    --accent-hover: 20 61 172;
+    --on-accent: 255 255 255;
+    --play: 178 106 0;
+    --up: 6 122 70;
+    --down: 200 37 54;
 
-    /* Shadows are warm-tinted, never pure black, and used sparingly. */
-    --shadow-raise: 0 1px 2px rgb(21 20 15 / 0.05);
-    --shadow-float: 0 8px 24px -8px rgb(21 20 15 / 0.16);
+    /* The wash behind a modal. Always darker than the page, which `--ink`
+       cannot be: ink inverts with the theme, so a dark-mode scrim built from it
+       lightens the page instead of dimming it. */
+    --scrim: 25 23 20;
 
-    --radius-sm: 3px;
-    --radius: 6px;
-    --radius-lg: 10px;
+    /* Shadows carry the palette's hue rather than pure black. */
+    --shadow-raise: 0 1px 2px rgb(25 23 20 / 0.06);
+    --shadow-float: 0 12px 32px -12px rgb(25 23 20 / 0.20), 0 2px 8px -6px rgb(25 23 20 / 0.12);
 
-    --measure: 65ch;
+    --radius-sm: 4px;
+    --radius: 8px;
+    --radius-lg: 12px;
+
+    --ease: cubic-bezier(0.22, 1, 0.36, 1);
+    --measure: 66ch;
     --header-h: 60px;
 
     color-scheme: light;
   }
 
   :root[data-theme='dark'] {
-    --paper: 20 19 16;
-    --paper-raised: 29 28 23;
-    --paper-sunken: 16 15 12;
-    --ink: 242 239 230;
-    --ink-muted: 161 155 140;
-    --ink-faint: 110 104 89;
-    --rule: 42 40 34;
-    --rule-strong: 61 57 47;
+    --paper: 16 15 14;
+    --paper-raised: 28 26 24;
+    --paper-sunken: 21 20 18;
+    --ink: 242 239 234;
+    --ink-muted: 160 153 144;
+    --ink-faint: 113 107 99;
+    --rule: 45 42 39;
+    --rule-strong: 66 62 57;
 
-    --accent: 127 168 212;
-    --accent-hover: 158 190 224;
-    --on-accent: 16 15 12;
-    --play: 227 182 92;
-    --up: 74 222 128;
-    --down: 248 113 113;
+    --accent: 91 140 255;
+    --accent-hover: 128 166 255;
+    --on-accent: 8 12 24;
+    --play: 245 179 60;
+    --up: 61 214 140;
+    --down: 255 106 114;
+    --scrim: 0 0 0;
 
-    --shadow-raise: 0 1px 2px rgb(0 0 0 / 0.4);
-    --shadow-float: 0 8px 24px -8px rgb(0 0 0 / 0.6);
+    --shadow-raise: 0 1px 2px rgb(0 0 0 / 0.5);
+    --shadow-float: 0 16px 40px -16px rgb(0 0 0 / 0.72), 0 2px 8px -6px rgb(0 0 0 / 0.5);
 
     color-scheme: dark;
+  }
+
+  /* ----------------------------------------------------------------------- *
+   * Zones                                                                     *
+   *                                                                           *
+   * Each section of the app owns a hue. `data-zone` on <html> redefines        *
+   * --accent, so every `text-accent`, `border-accent` and `bg-accent/10`       *
+   * already in the codebase becomes section-aware without touching a single    *
+   * component. Surfaces stay neutral; the hue only ever appears on chrome —    *
+   * the active nav item, a section rule, a meter, the first chart series.      *
+   *                                                                           *
+   * This is wayfinding, not decoration: the point is that Markets and Play     *
+   * should not feel like the same page with different words on it.            *
+   * ----------------------------------------------------------------------- */
+
+  :root[data-zone='today'] {
+    --accent: 168 98 10;
+    --accent-hover: 138 79 6;
+  }
+  :root[data-zone='learn'] {
+    --accent: 91 59 196;
+    --accent-hover: 74 46 166;
+  }
+  :root[data-zone='markets'] {
+    --accent: 27 78 209;
+    --accent-hover: 20 61 172;
+  }
+  :root[data-zone='play'] {
+    --accent: 179 30 107;
+    --accent-hover: 150 23 89;
+  }
+  :root[data-zone='progress'] {
+    --accent: 14 116 144;
+    --accent-hover: 10 94 117;
+  }
+
+  :root[data-theme='dark'][data-zone='today'] {
+    --accent: 240 169 59;
+    --accent-hover: 247 191 102;
+  }
+  :root[data-theme='dark'][data-zone='learn'] {
+    --accent: 167 139 250;
+    --accent-hover: 192 173 255;
+  }
+  :root[data-theme='dark'][data-zone='markets'] {
+    --accent: 91 140 255;
+    --accent-hover: 128 166 255;
+  }
+  :root[data-theme='dark'][data-zone='play'] {
+    --accent: 255 111 174;
+    --accent-hover: 255 148 195;
+  }
+  :root[data-theme='dark'][data-zone='progress'] {
+    --accent: 45 212 191;
+    --accent-hover: 94 226 208;
+  }
+
+  /* On dark, every zone hue is light enough that ink-on-accent must be dark. */
+  :root[data-theme='dark'][data-zone] {
+    --on-accent: 16 15 14;
   }
 
   * {
@@ -110,29 +181,54 @@
     text-rendering: optimizeLegibility;
   }
 
-  /* Newsprint grain. Breaks the flatness that makes generated UI look sterile.
-     Fixed and non-interactive so it never affects layout or hit-testing. */
+  /* A fine grain over the whole viewport. Without it the flat surfaces read as
+     sterile. Fixed and non-interactive, so it never affects layout or hit-testing. */
   body::before {
     content: '';
     position: fixed;
     inset: 0;
     z-index: 0;
     pointer-events: none;
-    opacity: 0.035;
+    opacity: 0.022;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
   }
 
   :root[data-theme='dark'] body::before {
-    opacity: 0.05;
+    opacity: 0.035;
+  }
+
+  /* The zone wash. Fixed, behind everything, and weak enough that it registers
+     as atmosphere rather than as a coloured background. */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0 0 auto 0;
+    height: 420px;
+    z-index: 0;
+    pointer-events: none;
+    background: radial-gradient(
+      120% 100% at 50% 0%,
+      rgb(var(--accent) / 0.07),
+      transparent 70%
+    );
+    transition: background 400ms var(--ease);
+  }
+
+  :root[data-theme='dark'] body::after {
+    background: radial-gradient(
+      120% 100% at 50% 0%,
+      rgb(var(--accent) / 0.11),
+      transparent 70%
+    );
   }
 
   h1,
   h2,
   h3 {
-    font-family: 'Instrument Serif', Georgia, serif;
-    font-weight: 400;
-    letter-spacing: -0.015em;
-    line-height: 1.08;
+    font-family: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    line-height: 1.12;
     text-wrap: balance;
   }
 
@@ -145,7 +241,7 @@
   .num {
     font-family: 'Geist Mono', ui-monospace, monospace;
     font-variant-numeric: tabular-nums;
-    letter-spacing: -0.01em;
+    letter-spacing: -0.02em;
   }
 
   :focus-visible {
@@ -155,7 +251,7 @@
   }
 
   ::selection {
-    background: rgb(var(--play) / 0.35);
+    background: rgb(var(--accent) / 0.22);
   }
 
   ::-webkit-scrollbar {
@@ -170,20 +266,18 @@
     border: 2px solid rgb(var(--paper-sunken));
     border-radius: 99px;
   }
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgb(var(--ink-faint));
+  }
 }
 
 @layer components {
-  /* The masthead rule: a thick line over a thin one, as used above a
-     newspaper's section header. */
-  .rule-masthead {
-    border-top: 3px solid rgb(var(--ink));
-    box-shadow: 0 2px 0 -1px rgb(var(--rule-strong));
-  }
-
+  /* Micro label above a heading or beside a figure. Uppercase because these
+     name data rather than speak to the reader. */
   .eyebrow {
     font-size: 10px;
     font-weight: 600;
-    letter-spacing: 0.14em;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
     color: rgb(var(--ink-faint));
   }
@@ -213,8 +307,17 @@
     max-width: var(--measure);
   }
 
+  /* For strips that scroll on purpose, where a visible bar would read as a
+     layout accident rather than an affordance. */
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
   .rise {
-    animation: rise 420ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
+    animation: rise 420ms var(--ease) backwards;
   }
 
   @keyframes rise {
@@ -225,7 +328,176 @@
   }
 
   .flip-in {
-    animation: flip-in 300ms cubic-bezier(0.22, 1, 0.36, 1) backwards;
+    animation: flip-in 300ms var(--ease) backwards;
+  }
+
+  .toast-in {
+    animation: toast-in 320ms var(--ease) backwards;
+  }
+
+  /* The zone curtain. Opaque for a beat so the section change registers, then
+     gone. `pointer-events: none` means it never blocks a click even mid-fade. */
+  .curtain {
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    display: grid;
+    place-items: center;
+    pointer-events: none;
+    background:
+      radial-gradient(100% 70% at 50% 40%, rgb(var(--accent) / 0.14), transparent 70%),
+      rgb(var(--paper));
+    animation: curtain 850ms var(--ease) forwards;
+  }
+
+  @keyframes curtain {
+    0% {
+      opacity: 0;
+    }
+    14% {
+      opacity: 1;
+    }
+    62% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+    }
+  }
+
+  .curtain > * {
+    animation: rise 520ms var(--ease) backwards;
+  }
+
+  .curtain-tape {
+    animation: curtain-tape 2.4s linear infinite;
+  }
+
+  @keyframes curtain-tape {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  .curtain-tile {
+    animation: curtain-tile 700ms var(--ease) backwards;
+  }
+
+  @keyframes curtain-tile {
+    from {
+      transform: rotateY(90deg) scale(0.8);
+      opacity: 0;
+    }
+  }
+
+  /* Progress gets no curtain in front of it — a page you open constantly should
+     not make you wait. The celebration happens on the page instead: one rocket
+     crossing it on arrival, behind the content and unable to take a click. */
+  .rocket-flight {
+    position: fixed;
+    left: 0;
+    top: 62vh;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    pointer-events: none;
+    color: rgb(var(--accent));
+    animation: rocket-flight 1900ms cubic-bezier(0.45, 0, 0.25, 1) forwards;
+  }
+
+  @keyframes rocket-flight {
+    from {
+      transform: translate(-20vw, 0) rotate(-18deg);
+      opacity: 0;
+    }
+    12% {
+      opacity: 1;
+    }
+    88% {
+      opacity: 1;
+    }
+    to {
+      transform: translate(118vw, -52vh) rotate(-18deg);
+      opacity: 0;
+    }
+  }
+
+  .rocket-trail {
+    height: 2px;
+    width: clamp(48px, 9vw, 120px);
+    border-radius: 99px;
+    background: linear-gradient(to left, rgb(var(--accent) / 0.85), transparent);
+    animation: rocket-trail 1900ms ease-out forwards;
+  }
+
+  @keyframes rocket-trail {
+    from {
+      transform: scaleX(0.2);
+    }
+    35% {
+      transform: scaleX(1);
+    }
+    to {
+      transform: scaleX(0.3);
+    }
+  }
+
+  .curtain-card {
+    animation: curtain-card 600ms var(--ease) backwards;
+  }
+
+  @keyframes curtain-card {
+    from {
+      transform: translateY(14px) rotate(-4deg);
+      opacity: 0;
+    }
+  }
+
+  .curtain-bar {
+    transform-origin: bottom;
+    animation: curtain-bar 600ms var(--ease) backwards;
+  }
+
+  @keyframes curtain-bar {
+    from {
+      transform: scaleY(0);
+    }
+  }
+
+  /* A price that changed flashes in its direction. The only decorative-looking
+     animation in the app that is actually carrying information. */
+  .flash-up {
+    animation: flash-up 900ms ease-out;
+  }
+  .flash-down {
+    animation: flash-down 900ms ease-out;
+  }
+
+  @keyframes flash-up {
+    from {
+      background-color: rgb(var(--up) / 0.28);
+      color: rgb(var(--up));
+    }
+  }
+
+  @keyframes flash-down {
+    from {
+      background-color: rgb(var(--down) / 0.28);
+      color: rgb(var(--down));
+    }
+  }
+
+  @keyframes toast-in {
+    from {
+      opacity: 0;
+      transform: translateY(12px) scale(0.97);
+    }
+  }
+
+  /* Staggered entry for a list or grid. The delay is set inline by the caller
+     so the cascade follows document order without a JS timer. */
+  .stagger > * {
+    animation: rise 420ms var(--ease) backwards;
   }
 
   @keyframes flip-in {

@@ -14,18 +14,20 @@ export const cx = (...parts) => parts.filter(Boolean).join(' ')
 /* Button                                                                      */
 /* -------------------------------------------------------------------------- */
 
+// The filled button is ink, not the accent. Keeping the accent off buttons is
+// what lets it mean "interactive" everywhere else without competing.
 const BUTTON_VARIANTS = {
-  primary: 'bg-accent text-accent-on hover:bg-accent-hover',
-  secondary: 'bg-paper-raised text-ink border border-rule-strong hover:border-ink',
-  ghost: 'text-ink-muted hover:text-ink hover:bg-paper-sunken',
+  primary: 'bg-ink text-paper hover:bg-ink/90',
+  secondary:
+    'border border-rule-strong bg-paper-raised text-ink hover:border-ink-faint hover:bg-paper-sunken',
+  ghost: 'text-ink-muted hover:bg-paper-sunken hover:text-ink',
   danger: 'bg-down text-white hover:opacity-90',
-  play: 'bg-play text-ink hover:brightness-105',
 }
 
 const BUTTON_SIZES = {
-  sm: 'h-8 px-3 text-xs',
-  md: 'h-10 px-4 text-sm',
-  lg: 'h-12 px-6 text-base',
+  sm: 'h-8 gap-1.5 px-3 text-xs',
+  md: 'h-10 gap-2 px-4 text-sm',
+  lg: 'h-12 gap-2 px-6 text-[15px]',
 }
 
 /**
@@ -37,8 +39,8 @@ export const Button = forwardRef(function Button(
   ref,
 ) {
   const classes = cx(
-    'inline-flex items-center justify-center gap-2 rounded font-medium',
-    'transition-[background-color,border-color,color,transform] duration-150 ease-out',
+    'inline-flex select-none items-center justify-center rounded font-medium',
+    'transition-[background-color,border-color,color,transform,opacity] duration-200 ease-out',
     'active:scale-[0.98] disabled:pointer-events-none disabled:opacity-45',
     BUTTON_VARIANTS[variant],
     BUTTON_SIZES[size],
@@ -71,13 +73,13 @@ export function Panel({ as: Tag = 'section', float = false, className, ...props 
   )
 }
 
-/** Section header with the newspaper double-rule above it. */
+/** Section header: a hairline, a label, a title. The rule separates, the space carries. */
 export function SectionHead({ label, title, action, className }) {
   return (
-    <div className={cx('rule-masthead flex items-end justify-between gap-4 pt-3', className)}>
+    <div className={cx('flex items-end justify-between gap-4 border-t border-rule pt-4', className)}>
       <div>
         {label && <p className="eyebrow">{label}</p>}
-        <h2 className="mt-1 text-title">{title}</h2>
+        <h2 className="mt-1.5 text-title">{title}</h2>
       </div>
       {action}
     </div>
@@ -105,17 +107,17 @@ export function Stat({ label, value, sub, tone, size = 'md' }) {
       >
         {value}
       </p>
-      {sub && <p className="mt-0.5 text-xs text-ink-muted">{sub}</p>}
+      {sub && <p className="mt-1 text-xs text-ink-muted">{sub}</p>}
     </div>
   )
 }
 
 const BADGE_TONES = {
   neutral: 'border-rule-strong text-ink-muted',
-  accent: 'border-accent/40 text-accent bg-accent/5',
-  up: 'border-up/40 text-up bg-up/5',
-  down: 'border-down/40 text-down bg-down/5',
-  play: 'border-play/50 text-play bg-play/10',
+  accent: 'border-accent/40 bg-accent/10 text-accent',
+  up: 'border-up/40 bg-up/10 text-up',
+  down: 'border-down/40 bg-down/10 text-down',
+  play: 'border-play/40 bg-play/10 text-play',
 }
 
 /** Square-cornered label, not a pill — pills read as generated. */
@@ -171,7 +173,7 @@ export function EmptyState({ icon: Icon, title, body, action }) {
   return (
     <div className="flex flex-col items-center px-6 py-14 text-center">
       {Icon && (
-        <div className="mb-4 grid h-11 w-11 place-items-center rounded border border-rule text-ink-faint">
+        <div className="mb-4 grid h-11 w-11 place-items-center rounded-lg border border-rule bg-paper-sunken text-ink-faint">
           <Icon size={18} strokeWidth={1.5} />
         </div>
       )}
@@ -216,7 +218,7 @@ export function Tabs({ items, value, onChange }) {
             aria-selected={active}
             onClick={() => onChange(item.value)}
             className={cx(
-              '-mb-px border-b-2 px-3 py-2 text-sm font-medium transition-colors',
+              '-mb-px border-b-2 px-3 py-2.5 text-sm font-medium transition-colors duration-200',
               active
                 ? 'border-accent text-ink'
                 : 'border-transparent text-ink-muted hover:text-ink',
@@ -237,7 +239,7 @@ export function PageHeader({ eyebrow, title, lede, action, className }) {
       <div>
         {eyebrow && <p className="eyebrow">{eyebrow}</p>}
         <h1 className="mt-2 text-headline">{title}</h1>
-        {lede && <p className="measure mt-2 text-sm text-ink-muted">{lede}</p>}
+        {lede && <p className="measure mt-2.5 text-sm text-ink-muted">{lede}</p>}
       </div>
       {action}
     </header>

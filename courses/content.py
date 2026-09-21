@@ -171,6 +171,29 @@ def _load_qna(path: Path) -> list[dict]:
     return pairs
 
 
+# Blurbs render as plain text, so Markdown emphasis would show as literal
+# asterisks. The lesson body keeps its markup; only the blurb is flattened.
+_EMPHASIS = re.compile(r'\*{1,2}([^*]+)\*{1,2}')
+
+
+def _summarise(theory: str, qna: list[dict], limit: int = 180) -> str:
+    """A blurb that ends on a sentence.
+
+    The catalogue used to show the first 180 characters of an arbitrary Q&A
+    answer, so every course card opened mid-thought and stopped mid-word. The
+    module's own theory reads as an introduction, which is what a card needs.
+    """
+    source = _EMPHASIS.sub(r'\1', theory or (qna[0]['answer'] if qna else ''))
+    if len(source) <= limit:
+        return source
+
+    window = source[: limit + 40]
+    cut = max(window.rfind('. '), window.rfind('? '), window.rfind('! '))
+    if cut > limit // 2:
+        return window[: cut + 1]
+    return source[:limit].rsplit(' ', 1)[0] + '…'
+
+
 def _load_module(course_id: str, path: Path, order: int) -> dict:
     cards = _load_cards(path / 'flash_cards.json')
     mcqs = _load_mcqs(path / 'mcqs.json')
@@ -186,7 +209,7 @@ def _load_module(course_id: str, path: Path, order: int) -> dict:
         'course_id': course_id,
         'title': title,
         'order': order,
-        'summary': (qna[0]['answer'][:180] if qna else theory[:180]),
+        'summary': _summarise(theory, qna),
         'theory': theory,
         'cards': cards,
         'mcqs': mcqs,

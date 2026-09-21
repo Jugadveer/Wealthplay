@@ -1,8 +1,8 @@
 /**
  * Progress: the streak calendar, achievements, goals and the weekly recap.
  */
-import { useState } from 'react'
-import { Flame, Lock, Snowflake, Target, Trophy } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { Flame, Lock, Rocket, Snowflake, Target, Trophy } from 'lucide-react'
 
 import { useAuth } from '../auth/AuthContext'
 import { api } from '../lib/api'
@@ -28,6 +28,8 @@ export default function Progress() {
 
   return (
     <div className="mx-auto max-w-page px-4 py-8">
+      <Launch />
+
       <PageHeader
         eyebrow={user?.username}
         title="Your progress"
@@ -40,11 +42,42 @@ export default function Progress() {
 
       <div className="mt-8 space-y-12">
         <Level user={user} />
+        <Calibration />
         <StreakCalendar />
         <Recap />
         <Achievements />
         <Goals />
       </div>
+    </div>
+  )
+}
+
+/**
+ * One rocket across the page on arrival.
+ *
+ * Progress is the page where the app should feel pleased with you, and it gets
+ * no curtain in front of it — a page you open constantly should not make you
+ * wait to see it. So the celebration happens on the page instead: it flies
+ * once, behind the content, and cannot take a click. Skipped for anyone who has
+ * asked for reduced motion.
+ */
+function Launch() {
+  const [flying, setFlying] = useState(
+    () => !window.matchMedia?.('(prefers-reduced-motion: reduce)').matches,
+  )
+
+  useEffect(() => {
+    if (!flying) return undefined
+    const timer = setTimeout(() => setFlying(false), 1900)
+    return () => clearTimeout(timer)
+  }, [flying])
+
+  if (!flying) return null
+
+  return (
+    <div className="rocket-flight" aria-hidden="true">
+      <span className="rocket-trail" />
+      <Rocket size={20} strokeWidth={1.75} className="-rotate-45" />
     </div>
   )
 }
@@ -67,6 +100,74 @@ function Level({ user }) {
         </p>
       </div>
     </Panel>
+  )
+}
+
+/**
+ * Calibration — the one thing here a quiz app cannot show you.
+ *
+ * Being right often is easy on easy calls. Being right 70% of the times you
+ * said 70% is a separate, harder skill, and it is the one that transfers to
+ * actually risking money. A perfectly calibrated player sits on the diagonal.
+ */
+function Calibration() {
+  const { data } = useQuery('challenge:calibration', api.calibration, { ttl: 60_000 })
+  if (!data) return null
+
+  const measured = data.bands.filter((band) => band.calls > 0)
+
+  return (
+    <section>
+      <SectionHead label="The hard skill" title="Calibration" />
+
+      <Panel className="mt-4 p-5">
+        <div className="flex flex-wrap items-end justify-between gap-4">
+          <Stat
+            label="Calibration gap"
+            value={data.calibration_gap === null ? '—' : `${data.calibration_gap} pts`}
+            sub="Average distance between what you claimed and what happened"
+            size="lg"
+          />
+          <p className="num text-xs text-ink-faint">{data.total_calls} calls</p>
+        </div>
+
+        {measured.length > 0 && (
+          <ul className="mt-6 space-y-3 border-t border-rule pt-5">
+            {measured.map((band) => (
+              <li key={band.label}>
+                <div className="flex items-baseline justify-between gap-3 text-xs">
+                  <span className="num text-ink-muted">
+                    Said {band.label} · {band.calls} {band.calls === 1 ? 'call' : 'calls'}
+                  </span>
+                  <span
+                    className={cx(
+                      'num font-semibold',
+                      Math.abs(band.actual - band.stated) <= 10 ? 'text-up' : 'text-down',
+                    )}
+                  >
+                    right {band.actual}%
+                  </span>
+                </div>
+                {/* Two bars on one track: the claim, then what happened. The
+                    gap between them is the whole point of the panel. */}
+                <div className="relative mt-1.5 h-2 w-full overflow-hidden rounded-sm bg-paper-sunken">
+                  <div
+                    className="absolute inset-y-0 left-0 bg-accent/30"
+                    style={{ width: `${band.stated}%` }}
+                  />
+                  <div
+                    className="absolute inset-y-0 left-0 border-r-2 border-ink"
+                    style={{ width: `${band.actual}%` }}
+                  />
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
+
+        <p className="measure mt-5 text-sm text-ink-muted">{data.verdict}</p>
+      </Panel>
+    </section>
   )
 }
 
