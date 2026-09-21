@@ -510,3 +510,62 @@ class TimeCapsuleSession(models.Model):
     
     def __str__(self):
         return f"{self.user.username} in {self.crisis.name}"
+
+
+class PracticeDeposit(models.Model):
+    """A fixed deposit inside the practice account.
+
+    Goal mode needs instruments that do not move, because the lesson is that a
+    goal with a date is funded differently from one without. Interest accrues
+    from the day it was opened; breaking it early costs the penalty a real bank
+    would charge.
+    """
+
+    BREAK_PENALTY = 0.01  # one percentage point off the rate, as most banks charge
+
+    portfolio = models.ForeignKey(
+        'DemoPortfolio', on_delete=models.CASCADE, related_name='deposits'
+    )
+    principal = models.DecimalField(max_digits=12, decimal_places=2)
+    rate = models.DecimalField(max_digits=5, decimal_places=4, default=0.068)
+    tenure_months = models.IntegerField(default=12)
+    opened_on = models.DateField(auto_now_add=True)
+    closed_on = models.DateField(null=True, blank=True)
+    broken_early = models.BooleanField(default=False)
+
+    class Meta:
+        ordering = ['-opened_on']
+
+    def __str__(self):
+        return f'{self.portfolio.user.username} FD {self.principal} @ {self.rate}'
+
+
+class PracticeSip(models.Model):
+    """A standing monthly instruction into one of the simulated funds.
+
+    Units are accumulated at the NAV on the day each instalment ran, so the
+    average cost is genuinely an average of what the market did — which is the
+    only way rupee-cost averaging teaches anything.
+    """
+
+    INSTRUMENTS = [
+        ('index', 'Nifty 50 index fund'),
+        ('midcap', 'Nifty Midcap 150 index fund'),
+        ('gold', 'Gold'),
+        ('debt', 'Short-duration debt fund'),
+    ]
+
+    portfolio = models.ForeignKey('DemoPortfolio', on_delete=models.CASCADE, related_name='sips')
+    instrument = models.CharField(max_length=16, choices=INSTRUMENTS, default='index')
+    monthly_amount = models.DecimalField(max_digits=12, decimal_places=2)
+    units = models.FloatField(default=0.0)
+    invested = models.DecimalField(max_digits=12, decimal_places=2, default=0.00)
+    active = models.BooleanField(default=True)
+    started_on = models.DateField(auto_now_add=True)
+    last_run_on = models.DateField(null=True, blank=True)
+
+    class Meta:
+        ordering = ['-started_on']
+
+    def __str__(self):
+        return f'{self.portfolio.user.username} SIP {self.instrument} {self.monthly_amount}'

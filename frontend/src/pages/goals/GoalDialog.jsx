@@ -1,10 +1,15 @@
 /**
  * Setting a goal.
  *
- * Two steps rather than one form. First what the goal is — and the kind matters,
- * because it decides how much risk the plan may carry. Then the numbers, with
- * the plan recalculating as they are typed, so the monthly figure is visible
- * before the goal is committed rather than after.
+ * The first version made the user pick their goal's kind from a grid, which
+ * asks them to already know the answer the app exists to work out. Now they
+ * describe it in their own words and give their numbers, and the app does the
+ * classifying: what kind of goal this is, and how much risk their finances can
+ * actually absorb.
+ *
+ * Then it asks. Capacity and appetite are different questions — the arithmetic
+ * decides the first, the person decides the second — so the assessment ends in
+ * a choice rather than a verdict.
  */
 import { useEffect, useState } from 'react'
 import {
@@ -17,6 +22,7 @@ import {
   Home,
   Plane,
   Shield,
+  Sparkles,
   Sunset,
   Wallet,
   X,
@@ -40,32 +46,30 @@ export const GOAL_ICONS = {
   wallet: Wallet,
 }
 
-const CRITICALITY_TONE = { critical: 'down', important: 'accent', flexible: 'neutral' }
-const CRITICALITY_LABEL = {
-  critical: 'Cannot slip',
-  important: 'Can slip a little',
-  flexible: 'Can slip',
-}
+const STANCE_TONE = { can_take_risk: 'up', be_careful: 'accent', stay_safe: 'down' }
+const CAPACITY_LABEL = { high: 'Room to take risk', moderate: 'Some room', low: 'Little room' }
 
-/** Two years out, as a sensible default the user will usually change. */
 function defaultDate() {
   const date = new Date()
-  date.setFullYear(date.getFullYear() + 2)
+  date.setFullYear(date.getFullYear() + 5)
   return date.toISOString().slice(0, 10)
 }
 
-export default function GoalDialog({ categories, onClose, onCreated }) {
-  const [step, setStep] = useState('kind')
-  const [category, setCategory] = useState(null)
+export default function GoalDialog({ onClose, onCreated }) {
+  const [step, setStep] = useState('details')
   const [values, setValues] = useState({
-    title: '',
+    description: '',
     target_amount: '',
-    current_amount: '',
-    monthly_capacity: '',
     target_date: defaultDate(),
+    current_amount: '',
+    monthly_income: '',
+    monthly_commitments: '',
+    dependants: '0',
+    has_emergency_fund: false,
   })
+  const [read, setRead] = useState(null)
+  const [appetite, setAppetite] = useState('balanced')
   const [plan, setPlan] = useState(null)
-  const [choice, setChoice] = useState('balanced')
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(false)
 
@@ -75,54 +79,62 @@ export default function GoalDialog({ categories, onClose, onCreated }) {
     return () => window.removeEventListener('keydown', onKey)
   }, [onClose])
 
-  // Recalculate as the numbers are typed, debounced so a four-digit amount is
-  // one request rather than four.
-  useEffect(() => {
-    if (step !== 'numbers' || !category) return undefined
-    const amount = Number(values.target_amount)
-    if (!amount || !values.target_date) {
-      setPlan(null)
-      return undefined
-    }
-
-    const timer = setTimeout(() => {
-      api
-        .planGoal({
-          category: category.key,
-          target_amount: amount,
-          target_date: values.target_date,
-          current_amount: Number(values.current_amount) || 0,
-          monthly_capacity: Number(values.monthly_capacity) || 0,
-        })
-        .then((data) => {
-          setPlan(data.plan)
-          setChoice(data.plan.recommended)
-        })
-        .catch(() => setPlan(null))
-    }, 350)
-
-    return () => clearTimeout(timer)
-  }, [step, category, values])
-
   const set = (field) => (event) => {
-    setValues((current) => ({ ...current, [field]: event.target.value }))
+    const value = event.target.type === 'checkbox' ? event.target.checked : event.target.value
+    setValues((current) => ({ ...current, [field]: value }))
     setError('')
   }
 
-  async function submit(event) {
+  async function assess(event) {
     event.preventDefault()
     setBusy(true)
     setError('')
 
     try {
+      const result = await api.assessGoal(values)
+      setRead(result)
+      setAppetite(result.assessment.stance === 'stay_safe' ? 'safe' : 'balanced')
+      setStep('read')
+    } catch (err) {
+      setError(err.message)
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  async function showPlan(choice) {
+    setAppetite(choice)
+    setBusy(true)
+
+    try {
+      const result = await api.planGoal({
+        category: read.assessment.category,
+        target_amount: Number(values.target_amount),
+        target_date: values.target_date,
+        current_amount: Number(values.current_amount) || 0,
+        monthly_capacity: monthlyCapacity(values),
+        appetite: choice,
+      })
+      setPlan(result.plan)
+      setStep('plan')
+    } catch (err) {
+      setError(err.message)
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  async function create() {
+    setBusy(true)
+    try {
       const { goal } = await api.createGoal({
-        title: values.title.trim(),
-        category: category.key,
+        title: values.description.trim().slice(0, 120),
+        category: read.assessment.category,
         target_amount: Number(values.target_amount),
         current_amount: Number(values.current_amount) || 0,
-        monthly_capacity: Number(values.monthly_capacity) || 0,
+        monthly_capacity: monthlyCapacity(values),
         target_date: values.target_date,
-        plan_choice: choice,
+        plan_choice: plan.recommended,
       })
       onCreated(goal)
     } catch (err) {
@@ -131,6 +143,13 @@ export default function GoalDialog({ categories, onClose, onCreated }) {
       setBusy(false)
     }
   }
+
+  const titles = {
+    details: 'Tell us about the goal',
+    read: 'What your numbers say',
+    plan: 'The plan',
+  }
+  const steps = { details: 'Step one', read: 'Step two', plan: 'Step three' }
 
   return (
     <div
@@ -145,10 +164,10 @@ export default function GoalDialog({ categories, onClose, onCreated }) {
       >
         <header className="flex items-start justify-between gap-4 border-b border-rule px-6 py-4">
           <div className="flex items-center gap-3">
-            {step === 'numbers' && (
+            {step !== 'details' && (
               <button
                 type="button"
-                onClick={() => setStep('kind')}
+                onClick={() => setStep(step === 'plan' ? 'read' : 'details')}
                 aria-label="Back"
                 className="rounded p-1 text-ink-muted transition-colors hover:text-ink"
               >
@@ -156,9 +175,9 @@ export default function GoalDialog({ categories, onClose, onCreated }) {
               </button>
             )}
             <div>
-              <p className="eyebrow">{step === 'kind' ? 'Step one' : 'Step two'}</p>
+              <p className="eyebrow">{steps[step]}</p>
               <h2 id="goal-title" className="mt-0.5 text-title">
-                {step === 'kind' ? 'What are you saving for?' : category.label}
+                {titles[step]}
               </h2>
             </div>
           </div>
@@ -172,115 +191,179 @@ export default function GoalDialog({ categories, onClose, onCreated }) {
           </button>
         </header>
 
-        {step === 'kind' ? (
-          <KindPicker
-            categories={categories}
-            onPick={(picked) => {
-              setCategory(picked)
-              setValues((current) => ({ ...current, title: current.title || picked.label }))
-              setStep('numbers')
-            }}
-          />
-        ) : (
-          <form onSubmit={submit} className="px-6 py-5" noValidate>
-            <div className="grid gap-4 sm:grid-cols-2">
-              <Field label="Call it something" value={values.title} onChange={set('title')} required />
-              <Field
-                label="Target date"
-                type="date"
-                value={values.target_date}
-                onChange={set('target_date')}
-                required
-              />
-              <Field
-                label="What will it cost today?"
-                type="number"
-                min="1"
-                value={values.target_amount}
-                onChange={set('target_amount')}
-                hint="Today's price. We inflate it for you."
-                required
-              />
-              <Field
-                label="Saved so far"
-                type="number"
-                min="0"
-                value={values.current_amount}
-                onChange={set('current_amount')}
-              />
-              <Field
-                label="What can you set aside monthly?"
-                type="number"
-                min="0"
-                value={values.monthly_capacity}
-                onChange={set('monthly_capacity')}
-                hint="From your income, after expenses. This is what makes it a plan."
-                className="sm:col-span-2"
-              />
-            </div>
+        {step === 'details' && (
+          <Details values={values} set={set} onSubmit={assess} busy={busy} error={error} />
+        )}
 
-            {plan && (
-              <div className="mt-6 border-t border-rule pt-6">
-                <PlanView plan={plan} chosen={choice} onChoose={setChoice} />
-              </div>
-            )}
+        {step === 'read' && (
+          <Read read={read} busy={busy} appetite={appetite} onChoose={showPlan} />
+        )}
 
-            {error && (
-              <p role="alert" className="mt-4 rounded-sm border border-down/30 bg-down/5 px-3 py-2 text-xs text-ink">
-                {error}
+        {step === 'plan' && plan && (
+          <div className="px-6 py-5">
+            {plan.appetite_note && (
+              <p className="measure mb-5 rounded border border-play/40 bg-play/10 px-3 py-2 text-xs text-ink">
+                {plan.appetite_note}
               </p>
             )}
+
+            <PlanView plan={plan} chosen={plan.recommended} />
 
             <div className="mt-6 flex flex-wrap items-center justify-between gap-3 border-t border-rule pt-5">
               <p className="num text-xs text-ink-faint">
-                {plan
-                  ? `${plan.plans.find((option) => option.key === choice)?.label}: ${money(
-                      plan.plans.find((option) => option.key === choice)?.monthly_required ?? 0,
-                    )} a month`
-                  : 'Enter an amount and a date to see the plan'}
+                {money(
+                  plan.plans.find((option) => option.key === plan.recommended)?.monthly_required ?? 0,
+                )}{' '}
+                a month
               </p>
               <div className="flex gap-2">
-                <Button type="button" variant="ghost" onClick={onClose}>
-                  Cancel
+                <Button type="button" variant="ghost" onClick={() => setStep('read')}>
+                  Change the risk
                 </Button>
-                <Button type="submit" disabled={busy || !values.target_amount}>
+                <Button type="button" onClick={create} disabled={busy}>
                   {busy ? 'Saving…' : 'Create this goal'}
                 </Button>
               </div>
             </div>
-          </form>
+          </div>
         )}
       </div>
     </div>
   )
 }
 
-function KindPicker({ categories, onPick }) {
+function monthlyCapacity(values) {
+  const income = Number(values.monthly_income) || 0
+  const commitments = Number(values.monthly_commitments) || 0
+  return Math.max(0, income - commitments)
+}
+
+function Details({ values, set, onSubmit, busy, error }) {
+  return (
+    <form onSubmit={onSubmit} className="px-6 py-5" noValidate>
+      <label className="block">
+        <span className="eyebrow">What are you saving for? Say it however you like.</span>
+        <textarea
+          value={values.description}
+          onChange={set('description')}
+          rows={2}
+          maxLength={200}
+          placeholder="My daughter's college fees, she's two now"
+          className="mt-1.5 w-full rounded border border-rule-strong bg-paper px-3 py-2 text-sm text-ink outline-none transition-colors focus:border-accent"
+          required
+        />
+        <span className="mt-1 block text-[11px] text-ink-faint">
+          We work out what kind of goal this is from what you write — you do not have to categorise it.
+        </span>
+      </label>
+
+      <div className="mt-5 grid gap-4 sm:grid-cols-2">
+        <Field label="What will it cost today?" type="number" min="1"
+               value={values.target_amount} onChange={set('target_amount')} required />
+        <Field label="When do you need it?" type="date"
+               value={values.target_date} onChange={set('target_date')} required />
+        <Field label="Saved so far" type="number" min="0"
+               value={values.current_amount} onChange={set('current_amount')} />
+        <Field label="People who depend on you" type="number" min="0" max="10"
+               value={values.dependants} onChange={set('dependants')} />
+        <Field label="Your monthly take-home" type="number" min="0"
+               value={values.monthly_income} onChange={set('monthly_income')}
+               hint="Used to work out how much risk you can afford, not stored anywhere else." required />
+        <Field label="Monthly expenses and EMIs" type="number" min="0"
+               value={values.monthly_commitments} onChange={set('monthly_commitments')}
+               hint="Everything that goes out before you can invest." required />
+      </div>
+
+      <label className="mt-4 flex items-start gap-2.5">
+        <input
+          type="checkbox"
+          checked={values.has_emergency_fund}
+          onChange={set('has_emergency_fund')}
+          className="mt-0.5 h-4 w-4 accent-[rgb(var(--accent))]"
+        />
+        <span className="text-sm text-ink">
+          I already have six months of expenses set aside
+          <span className="mt-0.5 block text-[11px] text-ink-faint">
+            Without one, a bad month forces you to sell — which changes what you can safely hold.
+          </span>
+        </span>
+      </label>
+
+      {error && (
+        <p role="alert" className="mt-4 rounded-sm border border-down/30 bg-down/5 px-3 py-2 text-xs text-ink">
+          {error}
+        </p>
+      )}
+
+      <div className="mt-6 flex justify-end border-t border-rule pt-5">
+        <Button type="submit" disabled={busy || !values.description.trim()}>
+          {busy ? 'Reading your numbers…' : 'See what this means'}
+        </Button>
+      </div>
+    </form>
+  )
+}
+
+function Read({ read, busy, appetite, onChoose }) {
+  const { assessment, options } = read
+  const Icon = GOAL_ICONS[assessment.icon] ?? Wallet
+
   return (
     <div className="px-6 py-5">
-      <p className="measure text-sm text-ink-muted">
-        The kind of goal decides how much risk its plan may carry. A holiday can slip by six months;
-        school fees in the year they are due cannot.
+      <div className="flex items-start gap-3">
+        <span className="grid h-10 w-10 shrink-0 place-items-center rounded bg-accent/10 text-accent">
+          <Icon size={18} strokeWidth={1.75} />
+        </span>
+        <div className="min-w-0">
+          <div className="flex flex-wrap items-center gap-2">
+            <p className="text-sm font-medium text-ink">{assessment.category_label}</p>
+            <Badge tone={STANCE_TONE[assessment.stance]}>
+              {CAPACITY_LABEL[assessment.capacity.level]}
+            </Badge>
+            {assessment.available ? (
+              <span className="flex items-center gap-1 text-[11px] text-ink-faint">
+                <Sparkles size={11} />
+                written for you
+              </span>
+            ) : (
+              <span className="text-[11px] text-ink-faint">computed from your numbers</span>
+            )}
+          </div>
+          <p className="measure mt-2 text-[15px] leading-relaxed text-ink">{assessment.headline}</p>
+        </div>
+      </div>
+
+      <ul className="mt-5 space-y-2 border-t border-rule pt-4">
+        {assessment.reasoning.map((line, index) => (
+          <li key={index} className="measure text-sm leading-relaxed text-ink-muted">
+            {line}
+          </li>
+        ))}
+      </ul>
+
+      <p className="measure mt-6 border-t border-rule pt-5 text-[15px] text-ink">
+        {assessment.question}
       </p>
 
-      <div className="stagger mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-        {categories.map((category, index) => {
-          const Icon = GOAL_ICONS[category.icon] ?? Wallet
+      <div className="mt-4 grid gap-3 sm:grid-cols-3">
+        {options.map((option) => {
+          const disabled = option.available === false
           return (
             <button
-              key={category.key}
+              key={option.key}
               type="button"
-              onClick={() => onPick(category)}
-              style={{ animationDelay: `${index * 35}ms` }}
-              className="flex flex-col items-start gap-2 rounded-lg border border-rule bg-paper p-4 text-left transition-[border-color,transform] duration-200 hover:-translate-y-0.5 hover:border-accent/50"
+              disabled={disabled || busy}
+              onClick={() => onChoose(option.key)}
+              className={cx(
+                'rounded-lg border p-4 text-left transition-[border-color,transform] duration-200',
+                disabled
+                  ? 'cursor-not-allowed border-rule opacity-50'
+                  : 'border-rule hover:-translate-y-0.5 hover:border-accent/60',
+                option.key === appetite && !disabled && 'border-accent',
+              )}
             >
-              <span className="grid h-9 w-9 place-items-center rounded bg-accent/10 text-accent">
-                <Icon size={17} strokeWidth={1.75} />
-              </span>
-              <span className="text-sm font-medium text-ink">{category.label}</span>
-              <Badge tone={CRITICALITY_TONE[category.criticality]}>
-                {CRITICALITY_LABEL[category.criticality]}
-              </Badge>
+              <p className="text-sm font-medium text-ink">{option.label}</p>
+              <p className="mt-1.5 text-[11px] leading-snug text-ink-muted">{option.detail}</p>
             </button>
           )
         })}

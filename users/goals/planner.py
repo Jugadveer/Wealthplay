@@ -275,6 +275,8 @@ def build(
     saved: float = 0.0,
     monthly_capacity: float = 0.0,
     category_key: str = 'general',
+    appetite: str | None = None,
+    has_emergency_fund: bool = True,
     today: date | None = None,
 ) -> dict:
     """Everything the goal page needs: the target, the options, and the verdict."""
@@ -295,8 +297,20 @@ def build(
     if months >= 60 and category.criticality != 'critical' and growth_equity > recommended_equity:
         plans.append(_growth_plan(inflated, saved, months, growth_equity))
 
-    recommended = plans[1] if len(plans) > 1 else plans[0]
+    recommended, appetite_note = _pick(plans, appetite)
     feasibility = _feasibility(recommended, monthly_capacity, months, inflated, saved)
+
+    # The allocation turned into things a person can actually go and do.
+    from . import realworld
+
+    implementation = realworld.build(
+        monthly=recommended.monthly_required,
+        equity_share=recommended.equity,
+        months=months,
+        category_key=category.key,
+        has_emergency_fund=has_emergency_fund,
+        lump_sum=inflated * (1 - recommended.equity),
+    )
 
     return {
         'category': {
@@ -313,11 +327,40 @@ def build(
         'inflation_percent': round(category.inflation * 100, 1),
         'already_saved': round(saved),
         'recommended': recommended.key,
+        'appetite_note': appetite_note,
         'plans': [plan.as_dict() for plan in plans],
         'ladder': fd_ladder(inflated * (1 - recommended.equity), months),
+        'implementation': implementation,
         'feasibility': feasibility,
         'borrowing': _borrowing(category, inflated),
     }
+
+
+def _pick(plans: list[Plan], appetite: str | None) -> tuple[Plan, str]:
+    """Honour what the user chose, within what the goal allows.
+
+    The safety rule is not negotiable — a goal that cannot slip is never given
+    the growth plan — but when the plan they asked for is available they get it,
+    and when it is not they are told why rather than silently overruled.
+    """
+    by_key = {plan.key: plan for plan in plans}
+    default = by_key.get('balanced') or plans[0]
+
+    if not appetite or appetite == 'balanced':
+        return default, ''
+
+    chosen = by_key.get(appetite)
+    if chosen:
+        return chosen, ''
+
+    if appetite == 'growth':
+        return default, (
+            'You asked for the higher-risk plan. It is not offered for this goal: it cannot be '
+            'postponed if markets are down when you need the money, so the balanced mix is the '
+            'most this one can carry.'
+        )
+
+    return default, ''
 
 
 def _safe_plan(target: float, saved: float, months: int) -> Plan:

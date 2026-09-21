@@ -274,3 +274,51 @@ def generate_drill_questions(module_title: str, theory: str, count: int = 3) -> 
         and isinstance(q.get('correct_index'), int)
         and 0 <= q['correct_index'] < 4
     ]
+
+
+# --------------------------------------------------------------------------- #
+# Goal assessment                                                              #
+# --------------------------------------------------------------------------- #
+
+def assess_goal(*, description: str, facts: dict, capacity: dict) -> dict | None:
+    """Read a goal and a person's finances, and put the trade-off to them.
+
+    The judgement is already made — `users.goals.assessment` computes how
+    critical the goal is and how much risk the numbers can absorb, with no model
+    involved. What this adds is the sentence: naming what it sees in their
+    figures and asking whether they want to use the room they have.
+
+    It asks rather than decides, because capacity and appetite are different
+    questions and only the second one belongs to the user.
+    """
+    lines = '\n'.join(f'- {key.replace("_", " ")}: {value}' for key, value in facts.items())
+    blockers = '; '.join(capacity.get('blockers') or []) or 'none'
+    reasons = '; '.join(capacity.get('reasons') or []) or 'none'
+
+    prompt = (
+        f'Someone is setting a savings goal. In their words: "{description}"\n\n'
+        f'Their numbers:\n{lines}\n\n'
+        f'Computed risk capacity: {capacity.get("level")}\n'
+        f'Supporting: {reasons}\n'
+        f'Constraints: {blockers}\n\n'
+        'Return JSON with:\n'
+        '  criticality: one of critical, important, flexible — can this goal be '
+        'postponed without real harm?\n'
+        '  stance: one of can_take_risk, be_careful, stay_safe — consistent with '
+        'the computed capacity above, which you must not contradict\n'
+        '  headline: one sentence telling them what you see in their numbers\n'
+        '  reasoning: 2-3 short observations, each citing one of their actual figures\n'
+        '  question: one sentence asking whether they want to use the risk room '
+        'they have, or prefer safer options. Ask; do not decide for them.'
+    )
+
+    return _safe(
+        client.complete_json,
+        prompt,
+        system=ANALYST_VOICE,
+        schema_hint='criticality, stance, headline, reasoning, question',
+        max_tokens=400,
+        # Same situation, same read. Without this the assessment regenerates on
+        # every keystroke in the form.
+        cache_key=f'goal-assess:{description[:60]}:{sorted(facts.items())}:{capacity.get("level")}',
+    )

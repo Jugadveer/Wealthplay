@@ -70,7 +70,6 @@ export default function Goals() {
 
       {adding && (
         <GoalDialog
-          categories={data?.categories ?? []}
           onClose={() => setAdding(false)}
           onCreated={(goal) => {
             setAdding(false)

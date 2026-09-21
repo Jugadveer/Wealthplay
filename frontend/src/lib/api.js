@@ -96,6 +96,14 @@ export const api = {
   stocks: () => get('/users/portfolio/stocks/'),
   stock: (symbol) => get(`/users/portfolio/stocks/${symbol}/`),
   buy: (payload) => post('/users/portfolio/buy/', payload),
+  instruments: () => get('/users/portfolio/instruments/'),
+  openDeposit: (principal, tenure_months) =>
+    post('/users/portfolio/deposits/open/', { principal, tenure_months }),
+  closeDeposit: (id) => post(`/users/portfolio/deposits/${id}/close/`, {}),
+  startSip: (instrument, monthly_amount) =>
+    post('/users/portfolio/sips/start/', { instrument, monthly_amount }),
+  stopSip: (id) => post(`/users/portfolio/sips/${id}/stop/`, {}),
+  runSips: () => post('/users/portfolio/sips/run/', {}),
   sell: (payload) => post('/users/portfolio/sell/', payload),
   critiqueTrade: (payload) => post('/users/portfolio/critique/', payload),
   hindsight: (preset) => get('/users/portfolio/hindsight/', { params: { preset } }),
@@ -132,6 +140,7 @@ export const api = {
 
   // Goals
   goals: () => get('/users/goals/'),
+  assessGoal: (payload) => post('/users/goals/assess/', payload),
   planGoal: (payload) => post('/users/goals/plan/', payload),
   createGoal: (payload) => post('/users/goals/create/', payload),
   updateGoal: (id, payload) => post(`/users/goals/${id}/update/`, payload),

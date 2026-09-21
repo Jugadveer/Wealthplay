@@ -14,6 +14,7 @@ import { money, percent, toneFor } from '../../lib/format'
 import { useQuery } from '../../lib/query'
 import { Badge, Skeleton, Tabs, cx } from '../../ui'
 import Trade from './Trade'
+import GoalInstruments from './GoalInstruments'
 
 const FILTERS = [
   { value: 'all', label: 'All' },
@@ -48,7 +49,11 @@ export default function Explore() {
   }
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-8">
+      {/* Only renders when a goal is linked. Stocks are the whole of normal
+          mode; a goal needs the instruments a goal is actually funded with. */}
+      <GoalInstruments />
+
       <div className="flex flex-wrap items-center justify-between gap-4">
         <label className="flex h-10 flex-1 items-center gap-2 rounded border border-rule-strong bg-paper px-3 transition-colors focus-within:border-accent sm:max-w-xs">
           <Search size={15} className="shrink-0 text-ink-faint" />

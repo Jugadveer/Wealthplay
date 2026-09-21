@@ -6,9 +6,9 @@
  * as what it can make, and — when the monthly amount is not affordable — which
  * of the three levers has to move and by how much.
  */
-import { Briefcase, Check, Info, ShieldCheck, TrendingUp } from 'lucide-react'
+import { AlertTriangle, Briefcase, CalendarClock, Check, Info, ShieldCheck, TrendingUp } from 'lucide-react'
 
-import { money } from '../../lib/format'
+import { money, percent } from '../../lib/format'
 import { Badge, Meter, Panel, cx } from '../../ui'
 
 const PLAN_ICONS = { safe: ShieldCheck, balanced: Check, growth: TrendingUp }
@@ -58,6 +58,8 @@ export default function PlanView({ plan, chosen, onChoose }) {
       </div>
 
       <Feasibility feasibility={plan.feasibility} />
+
+      {plan.implementation && <Implementation data={plan.implementation} />}
 
       {plan.ladder?.length > 1 && <Ladder rungs={plan.ladder} />}
       {plan.borrowing && <Borrowing loan={plan.borrowing} />}
@@ -176,6 +178,110 @@ function Feasibility({ feasibility }) {
         />
       )}
     </Panel>
+  )
+}
+
+/**
+ * The allocation turned into things a person can actually go and do.
+ *
+ * "45% equity" is correct and unactionable. This is the rupee amount per sleeve,
+ * the instrument types, what an index fund is holding at today's prices, and
+ * when to look at any of it again.
+ */
+function Implementation({ data }) {
+  return (
+    <div className="space-y-4">
+      <SectionLabel>How to actually do this, every month</SectionLabel>
+
+      <div className="grid gap-4 lg:grid-cols-3">
+        {data.sleeves.map((sleeve) => (
+          <Panel key={sleeve.key} className="flex flex-col p-5">
+            <div className="flex items-baseline justify-between gap-3">
+              <h3 className="font-display text-title">{sleeve.name}</h3>
+              <span className="num text-xs text-ink-faint">{sleeve.share}%</span>
+            </div>
+            <p className="num mt-2 text-xl font-semibold text-accent">{money(sleeve.monthly)}</p>
+            <p className="text-xs text-ink-faint">a month</p>
+
+            <ul className="mt-4 space-y-3 border-t border-rule pt-3">
+              {sleeve.instruments.map((item) => (
+                <li key={item.type}>
+                  <div className="flex items-baseline justify-between gap-2">
+                    <span className="text-xs font-medium text-ink">{item.type}</span>
+                    <span className="num text-xs text-ink-muted">{money(item.monthly)}</span>
+                  </div>
+                  <p className="mt-1 text-[11px] leading-snug text-ink-faint">
+                    {item.detail} <span className="num">~{item.rate}%</span>
+                  </p>
+                </li>
+              ))}
+            </ul>
+
+            {sleeve.holds?.length > 0 && (
+              <div className="mt-4 border-t border-rule pt-3">
+                <p className="eyebrow">What the index holds, priced now</p>
+                <ul className="mt-2 space-y-1">
+                  {sleeve.holds.slice(0, 4).map((hold) => (
+                    <li key={hold.symbol} className="flex items-baseline justify-between gap-2">
+                      <span className="num text-[11px] text-ink">{hold.symbol}</span>
+                      <span className="num text-[11px] text-ink-muted">{money(hold.price)}</span>
+                      <span
+                        className={cx(
+                          'num w-12 text-right text-[11px]',
+                          hold.change_percent >= 0 ? 'text-up' : 'text-down',
+                        )}
+                      >
+                        {percent(hold.change_percent, 1)}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            <p className="measure mt-auto pt-4 text-[11px] leading-snug text-ink-muted">
+              {sleeve.why}
+            </p>
+            {sleeve.action && (
+              <p className="mt-2 text-[11px] leading-snug text-accent">{sleeve.action}</p>
+            )}
+          </Panel>
+        ))}
+      </div>
+
+      <Panel className="p-5">
+        <div className="flex items-center gap-2">
+          <CalendarClock size={15} className="text-ink-faint" />
+          <p className="eyebrow">When to look at it</p>
+        </div>
+        <ul className="mt-3 divide-y divide-rule border-t border-rule">
+          {data.cadence.map((entry) => (
+            <li key={entry.period} className="grid gap-1 py-3 sm:grid-cols-[9rem_1fr] sm:gap-4">
+              <span className="num text-xs text-ink-faint">{entry.period}</span>
+              <div>
+                <p className="text-sm text-ink">{entry.action}</p>
+                <p className="measure mt-0.5 text-[11px] leading-snug text-ink-muted">
+                  {entry.detail}
+                </p>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </Panel>
+
+      <p className="measure flex gap-1.5 text-[11px] leading-snug text-ink-faint">
+        <AlertTriangle size={12} className="mt-0.5 shrink-0" />
+        {data.disclaimer}
+      </p>
+    </div>
+  )
+}
+
+function SectionLabel({ children }) {
+  return (
+    <div className="border-t border-rule pt-4">
+      <h3 className="text-title">{children}</h3>
+    </div>
   )
 }
 

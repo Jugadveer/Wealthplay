@@ -15,9 +15,11 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
+from ai import tutor
+
 from ..models import DemoPortfolio, FinancialGoal
 from ..portfolio.valuation import value_portfolio
-from . import planner
+from . import assessment, planner
 
 
 def _parse_date(raw) -> date | None:
@@ -125,6 +127,121 @@ def list_goals(request):
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
+def assess_goal(request):
+    """Read the goal and the person's finances, and put the risk choice to them.
+
+    The classification and the capacity are computed here, deterministically, so
+    the feature works with no model available. The model only phrases it — and
+    when it is unavailable the response says so rather than passing a template
+    off as advice.
+    """
+    description = (request.data.get('description') or '').strip()
+    target_date = _parse_date(request.data.get('target_date'))
+    target_amount = _amount(request.data.get('target_amount'))
+
+    if not description:
+        return Response({'error': 'Say what the goal is in your own words.'}, status=400)
+    if not target_date or target_date <= date.today():
+        return Response({'error': 'The target date has to be in the future.'}, status=400)
+    if target_amount <= 0:
+        return Response({'error': 'The target amount has to be more than zero.'}, status=400)
+
+    category = assessment.classify(description)
+    months = planner.months_until(target_date)
+
+    income = _amount(request.data.get('monthly_income'))
+    commitments = _amount(request.data.get('monthly_commitments'))
+    dependants = int(_amount(request.data.get('dependants')))
+
+    capacity = assessment.capacity(
+        monthly_income=income,
+        monthly_commitments=commitments,
+        months=months,
+        dependants=dependants,
+        has_emergency_fund=bool(request.data.get('has_emergency_fund')),
+        criticality=category.criticality,
+    )
+
+    written = tutor.assess_goal(
+        description=description,
+        facts={
+            'target_today': f'Rs {target_amount:,.0f}',
+            'years_away': round(months / 12, 1),
+            'already_saved': f'Rs {_amount(request.data.get("current_amount")):,.0f}',
+            'monthly_income': f'Rs {income:,.0f}',
+            'monthly_commitments': f'Rs {commitments:,.0f}',
+            'dependants': dependants,
+            'has_emergency_fund': bool(request.data.get('has_emergency_fund')),
+        },
+        capacity=capacity.as_dict(),
+    )
+
+    verdict = assessment.fallback_verdict(capacity, category)
+    if written:
+        reasoning = written.get('reasoning')
+        verdict = {
+            'available': True,
+            # The model may reclassify the goal from the description, but it may
+            # not talk the stance up past what the numbers support.
+            'criticality': written.get('criticality') or category.criticality,
+            'category': category.key,
+            'stance': _no_harder_than(written.get('stance'), capacity.level),
+            'headline': written.get('headline') or verdict['headline'],
+            'reasoning': reasoning if isinstance(reasoning, list) else [str(reasoning)],
+            'question': written.get('question') or verdict['question'],
+        }
+
+    return Response({
+        'assessment': {**verdict, 'capacity': capacity.as_dict(), 'category_label': category.label,
+                       'icon': category.icon},
+        'options': _appetite_options(capacity.level, category.criticality, months),
+    })
+
+
+# A model may be more cautious than the arithmetic, never less.
+_STANCE_CEILING = {'low': 'stay_safe', 'moderate': 'be_careful', 'high': 'can_take_risk'}
+_STANCE_ORDER = {'stay_safe': 0, 'be_careful': 1, 'can_take_risk': 2}
+
+
+def _no_harder_than(stance: str | None, level: str) -> str:
+    ceiling = _STANCE_CEILING[level]
+    if stance not in _STANCE_ORDER:
+        return ceiling
+    return stance if _STANCE_ORDER[stance] <= _STANCE_ORDER[ceiling] else ceiling
+
+
+def _appetite_options(level: str, criticality: str, months: int) -> list[dict]:
+    """The choices to offer, and what each one means in plain words."""
+    options = [
+        {
+            'key': 'safe',
+            'label': 'Keep it safe',
+            'detail': 'Nothing can fall. Costs the most each month.',
+        },
+        {
+            'key': 'balanced',
+            'label': 'Balanced',
+            'detail': 'The most this goal and this horizon can reasonably carry.',
+        },
+    ]
+
+    growth_allowed = months >= 60 and criticality != 'critical' and level == 'high'
+    options.append({
+        'key': 'growth',
+        'label': 'Use the risk room',
+        'detail': (
+            'More equity, a lower monthly amount, a wider range of outcomes.'
+            if growth_allowed
+            else 'Not available for this goal — it cannot be postponed if markets are down.'
+        ),
+        'available': growth_allowed,
+    })
+
+    return options
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
 def preview_plan(request):
     """Plan a goal before committing to it, so the form can show live numbers."""
     target_date = _parse_date(request.data.get('target_date'))
@@ -142,6 +259,7 @@ def preview_plan(request):
             saved=_amount(request.data.get('current_amount')),
             monthly_capacity=_amount(request.data.get('monthly_capacity')),
             category_key=request.data.get('category') or 'general',
+            appetite=request.data.get('appetite'),
         )
     })
 
@@ -284,9 +402,16 @@ def pay_contribution(request):
     portfolio.last_contribution_on = date.today()
     portfolio.save(update_fields=['balance', 'total_contributed', 'last_contribution_on'])
 
+    # The money arrives and is invested in one action, which is what a real SIP
+    # does — and it is what makes the average cost mean anything.
+    from ..portfolio import instruments
+
+    executed = instruments.run_due_sips(portfolio)
+
     return Response({
         'success': True,
         'credited': float(amount),
+        'sips_run': executed,
         'balance': float(portfolio.balance),
         'total_contributed': float(portfolio.total_contributed),
         'contribution_due': False,

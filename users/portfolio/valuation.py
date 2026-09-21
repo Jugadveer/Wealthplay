@@ -45,15 +45,25 @@ def value_portfolio(portfolio) -> dict:
     balance = Decimal(str(portfolio.balance))
     pnl = current - invested
 
+    # Deposits and SIPs are part of the account too, and a goal linked to it
+    # would under-report its own progress if they were left out of the total.
+    from . import instruments
+
+    other = instruments.summarise(portfolio)
+    other_value = Decimal(str(other['deposits_value'] + other['sips_value']))
+
     return {
         'balance': float(balance),
         'invested': float(invested),
         'current_value': float(current),
-        'total_value': float(balance + current),
+        'total_value': float(balance + current + other_value),
         'total_pnl': float(pnl),
         'total_pnl_percent': float(pnl / invested * 100) if invested > 0 else 0.0,
         'holdings': rows,
         'holdings_count': len(rows),
+        'deposits': other['deposits'],
+        'sips': other['sips'],
+        'other_value': float(other_value),
     }
 
 

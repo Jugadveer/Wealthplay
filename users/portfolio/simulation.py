@@ -25,6 +25,7 @@ from __future__ import annotations
 
 import random
 from dataclasses import dataclass
+from functools import lru_cache
 from datetime import date, timedelta
 
 from django.utils import timezone
@@ -56,20 +57,22 @@ class Profile:
     jump_size: float = 0.0
 
 
-# Calibrated so that, annualised, a stable name drifts ~8% with ~12% volatility
-# and a speculative one is wild enough to punish concentration.
+# `drift` is a differential against the market, not an absolute return: the
+# market factor already supplies the drift, and adding a second one compounded
+# the simulated market to 25% a year. A stable name gives up a little of the
+# market's return for a lot less movement; a speculative one does the reverse.
 PROFILES: dict[str, Profile] = {
-    'stable': Profile(drift=0.00030, vol=0.007, beta=0.85, sector_beta=0.6, reversion=0.010),
-    'dividend': Profile(drift=0.00026, vol=0.006, beta=0.70, sector_beta=0.5, reversion=0.012),
-    'growth': Profile(drift=0.00060, vol=0.018, beta=1.25, sector_beta=0.9),
-    'tech': Profile(drift=0.00050, vol=0.016, beta=1.30, sector_beta=1.1),
-    'finance': Profile(drift=0.00030, vol=0.011, beta=1.10, sector_beta=1.0),
-    'energy': Profile(drift=0.00020, vol=0.014, beta=0.95, sector_beta=1.2),
+    'stable': Profile(drift=-0.00004, vol=0.007, beta=0.85, sector_beta=0.6, reversion=0.010),
+    'dividend': Profile(drift=-0.00006, vol=0.006, beta=0.70, sector_beta=0.5, reversion=0.012),
+    'growth': Profile(drift=0.00012, vol=0.018, beta=1.25, sector_beta=0.9),
+    'tech': Profile(drift=0.00008, vol=0.016, beta=1.30, sector_beta=1.1),
+    'finance': Profile(drift=0.00000, vol=0.011, beta=1.10, sector_beta=1.0),
+    'energy': Profile(drift=-0.00004, vol=0.014, beta=0.95, sector_beta=1.2),
     'volatile': Profile(
-        drift=0.00020, vol=0.030, beta=1.45, sector_beta=0.8, jump_chance=0.04, jump_size=0.11
+        drift=-0.00010, vol=0.030, beta=1.45, sector_beta=0.8, jump_chance=0.04, jump_size=0.11
     ),
     'penny': Profile(
-        drift=-0.00010, vol=0.040, beta=1.30, sector_beta=0.6, jump_chance=0.06, jump_size=0.16
+        drift=-0.00030, vol=0.040, beta=1.30, sector_beta=0.6, jump_chance=0.06, jump_size=0.16
     ),
 }
 
@@ -99,7 +102,7 @@ def market_return(day: date) -> float:
     teach people what risk feels like.
     """
     rng = _rng('market', day.isoformat())
-    shock = rng.gauss(0.0004, 0.0085)
+    shock = rng.gauss(0.00055, 0.0085)
     if rng.random() < 0.03:
         shock += rng.uniform(-0.045, 0.035)
     return shock
@@ -138,6 +141,66 @@ def daily_return(stock, day: date, price: float) -> float:
         move -= strength * 0.004
 
     return max(-MAX_DAILY_MOVE, min(MAX_DAILY_MOVE, move))
+
+
+# --------------------------------------------------------------------------- #
+# Fund prices                                                                  #
+# --------------------------------------------------------------------------- #
+
+# The instruments goal mode can hold besides individual stocks. Each is a NAV
+# that follows the same simulated market as the stocks do, so a bad week in the
+# practice market is a bad week for the index fund too — which is the whole
+# reason to model them here rather than as a fixed interest rate.
+FUNDS = {
+    'index': {'label': 'Nifty 50 index fund', 'beta': 1.00, 'drift': -0.00002, 'vol': 0.004},
+    'midcap': {'label': 'Nifty Midcap 150 index fund', 'beta': 1.25, 'drift': 0.00004, 'vol': 0.007},
+    # Gold carries a negative beta on purpose — ballast that falls with
+    # everything else is not ballast — so it needs its own drift to go anywhere.
+    'gold': {'label': 'Gold (sovereign bonds / ETF)', 'beta': -0.25, 'drift': 0.00043, 'vol': 0.006},
+    'debt': {'label': 'Short-duration debt fund', 'beta': 0.05, 'drift': 0.00026, 'vol': 0.0008},
+}
+
+FUND_BASE_NAV = 100.0
+FUND_EPOCH = date(2024, 1, 1)
+
+
+@lru_cache(maxsize=4096)
+def _nav_at(instrument: str, day: date) -> float:
+    """Compounded NAV, memoised because the walk is from a fixed epoch."""
+    profile = FUNDS[instrument]
+    nav = FUND_BASE_NAV
+    cursor = FUND_EPOCH
+
+    while cursor <= day:
+        if is_trading_day(cursor):
+            rng = _rng('fund', instrument, cursor.isoformat())
+            nav *= 1 + profile['drift'] + profile['beta'] * market_return(cursor) + rng.gauss(
+                0, profile['vol']
+            )
+        cursor += timedelta(days=1)
+
+    return max(1.0, nav)
+
+
+def fund_nav(instrument: str, day: date | None = None) -> float:
+    """NAV of a simulated fund on a given day.
+
+    Built by compounding daily returns from a fixed epoch, each one seeded on
+    ``(instrument, date)`` exactly as the stocks are. That makes a NAV
+    reproducible from nothing, so nothing has to be stored and two callers can
+    never disagree about what a unit was worth.
+
+    Gold carries a negative beta on purpose: ballast that falls with everything
+    else is not ballast.
+    """
+    if instrument not in FUNDS:
+        return FUND_BASE_NAV
+
+    day = day or timezone.localdate()
+    if day < FUND_EPOCH:
+        return FUND_BASE_NAV
+
+    return round(_nav_at(instrument, day), 4)
 
 
 # --------------------------------------------------------------------------- #

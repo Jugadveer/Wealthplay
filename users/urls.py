@@ -3,7 +3,7 @@ from django.urls import path
 from . import challenge_views
 from .achievement_views import check_achievements, get_achievements, mark_achievement_notified
 from .goals import views as goals
-from .portfolio import analysis_views, social_views
+from .portfolio import analysis_views, instrument_views, social_views
 from .portfolio import views as portfolio
 from .simulation_views import get_sim_data, list_crises, start_session
 from .views import award_xp, get_user_profile, save_onboarding
@@ -16,6 +16,7 @@ urlpatterns = [
 
     # Goals
     path('goals/', goals.list_goals, name='list_goals'),
+    path('goals/assess/', goals.assess_goal, name='assess_goal'),
     path('goals/plan/', goals.preview_plan, name='preview_goal_plan'),
     path('goals/create/', goals.create_goal, name='create_goal'),
     path('goals/<int:goal_id>/update/', goals.update_goal, name='update_goal'),
@@ -31,6 +32,12 @@ urlpatterns = [
     path('portfolio/tickers-info/', portfolio.get_tickers_info, name='get_tickers_info'),
     path('portfolio/stocks/', portfolio.get_stocks, name='get_stocks'),
     path('portfolio/stocks/<str:symbol>/', portfolio.get_stock_detail, name='get_stock_detail'),
+    path('portfolio/instruments/', instrument_views.list_instruments, name='list_instruments'),
+    path('portfolio/deposits/open/', instrument_views.open_deposit, name='open_deposit'),
+    path('portfolio/deposits/<int:deposit_id>/close/', instrument_views.close_deposit, name='close_deposit'),
+    path('portfolio/sips/start/', instrument_views.start_sip, name='start_sip'),
+    path('portfolio/sips/<int:sip_id>/stop/', instrument_views.stop_sip, name='stop_sip'),
+    path('portfolio/sips/run/', instrument_views.run_sips, name='run_sips'),
     path('portfolio/buy/', portfolio.buy_stock, name='buy_stock'),
     path('portfolio/sell/', portfolio.sell_stock, name='sell_stock'),
     path('portfolio/critique/', analysis_views.critique_trade_idea, name='critique_trade_idea'),
