@@ -1,417 +1,318 @@
 """
-API endpoints for achievements system
+Achievements.
+
+The catalogue is a declarative table and unlocking is one loop over it. The
+previous version repeated the same eight-line ``get_or_create`` + grant-XP block
+twenty times, which is how it ended up granting XP twice for trading
+achievements: once inline, and again in a trailing "award XP" pass.
 """
+
+from __future__ import annotations
+
+import logging
+from dataclasses import dataclass
+from typing import Callable
+
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from django.utils import timezone
-from datetime import timedelta
-from .models import Achievement, UserAchievement, UserProfile, ChallengeLeaderboard
-from simulator.models import UserScenarioAttempt, QuizRun
-from .models import DemoPortfolio, StockPredictionChallenge
-from django.db.models import Count, Sum
-import json
-import traceback
+
+from simulator.models import QuizRun, UserScenarioAttempt
+
+from .models import (
+    Achievement,
+    DemoPortfolio,
+    StockPredictionChallenge,
+    UserAchievement,
+    UserProfile,
+)
+
+logger = logging.getLogger(__name__)
 
 
-ACHIEVEMENT_DEFAULTS = {
-    'first_trade': {'name': 'First Trade', 'description': 'Execute your first stock trade', 'icon_name': 'briefcase', 'category': 'trading', 'xp_reward': 25},
-    'portfolio_pro': {'name': 'Portfolio Pro', 'description': 'Build a diversified portfolio with 5+ stocks', 'icon_name': 'briefcase', 'category': 'trading', 'xp_reward': 100},
-    'diversified': {'name': 'Diversified Investor', 'description': 'Own stocks across 3+ different sectors', 'icon_name': 'target', 'category': 'trading', 'xp_reward': 75},
-    'risk_taker': {'name': 'Risk Taker', 'description': 'Make a trade worth over ₹10,000', 'icon_name': 'zap', 'category': 'trading', 'xp_reward': 50},
-    'conservative': {'name': 'Conservative Investor', 'description': 'Maintain positive returns for 7+ days', 'icon_name': 'shield', 'category': 'trading', 'xp_reward': 75},
-    'streak_5': {'name': '5-Day Streak', 'description': 'Log in and participate for 5 consecutive days', 'icon_name': 'flame', 'category': 'consistency', 'xp_reward': 50},
-    'streak_10': {'name': '10-Day Streak', 'description': 'Maintain a 10-day activity streak', 'icon_name': 'flame', 'category': 'consistency', 'xp_reward': 100},
-    'streak_30': {'name': '30-Day Streak', 'description': 'An incredible 30-day streak of learning', 'icon_name': 'flame', 'category': 'consistency', 'xp_reward': 300},
-    'xp_100': {'name': 'Rising Star', 'description': 'Earn your first 100 XP', 'icon_name': 'sparkles', 'category': 'milestone', 'xp_reward': 25},
-    'xp_500': {'name': 'XP Hunter', 'description': 'Accumulate 500 XP', 'icon_name': 'sparkles', 'category': 'milestone', 'xp_reward': 50},
-    'xp_1000': {'name': 'XP Legend', 'description': 'Reach 1000 XP and beyond', 'icon_name': 'trophy', 'category': 'milestone', 'xp_reward': 150},
-    'xp_2500': {'name': 'XP Legend+', 'description': 'Reach 2500 XP and beyond', 'icon_name': 'trophy', 'category': 'milestone', 'xp_reward': 250},
-    'xp_milestone': {'name': 'XP Legend', 'description': 'Reach 1000 XP and beyond', 'icon_name': 'trophy', 'category': 'milestone', 'xp_reward': 150},
-    'scenario_master': {'name': 'Scenario Master', 'description': 'Complete 5 financial scenario quizzes', 'icon_name': 'target', 'category': 'milestone', 'xp_reward': 100},
-    'scenario_perfect': {'name': 'Perfect Scenario', 'description': 'Score perfectly on a scenario quiz', 'icon_name': 'check-circle-2', 'category': 'learning', 'xp_reward': 100},
-    'stock_predictor': {'name': 'Stock Oracle', 'description': 'Make 10 stock predictions', 'icon_name': 'trending-up', 'category': 'milestone', 'xp_reward': 75},
-    'stock_master': {'name': 'Stock Master', 'description': 'Make 50 correct stock predictions', 'icon_name': 'trending-up', 'category': 'milestone', 'xp_reward': 200},
-    'perfect_quiz': {'name': 'Perfect Quiz', 'description': 'Score 80%+ on a scenario quiz', 'icon_name': 'check-circle-2', 'category': 'learning', 'xp_reward': 100},
-    'profit_maker': {'name': 'Profit Maker', 'description': 'Achieve 10% portfolio returns', 'icon_name': 'trending-up', 'category': 'milestone', 'xp_reward': 200},
-    'portfolio_master': {'name': 'Portfolio Master', 'description': 'Achieve 25% portfolio returns', 'icon_name': 'trending-up', 'category': 'milestone', 'xp_reward': 300},
-}
+@dataclass(frozen=True)
+class Rule:
+    """One achievement: how it is described, and when it unlocks.
+
+    ``unlocks_when`` receives a :class:`Progress` snapshot, so every rule reads
+    as a single condition and no rule issues its own queries.
+    """
+
+    id: str
+    name: str
+    description: str
+    icon: str
+    category: str
+    xp: int
+    unlocks_when: Callable[['Progress'], bool]
 
 
-def _ensure_achievement(achievement_id):
-    defaults = ACHIEVEMENT_DEFAULTS.get(achievement_id)
-    if not defaults:
-        return None
+@dataclass
+class Progress:
+    """Everything the rules need, gathered once."""
 
-    achievement, _ = Achievement.objects.get_or_create(
-        id=achievement_id,
-        defaults={**defaults, 'is_active': True},
+    xp: int
+    streak: int
+    holdings: int
+    sectors: int
+    has_traded: bool
+    largest_position: float
+    portfolio_return: float
+    scenario_score: int
+    perfect_scenarios: int
+    correct_predictions: int
+    modules_completed: int
+
+
+CATALOGUE: tuple[Rule, ...] = (
+    # Trading
+    Rule('first_trade', 'First Trade', 'Execute your first trade', 'briefcase', 'trading', 25,
+         lambda p: p.has_traded),
+    Rule('risk_taker', 'Size Matters', 'Build a single position worth over ₹10,000', 'zap', 'trading', 50,
+         lambda p: p.largest_position >= 10_000),
+    Rule('portfolio_pro', 'Portfolio Pro', 'Hold five different stocks at once', 'layers', 'trading', 100,
+         lambda p: p.holdings >= 5),
+    Rule('diversified', 'Diversified', 'Hold stocks across three or more sectors', 'target', 'trading', 75,
+         lambda p: p.sectors >= 3),
+    Rule('profit_maker', 'In the Green', 'Reach a 10% return on your practice portfolio', 'trending-up', 'trading', 200,
+         lambda p: p.portfolio_return >= 10),
+    Rule('portfolio_master', 'Compounding', 'Reach a 25% return on your practice portfolio', 'trending-up', 'trading', 300,
+         lambda p: p.portfolio_return >= 25),
+
+    # Learning
+    Rule('first_lesson', 'First Lesson', 'Finish your first module', 'book-open', 'learning', 20,
+         lambda p: p.modules_completed >= 1),
+    Rule('knowledge_seeker', 'Ten Down', 'Finish ten modules', 'library', 'learning', 200,
+         lambda p: p.modules_completed >= 10),
+    Rule('scenario_master', 'Scenario Master', 'Score 1,000 points across scenarios', 'compass', 'learning', 100,
+         lambda p: p.scenario_score >= 1000),
+    Rule('scenario_perfect', 'Flawless', 'Score full marks on a scenario run', 'check-circle-2', 'learning', 100,
+         lambda p: p.perfect_scenarios >= 1),
+
+    # Markets
+    Rule('stock_predictor', 'Ten Calls', 'Get ten market calls right', 'activity', 'markets', 75,
+         lambda p: p.correct_predictions >= 10),
+    Rule('stock_master', 'Market Read', 'Get fifty market calls right', 'radar', 'markets', 200,
+         lambda p: p.correct_predictions >= 50),
+
+    # Consistency
+    Rule('streak_5', 'Five Days', 'Show up five days running', 'flame', 'consistency', 50,
+         lambda p: p.streak >= 5),
+    Rule('streak_10', 'Ten Days', 'Show up ten days running', 'flame', 'consistency', 100,
+         lambda p: p.streak >= 10),
+    Rule('streak_30', 'A Month', 'Show up thirty days running', 'flame', 'consistency', 300,
+         lambda p: p.streak >= 30),
+
+    # Milestones
+    Rule('xp_100', 'Getting Started', 'Earn 100 XP', 'sparkles', 'milestone', 25,
+         lambda p: p.xp >= 100),
+    Rule('xp_500', 'Five Hundred', 'Earn 500 XP', 'sparkles', 'milestone', 50,
+         lambda p: p.xp >= 500),
+    Rule('xp_1000', 'Four Figures', 'Earn 1,000 XP', 'trophy', 'milestone', 150,
+         lambda p: p.xp >= 1000),
+    Rule('xp_2500', 'Seasoned', 'Earn 2,500 XP', 'crown', 'milestone', 250,
+         lambda p: p.xp >= 2500),
+)
+
+
+# --------------------------------------------------------------------------- #
+# Evaluation                                                                   #
+# --------------------------------------------------------------------------- #
+
+def _snapshot(user) -> Progress:
+    """Gather every signal the rules read."""
+    from courses.models import UserCourseProgress
+    from users.portfolio import value_portfolio
+
+    profile, _ = UserProfile.objects.get_or_create(user=user)
+
+    holdings_count = sectors = 0
+    largest_position = portfolio_return = 0.0
+    has_traded = False
+
+    portfolio = DemoPortfolio.objects.filter(user=user).first()
+    if portfolio:
+        trades = portfolio.trade_history if isinstance(portfolio.trade_history, list) else []
+        # A sold-out position still counts: the trade happened.
+        has_traded = bool(portfolio.holdings) or len(trades) > 1
+
+        valued = value_portfolio(portfolio)
+        holdings = valued['holdings']
+        holdings_count = len(holdings)
+        sectors = len({h.get('sector') for h in holdings if h.get('sector')})
+        portfolio_return = valued['total_pnl_percent']
+        largest_position = max((h['invested'] for h in holdings), default=0.0)
+
+    scenario_score = sum(
+        UserScenarioAttempt.objects.filter(user=user).values_list('score_earned', flat=True)
     )
 
-    dirty = False
-    for field, value in defaults.items():
-        if getattr(achievement, field) != value:
-            setattr(achievement, field, value)
-            dirty = True
-    if not achievement.is_active:
-        achievement.is_active = True
-        dirty = True
-    if dirty:
+    return Progress(
+        xp=profile.xp,
+        streak=profile.streak,
+        holdings=holdings_count,
+        sectors=sectors,
+        has_traded=has_traded,
+        largest_position=largest_position,
+        portfolio_return=portfolio_return,
+        scenario_score=scenario_score,
+        perfect_scenarios=_perfect_scenario_count(user),
+        correct_predictions=StockPredictionChallenge.objects.filter(user=user, is_correct=True).count(),
+        modules_completed=UserCourseProgress.objects.filter(user=user, status='completed')
+        .exclude(module_id='')
+        .count(),
+    )
+
+
+def _perfect_scenario_count(user) -> int:
+    """Completed scenario runs where every decision scored full marks."""
+    perfect = 0
+    for run in QuizRun.objects.filter(user=user, is_completed=True):
+        try:
+            scenarios = run.get_scenario_list()
+        except (TypeError, ValueError):
+            logger.debug('skipping malformed quiz run %s', run.id)
+            continue
+        if scenarios and run.total_score >= len(scenarios) * 20:
+            perfect += 1
+    return perfect
+
+
+def check_and_unlock_achievements(user) -> list[Achievement]:
+    """Unlock everything the user now qualifies for; return what was new.
+
+    Safe to call repeatedly: ``get_or_create`` makes each unlock idempotent and
+    XP is granted exactly once, at the moment of unlocking.
+    """
+    progress = _snapshot(user)
+    already = set(UserAchievement.objects.filter(user=user).values_list('achievement_id', flat=True))
+
+    newly: list[Achievement] = []
+    earned_xp = 0
+
+    for rule in CATALOGUE:
+        if rule.id in already:
+            continue
+
+        try:
+            qualifies = rule.unlocks_when(progress)
+        except Exception:
+            logger.warning('achievement rule %s failed to evaluate', rule.id, exc_info=True)
+            continue
+
+        if not qualifies:
+            continue
+
+        achievement = _sync_definition(rule)
+        _, created = UserAchievement.objects.get_or_create(user=user, achievement=achievement)
+        if created:
+            newly.append(achievement)
+            earned_xp += rule.xp
+
+    if earned_xp:
+        UserProfile.objects.filter(user=user).update(xp=progress.xp + earned_xp)
+
+    return newly
+
+
+def _sync_definition(rule: Rule) -> Achievement:
+    """Create or refresh the stored row so CATALOGUE stays the source of truth."""
+    fields = {
+        'name': rule.name,
+        'description': rule.description,
+        'icon_name': rule.icon,
+        'category': rule.category,
+        'xp_reward': rule.xp,
+        'is_active': True,
+    }
+
+    achievement, created = Achievement.objects.get_or_create(id=rule.id, defaults=fields)
+    if not created and any(getattr(achievement, key) != value for key, value in fields.items()):
+        for key, value in fields.items():
+            setattr(achievement, key, value)
         achievement.save()
 
     return achievement
 
 
-def _grant_xp(user, amount):
-    """Safely grant XP to a user's profile"""
-    try:
-        from .models import UserProfile
-        profile, _ = UserProfile.objects.get_or_create(user=user)
-        profile.xp += amount
-        # Logic for level up can go here if needed (e.g. floor(xp/500))
-        profile.save()
-        return True
-    except Exception as e:
-        print(f"Error granting XP to user {user.id}: {e}")
-        return False
-
-
-def check_and_unlock_achievements(user):
-    """Check user's activity and unlock achievements"""
-    unlocked = []
-    
-    try:
-        profile, _ = UserProfile.objects.get_or_create(user=user)
-    except Exception:
-        return unlocked
-    
-    # Check XP milestones
-    xp_milestones = [
-        ('xp_100', 100),
-        ('xp_500', 500),
-        ('xp_1000', 1000),
-        ('xp_2500', 2500),
-    ]
-    
-    for ach_id, threshold in xp_milestones:
-        if profile.xp >= threshold:
-            achievement = _ensure_achievement(ach_id) or Achievement.objects.filter(id=ach_id, is_active=True).first()
-            if achievement:
-                user_ach, created = UserAchievement.objects.get_or_create(
-                    user=user,
-                    achievement=achievement
-                )
-                if created:
-                    _grant_xp(user, achievement.xp_reward)
-                    unlocked.append(achievement)
-    
-    # Check streak achievements
-    if profile.streak >= 5:
-        achievement = _ensure_achievement('streak_5') or Achievement.objects.filter(id='streak_5', is_active=True).first()
-        if achievement:
-            user_ach, created = UserAchievement.objects.get_or_create(
-                user=user,
-                achievement=achievement
-            )
-            if created:
-                _grant_xp(user, achievement.xp_reward)
-                unlocked.append(achievement)
-    
-    if profile.streak >= 10:
-        achievement = _ensure_achievement('streak_10') or Achievement.objects.filter(id='streak_10', is_active=True).first()
-        if achievement:
-            user_ach, created = UserAchievement.objects.get_or_create(
-                user=user,
-                achievement=achievement
-            )
-            if created:
-                unlocked.append(achievement)
-    
-    if profile.streak >= 30:
-        achievement = _ensure_achievement('streak_30') or Achievement.objects.filter(id='streak_30', is_active=True).first()
-        if achievement:
-            user_ach, created = UserAchievement.objects.get_or_create(
-                user=user,
-                achievement=achievement
-            )
-            if created:
-                unlocked.append(achievement)
-    
-    # Check portfolio achievements
-    try:
-        portfolio = DemoPortfolio.objects.get(user=user)
-        holdings = portfolio.holdings or {}
-        trade_history = portfolio.trade_history if isinstance(portfolio.trade_history, list) else []
-        
-        # First trade should unlock after any completed trade, even if holdings are later sold.
-        has_completed_trade = len(holdings) > 0 or len(trade_history) > 0
-        if has_completed_trade:
-            achievement = _ensure_achievement('first_trade') or Achievement.objects.filter(id='first_trade', is_active=True).first()
-            if achievement:
-                # Only create if it doesn't exist - don't auto-unlock if already exists
-                user_ach, created = UserAchievement.objects.get_or_create(
-                    user=user,
-                    achievement=achievement
-                )
-                if created:
-                    _grant_xp(user, achievement.xp_reward)
-                    unlocked.append(achievement)
-        
-        # Diversified portfolio
-        if len(holdings) >= 5:
-            achievement = _ensure_achievement('diversified') or Achievement.objects.filter(id='diversified', is_active=True).first()
-            if achievement:
-                user_ach, created = UserAchievement.objects.get_or_create(
-                    user=user,
-                    achievement=achievement
-                )
-                if created:
-                    _grant_xp(user, achievement.xp_reward)
-                    unlocked.append(achievement)
-        
-        # Portfolio Pro - 10% returns
-        # Calculate from portfolio P/L
-        try:
-            from .portfolio_views import calculate_portfolio_data
-            portfolio_data = calculate_portfolio_data(portfolio)
-            total_pnl_percent = portfolio_data.get('total_pnl_percent', 0)
-        except Exception as e:
-            print(f"Error calculating portfolio data for achievements for user {user.id}: {e}")
-            print(traceback.format_exc())
-            total_pnl_percent = 0
-        
-        if total_pnl_percent >= 10:
-            achievement = _ensure_achievement('profit_maker') or Achievement.objects.filter(id='profit_maker', is_active=True).first()
-            if achievement:
-                user_ach, created = UserAchievement.objects.get_or_create(
-                    user=user,
-                    achievement=achievement
-                )
-                if created:
-                    _grant_xp(user, achievement.xp_reward)
-                    unlocked.append(achievement)
-        
-        # Portfolio Master - 25% returns
-        if total_pnl_percent >= 25:
-            achievement = _ensure_achievement('portfolio_master') or Achievement.objects.filter(id='portfolio_master', is_active=True).first()
-            if achievement:
-                user_ach, created = UserAchievement.objects.get_or_create(
-                    user=user,
-                    achievement=achievement
-                )
-                if created:
-                    _grant_xp(user, achievement.xp_reward)
-                    unlocked.append(achievement)
-        
-    except DemoPortfolio.DoesNotExist:
-        pass
-    
-    # Check scenario achievements
-    try:
-        scenario_attempts = UserScenarioAttempt.objects.filter(user=user)
-        scenario_score = sum((attempt.score_earned or 0) for attempt in scenario_attempts)
-    except Exception as e:
-        print(f"Error calculating scenario score for achievements for user {user.id}: {e}")
-        print(traceback.format_exc())
-        scenario_score = 0
-    
-    if scenario_score >= 1000:
-        achievement = _ensure_achievement('scenario_master') or Achievement.objects.filter(id='scenario_master', is_active=True).first()
-        if achievement:
-            user_ach, created = UserAchievement.objects.get_or_create(
-                user=user,
-                achievement=achievement
-            )
-            if created:
-                _grant_xp(user, achievement.xp_reward)
-                unlocked.append(achievement)
-    
-    # Check for perfect scenario quiz
-    try:
-        perfect_quizzes = QuizRun.objects.filter(
-            user=user,
-            is_completed=True
-        )
-        for quiz in perfect_quizzes:
-            try:
-                scenario_list = quiz.get_scenario_list()
-            except (TypeError, ValueError) as e:
-                print(f"Skipping malformed quiz run {quiz.id} for achievements: {e}")
-                continue
-
-            max_possible = len(scenario_list) * 20
-            if quiz.total_score >= max_possible:
-                achievement = _ensure_achievement('scenario_perfect') or Achievement.objects.filter(id='scenario_perfect', is_active=True).first()
-                if achievement:
-                    user_ach, created = UserAchievement.objects.get_or_create(
-                        user=user,
-                        achievement=achievement
-                    )
-                    if created:
-                        _grant_xp(user, achievement.xp_reward)
-                        unlocked.append(achievement)
-                break  # Only award once
-    except Exception as e:
-        print(f"Error checking quiz achievements for user {user.id}: {e}")
-        print(traceback.format_exc())
-    
-    # Check stock prediction achievements
-    try:
-        predictions = StockPredictionChallenge.objects.filter(user=user, is_correct=True)
-        correct_count = predictions.count()
-    except Exception as e:
-        print(f"Error checking stock prediction achievements for user {user.id}: {e}")
-        print(traceback.format_exc())
-        correct_count = 0
-    
-    if correct_count >= 10:
-        achievement = _ensure_achievement('stock_predictor') or Achievement.objects.filter(id='stock_predictor', is_active=True).first()
-        if achievement:
-            user_ach, created = UserAchievement.objects.get_or_create(
-                user=user,
-                achievement=achievement
-            )
-            if created:
-                unlocked.append(achievement)
-    
-    if correct_count >= 50:
-        achievement = _ensure_achievement('stock_master') or Achievement.objects.filter(id='stock_master', is_active=True).first()
-        if achievement:
-            user_ach, created = UserAchievement.objects.get_or_create(
-                user=user,
-                achievement=achievement
-            )
-            if created:
-                unlocked.append(achievement)
-    
-    # Award XP for newly unlocked achievements
-    try:
-        for achievement in unlocked:
-            if achievement.xp_reward > 0:
-                profile.xp += achievement.xp_reward
-                profile.save()
-    except Exception as e:
-        print(f"Error awarding achievement XP for user {user.id}: {e}")
-        print(traceback.format_exc())
-    
-    return unlocked
-
+# --------------------------------------------------------------------------- #
+# Endpoints                                                                    #
+# --------------------------------------------------------------------------- #
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_achievements(request):
-    """Get all achievements with user's unlock status - USER-SPECIFIC"""
-    try:
-        # Optimization: Only check for new achievements every 10 minutes unless forced
-        from datetime import datetime, timedelta
-        last_check_str = request.session.get('last_achievement_check')
-        should_check = True
-        
-        if last_check_str:
-            last_check = datetime.fromisoformat(last_check_str)
-            if datetime.now() - last_check < timedelta(minutes=10):
-                should_check = False
-                
-        if should_check:
-            check_and_unlock_achievements(request.user)
-            request.session['last_achievement_check'] = datetime.now().isoformat()
-        
-        all_achievements = Achievement.objects.filter(is_active=True).order_by('category', 'xp_reward')
-        # CRITICAL: Only get achievements that actually have UserAchievement records with valid unlocked_at timestamps
-        # This ensures new users with no activity show 0 achievements
-        # Filter by the SPECIFIC USER to ensure achievements are user-specific
-        user_achievements = UserAchievement.objects.filter(
-            user=request.user,  # CRITICAL: Filter by current user only - ensures user-specific data
-            unlocked_at__isnull=False  # Only include achievements with valid timestamps
-        ).select_related('achievement')
-        unlocked_ids = set(user_ach.achievement_id for user_ach in user_achievements)
-        
-        # Double-check: ensure we only count achievements that actually exist and are unlocked
-        # For new users, this will be an empty set
-        # This ensures achievements are truly user-specific
-        
-        achievements_data = []
-        for achievement in all_achievements:
-            is_unlocked = achievement.id in unlocked_ids
-            unlocked_at = None
-            
-            # Only set unlocked_at if achievement is actually unlocked AND has a valid timestamp
-            if is_unlocked:
-                user_ach = next((ua for ua in user_achievements if ua.achievement_id == achievement.id), None)
-                if user_ach and user_ach.unlocked_at:
-                    unlocked_at = user_ach.unlocked_at.isoformat()
-                else:
-                    # If UserAchievement exists but has no unlocked_at, it's invalid - mark as locked
-                    is_unlocked = False
-            
-            achievements_data.append({
-                'id': achievement.id,
-                'name': achievement.name,
-                'description': achievement.description,
-                'icon_name': achievement.icon_name,
-                'category': achievement.category,
-                'xp_reward': achievement.xp_reward,
-                'unlocked': is_unlocked,  # Only true if UserAchievement exists AND has unlocked_at
-                'unlocked_at': unlocked_at,  # Only set if actually unlocked with valid timestamp
-            })
-        
-        return Response({
-            'achievements': achievements_data,
-            'total_unlocked': len(unlocked_ids),
-            'total_available': all_achievements.count(),
-        })
-    except Exception as e:
-        print(f"Error in check_achievements: {e}")
-        print(traceback.format_exc())
-        return Response({'newly_unlocked': [], 'count': 0, 'error': str(e)}, status=200)
+    """The full catalogue with this user's unlock state.
+
+    Re-evaluates on read. Evaluation used to be throttled to once per ten
+    minutes via the session, so a user could earn an achievement and still see
+    it locked — which is exactly what happened after a first trade.
+    """
+    check_and_unlock_achievements(request.user)
+
+    unlocked = {
+        ua.achievement_id: ua.unlocked_at
+        for ua in UserAchievement.objects.filter(user=request.user, unlocked_at__isnull=False)
+    }
+
+    catalogue = [
+        {
+            'id': rule.id,
+            'name': rule.name,
+            'description': rule.description,
+            'icon_name': rule.icon,
+            'category': rule.category,
+            'xp_reward': rule.xp,
+            'unlocked': rule.id in unlocked,
+            'unlocked_at': unlocked[rule.id].isoformat() if rule.id in unlocked else None,
+        }
+        for rule in CATALOGUE
+    ]
+
+    return Response(
+        {
+            'achievements': catalogue,
+            'total_unlocked': sum(1 for row in catalogue if row['unlocked']),
+            'total_available': len(catalogue),
+        }
+    )
 
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def check_achievements(request):
-    """Manually check and unlock achievements, return newly unlocked ones"""
-    try:
-        unlocked = check_and_unlock_achievements(request.user)
-        
-        unlocked_data = []
-        for achievement in unlocked:
-            unlocked_data.append({
-                'id': achievement.id,
-                'name': achievement.name,
-                'description': achievement.description,
-                'icon_name': achievement.icon_name,
-                'xp_reward': achievement.xp_reward,
-            })
-        
-        return Response({
-            'newly_unlocked': unlocked_data,
-            'count': len(unlocked_data),
-        })
-    except Exception as e:
-        print(f"Error in check_achievements: {e}")
-        print(traceback.format_exc())
-        return Response({'newly_unlocked': [], 'count': 0, 'error': str(e)}, status=200)
+    """Force a re-check. Called after an XP event, never on page mount."""
+    newly = check_and_unlock_achievements(request.user)
+
+    return Response(
+        {
+            'newly_unlocked': [
+                {
+                    'id': a.id,
+                    'name': a.name,
+                    'description': a.description,
+                    'icon_name': a.icon_name,
+                    'xp_reward': a.xp_reward,
+                }
+                for a in newly
+            ],
+            'count': len(newly),
+        }
+    )
 
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def mark_achievement_notified(request):
-    """Mark an achievement as notified (user has seen the popup)"""
-    try:
-        achievement_id = request.data.get('achievement_id')
-        if not achievement_id:
-            return Response({'error': 'achievement_id required'}, status=400)
-        
-        user_ach = UserAchievement.objects.get(
-            user=request.user,
-            achievement_id=achievement_id
-        )
-        user_ach.notified = True
-        user_ach.save()
-        
-        return Response({'success': True})
-    except UserAchievement.DoesNotExist:
-        return Response({'error': 'Achievement not found'}, status=404)
-    except Exception as e:
-        return Response({'error': str(e)}, status=500)
+    """Record that the unlock popup has been shown."""
+    achievement_id = request.data.get('achievement_id')
+    if not achievement_id:
+        return Response({'error': 'achievement_id is required.'}, status=400)
 
+    updated = UserAchievement.objects.filter(
+        user=request.user, achievement_id=achievement_id
+    ).update(notified=True)
+
+    if not updated:
+        return Response({'error': 'That achievement is not unlocked.'}, status=404)
+    return Response({'success': True})

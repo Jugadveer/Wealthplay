@@ -1,79 +1,57 @@
-# Python
+# --- Python ------------------------------------------------------------------
 __pycache__/
 *.py[cod]
-*$py.class
 *.so
-.Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
 *.egg-info/
-.installed.cfg
-*.egg
+.eggs/
+build/
+dist/
 
-# Virtual Environment
+# --- Virtual environments ----------------------------------------------------
+# Every venv name this repo has used at some point. Never commit an interpreter:
+# the committed ones pointed at a path that no longer existed and broke setup.
 venv/
 env/
 ENV/
-.venv
+.venv/
+.venv313/
 
-# Django
+# --- Django ------------------------------------------------------------------
 *.log
 local_settings.py
 db.sqlite3
 db.sqlite3-journal
 /media
 /staticfiles
-/static
+/static/react
+vector_db/
 
-# IDE
+# --- Secrets -----------------------------------------------------------------
+.env
+.env.local
+.env.bak.*
+
+# --- Node --------------------------------------------------------------------
+node_modules/
+npm-debug.log*
+frontend/dist/
+frontend/.vite/
+
+# --- Tooling -----------------------------------------------------------------
 .vscode/
 .idea/
 *.swp
-*.swo
-*~
 .DS_Store
-
-# Environment variables
-.env
-.env.local
-
-# Vector DB
-vector_db/
-*.db
-
-# Node (if any)
-node_modules/
-npm-debug.log
-
-# Testing
 .coverage
 .pytest_cache/
 htmlcov/
+playwright-report/
+test-results/
 
-# Misc
+# --- Scratch -----------------------------------------------------------------
+tmp/
 *.bak
 *.tmp
-frontend_preview.html
-ref.html
 
-# Markdown files
-*.md
-!PROJECT_DOCUMENTATION.md
-!RUN.md
-!README.md
-
-# Ollama setup files
-setup_ollama.sh
-setup_ollama.bat
-OLLAMA_SETUP.md
-
+# --- Agent tooling -----------------------------------------------------------
+.claude/

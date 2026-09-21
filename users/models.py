@@ -96,38 +96,6 @@ class UserProfile(models.Model):
         ordering = ['-xp']
 
 
-class UserProgress(models.Model):
-    """Track user progress through courses"""
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='progress')
-    course_id = models.CharField(max_length=100)
-    module_id = models.CharField(max_length=100, blank=True)
-    status = models.CharField(max_length=20, default='not_started')  # not_started, in_progress, completed
-    progress_percent = models.FloatField(default=0.0)
-    xp_awarded = models.IntegerField(default=0)
-    started_at = models.DateTimeField(null=True, blank=True)
-    completed_at = models.DateTimeField(null=True, blank=True)
-    last_accessed = models.DateTimeField(auto_now=True)
-    flashcards_flipped = models.JSONField(default=list, blank=True)
-    mcqs_progress = models.JSONField(default=dict, blank=True)
-    
-    class Meta:
-        unique_together = ['user', 'course_id', 'module_id']
-        ordering = ['-last_accessed']
-
-
-class QuizAttempt(models.Model):
-    """Track quiz attempts"""
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='quiz_attempts')
-    lesson = models.ForeignKey('courses.Lesson', on_delete=models.CASCADE, null=True, blank=True)
-    quiz_data = models.JSONField(default=dict)
-    score = models.FloatField(default=0.0)
-    max_score = models.FloatField(default=0.0)
-    completed_at = models.DateTimeField(auto_now_add=True)
-    
-    class Meta:
-        ordering = ['-completed_at']
-
-
 class DemoPortfolio(models.Model):
     """Demo portfolio for practice trading"""
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='demo_portfolio')

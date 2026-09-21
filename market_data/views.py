@@ -1,92 +1,47 @@
-from django.http import JsonResponse
+"""Read-only market endpoints. All data comes from the cached service layer."""
+
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
-import yfinance as yf
-import random
-from django.utils import timezone
+from rest_framework.response import Response
+
+from . import services
 
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def market_news(request):
+    """Recent headlines for one symbol.
+
+    Returns ``{"news": []}`` when the provider has nothing, so the client can
+    render an honest empty state. The previous version manufactured a summary
+    out of empty fields and shipped it as real reporting.
+    """
     symbol = request.GET.get('symbol', 'AAPL')
-    try:
-        # 1. First check if it's a CustomStock
-        from users.models import CustomStock
-        try:
-            custom_stock = CustomStock.objects.get(symbol=symbol)
-            # Generate simulated news for algorithmic stocks
-            sim_titles = {
-                'bullish': [f"Breakthrough reported in {symbol}'s core technology segment", f"{symbol} expands into high-growth emerging markets"],
-                'bearish': [f"Analysts downgrade {symbol} amid supply chain concerns", f"Profit taking observed in {symbol} following recent rally"],
-                'neutral': [f"{symbol} consolidation phase continues as investors await earnings", f"Sector-wide stability supports current {symbol} valuation"]
-            }
-            trend = custom_stock.trend or 'neutral'
-            title = random.choice(sim_titles.get(trend, sim_titles['neutral']))
-            summary = f"Recent algorithmic analysis of {custom_stock.name} ({symbol}) shows strong correlation with current {trend} market sentiment. Internal metrics suggest a confidence factor of {custom_stock.trend_strength or 0.5}, marking a significant period for institutional positioning."
-            
-            return JsonResponse({
-                'news': [{
-                    'title': title,
-                    'link': '#',
-                    'publisher': 'WealthPlay Oracle',
-                    'providerPublishTime': int(timezone.now().timestamp()),
-                    'summary': summary,
-                    'thumbnail': ''
-                }]
-            })
-        except CustomStock.DoesNotExist:
-            pass
+    return Response({'news': services.get_news(symbol)})
 
-        # 2. Check persistent news cache
-        from .models import MarketNewsCache
-        cache_entry = MarketNewsCache.objects.filter(symbol=symbol).first()
-        if cache_entry:
-            age = timezone.now() - cache_entry.last_updated
-            if age.total_seconds() < 1800:  # 30 minutes cache
-                return JsonResponse(cache_entry.news_json)
 
-        # 3. Fallback to live data if cache miss or stale
-        ticker = yf.Ticker(symbol)
-        raw_news = ticker.news
-        
-        if not raw_news:
-            return JsonResponse({'news': []})
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def market_quotes(request):
+    """Quotes for a comma-separated ``symbols`` list, capped at 20 per call."""
+    raw = request.GET.get('symbols', '')
+    symbols = [s.strip() for s in raw.split(',') if s.strip()][:20]
+    if not symbols:
+        symbols = list(services.TRACKED_SYMBOLS[:8])
 
-        # Return only the TOP news item (highest relevance)
-        article = raw_news[0]
-        title = article.get('title', '')
-        publisher = article.get('publisher', '')
-        link = article.get('link', '')
-        
-        resolutions = article.get('thumbnail', {}).get('resolutions', [])
-        thumbnail = resolutions[0].get('url', '') if resolutions else ''
-        
-        summary = article.get('summary', '') or article.get('description', '')
-        
-        if not summary:
-            summary = f"Latest market report: {title}. This development, reported by {publisher}, is currently impacting trader sentiment for {symbol}. Analysts are monitoring volume and price action closely following this announcement."
-        else:
-            summary = summary.split('\n')[0]
+    quotes = services.get_quotes(symbols)
+    return Response({'quotes': [q.as_dict() for q in quotes.values()]})
 
-        result = {
-            'news': [{
-                'title': title,
-                'link': link,
-                'publisher': publisher,
-                'providerPublishTime': article.get('providerPublishTime', 0),
-                'summary': summary,
-                'thumbnail': thumbnail
-            }]
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def market_history(request, symbol):
+    """Daily closes for one symbol. ``days`` is clamped to 5..365."""
+    days = max(5, min(365, int(request.GET.get('days', 90) or 90)))
+    return Response(
+        {
+            'symbol': symbol.upper(),
+            'currency': services.currency_for(symbol),
+            'series': services.get_history(symbol, days),
         }
-
-        # Update cache
-        MarketNewsCache.objects.update_or_create(
-            symbol=symbol,
-            defaults={'news_json': result}
-        )
-
-        return JsonResponse(result)
-    except Exception as e:
-        print(f"Error in market_news for {symbol}: {e}")
-        return JsonResponse({'error': str(e)}, status=500)
+    )

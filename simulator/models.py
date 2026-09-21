@@ -55,7 +55,9 @@ class QuizRun(models.Model):
     current_question_index = models.IntegerField(default=0)
     total_score = models.IntegerField(default=0)
     is_completed = models.BooleanField(default=False)
-    xp_awarded = models.BooleanField(default=False)  # Track if XP was already awarded
+    xp_awarded = models.BooleanField(default=False)
+    # One balance carried across the whole run, so consequences accumulate.
+    running_balance = models.DecimalField(max_digits=12, decimal_places=2, default=50000)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def get_scenario_list(self):

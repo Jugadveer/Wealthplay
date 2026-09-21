@@ -1,388 +1,273 @@
-from rest_framework import viewsets ,status 
-from rest_framework .decorators import action ,api_view ,permission_classes 
-from rest_framework .response import Response 
-from rest_framework .permissions import IsAuthenticated ,AllowAny 
-from django .shortcuts import render ,redirect ,get_object_or_404 
-import uuid 
-from rest_framework .response import Response 
-from rest_framework .permissions import IsAuthenticated ,AllowAny 
-from django .shortcuts import render ,redirect ,get_object_or_404 
-from django .contrib .auth .decorators import login_required 
-from django .contrib .auth import login ,authenticate 
-from django .http import JsonResponse 
-from django .utils import timezone 
-from .models import Course ,Topic ,Lesson ,MentorPersona 
-from .serializers import CourseSerializer ,TopicSerializer ,LessonSerializer ,MentorPersonaSerializer 
-from .course_views import load_courses_data ,get_course_detail ,get_module_detail 
-from .load_from_folders import load_courses_from_folders 
-from users .models import UserProgress ,UserProfile 
-import json 
+"""
+Course API.
+
+Serves the catalogue from :mod:`courses.content` and tracks progress in
+``UserCourseProgress``. There is one content store now; the parallel
+``financial_course.json`` store that the mentor used to read has been removed.
+"""
+
+from __future__ import annotations
+
+import logging
+
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.response import Response
+
+from users.models import UserProfile
+
+from . import content
+from .models import UserCourseProgress
+
+logger = logging.getLogger(__name__)
 
 
+def _progress_for(user, course_id: str | None = None) -> dict[str, str]:
+    """Module id -> status for one user, optionally narrowed to a course."""
+    if not user.is_authenticated:
+        return {}
 
-class CourseViewSet (viewsets .ReadOnlyModelViewSet ):
-    queryset =Course .objects .all ()
-    serializer_class =CourseSerializer 
+    rows = UserCourseProgress.objects.filter(user=user).exclude(module_id='')
+    if course_id:
+        rows = rows.filter(course_id=course_id)
 
-    @action (detail =True ,methods =['get'])
-    def topics (self ,request ,pk =None ):
-        course =self .get_object ()
-        topics =Topic .objects .filter (course =course )
-        serializer =TopicSerializer (topics ,many =True )
-        return Response (serializer .data )
-
-
-class TopicViewSet (viewsets .ReadOnlyModelViewSet ):
-    queryset =Topic .objects .all ()
-    serializer_class =TopicSerializer 
+    return {f'{row.course_id}:{row.module_id}': row.status for row in rows}
 
 
-class LessonViewSet (viewsets .ReadOnlyModelViewSet ):
-    queryset =Lesson .objects .all ()
-    serializer_class =LessonSerializer 
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def list_courses(request):
+    """Every course, with the caller's completion counts."""
+    progress = _progress_for(request.user)
 
-
-class MentorPersonaViewSet (viewsets .ReadOnlyModelViewSet ):
-    queryset =MentorPersona .objects .all ()
-    serializer_class =MentorPersonaSerializer 
-
-
-
-
-
-
-
-@api_view (['GET'])
-@permission_classes ([IsAuthenticated ])
-def get_courses_with_progress (request ):
-    """Get all courses with user progress and unlock states"""
-    courses =load_courses_data ()
-
-    try :
-        profile =UserProfile .objects .get (user =request .user )
-        user_level =profile .level 
-        user_xp =profile .xp 
-    except UserProgress .DoesNotExist :
-        user_level ='beginner'
-        user_xp =0 
-
-
-    user_progress ={}
-    progress_records =UserProgress .objects .filter (user =request .user )
-    for p in progress_records :
-        if p .course_id and p .module_id :
-            key =f"{p .course_id }_{p .module_id }"
-            user_progress [key ]={
-            'status':p .status ,
-            'xp_awarded':p .xp_awarded ,
-            'completed_at':p .completed_at .isoformat ()if p .completed_at else None 
+    courses = []
+    for course in content.catalogue():
+        completed = sum(
+            1
+            for module in course['modules']
+            if progress.get(f'{course["id"]}:{module["id"]}') == 'completed'
+        )
+        courses.append(
+            {
+                'id': course['id'],
+                'title': course['title'],
+                'level': course['level'],
+                'summary': course['summary'],
+                'xp_to_unlock': course['xp_to_unlock'],
+                'module_count': course['module_count'],
+                'estimated_minutes': course['estimated_minutes'],
+                'completed_modules': completed,
             }
-
-
-    for course in courses :
-        course ['unlocked']=course .get ('xp_to_unlock',0 )<=user_xp 
-        if course .get ('modules'):
-            for module in course ['modules']:
-                key =f"{course ['id']}_{module ['id']}"
-                progress =user_progress .get (key )
-
-                if progress :
-                    module ['status']=progress ['status']
-                    module ['xp_awarded']=progress .get ('xp_awarded',0 )
-                else :
-
-                    module ['status']='locked'
-                    if module .get ('lock_rule')=='sequential'and module .get ('order',1 )>1 :
-
-                        prev_module =next ((m for m in course ['modules']if m .get ('order')==module .get ('order')-1 ),None )
-                        if prev_module :
-                            prev_key =f"{course ['id']}_{prev_module ['id']}"
-                            prev_progress =user_progress .get (prev_key )
-                            if prev_progress and prev_progress ['status']=='completed':
-                                module ['status']='unlocked'
-                    elif module .get ('order',1 )==1 and course ['unlocked']:
-                        module ['status']='unlocked'
-
-    return Response (courses )
-
-
-@api_view (['POST'])
-@permission_classes ([IsAuthenticated ])
-def start_lesson (request ,course_id ,module_id ):
-    """Mark lesson as started and return lesson content"""
-    courses =load_courses_data ()
-    course =next ((c for c in courses if c .get ('id')==course_id ),None )
-
-    if not course :
-        return Response ({'error':'Course not found'},status =404 )
-
-    module =next ((m for m in course .get ('modules',[])if m .get ('id')==module_id ),None )
-    if not module :
-        return Response ({'error':'Module not found'},status =404 )
-
-
-    progress ,created =UserProgress .objects .update_or_create (
-    user =request .user ,
-    course_id =course_id ,
-    module_id =module_id ,
-    defaults ={
-    'status':'in_progress',
-    'started_at':timezone .now ()if created else None 
-    }
-    )
-
-
-    return Response ({
-    'course':{
-    'id':course .get ('id'),
-    'title':course .get ('title'),
-    'source':course .get ('source')
-    },
-    'module':module ,
-    'progress':{
-    'status':progress .status ,
-    'started_at':progress .started_at .isoformat ()if progress .started_at else None 
-    }
-    })
-
-
-@api_view (['POST'])
-@permission_classes ([IsAuthenticated ])
-def complete_lesson (request ,course_id ,module_id ):
-    """Mark lesson as completed, award XP, and unlock next lessons"""
-
-    courses =load_courses_from_folders ()
-    if not courses :
-        courses =load_courses_data ()
-    course =next ((c for c in courses if c .get ('id')==course_id ),None )
-
-    if not course :
-        return Response ({'error':'Course not found'},status =404 )
-
-    module =next ((m for m in course .get ('modules',[])if m .get ('id')==module_id ),None )
-    if not module :
-        return Response ({'error':'Module not found'},status =404 )
-
-
-    progress ,created =UserProgress .objects .get_or_create (
-    user =request .user ,
-    course_id =course_id ,
-    module_id =module_id 
-    )
-
-
-    progress .status ='completed'
-    progress .completed_at =timezone .now ()
-    progress .progress_percent =100.0 
-
-
-    xp_reward =module .get ('xp_reward',0 )
-    progress .xp_awarded =xp_reward 
-
-    try :
-        profile =UserProfile .objects .get (user =request .user )
-        profile .xp +=xp_reward 
-        profile .save ()
-    except UserProfile .DoesNotExist :
-        pass 
-
-    progress .save ()
-
-
-    next_module =None 
-    if module .get ('lock_rule')=='sequential':
-        next_module =next ((m for m in course .get ('modules',[])if m .get ('order')==module .get ('order',0 )+1 ),None )
-        if next_module :
-            UserProgress .objects .update_or_create (
-            user =request .user ,
-            course_id =course_id ,
-            module_id =next_module ['id'],
-            defaults ={'status':'unlocked'}
-            )
-
-    return Response ({
-    'status':'completed',
-    'xp_awarded':xp_reward ,
-    'next_module':next_module ,
-    'profile':{
-    'xp':profile .xp if 'profile'in locals ()else 0 ,
-    'level':profile .level if 'profile'in locals ()else 'beginner'
-    }
-    })
-
-
-@api_view (['POST'])
-@permission_classes ([IsAuthenticated ])
-def generate_custom_course (request ):
-    """Generate dynamic LLM-backed course based on ticker via POST {"ticker": "AAPL"}"""
-    ticker =request .data .get ("ticker","").strip ()
-    if not ticker :
-        return Response ({"error":"Ticker is required"},status =400 )
-
-    try :
-        from .llm_generator import generate_dynamic_course 
-
-
-        course_data =generate_dynamic_course (ticker )
-
-
-        module_id =str (uuid .uuid4 ())[:8 ]
-
-        dynamic_module ={
-        'id':f"dynamic-{module_id }",
-        'title':course_data .get ('title',f"Understanding {ticker }"),
-        'summary':course_data .get ('summary',''),
-        'flash_cards':course_data .get ('flash_cards',[]),
-        'mcqs':course_data .get ('mcqs',[]),
-        'fixed_qna':course_data .get ('qna',[]),
-        'xp_reward':150 ,
-        'dynamic':True 
-        }
-
-
-        dynamic_course ={
-        'id':f"course-{ticker .lower ()}",
-        'title':f"{ticker .upper ()} Deep Dive",
-        'level':'intermediate',
-        'modules':[dynamic_module ]
-        }
-
-        return Response ({"course":dynamic_course ,"module":dynamic_module })
-    except Exception as e :
-        return Response ({"error":str (e )},status =500 )
-
-
-
-
-from django .views .decorators .csrf import csrf_exempt 
-from django .views .decorators .http import require_http_methods 
-
-@csrf_exempt
-@api_view (['POST'])
-@permission_classes ([AllowAny ])
-def login_view (request ):
-    from django .contrib .auth import authenticate ,login 
-    from django .http import JsonResponse 
-    import json 
-
-
-    username =request .POST .get ('username')
-    password =request .POST .get ('password')
-
-
-    if not username or not password :
-        try :
-            if hasattr (request ,'body')and request .body :
-                body_data =json .loads (request .body )
-                username =body_data .get ('username')or username 
-                password =body_data .get ('password')or password 
-        except (json .JSONDecodeError ,AttributeError ):
-            pass 
-
-
-    print (f"Login attempt - Username: {username }, Password: {'***'if password else 'None'}")
-    print (f"POST data keys: {list (request .POST .keys ())}")
-    print (f"Request content type: {request .content_type }")
-
-    username =(username or '').strip ()
-    password =password or ''
-
-    if not username :
-        return JsonResponse ({'success':False ,'error':'Username is required'},status =400 )
-    if not password :
-        return JsonResponse ({'success':False ,'error':'Password is required'},status =400 )
-
-    user =authenticate (request ,username =username ,password =password )
-    if user :
-        login (request ,user )
-
-        return JsonResponse ({
-        'success':True ,
-        'redirect':'/dashboard',
-        'needs_onboarding':False 
-        })
-    return JsonResponse ({'success':False ,'error':'Invalid credentials'},status =401 )
-
-
-@csrf_exempt
-@api_view (['POST'])
-@permission_classes ([AllowAny ])
-def signup_view (request ):
-    from django .contrib .auth .models import User 
-    from django .contrib .auth import login ,authenticate 
-    from django .http import JsonResponse 
-    import json 
-
-
-    username =request .POST .get ('username','').strip ()
-    email =request .POST .get ('email','').strip ()
-    password =request .POST .get ('password','')
-    password2 =request .POST .get ('password2','')
-
-
-    if not username or not email :
-        try :
-            if hasattr (request ,'body')and request .body :
-                body_data =json .loads (request .body )
-                username =(body_data .get ('username')or username ).strip ()
-                email =(body_data .get ('email')or email ).strip ()
-                password =body_data .get ('password')or password 
-                password2 =body_data .get ('password2')or password2 
-        except (json .JSONDecodeError ,AttributeError ):
-            pass 
-
-
-    print (f"Signup attempt - Username: {username }, Email: {email }, Password: {'***'if password else 'None'}")
-    print (f"POST data keys: {list (request .POST .keys ())}")
-    print (f"Request content type: {request .content_type }")
-
-    if not username or len (username )<3 :
-        return JsonResponse ({'success':False ,'error':'Username must be at least 3 characters'},status =400 )
-
-    if User .objects .filter (username =username ).exists ():
-        return JsonResponse ({'success':False ,'error':'Username already exists'},status =400 )
-
-    if not email :
-        return JsonResponse ({'success':False ,'error':'Email is required'},status =400 )
-
-    if User .objects .filter (email =email ).exists ():
-        return JsonResponse ({'success':False ,'error':'Email already registered'},status =400 )
-
-    if password !=password2 :
-        return JsonResponse ({'success':False ,'error':'Passwords do not match'},status =400 )
-
-    if not password or len (password )<6 :
-        return JsonResponse ({'success':False ,'error':'Password must be at least 6 characters'},status =400 )
-
-    try :
-        user =User .objects .create_user (username =username ,email =email ,password =password )
-
-
-        from users .models import UserProfile 
-        UserProfile .objects .create (
-        user =user ,
-        level ='beginner',
-        xp =0 
         )
 
-        login (request ,user )
-        return JsonResponse ({
-        'success':True ,
-        'redirect':'/onboarding',
-        'needs_onboarding':True 
-        })
-    except Exception as e :
-        return JsonResponse ({'success':False ,'error':str (e )},status =500 )
+    return Response({'courses': courses})
 
 
-@csrf_exempt
-@api_view (['POST'])
-@permission_classes ([AllowAny ])
-def logout_view (request ):
-    from django .contrib .auth import logout 
-    from django .http import JsonResponse 
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def course_detail(request, course_id):
+    """One course and its module list."""
+    course = content.get_course(course_id)
+    if not course:
+        return Response({'error': 'No such course.'}, status=404)
 
-    logout (request )
+    progress = _progress_for(request.user, course_id)
+
+    return Response(
+        {
+            'id': course['id'],
+            'title': course['title'],
+            'level': course['level'],
+            'summary': course['summary'],
+            'estimated_minutes': course['estimated_minutes'],
+            'modules': [
+                {
+                    'id': module['id'],
+                    'title': module['title'],
+                    'summary': module['summary'],
+                    'order': module['order'],
+                    'estimated_minutes': module['estimated_minutes'],
+                    'xp_reward': module['xp_reward'],
+                    'card_count': len(module['cards']),
+                    'question_count': len(module['mcqs']),
+                    'status': progress.get(f'{course_id}:{module["id"]}', 'not_started'),
+                }
+                for module in course['modules']
+            ],
+        }
+    )
 
 
-    return JsonResponse ({'success':True })
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def module_detail(request, course_id, module_id):
+    """One module, ready to render.
+
+    Correct answers are withheld: grading happens server-side so the answer key
+    is never in the page source.
+    """
+    module = content.get_module(course_id, module_id)
+    if not module:
+        return Response({'error': 'No such module.'}, status=404)
+
+    course = content.get_course(course_id)
+    answered = _answered_questions(request.user, course_id, module_id)
+
+    return Response(
+        {
+            'course': {'id': course['id'], 'title': course['title']},
+            'id': module['id'],
+            'title': module['title'],
+            'theory': module['theory'],
+            'estimated_minutes': module['estimated_minutes'],
+            'xp_reward': module['xp_reward'],
+            'cards': module['cards'],
+            'questions': [
+                {
+                    'id': question['id'],
+                    'question': question['question'],
+                    'options': question['options'],
+                    'answered': question['id'] in answered,
+                }
+                for question in module['mcqs']
+            ],
+            'qna': module['qna'],
+            'next': content.next_module(course_id, module_id),
+            'status': _module_status(request.user, course_id, module_id),
+        }
+    )
+
+
+def _answered_questions(user, course_id: str, module_id: str) -> set[str]:
+    row = UserCourseProgress.objects.filter(
+        user=user, course_id=course_id, module_id=module_id
+    ).first()
+    return set(getattr(row, 'answered_questions', None) or [])
+
+
+def _module_status(user, course_id: str, module_id: str) -> str:
+    row = UserCourseProgress.objects.filter(
+        user=user, course_id=course_id, module_id=module_id
+    ).first()
+    return row.status if row else 'not_started'
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def answer_question(request):
+    """Grade one question and award XP the first time it is answered correctly."""
+    course_id = request.data.get('course_id', '')
+    module_id = request.data.get('module_id', '')
+    question_id = str(request.data.get('question_id', ''))
+
+    module = content.get_module(course_id, module_id)
+    if not module:
+        return Response({'error': 'No such module.'}, status=404)
+
+    question = next((q for q in module['mcqs'] if str(q['id']) == question_id), None)
+    if not question:
+        return Response({'error': 'No such question.'}, status=404)
+
+    try:
+        chosen = int(request.data.get('choice'))
+    except (TypeError, ValueError):
+        return Response({'error': 'Choose an option.'}, status=400)
+
+    correct = chosen == question['correct_index']
+
+    row, _ = UserCourseProgress.objects.get_or_create(
+        user=request.user,
+        course_id=course_id,
+        module_id=module_id,
+        defaults={'status': 'in_progress'},
+    )
+
+    answered = set(row.answered_questions or [])
+    first_time = question_id not in answered
+
+    if correct and first_time:
+        answered.add(question_id)
+        row.answered_questions = sorted(answered)
+        row.status = 'in_progress' if row.status == 'not_started' else row.status
+        row.save(update_fields=['answered_questions', 'status', 'last_accessed'])
+
+    xp = 15 if (correct and first_time) else 0
+    if xp:
+        _award_xp(request.user, xp)
+
+    explanation = question['explanation'] if correct else question['hint']
+    if not correct and not explanation:
+        from ai import tutor
+
+        explanation = (
+            tutor.explain_wrong_answer(
+                question['question'],
+                chosen=question['options'][chosen] if 0 <= chosen < len(question['options']) else '',
+                correct=question['options'][question['correct_index']],
+                module_title=module['title'],
+            )
+            or ''
+        )
+
+    return Response(
+        {
+            'correct': correct,
+            'correct_index': question['correct_index'],
+            'explanation': explanation,
+            'xp_awarded': xp,
+        }
+    )
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def complete_module(request):
+    """Mark a module finished, award its XP, and enrol its questions for review."""
+    course_id = request.data.get('course_id', '')
+    module_id = request.data.get('module_id', '')
+
+    module = content.get_module(course_id, module_id)
+    if not module:
+        return Response({'error': 'No such module.'}, status=404)
+
+    row, _ = UserCourseProgress.objects.get_or_create(
+        user=request.user, course_id=course_id, module_id=module_id
+    )
+
+    already_done = row.status == 'completed'
+    if not already_done:
+        from django.utils import timezone
+
+        row.status = 'completed'
+        row.progress_percent = 100.0
+        row.completed_at = timezone.now()
+        row.save()
+        _award_xp(request.user, module['xp_reward'])
+
+        # The module's questions now enter the spaced-repetition queue.
+        from daily.review import sync_cards
+
+        sync_cards(request.user)
+
+    from users.achievement_views import check_and_unlock_achievements
+
+    unlocked = check_and_unlock_achievements(request.user)
+
+    return Response(
+        {
+            'success': True,
+            'already_completed': already_done,
+            'xp_awarded': 0 if already_done else module['xp_reward'],
+            'next': content.next_module(course_id, module_id),
+            'newly_unlocked_achievements': [
+                {'id': a.id, 'name': a.name, 'xp_reward': a.xp_reward} for a in unlocked
+            ],
+        }
+    )
+
+
+def _award_xp(user, amount: int) -> None:
+    profile, _ = UserProfile.objects.get_or_create(user=user)
+    profile.xp += amount
+    profile.save(update_fields=['xp'])
+    profile.calculate_level_from_xp()

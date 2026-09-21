@@ -5,7 +5,6 @@ from django.conf.urls.static import static
 from django.views.generic import TemplateView, RedirectView
 from django.http import Http404
 from .views import home, get_csrf_token
-from users.goals_views import goals_page
 
 def react_app_view(request):
     return TemplateView.as_view(template_name='react_app.html')(request)
@@ -14,13 +13,13 @@ urlpatterns = [
     path('admin', RedirectView.as_view(url='/admin/', permanent=True)),
     path('admin/', admin.site.urls),
     path('api/csrf-token/', get_csrf_token, name='get_csrf_token'),
+    path('api/auth/', include('users.auth_urls')),
     path('api/courses/', include('courses.urls')),
     path('api/chat/', include('chat.urls')),
     path('api/market/', include('market_data.urls')),
     path('api/users/', include('users.urls')),
-    path('api/uploads/', include('uploads.urls')),
-    path('api/cursor/', include('cursor.urls')),
     path('api/scenario/', include('simulator.urls')),
+    path('api/daily/', include('daily.urls')),
     path('', home, name='home'),
 ]
 

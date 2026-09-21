@@ -1,23 +1,35 @@
 """
-Celery tasks for users app
+Scheduled background work.
+
+Both tasks are also management commands, so they can be run by cron, Task
+Scheduler or Celery Beat without requiring a broker to be available.
 """
+
+import logging
+
 from celery import shared_task
-from django.core.management import call_command
-import traceback
+
+from market_data import services
+from users.portfolio.simulation import advance_all
+
+logger = logging.getLogger(__name__)
 
 
 @shared_task
-def update_ml_data_task():
-    """
-    Celery task to update ML data cache.
-    Runs the update_ml_data management command.
-    """
-    try:
-        call_command('update_ml_data')
-        return {'status': 'success', 'message': 'ML data updated successfully'}
-    except Exception as e:
-        error_msg = f'Error updating ML data: {str(e)}'
-        print(error_msg)
-        traceback.print_exc()
-        return {'status': 'error', 'message': error_msg}
+def warm_market_cache():
+    """Refresh quotes for every tracked symbol.
 
+    Without this the first request of the day pays the provider round trip for
+    every symbol on the page.
+    """
+    warmed = services.warm()
+    logger.info('warmed %s market symbols', warmed)
+    return {'warmed': warmed}
+
+
+@shared_task
+def advance_simulated_prices():
+    """Move the fictional practice stocks forward one session."""
+    moved = advance_all()
+    logger.info('advanced %s simulated stocks', moved)
+    return {'moved': moved}

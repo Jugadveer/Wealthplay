@@ -1,467 +1,338 @@
 """
-API endpoints for stock prediction challenges and leaderboard
+Stock prediction challenge and leaderboards.
+
+Scoring rewards *calibrated* calls rather than lucky ones: a correct direction
+earns the base score, and writing a rationale earns a bonus regardless of
+outcome, because articulating a thesis is the skill being taught.
 """
+
+from __future__ import annotations
+
+import random
+
+from django.contrib.auth.models import User
+from django.db.models import Count, Q, Sum
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from django.contrib.auth.models import User
-from django.db.models import F, Q
-from .models import StockPredictionChallenge, ChallengeLeaderboard, UserProfile, StockPredictionQuestion
+
+from ai import tutor
 from simulator.models import UserScenarioAttempt
-import re
-import random
+from users.portfolio import pricing
+
+from .models import ChallengeLeaderboard, StockPredictionChallenge, StockPredictionQuestion
+
+CORRECT_SCORE = 15
+RATIONALE_BONUS = 5
+STREAK_WINDOW = 20
 
 
-def extract_direction_from_prediction(prediction_text):
-    """Extract direction (up/down/neutral) from prediction text"""
-    prediction_lower = prediction_text.lower()
-    
-    # Check for down/bearish indicators
-    down_keywords = ['down', 'fall', 'drop', 'decrease', 'decline', 'bearish', 'sell', 'crash', 'plunge']
-    if any(keyword in prediction_lower for keyword in down_keywords):
-        return 'down'
-    
-    # Check for up/bullish indicators
-    up_keywords = ['up', 'rise', 'increase', 'grow', 'bullish', 'buy', 'surge', 'rally', 'gain']
-    if any(keyword in prediction_lower for keyword in up_keywords):
-        return 'up'
-    
-    return 'neutral'
+# --------------------------------------------------------------------------- #
+# Scoring                                                                      #
+# --------------------------------------------------------------------------- #
 
+def _direction_from_series(series: list[dict]) -> str:
+    """Classify a price series as bullish, bearish or neutral.
 
-def analyze_stock_trend(stock_symbol, price_history):
-    """Analyze stock trend based on price history - returns bullish/bearish/neutral"""
-    # 1. Check if it's a CustomStock with predefined behavior
-    from .models import CustomStock
-    try:
-        custom_stock = CustomStock.objects.get(symbol=stock_symbol)
-        if custom_stock.trend != 'neutral':
-            return 'bullish' if custom_stock.trend == 'bullish' else 'bearish'
-    except CustomStock.DoesNotExist:
-        pass
-
-    if not price_history or len(price_history) < 2:
+    Uses the last ten sessions against the twenty before them. A flat market is
+    genuinely neutral, and calling it either way should not score full marks.
+    """
+    closes = [float(p.get('close') or p.get('price') or 0) for p in series]
+    closes = [c for c in closes if c > 0]
+    if len(closes) < 10:
         return 'neutral'
-    
-    # Get recent prices
-    recent_prices = [h['price'] for h in price_history[-10:]]
-    if len(recent_prices) < 2:
-        return 'neutral'
-    
-    # Calculate trend
-    first_price = recent_prices[0]
-    last_price = recent_prices[-1]
-    change_percent = ((last_price - first_price) / first_price) * 100
-    
-    # Check moving averages if available
-    latest = price_history[-1]
-    ma20 = latest.get('ma20')
-    ma50 = latest.get('ma50')
-    current_price = latest.get('price', 0)
-    
-    # If price is above both MAs, bullish; below both, bearish
-    if ma20 and ma50 and current_price:
-        if current_price > ma20 and current_price > ma50:
-            return 'bullish'
-        elif current_price < ma20 and current_price < ma50:
-            return 'bearish'
-    
-    # Fallback to price trend - reduced threshold for more sensitive detection
-    if change_percent > 0.5:
+
+    recent = closes[-10:]
+    change = (recent[-1] - recent[0]) / recent[0] * 100
+
+    if change > 1.5:
         return 'bullish'
-    elif change_percent < -0.5:
+    if change < -1.5:
         return 'bearish'
-    
     return 'neutral'
 
 
-def evaluate_prediction(user_direction, ai_direction):
-    """Evaluate if user's prediction matches AI analysis"""
-    # Map directions
-    direction_map = {
-        'up': 'bullish',
-        'down': 'bearish',
-        'neutral': 'neutral',
-    }
-    
-    mapped_user_direction = direction_map.get(user_direction, 'neutral')
-    
-    # Check if they match
-    if mapped_user_direction == ai_direction:
-        return True, 15  # Correct prediction, base score
-    elif ai_direction == 'neutral' or mapped_user_direction == 'neutral':
-        return False, 5  # Partial match, lower score
-    else:
-        return False, 0  # Wrong prediction, no score
+def _normalise_call(text: str) -> str:
+    """Map a free-text or button prediction onto bullish/bearish/neutral."""
+    lowered = (text or '').lower()
+
+    if any(word in lowered for word in ('bear', 'down', 'fall', 'drop', 'decline', 'sell', 'short')):
+        return 'bearish'
+    if any(word in lowered for word in ('bull', 'up', 'rise', 'gain', 'rally', 'buy', 'long')):
+        return 'bullish'
+    return 'neutral'
+
+
+def _score(call: str, actual: str, has_rationale: bool) -> tuple[bool, int]:
+    """Return ``(correct, points)``."""
+    correct = call == actual
+    points = CORRECT_SCORE if correct else 0
+
+    # Reading a flat market as flat is a real read, not a non-answer.
+    if not correct and 'neutral' in (call, actual):
+        points = 5
+
+    if has_rationale:
+        points += RATIONALE_BONUS
+
+    return correct, points
+
+
+# --------------------------------------------------------------------------- #
+# Leaderboard                                                                  #
+# --------------------------------------------------------------------------- #
+
+def refresh_standings(user) -> ChallengeLeaderboard:
+    """Recompute one user's standings from their activity.
+
+    Only ever called for a single user. The previous version rebuilt the entire
+    leaderboard, for every user, on every request that touched it.
+    """
+    entry, _ = ChallengeLeaderboard.objects.get_or_create(user=user)
+
+    predictions = StockPredictionChallenge.objects.filter(user=user)
+    totals = predictions.aggregate(
+        score=Sum('score'),
+        total=Count('id'),
+        correct=Count('id', filter=Q(is_correct=True)),
+    )
+
+    scenarios = UserScenarioAttempt.objects.filter(user=user)
+    scenario_totals = scenarios.aggregate(score=Sum('score_earned'), attempts=Count('id'))
+
+    entry.stock_score = totals['score'] or 0
+    entry.total_predictions = totals['total'] or 0
+    entry.correct_predictions = totals['correct'] or 0
+    entry.scenario_score = scenario_totals['score'] or 0
+    entry.scenario_attempts = scenario_totals['attempts'] or 0
+    entry.total_score = entry.stock_score + entry.scenario_score
+
+    # Streak = unbroken run of correct calls, most recent first.
+    streak = 0
+    for correct in predictions.order_by('-created_at').values_list('is_correct', flat=True)[:STREAK_WINDOW]:
+        if not correct:
+            break
+        streak += 1
+
+    entry.current_streak = streak
+    entry.best_streak = max(entry.best_streak, streak)
+    entry.save()
+    return entry
 
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_leaderboard(request):
-    """Get leaderboard for top scores and streaks"""
-    try:
-        leaderboard_type = request.query_params.get('type', 'scores')  # 'scores' or 'streaks'
-        
-        # Get or create leaderboard entries for all users
-        users = User.objects.all()
-        for user in users:
-            ChallengeLeaderboard.objects.get_or_create(user=user)
-        
-        # Update leaderboard from predictions and scenarios
-        from simulator.models import UserScenarioAttempt
-        
-        for entry in ChallengeLeaderboard.objects.all():
-            # Stock predictions
-            predictions = StockPredictionChallenge.objects.filter(user=entry.user)
-            stock_score = sum(p.score for p in predictions)
-            entry.stock_score = stock_score
-            entry.total_predictions = predictions.count()
-            entry.correct_predictions = predictions.filter(is_correct=True).count()
-            
-            # Scenario quizzes
-            scenario_attempts = UserScenarioAttempt.objects.filter(user=entry.user)
-            scenario_score = sum(attempt.score_earned for attempt in scenario_attempts)
-            entry.scenario_score = scenario_score
-            entry.scenario_attempts = scenario_attempts.count()
-            
-            # Total score
-            entry.total_score = stock_score + scenario_score
-            
-            # Calculate current streak
-            recent_predictions = predictions.order_by('-created_at')[:10]
-            streak = 0
-            for pred in recent_predictions:
-                if pred.is_correct:
-                    streak += 1
-                else:
-                    break
-            entry.current_streak = streak
-            entry.best_streak = max(entry.best_streak, streak)
-            entry.save()
-        
-        # Get leaderboard based on type
-        if leaderboard_type == 'streaks':
-            entries = ChallengeLeaderboard.objects.all().order_by('-current_streak', '-total_score')[:20]
-        else:
-            entries = ChallengeLeaderboard.objects.all().order_by('-total_score', '-current_streak')[:20]
-        
-        leaderboard_data = []
-        for idx, entry in enumerate(entries):
-            leaderboard_data.append({
-                'rank': idx + 1,
-                'username': entry.user.username,
-                'total_score': entry.total_score,
-                'current_streak': entry.current_streak,
-                'best_streak': entry.best_streak,
-                'total_predictions': entry.total_predictions,
-                'correct_predictions': entry.correct_predictions,
-            })
-        
-        return Response({
-            'type': leaderboard_type,
-            'leaderboard': leaderboard_data,
-        })
-    except Exception as e:
-        return Response({'error': str(e)}, status=500)
+    """Top players by score or by streak."""
+    board_type = request.query_params.get('type', 'scores')
+    order = (
+        ['-current_streak', '-total_score']
+        if board_type == 'streaks'
+        else ['-total_score', '-current_streak']
+    )
+
+    # Only the requester's row is recomputed; everyone else's was written when
+    # they last played.
+    refresh_standings(request.user)
+
+    entries = ChallengeLeaderboard.objects.select_related('user').order_by(*order)[:20]
+
+    return Response(
+        {
+            'type': board_type,
+            'leaderboard': [
+                {
+                    'rank': rank,
+                    'username': entry.user.username,
+                    'is_you': entry.user_id == request.user.id,
+                    'total_score': entry.total_score,
+                    'current_streak': entry.current_streak,
+                    'best_streak': entry.best_streak,
+                    'total_predictions': entry.total_predictions,
+                    'correct_predictions': entry.correct_predictions,
+                    'accuracy': (
+                        round(entry.correct_predictions / entry.total_predictions * 100)
+                        if entry.total_predictions
+                        else None
+                    ),
+                }
+                for rank, entry in enumerate(entries, start=1)
+            ],
+        }
+    )
 
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_user_challenge_stats(request):
-    """Get current user's challenge statistics including scenario scores"""
-    try:
-        from simulator.models import QuizRun, UserScenarioAttempt
-        
-        leaderboard_entry, _ = ChallengeLeaderboard.objects.get_or_create(user=request.user)
-        
-        # Update from stock predictions
-        predictions = StockPredictionChallenge.objects.filter(user=request.user)
-        stock_score = sum(p.score for p in predictions)
-        leaderboard_entry.stock_score = stock_score
-        leaderboard_entry.total_predictions = predictions.count()
-        leaderboard_entry.correct_predictions = predictions.filter(is_correct=True).count()
-        
-        # Update from scenario quizzes
-        scenario_attempts = UserScenarioAttempt.objects.filter(user=request.user)
-        scenario_score = sum(attempt.score_earned for attempt in scenario_attempts)
-        leaderboard_entry.scenario_score = scenario_score
-        leaderboard_entry.scenario_attempts = scenario_attempts.count()
-        
-        # Calculate total score (stock + scenario)
-        leaderboard_entry.total_score = stock_score + scenario_score
-        
-        # Calculate current streak from stock predictions
-        recent_predictions = predictions.order_by('-created_at')[:10]
-        streak = 0
-        for pred in recent_predictions:
-            if pred.is_correct:
-                streak += 1
-            else:
-                break
-        leaderboard_entry.current_streak = streak
-        leaderboard_entry.best_streak = max(leaderboard_entry.best_streak, streak)
-        leaderboard_entry.save()
-        
-        # Calculate win rate (both activities)
-        total_activities = leaderboard_entry.total_predictions + leaderboard_entry.scenario_attempts
-        total_correct = leaderboard_entry.correct_predictions + scenario_attempts.filter(is_correct=True).count()
-        win_rate = (total_correct / total_activities * 100) if total_activities > 0 else 0
-        
-        return Response({
-            'total_score': leaderboard_entry.total_score,
-            'stock_score': leaderboard_entry.stock_score,
-            'scenario_score': leaderboard_entry.scenario_score,
-            'current_streak': leaderboard_entry.current_streak,
-            'best_streak': leaderboard_entry.best_streak,
-            'total_predictions': leaderboard_entry.total_predictions,
-            'correct_predictions': leaderboard_entry.correct_predictions,
-            'scenario_attempts': leaderboard_entry.scenario_attempts,
-            'win_rate': round(win_rate, 1),
-        })
-    except Exception as e:
-        return Response({'error': str(e)}, status=500)
+    """The requesting user's own standings."""
+    entry = refresh_standings(request.user)
+    attempted = entry.total_predictions + entry.scenario_attempts
 
+    correct = entry.correct_predictions + UserScenarioAttempt.objects.filter(
+        user=request.user, is_correct=True
+    ).count()
+
+    return Response(
+        {
+            'total_score': entry.total_score,
+            'stock_score': entry.stock_score,
+            'scenario_score': entry.scenario_score,
+            'current_streak': entry.current_streak,
+            'best_streak': entry.best_streak,
+            'total_predictions': entry.total_predictions,
+            'correct_predictions': entry.correct_predictions,
+            'scenario_attempts': entry.scenario_attempts,
+            'win_rate': round(correct / attempted * 100, 1) if attempted else 0.0,
+        }
+    )
+
+
+# --------------------------------------------------------------------------- #
+# The game                                                                     #
+# --------------------------------------------------------------------------- #
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_random_stock_question(request):
-    """Get a random stock prediction question with optional difficulty filtering"""
-    try:
-        difficulty = request.query_params.get('difficulty')
-        
-        questions = StockPredictionQuestion.objects.filter(is_active=True)
-        if difficulty:
-            questions = questions.filter(difficulty__iexact=difficulty)
-            
-        if not questions.exists():
-            # Fallback if specific difficulty doesn't exist
-            questions = StockPredictionQuestion.objects.filter(is_active=True)
-            
-        if not questions.exists():
-            return Response({'error': 'No questions available'}, status=404)
-        
-        question = random.choice(list(questions))
-        
-        return Response({
-            'id': question.id,
-            'stock_name': question.stock_name,
-            'stock_symbol': question.stock_symbol,
-            'question': question.question,
-            'chart_data': question.chart_data,
-            'difficulty': question.difficulty,
-            'hint': question.hint,
-            'explanation': question.explanation,
-        })
-    except Exception as e:
-        return Response({'error': str(e)}, status=500)
+    """Serve a prediction round.
+
+    Prefers the authored question bank; falls back to a live chart when the bank
+    is exhausted for the chosen difficulty, so the game never runs out.
+    """
+    difficulty = request.query_params.get('difficulty')
+
+    questions = StockPredictionQuestion.objects.filter(is_active=True)
+    if difficulty:
+        narrowed = questions.filter(difficulty__iexact=difficulty)
+        questions = narrowed if narrowed.exists() else questions
+
+    question = questions.order_by('?').first()
+    if question:
+        return Response(
+            {
+                'id': question.id,
+                'source': 'bank',
+                'stock_name': question.stock_name,
+                'stock_symbol': question.stock_symbol,
+                'question': question.question,
+                'chart_data': question.chart_data,
+                'difficulty': question.difficulty,
+            }
+        )
+
+    symbol = random.choice(['AAPL', 'MSFT', 'NVDA', 'RELIANCE', 'TCS', 'INFY'])
+    quote = pricing.quote(symbol)
+    series = pricing.history(symbol, days=90)
+
+    return Response(
+        {
+            'id': None,
+            'source': 'live',
+            'stock_name': quote['name'],
+            'stock_symbol': symbol,
+            'question': f'Where does {quote["name"]} go over the next week?',
+            'chart_data': series,
+            'currency': quote['currency'],
+            'difficulty': difficulty or 'intermediate',
+        }
+    )
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_prediction_hint(request):
+    """A teaching hint derived from the real series.
+
+    ``available: False`` when no model answered. The UI hides the hint rather
+    than printing a canned line — the previous fallback shipped the literal
+    string "The volume volume surge suggests a potential trend reversal".
+    """
+    symbol = (request.query_params.get('symbol') or '').strip().upper()
+    if not symbol:
+        return Response({'error': 'A symbol is required.'}, status=400)
+
+    quote = pricing.quote(symbol)
+    hint = tutor.chart_hint(symbol, quote['name'], pricing.history(symbol, days=60))
+
+    return Response({'available': bool(hint), 'hint': hint})
 
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def submit_stock_prediction(request):
-    """Submit stock prediction and get AI judge feedback - uses questions if question_id provided"""
-    try:
-        question_id = request.data.get('question_id')
-        stock_symbol = request.data.get('stock_symbol')
-        prediction_text = request.data.get('prediction', '')
-        
-        if not prediction_text:
-            return Response({'error': 'Prediction text required'}, status=400)
-        
-        # If question_id is provided, use the question-based system
-        if question_id:
-            try:
-                question = StockPredictionQuestion.objects.get(id=question_id, is_active=True)
-                
-                # Analyze user's prediction using keyword matching and AI-like analysis
-                user_direction = extract_direction_from_prediction(prediction_text)
-                prediction_lower = prediction_text.lower()
-                
-                # Check if user's answer contains expected keywords
-                keyword_matches = sum(1 for keyword in question.expected_keywords if keyword in prediction_lower)
-                keyword_score = min(keyword_matches / len(question.expected_keywords), 1.0) if question.expected_keywords else 0.5
-                
-                # Check direction match
-                direction_map = {
-                    'up': 'up',
-                    'down': 'down',
-                    'neutral': 'neutral',
-                }
-                direction_match = (user_direction == question.expected_direction)
-                
-                # Calculate score based on keyword matches and direction
-                if direction_match and keyword_score > 0.7:
-                    is_correct = True
-                    score = question.max_score
-                    feedback = f"Masterful prediction! Your technical analysis was spot-on. {question.explanation}"
-                elif direction_match and keyword_score > 0.3:
-                    is_correct = True
-                    score = question.base_score + int((question.max_score - question.base_score) * keyword_score)
-                    feedback = f"Good prediction! You identified the correct trend and valid support/resistance levels. {question.explanation}"
-                elif direction_match:
-                    is_correct = True
-                    score = question.base_score
-                    feedback = f"Correct trend! Although more technical detail would have earned more points. {question.explanation}"
-                elif keyword_score > 0.5:
-                    is_correct = False
-                    score = int(question.base_score * 0.5)
-                    feedback = f"You identified the right technical patterns, but the overall price action was {question.expected_direction}. {question.explanation}"
-                else:
-                    is_correct = False
-                    score = 0
-                    feedback = f"Not quite right. The technical setup favored a {question.expected_direction} move. {question.explanation}"
-                
-                # Save prediction
-                prediction = StockPredictionChallenge.objects.create(
-                    user=request.user,
-                    stock_symbol=question.stock_symbol,
-                    prediction=prediction_text,
-                    prediction_direction=user_direction,
-                    ai_analysis=question.explanation,
-                    ai_direction=question.expected_direction,
-                    is_correct=is_correct,
-                    score=score,
-                    feedback=feedback,
-                )
-                
-                # Update leaderboard
-                leaderboard_entry, _ = ChallengeLeaderboard.objects.get_or_create(user=request.user)
-                leaderboard_entry.total_score += score
-                leaderboard_entry.total_predictions += 1
-                if is_correct:
-                    leaderboard_entry.correct_predictions += 1
-                    leaderboard_entry.current_streak += 1
-                    leaderboard_entry.best_streak = max(leaderboard_entry.best_streak, leaderboard_entry.current_streak)
-                else:
-                    leaderboard_entry.current_streak = 0
-                leaderboard_entry.save()
-                
-                # Check for achievements
-                from .achievement_views import check_and_unlock_achievements
-                check_and_unlock_achievements(request.user)
-                
-                return Response({
-                    'success': True,
-                    'score': score,
-                    'is_correct': is_correct,
-                    'feedback': feedback,
-                    'ai_analysis': question.explanation,
-                    'prediction_direction': user_direction,
-                    'ai_direction': question.expected_direction,
-                    'total_score': leaderboard_entry.total_score,
-                    'current_streak': leaderboard_entry.current_streak,
-                })
-            except StockPredictionQuestion.DoesNotExist:
-                return Response({'error': 'Question not found'}, status=404)
-        
-        # Fallback to original system if no question_id
-        from .portfolio_views import get_stock_detail, get_stock_info
-        
-        if not stock_symbol:
-            return Response({'error': 'Stock symbol required when not using questions'}, status=400)
-        
-        # Get stock info and detail with price history
-        stock_info = get_stock_info(stock_symbol, use_cache=True)
-        if not stock_info or stock_info.get('current_price', 0.0) <= 0.0:
-            return Response({'error': 'Stock not found or data unavailable'}, status=404)
-        
-        # Get stock detail with price history using helper functions
-        from .portfolio_views import generate_price_history
-        from .models import PredictedStockData
-        from django.utils import timezone
-        
-        # Try to get price history from cache first
-        price_history = []
-        try:
-            cached = PredictedStockData.objects.get(symbol=stock_symbol)
-            cache_age = timezone.now() - cached.last_updated
-            if cache_age.total_seconds() < 600:  # 10 minutes
-                price_history = cached.price_history or []
-        except PredictedStockData.DoesNotExist:
-            pass
-        
-        # If no cached history, generate it
-        if not price_history:
-            price_history = generate_price_history(stock_symbol, days=60, use_cache=False)
-        
-        if not price_history:
-            return Response({'error': 'Price history not available for this stock'}, status=404)
-        
-        # Analyze stock trend using actual price history
-        ai_direction = analyze_stock_trend(stock_symbol, price_history)
-        
-        # Also get ML prediction for more accurate analysis
-        from .ml_predictor import ML_PREDICTOR
-        ml_prediction = ML_PREDICTOR.predict(stock_symbol)
-        ml_direction = ml_prediction.get('direction', 'neutral')
-        
-        # Use ML prediction if available, otherwise use trend analysis
-        if ml_direction != 'neutral':
-            ai_direction = ml_direction  # 'bullish', 'bearish', or 'neutral'
-        
-        # Extract user's prediction direction
-        user_direction = extract_direction_from_prediction(prediction_text)
-        
-        # Evaluate prediction
-        is_correct, base_score = evaluate_prediction(user_direction, ai_direction)
-        
-        # Generate feedback
-        import random
-        if is_correct:
-            score = base_score + random.randint(0, 5)  # 15-20 points for correct
-            feedback = "Great prediction! Your analysis shows good understanding of market trends."
-            ai_analysis = f"The stock's technical indicators and ML analysis suggest a {ai_direction} trend, confirming your prediction."
-        else:
-            score = base_score  # 0-5 points for incorrect
-            if user_direction == 'down' and ai_direction == 'bullish':
-                feedback = "Your prediction was incorrect. The stock shows bullish indicators, contradicting your prediction of downward movement."
-                ai_analysis = f"The stock's technical indicators and ML analysis suggest a {ai_direction} trend. Your prediction of a downward movement does not align with the current market analysis."
-            elif user_direction == 'up' and ai_direction == 'bearish':
-                feedback = "Your prediction was incorrect. The stock shows bearish indicators, contradicting your prediction of upward movement."
-                ai_analysis = f"The stock's technical indicators and ML analysis suggest a {ai_direction} trend. Your prediction of an upward movement does not align with the current market analysis."
-            else:
-                feedback = "Your prediction is partially correct. Consider analyzing the technical indicators more carefully."
-                ai_analysis = f"The stock's technical indicators and ML analysis suggest a {ai_direction} trend."
-        
-        # Save prediction
-        prediction = StockPredictionChallenge.objects.create(
-            user=request.user,
-            stock_symbol=stock_symbol,
-            prediction=prediction_text,
-            prediction_direction=user_direction,
-            ai_analysis=ai_analysis,
-            ai_direction=ai_direction,
-            is_correct=is_correct,
-            score=score,
-            feedback=feedback,
-        )
-        
-        # Update leaderboard
-        leaderboard_entry, _ = ChallengeLeaderboard.objects.get_or_create(user=request.user)
-        leaderboard_entry.total_score += score
-        leaderboard_entry.total_predictions += 1
-        if is_correct:
-            leaderboard_entry.correct_predictions += 1
-            leaderboard_entry.current_streak += 1
-            leaderboard_entry.best_streak = max(leaderboard_entry.best_streak, leaderboard_entry.current_streak)
-        else:
-            leaderboard_entry.current_streak = 0
-        leaderboard_entry.save()
-        
-        return Response({
-            'success': True,
-            'score': score,
-            'is_correct': is_correct,
-            'feedback': feedback,
-            'ai_analysis': ai_analysis,
-            'prediction_direction': user_direction,
-            'ai_direction': ai_direction,
-            'total_score': leaderboard_entry.total_score,
-            'current_streak': leaderboard_entry.current_streak,
-        })
-    except Exception as e:
-        import traceback
-        print(f"Error in submit_stock_prediction: {e}")
-        print(traceback.format_exc())
-        return Response({'error': str(e)}, status=500)
+    """Record a call, score it, and return feedback on the reasoning."""
+    call_text = (request.data.get('prediction') or '').strip()
+    rationale = (request.data.get('rationale') or '').strip()
+    question_id = request.data.get('question_id')
+    symbol = (request.data.get('stock_symbol') or '').strip().upper()
 
+    if not call_text:
+        return Response({'error': 'A prediction is required.'}, status=400)
+
+    question = StockPredictionQuestion.objects.filter(id=question_id).first() if question_id else None
+
+    if question:
+        symbol = question.stock_symbol
+        actual = question.expected_direction
+        # The bank stores up/down/neutral; scoring speaks bullish/bearish.
+        actual = {'up': 'bullish', 'down': 'bearish'}.get(actual, 'neutral')
+        explanation = question.explanation
+        series = question.chart_data or []
+    else:
+        if not symbol:
+            return Response({'error': 'A stock symbol is required.'}, status=400)
+        series = pricing.history(symbol, days=60)
+        actual = _direction_from_series(series)
+        explanation = ''
+
+    call = _normalise_call(call_text)
+    correct, points = _score(call, actual, bool(rationale))
+
+    # A bank question's expected direction is authored, not derived from its
+    # synthetic chart, so quoting a move from that chart would contradict it.
+    # Only live rounds report a real percentage.
+    move = 0.0
+    if question is None:
+        closes = [float(p.get('close') or p.get('price') or 0) for p in series]
+        closes = [c for c in closes if c > 0]
+        if len(closes) >= 10:
+            move = (closes[-1] - closes[-10]) / closes[-10] * 100
+
+    feedback = tutor.judge_prediction(
+        symbol,
+        called=call,
+        actual=actual,
+        rationale=rationale,
+        move_percent=move,
+    )
+
+    StockPredictionChallenge.objects.create(
+        user=request.user,
+        stock_symbol=symbol,
+        prediction=call_text,
+        prediction_direction=call,
+        ai_direction=actual,
+        ai_analysis=explanation,
+        is_correct=correct,
+        score=points,
+        feedback=feedback or '',
+    )
+
+    entry = refresh_standings(request.user)
+
+    return Response(
+        {
+            'correct': correct,
+            'score': points,
+            'your_call': call,
+            'actual': actual,
+            'move_percent': round(move, 2) if question is None else None,
+            'explanation': explanation,
+            'feedback': feedback,
+            'feedback_available': bool(feedback),
+            'rationale_bonus': RATIONALE_BONUS if rationale else 0,
+            'total_score': entry.total_score,
+            'current_streak': entry.current_streak,
+        }
+    )

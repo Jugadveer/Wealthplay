@@ -15,6 +15,7 @@ import os
 from urllib.parse import urlparse
 
 import dj_database_url
+from django.core.exceptions import ImproperlyConfigured
 from dotenv import load_dotenv
 
 # Load environment variables from .env file
@@ -23,10 +24,16 @@ load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-change-me')
-
 DEBUG = os.environ.get('DEBUG', 'True').lower() in ('1', 'true', 'yes', 'on')
 DEBUG_PROPAGATE_EXCEPTIONS = os.environ.get('DEBUG_PROPAGATE_EXCEPTIONS', 'False').lower() in ('1', 'true', 'yes', 'on')
+
+SECRET_KEY = os.environ.get('SECRET_KEY', '').strip()
+if not SECRET_KEY:
+    if not DEBUG:
+        # Shipping a known key would let anyone forge session cookies, so fail
+        # loudly at boot rather than quietly running insecure in production.
+        raise ImproperlyConfigured('SECRET_KEY must be set when DEBUG is off.')
+    SECRET_KEY = 'dev-only-insecure-key-do-not-deploy'
 
 
 def _split_env_list(name, default=''):
@@ -82,10 +89,9 @@ INSTALLED_APPS = [
     'courses',
     'chat',
     'users',
-    'uploads',
-    'cursor',
     'simulator',
     'market_data',
+    'daily',
 ]
 
 MIDDLEWARE = [
@@ -231,37 +237,44 @@ CORS_ALLOWED_HEADERS = [
 # Channels
 ASGI_APPLICATION = 'wealthplay.asgi.application'
 
-# REDIS_URL = os.environ.get('REDIS_URL', 'redis://localhost:6379/0')
-# 
-# if REDIS_URL:
-#     CHANNEL_LAYERS = {
-#         'default': {
-#             'BACKEND': 'channels_redis.core.RedisChannelLayer',
-#             'CONFIG': {
-#                 'hosts': [REDIS_URL],
-#             },
-#         },
-#     }
-# else:
-CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels.layers.InMemoryChannelLayer',
-    },
-}
+REDIS_URL = os.environ.get('REDIS_URL', '').strip()
 
-# Celery Configuration (Disabled for local production - use in-memory or comment out)
-# CELERY_BROKER_URL = REDIS_URL
-# CELERY_RESULT_BACKEND = REDIS_URL
-# CELERY_ACCEPT_CONTENT = ['json']
-# CELERY_TASK_SERIALIZER = 'json'
-# CELERY_RESULT_SERIALIZER = 'json'
-# CELERY_TIMEZONE = TIME_ZONE
-# CELERY_BEAT_SCHEDULE = {
-#     'update-ml-data-every-5-minutes': {
-#         'task': 'users.tasks.update_ml_data_task',
-#         'schedule': 300.0,
-#     },
-# }
+# Channels runs in-memory locally. Redis is only wired up when REDIS_URL is set,
+# so a missing Redis never stops the app from booting.
+if REDIS_URL:
+    CHANNEL_LAYERS = {
+        'default': {
+            'BACKEND': 'channels_redis.core.RedisChannelLayer',
+            'CONFIG': {'hosts': [REDIS_URL]},
+        },
+    }
+else:
+    CHANNEL_LAYERS = {
+        'default': {'BACKEND': 'channels.layers.InMemoryChannelLayer'},
+    }
+
+# The cache is load-bearing, not an optimisation: market_data.services keeps
+# every yfinance call behind it. Without it a dashboard load spends ~15s in
+# provider I/O.
+#
+# The default is a database cache rather than LocMem because LocMem is
+# per-process: a warm-up run by cron, or a second gunicorn worker, would not
+# share it. Point REDIS_URL at a server to swap in something faster.
+if REDIS_URL:
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+            'LOCATION': REDIS_URL,
+        },
+    }
+else:
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+            'LOCATION': 'wealthplay_cache',
+            'OPTIONS': {'MAX_ENTRIES': 5000, 'CULL_FREQUENCY': 4},
+        },
+    }
 
 LOGGING = {
     'version': 1,
