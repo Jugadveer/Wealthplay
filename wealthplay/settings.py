@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
+from importlib.util import find_spec
 from urllib.parse import urlparse
 
 import dj_database_url
@@ -61,6 +62,18 @@ CSRF_TRUSTED_ORIGINS = _split_env_list(
     'http://localhost:3000,http://127.0.0.1:3000,http://localhost:3001,http://127.0.0.1:3001,http://localhost:8000,http://127.0.0.1:8000',
 )
 CSRF_TRUSTED_ORIGINS = [origin.rstrip('/') for origin in CSRF_TRUSTED_ORIGINS]
+
+# Vercel gives each deployment its own generated hostname, and a preview build
+# gets a new one on every push. Reading it from the environment means a deploy
+# is never rejected as a DisallowedHost for a name nobody could have configured
+# in advance.
+VERCEL_URL = os.environ.get('VERCEL_URL', '').strip()
+VERCEL_BRANCH_URL = os.environ.get('VERCEL_BRANCH_URL', '').strip()
+for _host in (VERCEL_URL, VERCEL_BRANCH_URL, os.environ.get('VERCEL_PROJECT_PRODUCTION_URL', '').strip()):
+    _host = _normalize_host(_host)
+    if _host and _host not in ALLOWED_HOSTS:
+        ALLOWED_HOSTS.append(_host)
+        CSRF_TRUSTED_ORIGINS.append(f'https://{_host}')
 CSRF_COOKIE_SAMESITE = 'Lax'
 CSRF_COOKIE_HTTPONLY = not DEBUG
 
@@ -71,11 +84,25 @@ if not DEBUG and SECURE_SSL_REDIRECT:
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
 
+    # HSTS tells a browser to refuse plain HTTP to this host for the given
+    # window, and it cannot be taken back within that window — a browser that
+    # has cached the header will not fall back if TLS later breaks.
+    #
+    # So the default is one hour: long enough to be a real protection, short
+    # enough that a mistake ages out the same afternoon. Raise it to 31536000
+    # once the domain has been stable on HTTPS for a while.
+    SECURE_HSTS_SECONDS = int(os.environ.get('SECURE_HSTS_SECONDS', '3600'))
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = os.environ.get(
+        'SECURE_HSTS_INCLUDE_SUBDOMAINS', 'False'
+    ).lower() in ('1', 'true', 'yes', 'on')
+    # Never defaulted on: preloading is submitted to a browser-vendor list and
+    # removal takes months.
+    SECURE_HSTS_PRELOAD = False
+
 
 # Application definition
 
 INSTALLED_APPS = [
-    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -85,7 +112,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'corsheaders',
-    'channels',
     'courses',
     'chat',
     'users',
@@ -94,6 +120,33 @@ INSTALLED_APPS = [
     'daily',
     'ai',
 ]
+
+# Daphne and Channels are loaded only when they are installed.
+#
+# There are no WebSocket routes — `wealthplay/asgi.py` says so, and the two
+# consumers that once existed were removed because nothing ever connected to
+# them. That makes Daphne, Channels and Twisted about 80 MB of dependencies
+# buying nothing, which matters on a serverless host with a package size limit.
+#
+# They stay supported rather than deleted: a deployment that wants ASGI installs
+# `requirements-asgi.txt` and these come back with no settings change.
+def _installed(module: str) -> bool:
+    """Whether a package is importable, without importing it.
+
+    Wrapped because `find_spec` does not only return None for a missing
+    package — it raises when a parent package is absent, and settings failing to
+    import is a much worse outcome than an optional app not being registered.
+    """
+    try:
+        return find_spec(module) is not None
+    except (ImportError, ValueError):
+        return False
+
+
+if _installed('daphne'):
+    INSTALLED_APPS.insert(0, 'daphne')
+if _installed('channels'):
+    INSTALLED_APPS.append('channels')
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -132,10 +185,29 @@ WSGI_APPLICATION = 'wealthplay.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASE_URL = os.environ.get('DATABASE_URL', '').strip()
+# Serverless hosts give each invocation a fresh, read-only-ish filesystem, so a
+# SQLite file there is not a database — it is a file that appears empty to the
+# next request and loses every signup in between. Refusing to start is the
+# kinder failure: the alternative is a site that looks like it works.
+ON_SERVERLESS = bool(os.environ.get('VERCEL') or os.environ.get('AWS_LAMBDA_FUNCTION_NAME'))
+
 if DATABASE_URL:
     DATABASES = {
-        'default': dj_database_url.parse(DATABASE_URL, conn_max_age=600, ssl_require=True)
+        # `conn_max_age=0` on serverless: a pooled connection cannot outlive the
+        # invocation that opened it, and holding one open exhausts Postgres's
+        # connection limit as the platform scales instances out.
+        'default': dj_database_url.parse(
+            DATABASE_URL,
+            conn_max_age=0 if ON_SERVERLESS else 600,
+            ssl_require=True,
+        )
     }
+elif ON_SERVERLESS:
+    raise ImproperlyConfigured(
+        'DATABASE_URL must be set on a serverless deployment. SQLite cannot be '
+        'used: the filesystem is per-invocation, so writes are silently lost. '
+        'Attach a Postgres database and set DATABASE_URL.'
+    )
 else:
     DATABASES = {
         'default': {
