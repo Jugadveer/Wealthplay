@@ -10,7 +10,6 @@ from __future__ import annotations
 
 import random
 
-from django.contrib.auth.models import User
 from django.db.models import Count, Q, Sum
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated

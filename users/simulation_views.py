@@ -3,9 +3,6 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from .models import HistoricalCrisis, HistoricalNews, TimeCapsuleSession
-from django.utils import timezone
-from decimal import Decimal
-import yfinance as yf
 import random
 
 @api_view(['GET'])

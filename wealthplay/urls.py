@@ -3,7 +3,6 @@ from django.urls import path, include, re_path
 from django.conf import settings
 from django.conf.urls.static import static
 from django.views.generic import RedirectView
-from django.http import Http404
 from .views import home, get_csrf_token
 
 urlpatterns = [
