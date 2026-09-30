@@ -184,7 +184,27 @@ WSGI_APPLICATION = 'wealthplay.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASE_URL = os.environ.get('DATABASE_URL', '').strip()
+def _database_url() -> str:
+    """The Postgres connection string, under whichever name the host used.
+
+    Vercel's database integrations inject their own variable names — Neon sets
+    `DATABASE_URL` and `POSTGRES_URL`, Supabase sets `POSTGRES_URL`, and the
+    unpooled variants exist alongside them. Reading only `DATABASE_URL` means a
+    database that is correctly attached still looks missing.
+
+    Pooled connections come first. Each invocation opens its own connection, so
+    an unpooled endpoint exhausts the server's connection limit as the platform
+    scales instances out.
+    """
+    for name in ('DATABASE_URL', 'POSTGRES_URL', 'POSTGRES_PRISMA_URL',
+                 'DATABASE_URL_UNPOOLED', 'POSTGRES_URL_NON_POOLING'):
+        value = os.environ.get(name, '').strip()
+        if value:
+            return value
+    return ''
+
+
+DATABASE_URL = _database_url()
 # Serverless hosts give each invocation a fresh, read-only-ish filesystem, so a
 # SQLite file there is not a database — it is a file that appears empty to the
 # next request and loses every signup in between. Refusing to start is the
