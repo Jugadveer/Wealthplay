@@ -75,7 +75,18 @@ for _host in (VERCEL_URL, VERCEL_BRANCH_URL, os.environ.get('VERCEL_PROJECT_PROD
         ALLOWED_HOSTS.append(_host)
         CSRF_TRUSTED_ORIGINS.append(f'https://{_host}')
 CSRF_COOKIE_SAMESITE = 'Lax'
-CSRF_COOKIE_HTTPONLY = not DEBUG
+# Readable by JavaScript, deliberately.
+#
+# The client reads this cookie and echoes it back in an X-CSRFToken header, so
+# marking it HttpOnly does not harden anything — it just stops the client ever
+# seeing the token, and every POST fails with "CSRF Failed: CSRF token missing".
+# It was `not DEBUG`, so it only broke once deployed: signup worked, and then
+# onboarding, trades, quiz answers and goals all returned 403.
+#
+# Django's own documentation says the same: the CSRF token is not a secret in
+# the way a session id is. It defends against another origin submitting a form,
+# and an attacker who can already run JavaScript here has worse options.
+CSRF_COOKIE_HTTPONLY = False
 
 SECURE_SSL_REDIRECT = os.environ.get('SECURE_SSL_REDIRECT', 'False').lower() in ('1', 'true', 'yes', 'on')
 

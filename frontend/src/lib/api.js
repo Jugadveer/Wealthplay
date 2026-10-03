@@ -17,21 +17,33 @@ function csrfCookie() {
     .find(([name]) => name === 'csrftoken')?.[1]
 }
 
-/** Ensure the CSRF cookie exists, asking the server once if it does not. */
+/**
+ * The token, when the cookie cannot be read.
+ *
+ * `/csrf-token/` returns it in the body as well as setting the cookie. Keeping
+ * it means an HttpOnly cookie costs a request rather than breaking the app: the
+ * cookie is still sent with the request, and Django only needs the header to
+ * match it. Deploying with `CSRF_COOKIE_HTTPONLY` on made every POST fail,
+ * because this read `document.cookie` and found nothing.
+ */
+let issuedToken = ''
+
+/** Ensure a CSRF token is available, asking the server once if it is not. */
 export async function ensureCsrf() {
   const existing = csrfCookie()
   if (existing) return existing
 
   try {
-    await http.get('/csrf-token/')
+    const { data } = await http.get('/csrf-token/')
+    issuedToken = data?.csrfToken || ''
   } catch {
     // Not fatal: unsafe requests will surface a clearer 403 if it really is missing.
   }
-  return csrfCookie()
+  return csrfCookie() || issuedToken
 }
 
 http.interceptors.request.use((config) => {
-  const token = csrfCookie()
+  const token = csrfCookie() || issuedToken
   if (token) config.headers['X-CSRFToken'] = token
 
   // Let the browser set the multipart boundary itself.
