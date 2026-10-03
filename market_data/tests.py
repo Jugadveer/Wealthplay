@@ -15,7 +15,7 @@ suite that fails when Yahoo is slow.
 
 import json
 import math
-from datetime import date, datetime, timezone
+from datetime import date, datetime, timedelta, timezone
 from unittest.mock import patch
 
 from django.test import TestCase, override_settings
@@ -170,3 +170,63 @@ class SessionTests(TestCase):
             _, crumb = services._session()
         services._reset_session()
         self.assertEqual(crumb, '39Bdk.Qn6sJ')
+
+
+@override_settings(CACHES=LOCMEM)
+class MarketWireTests(TestCase):
+    """The wire that merges several symbols' feeds into one list."""
+
+    def _leaders(self, when):
+        universe = list(services.TRACKED_SYMBOLS)
+        stride = max(1, len(universe) // services.NEWS_SOURCES)
+        start = when.toordinal()
+        return [universe[(start + o * stride) % len(universe)]
+                for o in range(services.NEWS_SOURCES)]
+
+    def test_every_day_polls_a_listing_that_has_news(self):
+        """The provider's search index carries no stories for `.NS` tickers.
+
+        The picks used to be five consecutive entries, and the tracked list is
+        eight US listings followed by the NSE ones — so roughly a third of days
+        landed on an all-Indian window and the whole wire came back empty.
+        """
+        for offset in range(40):
+            day = date(2026, 1, 1) + timedelta(days=offset)
+            leaders = self._leaders(day)
+            self.assertTrue(
+                [s for s in leaders if s not in services.NSE_SYMBOLS],
+                f'{day} polls only NSE symbols: {leaders}',
+            )
+
+    def test_the_same_story_is_not_listed_twice(self):
+        """One story syndicates across several listings' feeds."""
+        story = {'title': 'Shared story', 'publisher': 'Reuters',
+                 'link': 'https://example.com/a', 'summary': '', 'published': ''}
+        with patch.object(services, '_fetch_news', return_value=[story]):
+            wire = services._fetch_market_news(limit=8)
+        self.assertEqual(len(wire), 1)
+
+    def test_a_failing_symbol_does_not_empty_the_wire(self):
+        calls = {'n': 0}
+
+        def flaky(symbol, limit):
+            calls['n'] += 1
+            if calls['n'] == 1:
+                raise RuntimeError('provider down')
+            return [{'title': f'Story {symbol}', 'publisher': 'X',
+                     'link': f'https://example.com/{symbol}', 'summary': '', 'published': ''}]
+
+        with patch.object(services, '_fetch_news', side_effect=flaky):
+            wire = services._fetch_market_news(limit=8)
+        self.assertEqual(len(wire), services.NEWS_SOURCES - 1)
+
+    def test_newest_first(self):
+        def feed(symbol, limit):
+            order = {'AAPL': '2026-01-03T00:00:00', 'MSFT': '2026-01-05T00:00:00'}
+            return [{'title': f'S {symbol}', 'publisher': 'X', 'link': f'u/{symbol}',
+                     'summary': '', 'published': order.get(symbol, '2026-01-01T00:00:00')}]
+
+        with patch.object(services, '_fetch_news', side_effect=feed):
+            wire = services._fetch_market_news(limit=8)
+        stamps = [a['published'] for a in wire]
+        self.assertEqual(stamps, sorted(stamps, reverse=True))

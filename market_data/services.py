@@ -477,6 +477,71 @@ def _window(start: date, end: date) -> dict:
     }
 
 
+def get_market_news(limit: int = 8) -> list[dict]:
+    """The day's headlines across the tracked universe, most recent first.
+
+    A single symbol's feed goes quiet for days at a time, so the wire used to
+    show the same four stories all week. This pulls from several listings at
+    once, rotates which ones lead on a daily cycle so the mix genuinely turns
+    over, then dedupes and sorts by publication time.
+
+    Cached for fifteen minutes: fresh enough to be a news feed, long enough that
+    a page load never waits on eight provider calls.
+    """
+    return _cached(f"news:market:{limit}:{date.today()}", TTL_NEWS, lambda: _fetch_market_news(limit)) or []
+
+
+# How many listings to poll for one wire. More would be slower without being
+# meaningfully more varied — the same wire services syndicate across all of them.
+NEWS_SOURCES = 5
+
+
+def _fetch_market_news(limit: int) -> list[dict]:
+    """Merge several symbols' feeds into one wire."""
+    # Strided rather than consecutive. The tracked list is eight US listings
+    # followed by the NSE ones, so taking five in a row lands on an all-Indian
+    # window roughly a third of the time — and the provider's search index
+    # carries no stories for `.NS` tickers, so the whole wire came back empty
+    # on those days. Spreading the picks guarantees a mix.
+    #
+    # Searching the bare symbol is not the fix: "RELIANCE" returns stories about
+    # Reliance Steel, a different company on a US exchange.
+    universe = list(TRACKED_SYMBOLS)
+    stride = max(1, len(universe) // NEWS_SOURCES)
+    start = date.today().toordinal()
+    leaders = [universe[(start + offset * stride) % len(universe)] for offset in range(NEWS_SOURCES)]
+
+    seen: set[str] = set()
+    articles = []
+
+    for symbol in leaders:
+        try:
+            for article in _fetch_news(symbol, limit):
+                key = (article.get("link") or article["title"]).strip().lower()
+                if key in seen:
+                    continue
+                seen.add(key)
+                articles.append({**article, "symbol": symbol})
+        except Exception:
+            logger.warning("news unavailable for %s", symbol, exc_info=True)
+
+    articles.sort(key=lambda article: _published_at(article), reverse=True)
+    return articles[:limit]
+
+
+def _published_at(article: dict) -> float:
+    """Sort key. Handles the epoch seconds and the ISO string the provider mixes."""
+    raw = article.get("published")
+    if isinstance(raw, (int, float)):
+        return float(raw)
+    if isinstance(raw, str) and raw:
+        try:
+            return datetime.fromisoformat(raw.replace("Z", "+00:00")).timestamp()
+        except ValueError:
+            return 0.0
+    return 0.0
+
+
 def _fetch_news(symbol: str, limit: int) -> list[dict]:
     """Headlines for a symbol.
 
