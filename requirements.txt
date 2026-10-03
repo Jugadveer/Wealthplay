@@ -3,16 +3,21 @@
 # Pinned exactly so a clean clone reproduces the environment that was tested.
 # Install:  pip install -r requirements.txt   (Python 3.12+)
 #
-# This is the deployable set, and it is deliberately the smaller one. Serverless
-# hosts cap an unzipped function at 250 MB; this comes to roughly 200 MB, and
-# the ASGI and worker stacks that used to sit here accounted for about 80 MB
-# while serving no route the app actually has.
+# This is the deployable set, and it is deliberately small. A serverless
+# function is capped at 225 MB unzipped; this comes to roughly 70 MB.
 #
-# Daphne, Channels, Twisted and Celery now live in `requirements-asgi.txt`.
-# Install that as well on a host that runs a long-lived ASGI process or a
-# scheduled worker. Nothing in the code requires them: `settings.py` adds the
-# apps only when they import, and `wealthplay/__init__.py` skips Celery when it
-# is absent.
+# Two things used to sit here and no longer do:
+#
+# * The ASGI and worker stacks — Daphne, Channels, Twisted, Celery — about
+#   80 MB serving no route the app actually has, since there are no WebSocket
+#   consumers. They moved to `requirements-asgi.txt`.
+# * pandas and numpy, 119 MB, pulled in by `yfinance` to read a few hundred
+#   numbers out of a JSON response. The provider's JSON endpoints are called
+#   directly now; see `market_data/services.py`.
+#
+# Nothing in the code requires the absent packages: `settings.py` registers
+# Daphne and Channels only when they import, and `wealthplay/__init__.py` skips
+# Celery when it is missing.
 
 # --- Web framework -----------------------------------------------------------
 Django==5.2.12
@@ -30,49 +35,32 @@ asgiref==3.11.1
 gunicorn==23.0.0
 
 # --- Database ----------------------------------------------------------------
-# SQLite locally; psycopg is used when DATABASE_URL points at Postgres, which
-# is required in production because a serverless filesystem does not persist.
+# SQLite locally; psycopg is used when DATABASE_URL points at Postgres, which is
+# required in production because a serverless filesystem does not persist.
 psycopg==3.3.3
 psycopg-binary==3.3.3
 
 # --- Cache -------------------------------------------------------------------
-# Optional: only used when REDIS_URL is set. Without it the database cache is
-# used, which is the right choice on serverless anyway.
-redis==7.4.0
+# No client here. Without REDIS_URL the database cache is used, which is the
+# right choice on serverless anyway. For Redis, add `redis==7.4.0`.
 
 # --- Market data -------------------------------------------------------------
-yfinance==1.2.0
+# curl_cffi rather than plain requests for the provider: Yahoo rejects a stock
+# HTTP client on its TLS fingerprint, and `impersonate` is what gets past that.
+# It is the only part of yfinance that was actually load-bearing.
 curl_cffi==0.13.0
-multitasking==0.0.12
-frozendict==2.4.7
-peewee==4.0.4
-beautifulsoup4==4.14.3
-soupsieve==2.8.3
-protobuf==7.34.1
-websockets==16.0
+cffi==2.0.0
+pycparser==3.0
 
-# --- Data --------------------------------------------------------------------
-# Required by yfinance for its dataframes. Together these are half the
-# deployment size and there is no smaller path to real market history.
-numpy==2.4.4
-pandas==3.0.2
-
-# --- HTTP / crypto -----------------------------------------------------------
+# --- HTTP --------------------------------------------------------------------
 requests==2.33.1
 urllib3==2.6.3
 certifi==2026.2.25
 charset-normalizer==3.4.7
 idna==3.11
-cryptography==46.0.6
-cffi==2.0.0
-pycparser==3.0
 
-# --- Dates / misc ------------------------------------------------------------
-python-dateutil==2.9.0.post0
-pytz==2026.1.post1
+# --- Misc --------------------------------------------------------------------
+# tzdata is required by psycopg on Windows and by Django for zoneinfo on any
+# platform without a system tz database.
 tzdata==2026.1
-tzlocal==5.3.1
-platformdirs==4.9.4
 typing_extensions==4.15.0
-six==1.17.0
-packaging==26.0

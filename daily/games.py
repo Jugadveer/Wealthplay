@@ -135,7 +135,9 @@ def _year_change(symbol: str) -> float | None:
     * ``sorted`` against NaN returns an arbitrary order, so the answer would
       have been wrong even if it had saved.
     """
-    series = services.get_history(symbol, days=250)
+    # Calendar days, not trading days. 250 of them is about eight months, and
+    # the board tells the player it is ranking the past year.
+    series = services.get_history(symbol, days=365)
     closes = [
         point['close']
         for point in series

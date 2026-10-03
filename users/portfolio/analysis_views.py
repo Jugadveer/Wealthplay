@@ -141,8 +141,6 @@ def _replay_series(holdings: dict, start: date, end: date) -> list[dict]:
     Simulated stocks are skipped: they have no real history, so including them
     would invent one.
     """
-    import yfinance as yf
-
     by_date: dict[str, float] = {}
     rate = pricing.usd_to_inr()
 
@@ -151,24 +149,16 @@ def _replay_series(holdings: dict, start: date, end: date) -> list[dict]:
         if quantity <= 0 or CustomStock.objects.filter(symbol=symbol).exists():
             continue
 
-        try:
-            frame = yf.Ticker(services.provider_symbol(symbol)).history(
-                start=start.isoformat(),
-                end=(end + timedelta(days=1)).isoformat(),
-                interval='1d',
-            )
-        except Exception:
-            logger.warning('replay fetch failed for %s', symbol, exc_info=True)
-            continue
-
-        if frame.empty:
+        # Goes through the cache like every other provider read, so replaying
+        # the same crash twice costs one fetch rather than two.
+        series = services.get_history_between(symbol, start, end)
+        if not series:
             continue
 
         currency = services.currency_for(symbol)
-        for index, row in frame.iterrows():
-            key = index.date().isoformat()
-            close = float(pricing.to_inr(float(row['Close']), currency, rate))
-            by_date[key] = by_date.get(key, 0.0) + quantity * close
+        for point in series:
+            close = float(pricing.to_inr(point['close'], currency, rate))
+            by_date[point['date']] = by_date.get(point['date'], 0.0) + quantity * close
 
     return [{'date': key, 'value': round(by_date[key], 2)} for key in sorted(by_date)]
 

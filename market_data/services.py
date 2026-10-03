@@ -25,9 +25,9 @@ from __future__ import annotations
 import logging
 import math
 from dataclasses import asdict, dataclass
-from datetime import date, datetime, timedelta
+from datetime import date, datetime, timedelta, timezone
 
-import yfinance as yf
+from curl_cffi import requests as curl_requests
 from django.core.cache import cache
 
 logger = logging.getLogger(__name__)
@@ -187,6 +187,22 @@ def get_history(symbol: str, days: int = 90) -> list[dict]:
     return _cached(f"history:{symbol}:{days}", TTL_HISTORY, lambda: _fetch_history(symbol, days)) or []
 
 
+def get_history_between(symbol: str, start: date, end: date) -> list[dict]:
+    """Daily closes across an explicit window, oldest first.
+
+    Used by the hindsight replay, which holds today's positions through a past
+    crash. Simulated symbols return nothing rather than a generated series: they
+    have no history to replay, and inventing one would be the opposite of the
+    point.
+    """
+    symbol = symbol.upper()
+    if _simulated_quote(symbol) is not None:
+        return []
+
+    key = f"history:{symbol}:{start.isoformat()}:{end.isoformat()}"
+    return _cached(key, TTL_HISTORY, lambda: _fetch_history_between(symbol, start, end)) or []
+
+
 def get_news(symbol: str, limit: int = 6) -> list[dict]:
     """Recent headlines as ``[{title, publisher, link, summary, published}]``.
 
@@ -216,75 +232,118 @@ def warm(symbols=TRACKED_SYMBOLS) -> int:
 # --------------------------------------------------------------------------- #
 # Kept separate from the cache layer so a provider change touches only this
 # section, and so the shape returned to callers is stable.
+#
+# These used to go through `yfinance`, which returns pandas DataFrames and
+# therefore drags pandas and numpy in behind it. That is 119 MB of wheels to
+# read a few hundred numbers out of a JSON response, and it put the deployed
+# function over a serverless size limit — 242 MB against a 225 MB cap.
+#
+# So the JSON endpoints are called directly. `curl_cffi` stays, because it is
+# the part of yfinance that actually mattered: Yahoo rejects a plain `requests`
+# client on TLS fingerprint, and `impersonate` is what gets past that.
+#
+# Nothing else changed. The same fields come back, including sector and market
+# cap, and gap days still arrive as nulls rather than NaN.
 
-def _fetch_quote(symbol: str) -> dict | None:
-    ticker = yf.Ticker(provider_symbol(symbol))
+CHART_URL = "https://query1.finance.yahoo.com/v8/finance/chart/{symbol}"
+SEARCH_URL = "https://query1.finance.yahoo.com/v1/finance/search"
+SUMMARY_URL = "https://query1.finance.yahoo.com/v10/finance/quoteSummary/{symbol}"
+CRUMB_URL = "https://query1.finance.yahoo.com/v1/test/getcrumb"
+COOKIE_URL = "https://fc.yahoo.com"
 
-    # fast_info is a single lightweight request; .info is a much heavier one, so
-    # try the cheap path first and only fall back when it comes up empty.
-    price = change = None
+PROVIDER_TIMEOUT = 20
+IMPERSONATE = "chrome"
+
+_session_state: dict = {}
+
+
+def _session():
+    """A browser-shaped session, with the crumb the private endpoints want.
+
+    The chart and search endpoints are open. `quoteSummary` — the only source of
+    sector and market cap without an API key — answers 401 "Invalid Crumb"
+    unless a cookie is presented along with a token fetched using it.
+
+    Held per process and rebuilt on rejection, because the crumb expires and a
+    stale one looks exactly like a missing one.
+    """
+    if "session" not in _session_state:
+        session = curl_requests.Session(impersonate=IMPERSONATE)
+        crumb = ""
+        try:
+            session.get(COOKIE_URL, timeout=PROVIDER_TIMEOUT)
+            response = session.get(CRUMB_URL, timeout=PROVIDER_TIMEOUT)
+            candidate = (response.text or "").strip()
+            # An error page is HTML, and an HTML crumb fails every later call.
+            if response.status_code == 200 and candidate and "<" not in candidate:
+                crumb = candidate
+        except Exception:
+            logger.debug("could not establish a provider session", exc_info=True)
+        _session_state["session"] = session
+        _session_state["crumb"] = crumb
+
+    return _session_state["session"], _session_state["crumb"]
+
+
+def _reset_session() -> None:
+    _session_state.clear()
+
+
+def _json(url: str, params: dict | None = None, *, with_crumb: bool = False) -> dict | None:
+    """One GET, returning parsed JSON or ``None``.
+
+    Never raises. A provider failure has to degrade to stale cache rather than a
+    500, and :func:`_cached` is what decides that.
+    """
+    for attempt in range(2):
+        session, crumb = _session()
+        query = dict(params or {})
+        if with_crumb:
+            if not crumb:
+                return None
+            query["crumb"] = crumb
+
+        try:
+            response = session.get(url, params=query, timeout=PROVIDER_TIMEOUT)
+        except Exception:
+            logger.warning("provider request failed: %s", url, exc_info=True)
+            return None
+
+        if response.status_code == 401 and attempt == 0:
+            # The crumb went stale. Rebuild it once and try again.
+            _reset_session()
+            continue
+        if response.status_code != 200:
+            logger.warning("provider %s -> %s", url, response.status_code)
+            return None
+
+        try:
+            return response.json()
+        except Exception:
+            logger.warning("provider returned unparsable JSON: %s", url, exc_info=True)
+            return None
+
+    return None
+
+
+def _chart(symbol: str, **params) -> dict | None:
+    """The chart payload for a symbol: metadata, timestamps and daily bars."""
+    payload = _json(CHART_URL.format(symbol=provider_symbol(symbol)),
+                    {"interval": "1d", **params})
     try:
-        fast = ticker.fast_info
-        price = fast.get("last_price")
-        previous = fast.get("previous_close")
-        if price and previous:
-            change = (price - previous) / previous * 100
-    except Exception:
-        logger.debug("fast_info unavailable for %s", symbol, exc_info=True)
-
-    info = _fetch_profile(symbol) or {}
-
-    if not price:
-        price = info.get("regularMarketPrice") or info.get("currentPrice")
-    if not price:
+        results = payload["chart"]["result"]
+    except (TypeError, KeyError):
         return None
-
-    if change is None:
-        previous = info.get("regularMarketPreviousClose")
-        change = (price - previous) / previous * 100 if previous else 0.0
-
-    return Quote(
-        symbol=symbol,
-        name=info.get("longName") or info.get("shortName") or symbol,
-        price=round(float(price), 2),
-        change_percent=round(float(change), 2),
-        currency=currency_for(symbol),
-        sector=info.get("sector") or "Unknown",
-        market_cap=info.get("marketCap"),
-    ).as_dict()
+    return results[0] if results else None
 
 
-def _fetch_profile(symbol: str) -> dict | None:
-    """Company metadata. Cached for half a day -- a sector does not change."""
+def _bars(chart: dict) -> list[dict]:
+    """Daily closes from a chart payload, with the gaps dropped rather than carried.
 
-    def load():
-        info = yf.Ticker(provider_symbol(symbol)).info
-        # Keep only what is rendered. The raw payload is ~150 keys.
-        return {
-            k: info.get(k)
-            for k in (
-                "longName",
-                "shortName",
-                "sector",
-                "industry",
-                "marketCap",
-                "trailingPE",
-                "regularMarketPrice",
-                "currentPrice",
-                "regularMarketPreviousClose",
-            )
-        }
-
-    return _cached(f"profile:{symbol}", TTL_PROFILE, load)
-
-
-def _fetch_history(symbol: str, days: int) -> list[dict]:
-    """Daily closes from the provider, with the gaps dropped rather than carried.
-
-    The provider returns a row for days it has no price for, with ``NaN`` in the
-    close. ``float(NaN)`` and ``round(NaN, 2)`` are both NaN and neither raises,
-    so those rows used to travel all the way out of here and break two things
-    well away from the cause:
+    The provider returns an entry for days it has no price for, with ``null`` in
+    the close. Those used to arrive from pandas as ``NaN``, which neither
+    ``float()`` nor ``round()`` complains about, so they travelled out of here
+    intact and broke two things far from the cause:
 
     * ``json.dumps`` refuses NaN, so the Oracle's chart question returned a 500
       whenever a drawn symbol had a gap — intermittent, because which symbols
@@ -294,111 +353,160 @@ def _fetch_history(symbol: str, days: int) -> list[dict]:
 
     A day with no price is not a data point, so it does not become one.
     """
-    frame = yf.Ticker(provider_symbol(symbol)).history(period=f"{days}d", interval="1d")
-    if frame.empty:
-        return []
+    timestamps = chart.get("timestamp") or []
+    quote = (chart.get("indicators", {}).get("quote") or [{}])[0]
+    closes = quote.get("close") or []
+    volumes = quote.get("volume") or []
 
     points = []
-    for index, row in frame.iterrows():
-        close = float(row["Close"])
-        if not math.isfinite(close):
+    for index, stamp in enumerate(timestamps):
+        close = closes[index] if index < len(closes) else None
+        if close is None or not math.isfinite(close):
             continue
 
-        volume = row.get("Volume")
-        volume = int(volume) if volume is not None and math.isfinite(float(volume)) else 0
-
+        volume = volumes[index] if index < len(volumes) else None
         points.append({
-            "date": index.date().isoformat(),
-            "close": round(close, 2),
-            "volume": volume,
+            "date": datetime.fromtimestamp(stamp, tz=timezone.utc).date().isoformat(),
+            "close": round(float(close), 2),
+            "volume": int(volume) if volume else 0,
         })
 
     return points
 
 
-def get_market_news(limit: int = 8) -> list[dict]:
-    """The day's headlines across the tracked universe, most recent first.
+def _fetch_quote(symbol: str) -> dict | None:
+    """Current price and the day's move.
 
-    A single symbol's feed goes quiet for days at a time, so the wire used to
-    show the same four stories all week. This pulls from several listings at
-    once, rotates which ones lead on a daily cycle so the mix genuinely turns
-    over, then dedupes and sorts by publication time.
-
-    Cached for fifteen minutes: fresh enough to be a news feed, long enough that
-    a page load never waits on eight provider calls.
+    The change is computed from the last two closes rather than read from the
+    metadata: `chartPreviousClose` is the close before the requested window, so
+    on a year-long range it reports the move since last year.
     """
-    return _cached(f"news:market:{limit}:{date.today()}", TTL_NEWS, lambda: _fetch_market_news(limit)) or []
+    chart = _chart(symbol, range="5d")
+    if chart is None:
+        return None
+
+    meta = chart.get("meta") or {}
+    price = meta.get("regularMarketPrice")
+    bars = _bars(chart)
+
+    if price is None and bars:
+        price = bars[-1]["close"]
+    if price is None:
+        return None
+
+    previous = meta.get("previousClose")
+    if previous is None and len(bars) >= 2:
+        previous = bars[-2]["close"]
+    change = ((float(price) - previous) / previous * 100) if previous else 0.0
+
+    info = _fetch_profile(symbol) or {}
+
+    return Quote(
+        symbol=symbol,
+        name=info.get("name") or meta.get("longName") or meta.get("shortName") or symbol,
+        price=round(float(price), 2),
+        change_percent=round(float(change), 2),
+        currency=currency_for(symbol),
+        sector=info.get("sector") or "Unknown",
+        market_cap=info.get("marketCap"),
+    ).as_dict()
 
 
-# How many listings to poll for one wire. More would be slower without being
-# meaningfully more varied — the same wire services syndicate across all of them.
-NEWS_SOURCES = 5
+def _fetch_profile(symbol: str) -> dict | None:
+    """Company metadata. Cached for half a day -- a sector does not change.
 
+    Two sources, because they fail differently. `quoteSummary` carries both the
+    sector and the market cap but needs a crumb; the search endpoint is open and
+    carries the sector alone. Falling back keeps the ESG and concentration
+    figures working on a day when the crumb cannot be had.
+    """
 
-def _fetch_market_news(limit: int) -> list[dict]:
-    """Merge several symbols' feeds into one wire."""
-    universe = list(TRACKED_SYMBOLS)
-    start = date.today().toordinal() * NEWS_SOURCES
-    leaders = [universe[(start + offset) % len(universe)] for offset in range(NEWS_SOURCES)]
-
-    seen: set[str] = set()
-    articles = []
-
-    for symbol in leaders:
+    def load():
+        ticker = provider_symbol(symbol)
+        payload = _json(SUMMARY_URL.format(symbol=ticker),
+                        {"modules": "assetProfile,price"}, with_crumb=True)
         try:
-            for article in _fetch_news(symbol, limit):
-                key = (article.get("link") or article["title"]).strip().lower()
-                if key in seen:
-                    continue
-                seen.add(key)
-                articles.append({**article, "symbol": symbol})
-        except Exception:
-            logger.warning("news unavailable for %s", symbol, exc_info=True)
+            result = payload["quoteSummary"]["result"][0]
+        except (TypeError, KeyError, IndexError):
+            result = None
 
-    articles.sort(key=lambda article: _published_at(article), reverse=True)
-    return articles[:limit]
+        if result:
+            profile = result.get("assetProfile") or {}
+            price = result.get("price") or {}
+            return {
+                "name": (price.get("longName") or price.get("shortName") or ""),
+                "sector": profile.get("sector") or "",
+                "industry": profile.get("industry") or "",
+                "marketCap": (price.get("marketCap") or {}).get("raw"),
+            }
+
+        search = _json(SEARCH_URL, {"q": ticker, "quotesCount": 4, "newsCount": 0}) or {}
+        for quote in search.get("quotes") or []:
+            if quote.get("symbol") == ticker:
+                return {
+                    "name": quote.get("longname") or quote.get("shortname") or "",
+                    "sector": quote.get("sector") or "",
+                    "industry": quote.get("industry") or "",
+                    "marketCap": None,
+                }
+        return {}
+
+    return _cached(f"profile:{symbol}", TTL_PROFILE, load)
 
 
-def _published_at(article: dict) -> float:
-    """Sort key. Handles the epoch seconds and the ISO string the provider mixes."""
-    raw = article.get("published")
-    if isinstance(raw, (int, float)):
-        return float(raw)
-    if isinstance(raw, str) and raw:
-        try:
-            return datetime.fromisoformat(raw.replace("Z", "+00:00")).timestamp()
-        except ValueError:
-            return 0.0
-    return 0.0
+def _fetch_history(symbol: str, days: int) -> list[dict]:
+    """Daily closes for the last ``days`` days."""
+    end = date.today()
+    chart = _chart(symbol, **_window(end - timedelta(days=days), end))
+    return _bars(chart) if chart else []
+
+
+def _fetch_history_between(symbol: str, start: date, end: date) -> list[dict]:
+    """Daily closes across an explicit window, for the hindsight replay."""
+    chart = _chart(symbol, **_window(start, end))
+    return _bars(chart) if chart else []
+
+
+def _window(start: date, end: date) -> dict:
+    """A date range as the provider's inclusive Unix-timestamp parameters."""
+    midnight = datetime.min.time()
+    return {
+        "period1": int(datetime.combine(start, midnight, tzinfo=timezone.utc).timestamp()),
+        "period2": int(datetime.combine(end + timedelta(days=1), midnight,
+                                        tzinfo=timezone.utc).timestamp()),
+    }
 
 
 def _fetch_news(symbol: str, limit: int) -> list[dict]:
-    """Normalise the provider's news payload.
+    """Headlines for a symbol.
 
-    yfinance moved every field under a ``content`` object. Reading the old flat
-    keys is why the dashboard rendered an empty headline dated 1 January 1970.
-    Both shapes are handled so a provider rollback does not break the feed again.
+    The previous version read a yfinance payload whose fields had moved under a
+    `content` object, which is why the dashboard once rendered an empty headline
+    dated 1 January 1970. A story with no title is dropped rather than shown.
     """
-    articles = []
+    payload = _json(SEARCH_URL, {
+        "q": provider_symbol(symbol),
+        "newsCount": max(limit, 1),
+        "quotesCount": 0,
+    }) or {}
 
-    for item in yf.Ticker(provider_symbol(symbol)).news or []:
-        body = item.get("content") or item
-        title = (body.get("title") or "").strip()
+    articles = []
+    for item in payload.get("news") or []:
+        title = (item.get("title") or "").strip()
         if not title:
             continue
 
-        provider = body.get("provider") or {}
-        url = body.get("canonicalUrl") or body.get("clickThroughUrl") or {}
-
-        articles.append(
-            {
-                "title": title,
-                "publisher": provider.get("displayName") or body.get("publisher") or "",
-                "link": url.get("url") if isinstance(url, dict) else (body.get("link") or ""),
-                "summary": (body.get("summary") or body.get("description") or "").split("\n")[0],
-                "published": body.get("pubDate") or body.get("providerPublishTime") or "",
-            }
-        )
+        published = item.get("providerPublishTime")
+        articles.append({
+            "title": title,
+            "publisher": item.get("publisher") or "",
+            "link": item.get("link") or "",
+            "summary": (item.get("summary") or "").split("\n")[0],
+            "published": (
+                datetime.fromtimestamp(published, tz=timezone.utc).isoformat()
+                if isinstance(published, (int, float)) and published else ""
+            ),
+        })
         if len(articles) >= limit:
             break
 

@@ -59,7 +59,7 @@ you claimed and what happened. Nothing else here is unusual; this is.
 
 **Every quote is cached; no view touches the network.** `market_data.services`
 is the only module allowed to call a provider. Views read through it, so a page
-never blocks on `yfinance`. The cache is load-bearing rather than an
+never blocks on the provider. The cache is load-bearing rather than an
 optimisation: without it, one dashboard load spent ~15 seconds in provider I/O.
 
 **The practice market is a factor model, not noise.** Each simulated stock has a
@@ -219,8 +219,8 @@ a serverless filesystem is per-invocation, so a SQLite file there loses every
 signup, and `settings.py` refuses to start rather than let the site look like it
 works.
 
-A serverless function is capped at 250 MB unzipped and these dependencies come to
-about 200 MB. That margin exists because `requirements.txt` is the smaller file:
+A serverless function is capped at 225 MB unzipped and these dependencies come to
+about 70 MB. That margin exists because `requirements.txt` is the smaller file:
 Daphne, Channels, Twisted and Celery moved to `requirements-asgi.txt`, being
 ~80 MB that served no route the app actually has. `settings.py` registers them
 when they are importable and skips them when they are not, so a long-lived ASGI
@@ -336,7 +336,7 @@ Measured before and after, on the same machine.
 | Working LLM providers | 0 (both models retired upstream) | local model, hosted failover |
 | AI cost per answer | metered | none — it runs here |
 | Tests | 0 | 209 |
-| Deployment size | 280 MB | 201 MB |
+| Deployment size | 280 MB | 70 MB |
 
 Functional fixes, each verified in a browser:
 
@@ -357,6 +357,12 @@ Functional fixes, each verified in a browser:
 - Achievement XP was granted inline and again in a trailing pass.
 - Earned achievements displayed as locked, because the list was cached in
   `localStorage` and never invalidated.
+- **The deployed function was 17 MB over the serverless size limit.** `yfinance`
+  returns DataFrames, so it drags pandas and numpy behind it — 119 MB of wheels
+  to read a few hundred numbers out of a JSON response. The provider's JSON
+  endpoints are called directly now, which also removes pandas from every cold
+  start. `curl_cffi` stays, because it is the part of yfinance that mattered:
+  Yahoo rejects a plain HTTP client on its TLS fingerprint.
 - The news feed parsed a yfinance schema that had moved, rendering an empty
   headline dated 1 January 1970.
 - Flashcards showed the answer face-up, duplicating the theory above them.

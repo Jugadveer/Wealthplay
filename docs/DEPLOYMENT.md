@@ -57,9 +57,13 @@ what is wrong rather than erroring opaquely.
 
 ### What the size limit means
 
-A serverless function is capped at 250 MB unzipped. The dependencies come to
-about 200 MB, of which pandas and numpy are half — they are not optional,
-because `yfinance` needs them for real market history.
+A serverless function is capped at 225 MB unzipped. The dependencies come to
+about 70 MB.
+
+It was 242 MB until the market data layer stopped using `yfinance`. That library
+returns pandas DataFrames, so pandas and numpy came with it — 119 MB of wheels
+to read a few hundred numbers out of a JSON response. The provider's JSON
+endpoints are called directly now.
 
 That margin is why `requirements.txt` is the smaller file. Daphne, Channels,
 Twisted and Celery moved to `requirements-asgi.txt`: they were about 80 MB and
