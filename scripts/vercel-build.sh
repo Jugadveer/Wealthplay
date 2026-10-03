@@ -17,20 +17,41 @@
 
 set -euo pipefail
 
-# Which Python, and are its dependencies there yet?
+# Pick the interpreter that can actually import the installed packages.
 #
-# Vercel runs one install step, and which one depends on how it classified the
-# project. A repo holding both a package.json and a Python function can be
-# classified Node-first, in which case `npm install` runs and nothing has
-# installed Django by the time this script needs it. Installing here when it is
-# missing makes the build work either way, and costs nothing when the platform
-# has already done it.
-PY=$(command -v python3 || command -v python)
-echo "--- using $($PY --version) ---"
+# The platform installs the function's dependencies against one Python and may
+# put a different one first on PATH — here, packages built for CPython 3.14.7
+# while `python3` resolved to 3.12.14. Pure-Python packages do not care, so
+# Django imported and the build looked fine; `psycopg-binary` is a compiled
+# extension built for one ABI, and it failed with "Error loading psycopg2 or
+# psycopg module" only once collectstatic loaded the models.
+#
+# So the test is a compiled package, not just Django, and every candidate is
+# tried before giving up and installing.
+probe() {
+    "$1" -c 'import django, psycopg, pandas' 2>/dev/null
+}
 
-if ! "$PY" -c 'import django' 2>/dev/null; then
-  echo "--- installing python dependencies ---"
-  "$PY" -m pip install --disable-pip-version-check -q -r requirements.txt
+PY=''
+for candidate in \
+    python3.14 python3.13 python3.12 python3 python \
+    /uv/python/versions/*/bin/python3
+do
+    path=$(command -v "$candidate" 2>/dev/null || { [ -x "$candidate" ] && echo "$candidate"; })
+    [ -n "$path" ] || continue
+    if probe "$path"; then
+        PY="$path"
+        echo "--- using $("$PY" --version), which can import the installed packages ---"
+        break
+    fi
+done
+
+if [ -z "$PY" ]; then
+    # Nothing on this machine has a working set, so build one. Slower, and it
+    # always produces wheels matching the interpreter that will run them.
+    PY=$(command -v python3 || command -v python)
+    echo "--- no interpreter had the dependencies; installing for $("$PY" --version) ---"
+    "$PY" -m pip install --disable-pip-version-check -q -r requirements.txt
 fi
 
 echo "--- building the frontend ---"
