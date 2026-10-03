@@ -28,8 +28,15 @@ set -euo pipefail
 #
 # So the test is a compiled package, not just Django, and every candidate is
 # tried before giving up and installing.
+# Both compiled packages are in the probe on purpose. Django is pure Python and
+# imports under any version, so testing it alone is what let a 3.12 interpreter
+# look correct while the 3.14-built psycopg wheel could not load.
+#
+# Keep this list matched to requirements.txt. It briefly asked for pandas after
+# pandas had been removed, so nothing could satisfy it and every build fell
+# through to the install path below.
 probe() {
-    "$1" -c 'import django, psycopg, pandas' 2>/dev/null
+    "$1" -c 'import django, psycopg, curl_cffi' 2>/dev/null
 }
 
 PY=''
@@ -47,11 +54,20 @@ do
 done
 
 if [ -z "$PY" ]; then
-    # Nothing on this machine has a working set, so build one. Slower, and it
-    # always produces wheels matching the interpreter that will run them.
+    # Nothing here has a working set, so build one. Slower, and it always
+    # produces wheels matching the interpreter that will run them.
     PY=$(command -v python3 || command -v python)
     echo "--- no interpreter had the dependencies; installing for $("$PY" --version) ---"
-    "$PY" -m pip install --disable-pip-version-check -q -r requirements.txt
+
+    # uv manages the interpreter on this platform and refuses a plain pip
+    # install into it (PEP 668, "externally-managed-environment"), so use uv
+    # when it is present and only then fall back to pip.
+    if command -v uv >/dev/null 2>&1; then
+        uv pip install --python "$PY" --quiet -r requirements.txt
+    else
+        "$PY" -m pip install --disable-pip-version-check -q \
+            --break-system-packages -r requirements.txt
+    fi
 fi
 
 echo "--- building the frontend ---"
