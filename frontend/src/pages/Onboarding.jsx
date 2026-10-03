@@ -70,12 +70,15 @@ export default function Onboarding() {
   const [step, setStep] = useState(0)
   const [answers, setAnswers] = useState({})
   const [busy, setBusy] = useState(false)
+  const [error, setError] = useState('')
 
   const current = STEPS[step]
+  const chosen = answers[current.field]
 
   async function choose(value) {
     const next = { ...answers, [current.field]: value }
     setAnswers(next)
+    setError('')
 
     if (step < STEPS.length - 1) {
       setStep(step + 1)
@@ -88,6 +91,10 @@ export default function Onboarding() {
       await refresh()
       invalidate('')
       navigate('/today')
+    } catch (failure) {
+      // Without this the last answer looked like a dead button: the request
+      // failed, `finally` cleared `busy`, and nothing on screen changed.
+      setError(failure.message || 'That did not save. Try once more.')
     } finally {
       setBusy(false)
     }
@@ -109,9 +116,19 @@ export default function Onboarding() {
             key={value}
             onClick={() => choose(value)}
             disabled={busy}
+            // Going back has to show what was picked. The answer was already
+            // being kept; nothing read it, so every question looked unanswered
+            // the second time you saw it.
+            aria-pressed={chosen === value}
+            // A ring rather than a border colour. `Panel` always applies
+            // `border-rule`, and Tailwind emits both at the same specificity,
+            // so which one wins is decided by its own sort order rather than
+            // by the order they are listed here — `border-accent` lost, and the
+            // selected option looked identical to the others.
             className={cx(
               'w-full p-4 text-left transition-colors',
               'hover:border-accent hover:bg-paper-raised',
+              chosen === value && 'ring-2 ring-accent',
             )}
           >
             <span className="block text-[15px] font-medium text-ink">{label}</span>
@@ -120,11 +137,27 @@ export default function Onboarding() {
         ))}
       </div>
 
-      {step > 0 && (
-        <Button variant="ghost" size="sm" className="mt-6" onClick={() => setStep(step - 1)}>
-          Back
-        </Button>
+      {error && (
+        <p role="alert" className="mt-4 rounded border border-down/30 bg-down/5 px-3 py-2 text-sm text-ink">
+          {error}
+        </p>
       )}
+
+      <div className="mt-6 flex items-center gap-3">
+        {step > 0 && (
+          <Button variant="ghost" size="sm" onClick={() => setStep(step - 1)}>
+            Back
+          </Button>
+        )}
+        {/* Only once this question has an answer: it is the way forward after
+            going back, and the options themselves advance on first pass. */}
+        {chosen && step < STEPS.length - 1 && (
+          <Button variant="ghost" size="sm" onClick={() => setStep(step + 1)}>
+            Next
+          </Button>
+        )}
+        {busy && <span className="text-sm text-ink-muted">Saving…</span>}
+      </div>
     </div>
   )
 }
